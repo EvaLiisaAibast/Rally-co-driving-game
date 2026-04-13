@@ -500,7 +500,7 @@ img{display:block;max-width:100%}
 <div class="screen active" id="menu">
 <div class="menu-wrap">
   <div class="menu-left">
-    <img class="menu-hero" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Sebastien_Loeb_-_2008_Rallye_de_France.jpg/800px-Sebastien_Loeb_-_2008_Rallye_de_France.jpg" alt="" onerror="this.style.display='none'"/>
+    
     <div class="menu-overlay"></div>
     <div class="menu-stripe"></div>
     <div class="menu-content">
@@ -741,7 +741,7 @@ img{display:block;max-width:100%}
   </div>
   <div class="mp-name-row">
     <div class="mp-title">MAX<em>POWER</em><br><span style="font-size:.55em;letter-spacing:2px">STAGE REPORT</span></div>
-    <img class="mp-babe-thumb" src="/mnt/user-data/uploads/1775807978278_image.png" alt="" onerror="this.style.display='none'"/>
+    
   </div>
   <div class="mp-mast-bottom">
     <div class="mp-strap" id="r-outlet">Rallye Mondiale</div>
@@ -757,7 +757,7 @@ img{display:block;max-width:100%}
 <div class="mp-body-wrap">
   <div class="mp-main">
     <div class="mp-babe-bar">
-      <img src="/mnt/user-data/uploads/1775807978278_image.png" alt="" onerror="this.style.display='none'"/>
+      
       <div>
         <div class="mp-babe-txt">Max Power Stage Report</div>
         <div class="mp-babe-sub">The fastest stage debrief in rallying</div>
@@ -2034,31 +2034,74 @@ function resetTuning(){
 function loadPreset(type){
   TUNE = defaultTune();
   if(type === 'safe'){
-    // Softer springs, more stable setup
-    if(TUNE.spring_f !== undefined) TUNE.spring_f = 45;
-    if(TUNE.spring_r !== undefined) TUNE.spring_r = 40;
-    if(TUNE.arb_f !== undefined) TUNE.arb_f = 100;
-    if(TUNE.arb_r !== undefined) TUNE.arb_r = 90;
-    if(TUNE.rdiff_lock !== undefined) TUNE.rdiff_lock = 30;
-    if(TUNE.boost !== undefined) TUNE.boost = 1.5;
-    if(TUNE.anti_lag !== undefined) TUNE.anti_lag = 1;
-    if(TUNE.rear_wing !== undefined) TUNE.rear_wing = 18;
-    if(TUNE.pres_fl !== undefined) TUNE.pres_fl = 36;
-    if(TUNE.pres_rr !== undefined) TUNE.pres_rr = 36;
-    if(TUNE.fuel_load !== undefined) TUNE.fuel_load = 70;
+    // Conservative: soft springs, low boost, stable diffs, full fuel
+    if('spr_fl' in TUNE) TUNE.spr_fl = 44;
+    if('spr_fr' in TUNE) TUNE.spr_fr = 46;
+    if('spr_rl' in TUNE) TUNE.spr_rl = 40;
+    if('spr_rr' in TUNE) TUNE.spr_rr = 42;
+    if('arb_f_nm' in TUNE) TUNE.arb_f_nm = 90;
+    if('arb_r_nm' in TUNE) TUNE.arb_r_nm = 80;
+    if('lsd_bump_f' in TUNE) TUNE.lsd_bump_f = 500;
+    if('lsd_reb_f' in TUNE) TUNE.lsd_reb_f = 900;
+    if('lsd_bump_r' in TUNE) TUNE.lsd_bump_r = 450;
+    if('lsd_reb_r' in TUNE) TUNE.lsd_reb_r = 750;
+    if('rd_lock_accel' in TUNE) TUNE.rd_lock_accel = 25;
+    if('rd_lock_decel' in TUNE) TUNE.rd_lock_decel = 30;
+    if('rd_preload' in TUNE) TUNE.rd_preload = 60;
+    if('fd_lock_accel' in TUNE) TUNE.fd_lock_accel = 20;
+    if('cd_split' in TUNE) TUNE.cd_split = 45;
+    if('boost_bar' in TUNE) TUNE.boost_bar = 1.65;
+    if('als_level' in TUNE) TUNE.als_level = 1;
+    if('wastegate_psi' in TUNE) TUNE.wastegate_psi = 11;
+    if('tc_slip' in TUNE) TUNE.tc_slip = 6;
+    if('rear_wing' in TUNE) TUNE.rear_wing = 20;
+    if('pres_fl' in TUNE) TUNE.pres_fl = 31;
+    if('pres_fr' in TUNE) TUNE.pres_fr = 31;
+    if('pres_rl' in TUNE) TUNE.pres_rl = 30;
+    if('pres_rr' in TUNE) TUNE.pres_rr = 31;
+    if('fuel_load' in TUNE) TUNE.fuel_load = 72;
+    if('droop_f' in TUNE) TUNE.droop_f = 90;
+    if('droop_r' in TUNE) TUNE.droop_r = 100;
+    if('bstop_fl_contact' in TUNE) TUNE.bstop_fl_contact = 20;
+    if('bstop_rl_contact' in TUNE) TUNE.bstop_rl_contact = 28;
+    if('brake_bias' in TUNE) TUNE.brake_bias = 61;
   } else if(type === 'attack'){
-    // Stiff, aggressive, maximum power
-    if(TUNE.spring_f !== undefined) TUNE.spring_f = 95;
-    if(TUNE.spring_r !== undefined) TUNE.spring_r = 85;
-    if(TUNE.arb_f !== undefined) TUNE.arb_f = 300;
-    if(TUNE.rdiff_lock !== undefined) TUNE.rdiff_lock = 70;
-    if(TUNE.boost !== undefined) TUNE.boost = 2.4;
-    if(TUNE.anti_lag !== undefined) TUNE.anti_lag = 3;
-    if(TUNE.rear_wing !== undefined) TUNE.rear_wing = 6;
-    if(TUNE.pres_fl !== undefined) TUNE.pres_fl = 28;
-    if(TUNE.pres_rr !== undefined) TUNE.pres_rr = 28;
-    if(TUNE.fuel_load !== undefined) TUNE.fuel_load = 35;
-    if(TUNE.rev_limit !== undefined) TUNE.rev_limit = 9200;
+    // Maximum attack: stiff, high boost, aggressive diffs, light fuel
+    if('spr_fl' in TUNE) TUNE.spr_fl = 96;
+    if('spr_fr' in TUNE) TUNE.spr_fr = 98;
+    if('spr_rl' in TUNE) TUNE.spr_rl = 84;
+    if('spr_rr' in TUNE) TUNE.spr_rr = 86;
+    if('arb_f_nm' in TUNE) TUNE.arb_f_nm = 310;
+    if('arb_r_nm' in TUNE) TUNE.arb_r_nm = 260;
+    if('lsd_bump_f' in TUNE) TUNE.lsd_bump_f = 1200;
+    if('lsd_reb_f' in TUNE) TUNE.lsd_reb_f = 2000;
+    if('lsd_bump_r' in TUNE) TUNE.lsd_bump_r = 1100;
+    if('lsd_reb_r' in TUNE) TUNE.lsd_reb_r = 1800;
+    if('hsd_bump_fl' in TUNE) TUNE.hsd_bump_fl = 14;
+    if('hsd_bump_rl' in TUNE) TUNE.hsd_bump_rl = 12;
+    if('rd_lock_accel' in TUNE) TUNE.rd_lock_accel = 70;
+    if('rd_lock_decel' in TUNE) TUNE.rd_lock_decel = 12;
+    if('rd_preload' in TUNE) TUNE.rd_preload = 100;
+    if('rd_ramp_decel' in TUNE) TUNE.rd_ramp_decel = 30;
+    if('fd_lock_accel' in TUNE) TUNE.fd_lock_accel = 50;
+    if('cd_split' in TUNE) TUNE.cd_split = 35;
+    if('cd_lock' in TUNE) TUNE.cd_lock = 70;
+    if('boost_bar' in TUNE) TUNE.boost_bar = 2.35;
+    if('als_level' in TUNE) TUNE.als_level = 3;
+    if('wastegate_psi' in TUNE) TUNE.wastegate_psi = 22;
+    if('tc_slip' in TUNE) TUNE.tc_slip = 20;
+    if('rev_limit' in TUNE) TUNE.rev_limit = 9100;
+    if('rear_wing' in TUNE) TUNE.rear_wing = 6;
+    if('front_splitter' in TUNE) TUNE.front_splitter = 75;
+    if('pres_fl' in TUNE) TUNE.pres_fl = 26.5;
+    if('pres_fr' in TUNE) TUNE.pres_fr = 26;
+    if('pres_rl' in TUNE) TUNE.pres_rl = 25.5;
+    if('pres_rr' in TUNE) TUNE.pres_rr = 26;
+    if('fuel_load' in TUNE) TUNE.fuel_load = 38;
+    if('brake_bias' in TUNE) TUNE.brake_bias = 67;
+    if('hb_pressure' in TUNE) TUNE.hb_pressure = 80;
+    if('ballast_height' in TUNE) TUNE.ballast_height = 70;
+    if('lambda' in TUNE) TUNE.lambda = 0.87;
   }
   renderTuneSection(activeTuneSection);
 }
@@ -2603,10 +2646,19 @@ function submitAnswer(){
   const dot=document.getElementById(`gd-${G.idx}`);
   if(dot)dot.className='gd '+(ok?'ok':'bad');
   G.results.push({raw:n.raw,ans:n.ans,typed,ok,score});
-  const badCrash=!ok&&rollCrash(n.raw,false,true);
-  showResult(ok,n,score,false,false,badCrash);
-  if(!badCrash){G.idx++;setTimeout(loadNote,2600);}
-  else{G.idx++;injectAtmosphere();triggerCrash(n.raw);}
+  G.idx++; // increment first so crash modal can see correct idx state
+  const isLastNote = G.idx >= G.notes.length;
+  const badCrash = !ok && !isLastNote && rollCrash(n.raw,false,true); // no crash on final note - go straight to result
+  showResult(ok,n,score,false,false,false); // never show crash on last note
+  if(!badCrash || isLastNote){
+    setTimeout(()=>{
+      if(G.idx>=G.notes.length){endStage();}
+      else{loadNote();}
+    },2600);
+  } else {
+    injectAtmosphere();
+    triggerCrash(n.raw);
+  }
 }
 function skipNote(){
   clearInterval(G.timer);
@@ -2614,22 +2666,38 @@ function skipNote(){
   const n=G.notes[G.idx];G.skipped++;
   const dot=document.getElementById(`gd-${G.idx}`);if(dot)dot.className='gd sk';
   G.results.push({raw:n.raw,ans:n.ans,typed:'',ok:false,score:0,skipped:true});
-  const skipCrash=rollCrash(n.raw,false,true);
-  showResult(false,n,0,true,false,skipCrash);
   G.idx++;
-  if(!skipCrash){setTimeout(loadNote,2600);}
-  else{injectAtmosphere();triggerCrash(n.raw);}
+  const skipIsLast = G.idx >= G.notes.length;
+  const skipCrash = !skipIsLast && rollCrash(n.raw,false,true);
+  showResult(false,n,0,true,false,false);
+  if(!skipCrash || skipIsLast){
+    setTimeout(()=>{
+      if(G.idx>=G.notes.length){endStage();}
+      else{loadNote();}
+    },2600);
+  } else {
+    injectAtmosphere();
+    triggerCrash(n.raw);
+  }
 }
 function timeUp(){
   document.getElementById('g-input').disabled=true;document.getElementById('g-sub').disabled=true;
   const n=G.notes[G.idx];
   const dot=document.getElementById(`gd-${G.idx}`);if(dot)dot.className='gd bad';
   G.results.push({raw:n.raw,ans:n.ans,typed:'',ok:false,score:0,timeout:true});
-  const toCrash=rollCrash(n.raw,true,false);
-  showResult(false,n,0,false,true,toCrash);
   G.idx++;
-  if(!toCrash){setTimeout(loadNote,2600);}
-  else{injectAtmosphere();triggerCrash(n.raw);}
+  const timeIsLast = G.idx >= G.notes.length;
+  const toCrash = !timeIsLast && rollCrash(n.raw,true,false);
+  showResult(false,n,0,false,true,false);
+  if(!toCrash || timeIsLast){
+    setTimeout(()=>{
+      if(G.idx>=G.notes.length){endStage();}
+      else{loadNote();}
+    },2600);
+  } else {
+    injectAtmosphere();
+    triggerCrash(n.raw);
+  }
 }
 function showResult(ok,n,score,skipped,timeout,crashFollows=false){
   const fb=document.getElementById('g-fb');
@@ -2740,6 +2808,8 @@ function endStage(){
     :won
     ?`<p>${G.driver}, navigating from the notes of ${G.codriver} in the ${G.car?.n||'car'}, produced a ${acc>=85?'dominant':'controlled'} performance on ${stageName}. The crew translated ${G.correct} of ${total} pacenotes correctly across ${era.surf} conditions.</p><p>${crashWords}the stage time of ${timeStr} reflects the effort. "The notes were exactly right," said ${G.driver}. "When you trust them, the car goes where it needs to go."</p><p>The ${era.label} machinery performed as expected and the note-reading held under pressure.</p>`
     :`<p>${G.driver} and ${G.codriver} endured a difficult run through ${stageName}, with only ${G.correct} of ${total} pacenotes translated accurately. ${crashWords}time was lost at multiple corners where hesitation cost precious seconds.</p><p>"We got caught out on the sequences," admitted ${G.driver}. "The notes came quicker than expected." ${G.codriver}: "We'll study the vocab before the next one."</p><p>The crew brought the car home in ${timeStr}. Work is needed before the next round.</p>`
+  // Add crash/damage section to article
+  const dmgLine=G.crashCount>0?`<p>The car suffered ${G.crashCount} incident${G.crashCount>1?'s':''} during the stage, costing an estimated ${Math.round(G.totalTimeLost)} seconds in total. Average car damage was ${Math.round(avgDmg)}% at the finish — ${avgDmg>80?'remarkable considering the conditions':'visible on the bodywork and underneath'}.`:`<p>The car came through clean — no incidents, no damage beyond the normal wear of a gravel stage.`;
   document.getElementById('r-article').innerHTML=art+dmgLine+'</p>';
   const q=won
     ?`"The notes were perfect. When you trust them completely, the car goes exactly where it needs to go."`
@@ -2753,8 +2823,6 @@ function endStage(){
   document.getElementById('r-acc').className='rs-v '+(acc>=70?'grn':acc<50?'red':'gld');
   document.getElementById('r-correct').textContent=`${G.correct} / ${total}`;
   document.getElementById('r-pen').textContent=G.dnf?'Retired':(`+${pen}s (${G.crashCount} crash${G.crashCount!==1?'es':''})`);
-  // Add crash/damage section to article
-  const dmgLine=G.crashCount>0?`<p>The car suffered ${G.crashCount} incident${G.crashCount>1?'s':''} during the stage, costing an estimated ${Math.round(G.totalTimeLost)} seconds in total. Average car damage was ${Math.round(avgDmg)}% at the finish — ${avgDmg>80?'remarkable considering the conditions':'visible on the bodywork and underneath'}.`:`<p>The car came through clean — no incidents, no damage beyond the normal wear of a gravel stage.`;
   document.getElementById('r-breakdown').innerHTML=G.results.map((r,i)=>`
     <div class="bd-row">
       <span class="bd-i">${i+1}</span>
