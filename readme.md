@@ -39,5 +39,5 @@ give you a starting point.
 
 ## No dependencies
 
-Pure HTML, CSS, and JavaScript. One file. Works offline after download.
+Pure HTML, CSS, and JavaScript.
 Uses the Web Speech API for audio — works in Chrome and most modern browsers.
