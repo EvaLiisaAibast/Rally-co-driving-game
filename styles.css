@@ -1,0 +1,51 @@
+/ Video Background */
+body {
+    background: url('path/to/video-background.mp4') no-repeat center center fixed;
+    background-size: cover;
+}
+
+/* Tuning System */
+.tuning-system {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* Screen Styles */
+.screen {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Animation Styles */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.fade-in {
+    animation: fadeIn 1s ease-in-out;
+}
+
+/* Accessibility Features */
+accessible-text {
+    font-size: 1.2em;
+    line-height: 1.5;
+    color: #333;
+}
+
+button {
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+}
