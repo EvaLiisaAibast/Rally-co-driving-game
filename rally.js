@@ -1,4 +1,4 @@
-// ═══════════════ DATA ═══════════════
+
 const DIFFS=[{n:'Easy',s:12},{n:'Normal',s:9},{n:'Hard',s:7},{n:'Insane',s:5},{n:'Chaos',s:4}];
 const RIVALS=[{name:'S. Laurent',team:'Citroën'},{name:'C. MacRae',team:'Subaru'},{name:'M. Grönholm',team:'Peugeot'},{name:'K. Rovanperä',team:'Toyota'}];
 
