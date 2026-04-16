@@ -1,43 +1,147 @@
 # Rally Pacenote Academy
 
-A browser-based rally co-driver game and training tool. No install, no server — open the HTML file and play.
+**You’re not the driver. You’re the reason the driver survives.**
 
-## What is it
+A high-intensity rally co-driver simulator where you read pacenotes under pressure, translate them instantly, and keep the car out of the trees.
 
-In real rally racing, the co-driver reads handwritten shorthand notes to the driver before each corner. 
-Things like `L3 !2 INTO R4` — which means "left three, caution hairpin, into right four." 
-The driver hears this and reacts. Get it wrong and you're in the trees.
+---
 
-This game puts you in the co-driver seat. You see the raw pacenote shorthand and have to translate 
-it into plain English against a countdown timer. The faster and more accurately you read the notes, 
-the better your stage time.
+## ABOUT THIS GAME
 
-## Features
+In rally racing, the most important role isn’t behind the wheel.
 
-- **Three eras** — Group B (1982–86), WRC 90s golden era, Modern Rally1 hybrid
-- **Career mode** — six-round championship across all three eras with rival standings and championship points
-- **Training school** — five lessons covering pacenote basics, corner severity, hazard marks, distances, and era differences, plus an untimed practice quiz
-- **Obsessive tuning system** — 130+ parameters across suspension, differentials, brakes, drivetrain, engine, tyres, aerodynamics, and ballast. Every setting has a real mechanical explanation
-- **Crash and damage system** — wrong reads and timeouts can trigger six crash types (spin, rock strike, puncture, water, off road, heavy contact) with real consequences including DNF
-- **Stage atmosphere** — opening monologue, crowd events, split time reports, and commentator lines per era
-- **Max Power tabloid newspaper result** — post-stage report in the style of a 2002 car magazine, with article, driver quotes, breakdown, and championship standings
-- **Audio** — manual co-driver call button reads the note aloud at pace. Commentator lines auto-play after each answer. Stage result announced at the end
+It’s the voice telling the driver what’s coming next — at speed, without hesitation, and without mistakes.
 
-## How to play
+Pacenotes look like this:
 
-1. Open `rally_maxpower.html` in Chrome or Firefox
-2. Pick an era, name your crew, choose a car and difficulty
-3. Each note appears on screen — type what it means in plain English
-4. Hit Enter or Submit before the timer runs out
-5. Survive eight notes to complete the stage and see the newspaper result
+> **L3 !2 INTO R4**
 
-## Tuning
+You have seconds to process it.
+Then you say:
 
-Click **Tuning Garage** from the setup screen or main menu. You can tune without picking a stage first. 
-Your setup affects crash probability, damage taken, and stage time. Safe Setup and Attack Setup presets 
-give you a starting point.
+> *“Left three, caution hairpin, into right four.”*
 
-## No dependencies
+Get it right — the stage continues.
+Get it wrong — you might not.
 
-Pure HTML, CSS, and JavaScript.
-Uses the Web Speech API for audio — works in Chrome and most modern browsers.
+**Rally Pacenote Academy turns that responsibility into a game.**
+
+---
+
+## KEY FEATURES
+
+### Read. React. Survive.
+
+* Translate real rally pacenote shorthand into plain English
+* Beat the countdown timer on every call
+* Chain multiple instructions under increasing pressure
+* Accuracy and timing both affect your result
+
+---
+
+### Three distinct rally eras
+
+* **Group B** — raw speed and chaos
+* **90s WRC** — technical precision
+* **Modern Rally1** — fast, dense, unforgiving
+
+Each era changes pacing, complexity, and difficulty.
+
+---
+
+### Career mode
+
+* Six-stage championship
+* Rival drivers and points standings
+* Progress through all three eras
+
+---
+
+### Training school
+
+Learn how to actually read pacenotes:
+
+* corner severity and numbering
+* hazard markers and cautions
+* distances and “into” chaining
+* era-specific notation differences
+
+Plus free practice mode.
+
+---
+
+### Consequences that matter
+
+Mistakes aren’t just wrong answers.
+
+* Spins, punctures, off-road excursions, heavy impacts
+* Damage affects performance — or ends your run entirely
+* One bad call can cost the stage
+
+---
+
+### Tuning Garage (for those who want it)
+
+* Deep setup system with 100+ parameters
+* Suspension, differentials, brakes, tyres, aero, and more
+* Influences risk, damage, and stage performance
+
+Or pick:
+
+* **Safe Setup**
+* **Attack Setup**
+
+---
+
+### Full stage presentation
+
+* Opening stage intros and atmosphere
+* Split times and performance feedback
+* Dynamic commentator reactions
+* Post-stage tabloid-style race report
+
+All built around a single question:
+**did you get the notes right?**
+
+---
+
+## WHAT THIS GAME IS
+
+* A **co-driver simulator**
+* A **high-speed recognition and reaction challenge**
+* A game about **processing information under pressure**
+
+---
+
+## WHAT THIS GAME IS NOT
+
+* Not a driving simulator
+* Not a physics-based racing game
+* Not forgiving
+
+---
+
+## SYSTEM REQUIREMENTS
+
+Runs on anything that can open a browser.
+Desktop version included.
+
+---
+
+## ROADMAP
+
+* Expanded career mode
+* More complex pacenote structures
+* Improved input recognition and flexibility
+* Optional realism vs arcade modes
+* Additional eras and stages
+
+---
+
+## FINAL WORD
+
+Rally drivers don’t see the road ahead.
+
+They trust the voice beside them.
+
+**Now that voice is you.**
