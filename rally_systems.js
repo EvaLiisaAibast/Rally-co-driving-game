@@ -1838,14 +1838,14 @@ function editorImport() {
 }
 
 // ── ACCESSIBILITY SETTINGS RENDER ──
+function toggleAccessibilitySetting(key) {
+  Accessibility.set(key, !Accessibility.prefs[key]);
+  renderAccessibilitySettings();
+}
+
 function renderAccessibilitySettings() {
   const body = document.getElementById('accessibility-body');
   if (!body) return;
-
-  const toggle = (key) => {
-    Accessibility.set(key, !Accessibility.prefs[key]);
-    renderAccessibilitySettings();
-  };
 
   body.innerHTML = `
     <div style="display:flex;flex-direction:column;gap:1rem">
@@ -1861,7 +1861,7 @@ function renderAccessibilitySettings() {
             <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:.25rem">${label}</div>
             <div style="font-size:12px;color:var(--text2)">${desc}</div>
           </div>
-          <button onclick="toggle('${key}')" style="
+          <button onclick="toggleAccessibilitySetting('${key}')" style="
             padding:6px 14px;border:1px solid ${Accessibility.prefs[key]?'var(--green)':'var(--brd2)'};
             background:${Accessibility.prefs[key]?'#041a08':'none'};
             color:${Accessibility.prefs[key]?'var(--green)':'var(--text2)'};
