@@ -1,4 +1,4 @@
-
+/* Rally Pacenote Academy — Stylesheet */
 
 :root{
   --bg:#0a0a0c;--surf:#111116;--surf2:#17171e;--surf3:#1e1e28;
@@ -23,29 +23,31 @@ img{display:block;max-width:100%}
 .menu-wrap{display:grid;grid-template-columns:1fr 400px;min-height:100vh;flex:1}
 .menu-left{
   position:relative;overflow:hidden;
-  background:#0a0005;
+  background:transparent;
   display:flex;flex-direction:column;justify-content:flex-end;padding:2.5rem;
 }
 .menu-hero{
   position:absolute;inset:0;width:100%;height:100%;
   object-fit:cover;object-position:center top;
-  opacity:0.6;
+  opacity:.9 !important;
+  filter:brightness(.88) contrast(1.03) !important;
+  mix-blend-mode:normal;
+  z-index:0;
 }
 .menu-overlay{
-  position:absolute;inset:0;
-  background:linear-gradient(to top,rgba(0,0,0,.95) 0%,rgba(0,0,0,.3) 50%,rgba(10,0,20,.5) 100%);
+  display:none !important;
 }
 .menu-stripe{position:absolute;top:0;bottom:0;right:0;width:5px;background:linear-gradient(180deg,var(--mp-yellow),var(--mp-red),var(--mp-orange))}
 .menu-content{position:relative;z-index:2}
 .menu-title{
-  font-family:'Bebas Neue',sans-serif;
+  font-family:'Bebas Neue','Anton',sans-serif;
   font-size:clamp(56px,8vw,108px);
   line-height:.85;letter-spacing:4px;
   color:var(--mp-yellow);
   text-shadow:4px 4px 0 var(--mp-red);
 }
 .menu-sub{
-  font-family:'Anton',sans-serif;
+  font-family:'Anton','Bebas Neue',sans-serif;
   font-size:clamp(13px,1.8vw,20px);letter-spacing:.2em;
   color:var(--mp-red);margin-top:.6rem;text-transform:uppercase;
 }
@@ -55,7 +57,7 @@ img{display:block;max-width:100%}
 .menu-nav{flex:1;padding:1.5rem;display:flex;flex-direction:column;gap:10px}
 .mnbtn{
   width:100%;padding:1.1rem 1.5rem;border:1px solid var(--brd2);background:var(--surf);
-  color:var(--text);font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;
+  color:var(--text);font-family:'Bebas Neue','Anton',sans-serif;font-size:22px;letter-spacing:3px;
   text-align:left;display:flex;justify-content:space-between;align-items:center;
   transition:all .15s;position:relative;overflow:hidden;
 }
@@ -68,7 +70,7 @@ img{display:block;max-width:100%}
 
 /* ── SHARED HDR ── */
 .page-hdr{background:var(--surf);border-bottom:1px solid var(--brd2);padding:.75rem 1.5rem;display:flex;align-items:center;gap:1rem;flex-shrink:0}
-.page-hdr-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:var(--gold)}
+.page-hdr-title{font-family:'Bebas Neue','Anton',sans-serif;font-size:22px;letter-spacing:3px;color:var(--gold)}
 .bk{padding:5px 13px;border:1px solid var(--brd2);background:none;color:var(--text2);font-size:11px;letter-spacing:.1em;text-transform:uppercase;transition:all .15s}
 .bk:hover{border-color:var(--gold);color:var(--gold)}
 
@@ -107,7 +109,7 @@ img{display:block;max-width:100%}
 .car-cd{font-size:10px;color:var(--text2);margin-top:1px;font-family:'IBM Plex Mono',monospace}
 .car-btn.sel .car-cn{color:var(--gold)}
 .start-bar{background:var(--surf);border-top:1px solid var(--brd);padding:1rem 1.5rem;display:flex;justify-content:flex-end;gap:8px;flex-shrink:0}
-.gbtn{padding:10px 20px;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:2px;border:1px solid var(--brd);background:transparent;color:var(--text2);transition:all .15s}
+.gbtn{padding:10px 20px;font-family:'Bebas Neue','Anton',sans-serif;font-size:17px;letter-spacing:2px;border:1px solid var(--brd);background:transparent;color:var(--text2);transition:all .15s}
 .gbtn:hover{border-color:var(--gold);color:var(--gold)}
 .gbtn.sec2{border-color:var(--cyan);color:var(--cyan)}
 .gbtn.sec2:hover{background:rgba(0,229,255,.12);color:var(--cyan)}
@@ -172,7 +174,7 @@ img{display:block;max-width:100%}
 /* ── GAME ── */
 #game{background:var(--bg);flex-direction:column}
 .g-topbar{background:var(--surf);border-bottom:1px solid var(--brd2);padding:.7rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.g-stage{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:2px;color:var(--gold)}
+.g-stage{font-family:'Bebas Neue','Anton',sans-serif;font-size:19px;letter-spacing:2px;color:var(--gold)}
 .g-meta{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text2);margin-top:2px}
 .g-scores{display:flex;gap:1.5rem;align-items:center}
 .g-sv{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--text)}
