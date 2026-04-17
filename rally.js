@@ -1,4 +1,4 @@
-
+// ═══════════════ DATA ═══════════════
 const DIFFS=[{n:'Easy',s:12},{n:'Normal',s:9},{n:'Hard',s:7},{n:'Insane',s:5},{n:'Chaos',s:4}];
 const RIVALS=[{name:'S. Laurent',team:'Citroën'},{name:'C. MacRae',team:'Subaru'},{name:'M. Grönholm',team:'Peugeot'},{name:'K. Rovanperä',team:'Toyota'}];
 
@@ -15,26 +15,89 @@ const ERAS={
     stages:[
       {name:'SS7 — Manta Road',country:'Portugal',surf:'Rough gravel',weather:'Overcast · 14°C',km:'22.4',
        cond:'Very rough. Rocks on inside of corners. Crowd three-deep on hairpins. One wrong line ends your stage.',
+       segments:['Opening','Technical','Pressure','Sprint'],
        notes:[
+        // OPENING SEGMENT (Notes 1-8)
+        {raw:'R3 EASY',ans:'right three easy',narr:'Gentle introduction to the stage. Find your rhythm early.',comm:'The opening notes set the pace for the entire stage.'},
+        {raw:'L4 150',ans:'left four 150 metres',narr:'Medium left with plenty of time to set up.',comm:'Early confidence builder before the technical section.'},
+        {raw:'R2 INTO L3',ans:'right two into left three',narr:'Linked corners - the first test of your flow.',comm:'Into calls require smooth transitions.'},
+        {raw:'FLAT R5',ans:'flat right five',narr:'First flat call of the stage. Trust the notes.',comm:'Flat calls separate the good from the great.'},
+        {raw:'L3 LONG',ans:'left three long',narr:'Long left that tightens slightly mid-corner.',comm:'Long corners test your consistency.'},
+        {raw:'R4 200',ans:'right four 200 metres',narr:'Fast right with a long straight after.',comm:'200 metres is about three seconds at rally pace.'},
+        {raw:'L2! OPENS',ans:'left two caution opens',narr:'Tight left that opens to a straight.',comm:'Caution calls demand immediate attention.'},
+        {raw:'R3 CREST',ans:'right three over crest',narr:'Blind crest - the corner hides until commitment.',comm:'Crest notes are pure trust in your co-driver.'},
+        
+        // TECHNICAL SEGMENT (Notes 9-16)
         {raw:'R5 DONTCUT',ans:"right five don't cut",narr:'A deceptive medium-speed right. The inside drops into the valley below.',comm:'Every year this corner claims someone. The crowd knows exactly why.'},
         {raw:'L3 !2 INTO R4',ans:'left three caution hairpin into right four',narr:'Three calls in under two seconds. The caution between them is the one that matters.',comm:'You\'ll hear the engine note change twice before the next call arrives.'},
+        {raw:'SQUARE R NARROW',ans:'square right narrows',narr:'Nearly hairpin right with stone walls closing in.',comm:'Square calls mean near-90-degree corners.'},
+        {raw:'L4 TIGHTENS',ans:'left four tightens',narr:'Appears as a medium left, pulls tight mid-corner.',comm:'Tightens notes test your adaptability.'},
+        {raw:'R2!! JUNCTION',ans:'right two maximum caution junction',narr:'Double caution at a crossroads. Absolute concentration required.',comm:'Double bang means something terrifying was found in recce.'},
+        {raw:'L3 DONTCUT 100',ans:"left three don't cut 100 metres",narr:'Inside line drops away. Stay wide and survive.',comm:'Don\'t cut notes are there for a reason.'},
+        {raw:'R4 BUMP L3',ans:'right four bumps into left three',narr:'Compression unsettles the car before the left.',comm:'Bumps require car control and note precision.'},
         {raw:'CREST R6 NARROW',ans:'over crest right six narrows',narr:'The crest makes the R6 invisible until you\'re already in it. Stone walls close in.',comm:'Flat over the top if you trust the notes. That\'s the only way through here.'},
+        
+        // PRESSURE SEGMENT (Notes 17-24)
         {raw:'L2! JUNCTION STOP',ans:'left two caution junction stop',narr:'Full braking. Another road crosses here, blind at speed.',comm:'STOP means stop. Not a scrub. The notes are literal here.'},
+        {raw:'R3 ICE 50',ans:'right three ice 50 metres',narr:'Ice patch discovered this morning. Extreme caution.',comm:'Ice notes appear when conditions change overnight.'},
+        {raw:'L4! DONTCUT',ans:"left four caution don't cut",narr:'Fast left with a dangerous inside line.',comm:'Caution plus don\'t cut equals maximum concentration.'},
+        {raw:'R5 LONG TIGHTENS',ans:'right five long tightens',narr:'Long fast right that pulls tight unexpectedly.',comm:'Long tightens are the most deceptive notes.'},
+        {raw:'SQUARE L!! STOP',ans:'square left maximum caution stop',narr:'Hairpin with double caution and full stop. Zero margin.',comm:'Square plus double bang plus stop - the trifecta of danger.'},
+        {raw:'R3 MUD OPENS',ans:'right three mud opens',narr:'Deep ruts on entry, then opens to clean exit.',comm:'Mud notes change the line completely.'},
+        {raw:'L4 BUMP BUMP',ans:'left four bumps bumps',narr:'Double compression - car never settles.',comm:'Multiple bumps test suspension and rhythm.'},
+        {raw:'R2 INTO SQUARE L',ans:'right two into square left',narr:'Quick right into immediate hairpin left.',comm:'Into square calls require instant direction change.'},
+        
+        // SPRINT SEGMENT (Notes 25-32)
         {raw:'FLAT R CREST L5 LONG',ans:'flat right over crest long left five',narr:'The gift section. Back-to-back flat calls if you believe the recce.',comm:'This is what Group B felt like. This is why they came.'},
         {raw:'BUMP R3 BUMP L3',ans:'bumps right three bumps left three',narr:'Double compression — the car goes light both times. Steer on the way down.',comm:'These compressions can bottom the car if the setup is wrong.'},
         {raw:'L4 ICE 100 R3',ans:'left four ice 100 metres right three',narr:'Ice on entry to the left, then 100 metres to set up the right three.',comm:'At night this stage becomes a completely different animal.'},
+        {raw:'R6 FLAT L4',ans:'right six flat left four',narr:'Maximum attack section. Two flat calls back-to-back.',comm:'Flat calls in succession test your nerve.'},
+        {raw:'L5 LONG R3',ans:'left five long right three',narr:'Fast left five with a long straight to the right three.',comm:'Long straights between notes let you breathe.'},
+        {raw:'CREST R4 FINISH',ans:'over crest right four finish',narr:'Final corner over a crest to the timing beam.',comm:'The final note is always the most important.'},
+        {raw:'L3 200 R2',ans:'left three 200 metres right two',narr:'Medium left, long straight, then tight right to finish.',comm:'200 metres to the final corner - make it count.'},
         {raw:'R1! HAIRPIN STOP 50',ans:'right one caution hairpin stop 50 metres',narr:'U-turn under maximum caution. 50 metres — it appears immediately after the call.',comm:'That wall has been there since before the rally existed.'}
        ]},
       {name:'SS4 — Col de Turini',country:'Monte Carlo',surf:'Tarmac / ice',weather:'Night · −2°C · ice',km:'18.7',
        cond:'Night stage. Spectator torches on corners. Temperature dropped since afternoon. Ice patches not mapped from earlier run.',
+       segments:['Opening','Technical','Pressure','Sprint'],
        notes:[
+        // OPENING SEGMENT (Notes 1-8)
+        {raw:'L3 EASY',ans:'left three easy',narr:'Gentle start to the night stage. Find your rhythm in the dark.',comm:'Night driving demands absolute trust in your co-driver.'},
+        {raw:'R4 150',ans:'right four 150 metres',narr:'Medium right with torches lighting the apex.',comm:'Spectator torches help, but the headlights do the work.'},
+        {raw:'L2 INTO R3',ans:'left two into right three',narr:'Linked corners in the forest section.',comm:'Into calls at night require extra precision.'},
+        {raw:'FLAT R5',ans:'flat right five',narr:'First flat call of the night. Trust the pace notes completely.',comm:'Flat at night means you\'re committed before seeing the corner.'},
+        {raw:'L3 LONG',ans:'left three long',narr:'Long left through the dark pines.',comm:'Long corners at night test your nerve.'},
+        {raw:'R4 200',ans:'right four 200 metres',narr:'Fast right with a long straight after.',comm:'200 metres of darkness before the next call.'},
+        {raw:'L2! OPENS',ans:'left two caution opens',narr:'Tight left that opens to a straight.',comm:'Caution calls at night demand immediate attention.'},
+        {raw:'R3 CREST',ans:'right three over crest',narr:'Blind crest - the corner hides until commitment.',comm:'Crest notes at night are pure faith.'},
+        
+        // TECHNICAL SEGMENT (Notes 9-16)
         {raw:'L3 ICE DONTCUT',ans:"left three ice don't cut",narr:'Night Turini. Your headlights find a left three — the inside is glazed.',comm:'Several crews hit ice there. Not everyone brought the car back.'},
         {raw:'R2!! INTO L4',ans:'right two maximum caution into left four',narr:'Double exclamation. A cliff on the wrong line feeds directly into a hairpin.',comm:'Double bang means they found something terrifying in recce. Trust the note.'},
+        {raw:'SQUARE R NARROW',ans:'square right narrows',narr:'Nearly hairpin right with stone walls closing in.',comm:'Square calls in the village require precision.'},
+        {raw:'L4 TIGHTENS',ans:'left four tightens',narr:'Appears as a medium left, pulls tight mid-corner.',comm:'Tightens notes test your adaptability in the dark.'},
+        {raw:'R2!! JUNCTION',ans:'right two maximum caution junction',narr:'Double caution at a crossroads. Absolute concentration required.',comm:'Double bang at night means maximum danger.'},
+        {raw:'L3 DONTCUT 100',ans:"left three don't cut 100 metres",narr:'Inside line drops away. Stay wide and survive.',comm:'Don\'t cut notes at night are survival instructions.'},
+        {raw:'R4 BUMP L3',ans:'right four bumps into left three',narr:'Compression unsettles the car before the left.',comm:'Bumps at night can unsettle even the best drivers.'},
         {raw:'CREST L5 LONG 200',ans:'over crest long left five 200 metres',narr:'The mountain crest opens to total darkness. Two hundred metres to breathe.',comm:'At this speed, 200 metres is about three seconds. That\'s all the rest you get.'},
+        
+        // PRESSURE SEGMENT (Notes 17-24)
         {raw:'L4 OVER CREST TIGHT R3',ans:'left four over crest tightens into right three',narr:'Crest hides the tightener before feeding the right three. You can\'t see it early.',comm:'You cannot see the tighten from the entry. That\'s the whole point of recce.'},
+        {raw:'R3 ICE 50',ans:'right three ice 50 metres',narr:'Ice patch discovered this morning. Extreme caution.',comm:'Ice notes appear when conditions change overnight.'},
+        {raw:'L4! DONTCUT',ans:"left four caution don't cut",narr:'Fast left with a dangerous inside line.',comm:'Caution plus don\'t cut equals maximum concentration.'},
+        {raw:'R5 LONG TIGHTENS',ans:'right five long tightens',narr:'Long fast right that pulls tight unexpectedly.',comm:'Long tightens are the most deceptive notes at night.'},
+        {raw:'SQUARE L!! STOP',ans:'square left maximum caution stop',narr:'Hairpin with double caution and full stop. Zero margin.',comm:'Square plus double bang plus stop - the trifecta of night danger.'},
+        {raw:'R3 MUD OPENS',ans:'right three mud opens',narr:'Deep ruts on entry, then opens to clean exit.',comm:'Mud notes change the line completely.'},
+        {raw:'L4 BUMP BUMP',ans:'left four bumps bumps',narr:'Double compression - car never settles.',comm:'Multiple bumps test suspension and rhythm.'},
         {raw:'JUNCTION R1!! STOP 50',ans:'junction right one maximum caution stop 50 metres',narr:'Into the village. Double caution and stop. Old stone walls all around.',comm:'Right one into the village. Every generation of co-driver has this in their nightmares.'},
+        
+        // SPRINT SEGMENT (Notes 25-32)
         {raw:'BUMP L2! 50',ans:'bumps left two caution 50 metres',narr:'Compression into a tight caution left. Very little run-off beyond.',comm:'Nasty corner. Very little time to react to the bump at this pace.'},
         {raw:'SQUARE R ICE INTO L4',ans:'square right ice into left four',narr:'U-turn on ice feeding directly into a medium left. The worst combination this stage has.',comm:'Two cars went off here in practice. The ice doesn\'t show in the headlights.'},
+        {raw:'R6 FLAT L4',ans:'right six flat left four',narr:'Maximum attack section. Two flat calls back-to-back.',comm:'Flat calls in succession test your nerve at night.'},
+        {raw:'L5 LONG R3',ans:'left five long right three',narr:'Fast left five with a long straight to the right three.',comm:'Long straights between notes let you breathe in the dark.'},
+        {raw:'CREST R4 FINISH',ans:'over crest right four finish',narr:'Final corner over a crest to the timing beam.',comm:'The final note is always the most important.'},
+        {raw:'L3 200 R2',ans:'left three 200 metres right two',narr:'Medium left, long straight, then tight right to finish.',comm:'200 metres to the final corner - make it count.'},
         {raw:'R3 LONG FLAT L FINISH',ans:'right three long flat left finish',narr:'Out of the village, the road opens. Final sweep, then the timing arch.',comm:'And across the line. Another Turini survived.'}
        ]}
     ]
@@ -1768,8 +1831,64 @@ function beginStageWithData(stage){
 function loadNote(){
   if(G.idx>=G.notes.length){endStage();return;}
   const n=G.notes[G.idx];
-  document.getElementById('g-note').textContent=n.raw;
-  document.getElementById('g-narr').style.display='none';
+  
+  // Initialize rally state for first note
+  if(G.idx === 0) {
+    RALLY_STATE.startTime = Date.now();
+    RALLY_STATE.lastInputTime = Date.now();
+    RALLY_STATE.currentSector = 0;
+    RALLY_STATE.splitTimes = [];
+    RALLY_STATE.sectorTimes = [];
+    
+    // Initialize competitive seed for zero randomness
+    initializeCompetitiveSeed(G.stageName || 'Unknown', G.driver || 'Driver');
+    
+    // Load personal best if exists
+    loadPersonalBest();
+  }
+  
+  // Note streaming with fade transitions
+  const noteElement = document.getElementById('g-note');
+  const narrElement = document.getElementById('g-narr');
+  
+  // Fade out current note
+  if(G.idx > 0) {
+    noteElement.style.opacity = '0';
+    noteElement.style.transition = 'opacity 0.3s ease';
+    
+    setTimeout(() => {
+      // Fade in new note
+      noteElement.textContent = n.raw;
+      noteElement.style.opacity = '1';
+    }, 150);
+  } else {
+    noteElement.textContent = n.raw;
+    noteElement.style.opacity = '1';
+  }
+  
+  // Overlapping narration - start narration before previous note fully completes
+  if(n.narr) {
+    setTimeout(() => {
+      narrElement.style.display = 'block';
+      document.getElementById('g-narr-txt').textContent = n.narr;
+      narrElement.style.opacity = '0';
+      narrElement.style.transition = 'opacity 0.4s ease';
+      
+      setTimeout(() => {
+        narrElement.style.opacity = '1';
+      }, 50);
+      
+      // Auto-hide narration after reading time
+      setTimeout(() => {
+        narrElement.style.opacity = '0';
+        setTimeout(() => {
+          narrElement.style.display = 'none';
+        }, 400);
+      }, 3000 + n.narr.length * 50); // Longer narration gets more time
+    }, G.idx > 0 ? 200 : 500); // Overlap timing
+  }
+  
+  // Update UI elements
   document.getElementById('g-fb').style.display='none';
   document.getElementById('g-comm').style.display='none';
   document.getElementById('g-comm-ph').style.display='block';
@@ -1780,14 +1899,193 @@ function loadNote(){
   document.getElementById('g-foot-note').textContent=`Note ${G.idx+1} of ${G.notes.length}`;
   document.getElementById('g-prog').style.width=(G.idx/G.notes.length*100)+'%';
   document.getElementById('g-corr').textContent=G.correct;
-  if(G.idx>0){const pd=document.getElementById(`gd-${G.idx-1}`);if(pd&&!pd.classList.contains('bad')&&!pd.classList.contains('sk'))pd.classList.add('ok');}
-  const cur=document.getElementById(`gd-${G.idx}`);if(cur)cur.className='gd now';
-  G.remaining=G.timeLimit;updateTimer();
+  
+  // Update progress dots with smooth transitions
+  if(G.idx>0){
+    const pd=document.getElementById(`gd-${G.idx-1}`);
+    if(pd&&!pd.classList.contains('bad')&&!pd.classList.contains('sk')){
+      pd.style.transition = 'all 0.3s ease';
+      pd.classList.add('ok');
+    }
+  }
+  const cur=document.getElementById(`gd-${G.idx}`);
+  if(cur){
+    cur.style.transition = 'all 0.3s ease';
+    cur.className='gd now';
+  }
+  
+  // Dynamic difficulty based on performance
+  updateDynamicDifficulty();
+  
+  // Rhythm shifts every 5-8 notes
+  if(G.idx > 0 && (G.idx % 6 === 0 || G.idx % 7 === 0)) {
+    applyRhythmShift();
+  }
+  
+  // Weather effects as tempo
+  applyWeatherTempo();
+  
+  // Update urgency states
+  updateUrgencyState();
+  
+  // Timer with dynamic adjustment
+  G.remaining = calculateDynamicTimeLimit();
+  updateTimer();
   clearInterval(G.timer);
   G.timer=setInterval(()=>{G.remaining--;updateTimer();if(G.remaining<=0){clearInterval(G.timer);timeUp();}},1000);
+  
   setTimeout(()=>document.getElementById('g-input').focus(),50);
-  // Inject atmosphere event every 2nd note
-  if(G.idx>0&&G.idx%2===0)setTimeout(injectAtmosphere,800);
+  
+  // Inject atmosphere event every 2nd note (reduced frequency for flow)
+  if(G.idx>0&&G.idx%3===0)setTimeout(injectAtmosphere,800);
+  
+  // Reset visual feedback
+  const input = document.getElementById('g-input');
+  input.style.borderColor = 'var(--brd2)';
+  input.style.boxShadow = 'none';
+}
+
+function updateDynamicDifficulty() {
+  // Adjust timer and threshold based on current streak
+  const baseTime = DIFFS[G.diff].s;
+  const streakBonus = Math.min(RALLY_STATE.streak * 0.5, 3); // Max 3 seconds bonus
+  const momentumBonus = (RALLY_STATE.momentum - 1.0) * 2; // Momentum affects time
+  
+  G.timeLimit = Math.max(5, baseTime - streakBonus + momentumBonus);
+  
+  // Adjust forgiveness window based on performance
+  if(RALLY_STATE.streak >= 5) {
+    RALLY_STATE.forgivenessWindow = Math.min(0.75, 0.62 + RALLY_STATE.streak * 0.02);
+  } else if(RALLY_STATE.streak === 0 && RALLY_STATE.momentum < 0.8) {
+    RALLY_STATE.forgivenessWindow = Math.max(0.55, 0.62 - 0.1);
+  }
+}
+
+function calculateDynamicTimeLimit() {
+  let timeLimit = G.timeLimit;
+  
+  // Weather effects
+  if(RALLY_STATE.weatherEffect === 'rain') {
+    timeLimit += 2; // Slower transitions
+  } else if(RALLY_STATE.weatherEffect === 'ice') {
+    timeLimit -= 1; // Tighter timing
+  } else if(RALLY_STATE.weatherEffect === 'fog') {
+    timeLimit += 1.5; // Delayed reveal
+  }
+  
+  // Urgency state effects
+  if(RALLY_STATE.urgencyLevel === 'critical') {
+    timeLimit -= 1; // Less time under pressure
+  } else if(RALLY_STATE.urgencyLevel === 'calm' && RALLY_STATE.streak >= 3) {
+    timeLimit += 1; // More time when flowing well
+  }
+  
+  return Math.max(4, Math.min(15, timeLimit)); // Clamp between 4-15 seconds
+}
+
+function applyRhythmShift() {
+  // Change pace every 5-8 notes to prevent monotony
+  const shifts = ['normal', 'fast', 'technical', 'sprint'];
+  const currentShift = shifts[Math.floor((G.idx / 6) % shifts.length)];
+  
+  // Show rhythm shift indicator
+  const indicator = document.createElement('div');
+  indicator.className = 'rhythm-shift';
+  indicator.textContent = currentShift.toUpperCase() + ' SECTION';
+  indicator.style.cssText = `
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(245, 197, 24, 0.9);
+    color: #000;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 2px;
+    z-index: 1000;
+    animation: fadeInOut 2s ease;
+  `;
+  
+  document.body.appendChild(indicator);
+  setTimeout(() => indicator.remove(), 2000);
+  
+  // Adjust parameters based on rhythm
+  switch(currentShift) {
+    case 'fast':
+      G.timeLimit *= 0.8; // 20% faster
+      break;
+    case 'technical':
+      G.timeLimit *= 1.2; // 20% slower for complex notes
+      break;
+    case 'sprint':
+      G.timeLimit *= 0.7; // 30% faster for sprint section
+      break;
+  }
+}
+
+function applyWeatherTempo() {
+  // Weather as tempo system
+  if(!RALLY_STATE.weatherEffect) {
+    // Randomly assign weather for competitive fairness (seeded)
+    const weatherTypes = ['clear', 'rain', 'ice', 'fog'];
+    const seed = G.idx + G.stageName.charCodeAt(0); // Deterministic seed
+    RALLY_STATE.weatherEffect = weatherTypes[seed % weatherTypes.length];
+  }
+  
+  // Update conditions display
+  const conditionsElement = document.getElementById('g-cond');
+  if(conditionsElement) {
+    const weatherDescriptions = {
+      'clear': 'Optimal conditions',
+      'rain': 'Wet surface - slower transitions',
+      'ice': 'Icy patches - extreme caution',
+      'fog': 'Limited visibility - delayed notes'
+    };
+    conditionsElement.textContent = weatherDescriptions[RALLY_STATE.weatherEffect];
+  }
+}
+
+function updateUrgencyState() {
+  // Adaptive co-driver voice tone based on performance
+  let newUrgency = 'calm';
+  
+  if(RALLY_STATE.streak >= 5) {
+    newUrgency = 'calm';
+  } else if(RALLY_STATE.streak >= 2) {
+    newUrgency = 'alert';
+  } else if(RALLY_STATE.streak === 0 && RALLY_STATE.momentum < 0.7) {
+    newUrgency = 'critical';
+  }
+  
+  if(newUrgency !== RALLY_STATE.urgencyLevel) {
+    RALLY_STATE.urgencyLevel = newUrgency;
+    
+    // Visual indicator of urgency change
+    const urgencyIndicator = document.createElement('div');
+    urgencyIndicator.className = 'urgency-change';
+    urgencyIndicator.textContent = `CO-DRIVER: ${newUrgency.toUpperCase()}`;
+    urgencyIndicator.style.cssText = `
+      position: fixed;
+      bottom: 100px;
+      right: 20px;
+      background: ${newUrgency === 'critical' ? 'rgba(232, 41, 28, 0.9)' : 
+                   newUrgency === 'alert' ? 'rgba(245, 197, 24, 0.9)' : 
+                   'rgba(57, 255, 20, 0.9)'};
+      color: white;
+      padding: 6px 12px;
+      border-radius: 3px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 1px;
+      z-index: 999;
+      animation: fadeInOut 1.5s ease;
+    `;
+    
+    document.body.appendChild(urgencyIndicator);
+    setTimeout(() => urgencyIndicator.remove(), 1500);
+  }
 }
 function updateTimer(){
   const frac=G.remaining/G.timeLimit;
@@ -1804,32 +2102,36 @@ function similarity(a,b){
   return hit/Math.max(wa.size,wb.size);
 }
 function submitAnswer(){
+  // Legacy function - now uses auto-submit system
+  // Only called if user manually presses Enter
   clearInterval(G.timer);
-  if(G.idx>=G.notes.length||G.stageEnded)return; // guard
+  if(G.idx>=G.notes.length||G.stageEnded)return;
   const typed=document.getElementById('g-input').value.trim();
   if(!typed)return;
-  document.getElementById('g-input').disabled=true;document.getElementById('g-sub').disabled=true;
-  const n=G.notes[G.idx];
-  const thresh=G.diff===4?0.98:0.62;
-  const score=similarity(typed,n.ans);
-  const ok=score>=thresh;
-  if(ok)G.correct++;
-  const dot=document.getElementById(`gd-${G.idx}`);
-  if(dot)dot.className='gd '+(ok?'ok':'bad');
-  G.results.push({raw:n.raw,ans:n.ans,typed,ok,score});
-  G.idx++; // increment first so crash modal can see correct idx state
-  const isLastNote = G.idx >= G.notes.length;
-  const badCrash = !ok && !isLastNote && rollCrash(n.raw,false,true); // no crash on final note - go straight to result
-  showResult(ok,n,score,false,false,false); // never show crash on last note
-  if(!badCrash || isLastNote){
-    setTimeout(()=>{
-      if(G.idx>=G.notes.length){endStage();}
-      else{loadNote();}
-    },2600);
+  
+  const currentNote = G.notes[G.idx];
+  const reactionTime = Date.now() - RALLY_STATE.lastInputTime;
+  
+  // Use the same processing as auto-submit
+  const baseScore = similarity(typed, currentNote.ans);
+  const finalScore = Math.min(1.0, baseScore * RALLY_STATE.multiplier);
+  const ok = finalScore >= RALLY_STATE.forgivenessWindow;
+  
+  // Record reaction time
+  RALLY_STATE.reactionTimes.push(reactionTime);
+  
+  // Update rally state
+  if (ok) {
+    RALLY_STATE.streak++;
+    RALLY_STATE.momentum = Math.min(2.0, RALLY_STATE.momentum + 0.1);
+    RALLY_STATE.multiplier = 1.0 + (RALLY_STATE.streak * 0.05);
+    RALLY_STATE.forgivenessWindow = Math.min(0.8, 0.62 + (RALLY_STATE.streak * 0.02));
+    showFlowTransition(true);
   } else {
-    injectAtmosphere();
-    triggerCrash(n.raw);
+    handleMistakeDisruption();
   }
+  
+  processAnswer(typed, currentNote, ok, finalScore, false);
 }
 function skipNote(){
   clearInterval(G.timer);
@@ -2581,11 +2883,2049 @@ document.addEventListener('keydown', e => {
   }
 });
 
+// ═══════════════════════════════════════════════════════════════
+// COMPETITIVE RALLY EXPERIENCE - AUTO-SUBMIT & VISUAL FLOW
+// ═══════════════════════════════════════════════════════════════
+
+// Execution contexts for different rally experiences
+const EXECUTION_CONTEXTS = {
+  sprint: {
+    name: 'Sprint',
+    description: 'Fast rhythm, low complexity',
+    timeMultiplier: 0.7,
+    complexityMultiplier: 0.6,
+    forgivenessWindow: 0.55,
+    noteDensity: 0.8,
+    visualClarity: 1.0,
+    momentumGain: 0.15,
+    momentumLoss: 0.25,
+    rhythmShiftFrequency: 4,
+    weatherIntensity: 0.5
+  },
+  technical: {
+    name: 'Technical',
+    description: 'Dense, long notes requiring high precision',
+    timeMultiplier: 1.3,
+    complexityMultiplier: 1.4,
+    forgivenessWindow: 0.70,
+    noteDensity: 1.2,
+    visualClarity: 0.9,
+    momentumGain: 0.08,
+    momentumLoss: 0.15,
+    rhythmShiftFrequency: 8,
+    weatherIntensity: 0.7
+  },
+  endurance: {
+    name: 'Endurance',
+    description: 'Long-form stages to test mental fatigue',
+    timeMultiplier: 1.0,
+    complexityMultiplier: 1.0,
+    forgivenessWindow: 0.65,
+    noteDensity: 1.0,
+    visualClarity: 0.8,
+    momentumGain: 0.05,
+    momentumLoss: 0.10,
+    rhythmShiftFrequency: 10,
+    weatherIntensity: 0.6,
+    fatigueMultiplier: 1.2
+  },
+  night: {
+    name: 'Night',
+    description: 'Reduced visual clarity/feedback',
+    timeMultiplier: 1.1,
+    complexityMultiplier: 1.1,
+    forgivenessWindow: 0.60,
+    noteDensity: 0.9,
+    visualClarity: 0.5,
+    momentumGain: 0.06,
+    momentumLoss: 0.20,
+    rhythmShiftFrequency: 6,
+    weatherIntensity: 0.9,
+    reducedFeedback: true
+  },
+  chaos: {
+    name: 'Chaos',
+    description: 'High-pressure, slightly ambiguous pacing',
+    timeMultiplier: 0.9,
+    complexityMultiplier: 1.2,
+    forgivenessWindow: 0.58,
+    noteDensity: 1.1,
+    visualClarity: 0.7,
+    momentumGain: 0.12,
+    momentumLoss: 0.18,
+    rhythmShiftFrequency: 3,
+    weatherIntensity: 1.0,
+    ambiguousPacing: true
+  }
+};
+
+// Co-driver personality variants
+const CODRIVER_PERSONALITIES = {
+  professional: {
+    name: 'Professional',
+    style: 'concise',
+    vocabulary: 'standard',
+    pace: 'measured',
+    urgency: 'low',
+    examples: {
+      'R3': 'Right three',
+      'L2!': 'Left two caution',
+      'FLAT R6': 'Flat right six'
+    }
+  },
+  veteran: {
+    name: 'Veteran',
+    style: 'shorthand',
+    vocabulary: 'authentic',
+    pace: 'rapid',
+    urgency: 'medium',
+    examples: {
+      'R3': 'R-three',
+      'L2!': 'L-two bang',
+      'FLAT R6': 'Flat six'
+    }
+  },
+  enthusiastic: {
+    name: 'Enthusiastic',
+    style: 'verbose',
+    vocabulary: 'descriptive',
+    pace: 'energetic',
+    urgency: 'high',
+    examples: {
+      'R3': 'Right three - easy medium right!',
+      'L2!': 'Left two - watch the inside!',
+      'FLAT R6': 'Flat right six - absolutely flat!'
+    }
+  },
+  calm: {
+    name: 'Calm',
+    style: 'reassuring',
+    vocabulary: 'simplified',
+    pace: 'gentle',
+    urgency: 'very_low',
+    examples: {
+      'R3': 'Right three, nice and easy',
+      'L2!': 'Left two, take care',
+      'FLAT R6': 'Flat right six, you\'re fine'
+    }
+  }
+};
+
+// Pacenote evolution system
+const PACENOTE_EVOLUTION = {
+  clean: {
+    level: 1,
+    name: 'Clean',
+    description: 'Readable, spaced notes',
+    compression: 1.0,
+    ambiguity: 0.1,
+    visualDensity: 0.7
+  },
+  compressed: {
+    level: 2,
+    name: 'Compressed',
+    description: 'Tighter spacing, some shorthand',
+    compression: 0.8,
+    ambiguity: 0.3,
+    visualDensity: 0.85
+  },
+  high_density: {
+    level: 3,
+    name: 'High Density',
+    description: 'Compact, heavy shorthand use',
+    compression: 0.6,
+    ambiguity: 0.5,
+    visualDensity: 1.0
+  },
+  ambiguous: {
+    level: 4,
+    name: 'Ambiguous',
+    description: 'Expert-level compressed notation',
+    compression: 0.5,
+    ambiguity: 0.7,
+    visualDensity: 1.2
+  }
+};
+
+// Competitive rally state management
+const RALLY_STATE = {
+  momentum: 1.0,
+  streak: 0,
+  multiplier: 1.0,
+  forgivenessWindow: 0.62,
+  inRecovery: false,
+  recoveryTimer: null,
+  lastInputTime: 0,
+  reactionTimes: [],
+  sectorTimes: [],
+  currentSector: 0,
+  weatherEffect: null,
+  urgencyLevel: 'calm',
+  startTime: 0,
+  splitTimes: [],
+  // Execution context
+  currentContext: 'sprint',
+  contextModifiers: {},
+  // Pacenote evolution
+  currentEvolution: 'clean',
+  evolutionLevel: 1,
+  // Co-driver personality
+  codriverPersonality: 'professional',
+  // Advanced scoring
+  accuracyScore: 0,
+  speedScore: 0,
+  consistencyScore: 0,
+  resilienceScore: 0,
+  totalScore: 0,
+  // Precision grading
+  perfectInputs: 0,
+  goodInputs: 0,
+  safeInputs: 0,
+  failInputs: 0,
+  // Recovery metrics
+  recoverySpeeds: [],
+  averageRecoveryTime: 0,
+  // Timing tiers
+  earlyInputs: 0,
+  lateInputs: 0,
+  // Personal best tracking
+  personalBest: null,
+  currentPB: null,
+  // Ghost system
+  activeGhost: null,
+  ghostData: null,
+  // Zero randomness seed
+  competitiveSeed: 0,
+  // Fatigue system
+  fatigueLevel: 0,
+  fatigueMultiplier: 1.0
+};
+
+// Zero randomness for competitive fairness
+function initializeCompetitiveSeed(stageName, driverName) {
+  // Create deterministic seed from stage and driver names
+  let seed = 0;
+  for (let i = 0; i < stageName.length; i++) {
+    seed += stageName.charCodeAt(i) * (i + 1);
+  }
+  for (let i = 0; i < driverName.length; i++) {
+    seed += driverName.charCodeAt(i) * (i + 3);
+  }
+  RALLY_STATE.competitiveSeed = seed % 1000000; // Keep it manageable
+}
+
+// Seeded random number generator for competitive fairness
+function seededRandom() {
+  const x = Math.sin(RALLY_STATE.competitiveSeed++) * 10000;
+  return x - Math.floor(x);
+}
+
+// Advanced composite scoring system (35% accuracy, 25% speed, 20% consistency, 15% resilience, 5% precision)
+function calculateCompositeScore() {
+  const totalNotes = G.notes.length;
+  const correctNotes = G.correct;
+  
+  // Accuracy score (35% weight) - weighted by execution context
+  const context = EXECUTION_CONTEXTS[RALLY_STATE.currentContext];
+  const accuracyWeight = context.name === 'Technical' ? 1.2 : 
+                       context.name === 'Sprint' ? 0.9 : 1.0;
+  RALLY_STATE.accuracyScore = (correctNotes / totalNotes) * 35 * accuracyWeight;
+  
+  // Speed score (25% weight) - based on average reaction time with fatigue consideration
+  const avgReactionTime = RALLY_STATE.reactionTimes.length > 0 
+    ? RALLY_STATE.reactionTimes.reduce((a, b) => a + b, 0) / RALLY_STATE.reactionTimes.length 
+    : 5000; // Default slow time
+  
+  // Apply fatigue multiplier for endurance stages
+  const adjustedTime = avgReactionTime * RALLY_STATE.fatigueMultiplier;
+  
+  // Faster reaction = higher score (optimal around 800ms)
+  const optimalTime = 800;
+  const speedRatio = Math.max(0, Math.min(1, 1 - (adjustedTime - optimalTime) / optimalTime));
+  RALLY_STATE.speedScore = speedRatio * 25;
+  
+  // Consistency score (20% weight) - using weighted consistency
+  RALLY_STATE.consistencyScore = calculateConsistencyWeightedScore();
+  
+  // Resilience score (15% weight) - recovery speed metric
+  RALLY_STATE.resilienceScore = calculateResilienceScore();
+  
+  // Precision score (5% weight) - based on perfect/good/safe ratios
+  const totalGradedInputs = RALLY_STATE.perfectInputs + RALLY_STATE.goodInputs + RALLY_STATE.safeInputs + RALLY_STATE.failInputs;
+  if (totalGradedInputs > 0) {
+    const precisionRatio = ((RALLY_STATE.perfectInputs * 1.0) + 
+                          (RALLY_STATE.goodInputs * 0.8) + 
+                          (RALLY_STATE.safeInputs * 0.6)) / totalGradedInputs;
+    RALLY_STATE.precisionScore = precisionRatio * 5;
+  } else {
+    RALLY_STATE.precisionScore = 2.5; // Default middle score
+  }
+  
+  // Total composite score
+  RALLY_STATE.totalScore = Math.min(100, RALLY_STATE.accuracyScore + RALLY_STATE.speedScore + 
+                                   RALLY_STATE.consistencyScore + RALLY_STATE.resilienceScore + RALLY_STATE.precisionScore);
+  
+  return RALLY_STATE.totalScore;
+}
+
+// Ghost ecosystem implementation
+function createGhostData(runData) {
+  return {
+    driverName: runData.driverName || G.driver,
+    score: runData.totalScore || RALLY_STATE.totalScore,
+    context: runData.context || RALLY_STATE.currentContext,
+    evolution: runData.evolution || RALLY_STATE.currentEvolution,
+    personality: runData.personality || RALLY_STATE.codriverPersonality,
+    reactionTimes: [...(runData.reactionTimes || RALLY_STATE.reactionTimes)],
+    precisionGrades: [...(runData.precisionGrades || [])],
+    sectorTimes: [...(runData.sectorTimes || RALLY_STATE.splitTimes)],
+    timestamp: Date.now(),
+    seed: runData.seed || RALLY_STATE.competitiveSeed,
+    weather: runData.weather || RALLY_STATE.weatherEffect
+  };
+}
+
+function loadGhostData(type) {
+  const storageKey = `ghost_${type}_${G.stageName}`;
+  const savedGhost = localStorage.getItem(storageKey);
+  return savedGhost ? JSON.parse(savedGhost) : null;
+}
+
+function saveGhostData(type, ghostData) {
+  const storageKey = `ghost_${type}_${G.stageName}`;
+  localStorage.setItem(storageKey, JSON.stringify(ghostData));
+}
+
+function getNearRankRival() {
+  const leaderboard = getDailyLeaderboard();
+  const playerScore = RALLY_STATE.totalScore;
+  
+  // Find the closest score above and below the player
+  let aboveRival = null;
+  let belowRival = null;
+  
+  for (const entry of leaderboard) {
+    if (entry.score > playerScore && (!aboveRival || entry.score < aboveRival.score)) {
+      aboveRival = entry;
+    } else if (entry.score < playerScore && (!belowRival || entry.score > belowRival.score)) {
+      belowRival = entry;
+    }
+  }
+  
+  // Return the closer rival
+  if (aboveRival && belowRival) {
+    return (aboveRival.score - playerScore) < (playerScore - belowRival.score) ? aboveRival : belowRival;
+  }
+  return aboveRival || belowRival;
+}
+
+function initializeGhosts() {
+  // Load Personal Best ghost
+  const pbGhost = loadGhostData('pb');
+  if (pbGhost) {
+    RALLY_STATE.activeGhost = pbGhost;
+    RALLY_STATE.ghostData = pbGhost;
+  }
+  
+  // Load Global Top ghost (from daily leaderboard)
+  const leaderboard = getDailyLeaderboard();
+  if (leaderboard.length > 0) {
+    const topEntry = leaderboard[0];
+    const globalGhost = {
+      driverName: topEntry.driverName,
+      score: topEntry.score,
+      rankTier: topEntry.rankTier,
+      timestamp: topEntry.timestamp,
+      type: 'global'
+    };
+    saveGhostData('global', globalGhost);
+  }
+  
+  // Load Near Rank rival ghost
+  const nearRival = getNearRankRival();
+  if (nearRival) {
+    const rivalGhost = {
+      driverName: nearRival.driverName,
+      score: nearRival.score,
+      rankTier: nearRival.rankTier,
+      timestamp: nearRival.timestamp,
+      type: 'rival'
+    };
+    saveGhostData('rival', rivalGhost);
+  }
+}
+
+function updateGhostProgress(currentNoteIndex) {
+  if (!RALLY_STATE.ghostData) return;
+  
+  // Calculate ghost progress based on their reaction times
+  let ghostProgress = 0;
+  for (let i = 0; i < currentNoteIndex && i < RALLY_STATE.ghostData.reactionTimes.length; i++) {
+    ghostProgress += RALLY_STATE.ghostData.reactionTimes[i];
+  }
+  
+  // Update ghost visual indicator
+  const ghostIndicator = document.getElementById('ghost-progress');
+  if (ghostIndicator) {
+    const progress = Math.min(100, (ghostProgress / 1000) / G.timeLimit * 100);
+    ghostIndicator.style.width = `${progress}%`;
+  }
+}
+
+// Split system with sector times and PB comparisons
+function updateSplitTimes() {
+  const currentNote = G.idx;
+  const totalNotes = G.notes.length;
+  
+  // Define sectors (every 8 notes for 32-note stages)
+  const sectorSize = Math.floor(totalNotes / 4);
+  const currentSector = Math.floor(currentNote / sectorSize);
+  
+  if (currentSector > RALLY_STATE.currentSector && currentNote > 0) {
+    // Completed a sector
+    const sectorTime = Date.now() - RALLY_STATE.sectorTimes[RALLY_STATE.currentSector] || 0;
+    RALLY_STATE.splitTimes.push(sectorTime);
+    RALLY_STATE.currentSector = currentSector;
+    
+    // Start timing new sector
+    RALLY_STATE.sectorTimes[currentSector] = Date.now();
+    
+    // Show split time comparison to PB
+    showSplitComparison(currentSector, sectorTime);
+  } else if (RALLY_STATE.sectorTimes.length === 0) {
+    // Initialize first sector timing
+    RALLY_STATE.sectorTimes[0] = Date.now();
+  }
+}
+
+function showSplitComparison(sectorNumber, sectorTime) {
+  const sectorNames = ['SS1', 'SS2', 'SS3', 'SS4'];
+  const pbTime = RALLY_STATE.personalBest ? RALLY_STATE.personalBest.splitTimes[sectorNumber] : null;
+  
+  let deltaText = '';
+  let deltaColor = '#39ff14'; // Green
+  
+  if (pbTime) {
+    const delta = sectorTime - pbTime;
+    if (delta > 0) {
+      deltaText = `+${(delta / 1000).toFixed(2)}s`;
+      deltaColor = '#e8291c'; // Red
+    } else if (delta < 0) {
+      deltaText = `${(delta / 1000).toFixed(2)}s`;
+      deltaColor = '#39ff14'; // Green
+    } else {
+      deltaText = '0.00s';
+      deltaColor = '#f5c518'; // Yellow
+    }
+  } else {
+    deltaText = 'NEW PB';
+    deltaColor = '#f5c518'; // Yellow
+  }
+  
+  // Show split ticker
+  const splitTicker = document.getElementById('split-ticker');
+  if (splitTicker) {
+    splitTicker.style.display = 'block';
+    splitTicker.innerHTML = `${sectorNames[sectorNumber]} — ${deltaText}`;
+    splitTicker.style.color = deltaColor;
+    
+    setTimeout(() => {
+      splitTicker.style.display = 'none';
+    }, 3000);
+  }
+}
+
+// Precision grading windows (rhythm-game style)
+function calculatePrecisionGrade(reactionTime, timeLimit, similarity) {
+  const timeRatio = reactionTime / (timeLimit * 1000); // Convert to ms
+  
+  // Perfect: Excellent timing + high accuracy
+  if (timeRatio <= 0.25 && similarity >= 0.95) {
+    return 'perfect';
+  }
+  // Good: Good timing + decent accuracy
+  else if (timeRatio <= 0.5 && similarity >= 0.8) {
+    return 'good';
+  }
+  // Safe: Acceptable timing + minimum accuracy
+  else if (timeRatio <= 0.85 && similarity >= RALLY_STATE.forgivenessWindow) {
+    return 'safe';
+  }
+  // Fail: Too slow or too inaccurate
+  else {
+    return 'fail';
+  }
+}
+
+// Timing tiers for early/late input rewards
+function calculateTimingTier(reactionTime, timeLimit) {
+  const timeRatio = reactionTime / (timeLimit * 1000); // Convert to ms
+  
+  if (timeRatio <= 0.3) {
+    return 'early'; // Very fast input
+  } else if (timeRatio <= 0.6) {
+    return 'perfect'; // Optimal timing
+  } else if (timeRatio <= 0.8) {
+    return 'good'; // Good timing
+  } else if (timeRatio <= 1.0) {
+    return 'late'; // Late but within limit
+  } else {
+    return 'timeout'; // Too late
+  }
+}
+
+// Apply precision grading with risk vs reward
+function applyPrecisionGrade(grade, baseScore) {
+  switch (grade) {
+    case 'perfect':
+      RALLY_STATE.perfectInputs++;
+      return Math.min(1.0, baseScore * 1.25); // 25% bonus
+    case 'good':
+      RALLY_STATE.goodInputs++;
+      return Math.min(1.0, baseScore * 1.1); // 10% bonus
+    case 'safe':
+      RALLY_STATE.safeInputs++;
+      return baseScore; // No bonus/penalty
+    case 'fail':
+      RALLY_STATE.failInputs++;
+      return baseScore * 0.5; // 50% penalty
+    default:
+      return baseScore;
+  }
+}
+
+function applyTimingTier(tier, score) {
+  switch (tier) {
+    case 'early':
+      RALLY_STATE.earlyInputs++;
+      // Risk vs reward: early inputs are risky but rewarding
+      return score * 1.2; // 20% bonus for early inputs
+    case 'perfect':
+      RALLY_STATE.perfectInputs++;
+      return score * 1.1; // 10% bonus for perfect timing
+    case 'good':
+      return score; // No bonus/penalty
+    case 'late':
+      RALLY_STATE.lateInputs++;
+      return score * 0.9; // 10% penalty for late inputs
+    case 'timeout':
+      return 0; // No score for timeout
+    default:
+      return score;
+  }
+}
+
+// Consistency weighted scoring
+function calculateConsistencyWeightedScore() {
+  if (RALLY_STATE.reactionTimes.length < 2) return 0;
+  
+  const avgTime = RALLY_STATE.reactionTimes.reduce((a, b) => a + b, 0) / RALLY_STATE.reactionTimes.length;
+  const variance = RALLY_STATE.reactionTimes.reduce((acc, time) => {
+    return acc + Math.pow(time - avgTime, 2);
+  }, 0) / RALLY_STATE.reactionTimes.length;
+  
+  // Lower variance = higher consistency score
+  const consistencyRatio = Math.max(0, Math.min(1, 1 - variance / 1000000));
+  
+  // Weight by execution context
+  const context = EXECUTION_CONTEXTS[RALLY_STATE.currentContext];
+  const consistencyWeight = context.name === 'Technical' ? 1.3 : 
+                          context.name === 'Sprint' ? 0.8 : 1.0;
+  
+  return consistencyRatio * consistencyWeight * 25; // Max 25 points
+}
+
+// Resilience metric - recovery speed after mistakes
+function calculateResilienceScore() {
+  if (RALLY_STATE.recoverySpeeds.length === 0) return 10; // Base score
+  
+  const avgRecoveryTime = RALLY_STATE.recoverySpeeds.reduce((a, b) => a + b, 0) / RALLY_STATE.recoverySpeeds.length;
+  
+  // Faster recovery = higher resilience score
+  const optimalRecoveryTime = 2000; // 2 seconds
+  const resilienceRatio = Math.max(0, Math.min(1, 1 - (avgRecoveryTime - optimalRecoveryTime) / optimalRecoveryTime));
+  
+  return resilienceRatio * 15 + 5; // Max 20 points
+}
+
+// Record recovery speed after mistake
+function recordRecoverySpeed() {
+  if (RALLY_STATE.lastInputTime > 0) {
+    const recoveryTime = Date.now() - RALLY_STATE.lastInputTime;
+    RALLY_STATE.recoverySpeeds.push(recoveryTime);
+    RALLY_STATE.averageRecoveryTime = RALLY_STATE.recoverySpeeds.reduce((a, b) => a + b, 0) / RALLY_STATE.recoverySpeeds.length;
+  }
+}
+
+// Percentile-based rank tiers (Bronze through World Class)
+function calculateRankTier(score) {
+  if (score >= 95) return { tier: 'World Class', color: '#FFD700', percentile: 99 };
+  if (score >= 90) return { tier: 'Elite', color: '#C0C0C0', percentile: 95 };
+  if (score >= 85) return { tier: 'Diamond', color: '#B9F2FF', percentile: 90 };
+  if (score >= 80) return { tier: 'Platinum', color: '#E5E4E2', percentile: 85 };
+  if (score >= 75) return { tier: 'Gold', color: '#FFD700', percentile: 75 };
+  if (score >= 70) return { tier: 'Silver', color: '#C0C0C0', percentile: 60 };
+  if (score >= 65) return { tier: 'Bronze', color: '#CD7F32', percentile: 40 };
+  if (score >= 60) return { tier: 'Professional', color: '#4169E1', percentile: 25 };
+  if (score >= 55) return { tier: 'Advanced', color: '#32CD32', percentile: 15 };
+  if (score >= 50) return { tier: 'Intermediate', color: '#FFA500', percentile: 10 };
+  if (score >= 45) return { tier: 'Club', color: '#800080', percentile: 5 };
+  if (score >= 40) return { tier: 'Rookie', color: '#A52A2A', percentile: 2 };
+  return { tier: 'Amateur', color: '#808080', percentile: 0 };
+}
+
+// Performance heatmap for post-run analysis
+function generatePerformanceHeatmap() {
+  const heatmap = {
+    accuracy: [],
+    speed: [],
+    consistency: [],
+    mistakes: []
+  };
+  
+  G.results.forEach((result, index) => {
+    // Accuracy per note
+    heatmap.accuracy.push(result.ok ? 1 : 0);
+    
+    // Speed per note (reaction time normalized)
+    if (result.reactionTime) {
+      const normalizedSpeed = Math.max(0, Math.min(1, 1 - (result.reactionTime - 500) / 2000));
+      heatmap.speed.push(normalizedSpeed);
+    } else {
+      heatmap.speed.push(0);
+    }
+    
+    // Consistency per note (based on momentum)
+    heatmap.consistency.push(result.momentum || 1);
+    
+    // Mistakes marked
+    if (!result.ok) {
+      heatmap.mistakes.push(index);
+    }
+  });
+  
+  return heatmap;
+}
+
+// ...
+
+function endStage(){
+  clearInterval(G.timer);
+  G.stageEnded=true;
+  document.getElementById('g-input').disabled=true;
+  document.getElementById('g-sub').disabled=true;
+  const today = new Date();
+  const weekNumber = Math.floor((today.getDate() - 1) / 7) + 1;
+  const month = today.getMonth();
+  const year = today.getFullYear();
+  const weekString = `${year}-${month}-${weekNumber}`;
+  let seed = 0;
+  for (let i = 0; i < weekString.length; i++) {
+    seed += weekString.charCodeAt(i) * (i + 2);
+  }
+  return seed % 1000000;
+}
+
+function getWeeklyRallyStage() {
+  const weeklySeed = generateWeeklySeed();
+  const allStages = [];
+  
+  // Collect all stages from all eras
+  Object.values(ERAS).forEach(era => {
+    era.stages.forEach(stage => {
+      allStages.push({ ...stage, era: era.label });
+    });
+  });
+  
+  // Select stage based on weekly seed
+  const stageIndex = weeklySeed % allStages.length;
+  const selectedStage = allStages[stageIndex];
+  
+  // Add weekly variations - more challenging than daily
+  const tempSeed = weeklySeed + 2000;
+  const contexts = ['technical', 'endurance', 'chaos'];
+  const contextIndex = Math.floor((tempSeed % 10000) / 3333);
+  
+  return {
+    ...selectedStage,
+    weeklyContext: contexts[contextIndex],
+    weeklySeed: weeklySeed,
+    isWeeklyRun: true,
+    difficulty: 'hard'
+  };
+}
+
+function submitWeeklyRun(score, driverName) {
+  const weeklySeed = generateWeeklySeed();
+  const leaderboardKey = `weekly_leaderboard_${weeklySeed}`;
+  
+  // Get current leaderboard and apply rank decay
+  let leaderboard = JSON.parse(localStorage.getItem(leaderboardKey) || '[]');
+  leaderboard = applyRankDecay(leaderboard, 'weekly');
+  
+  // Restore score if player was decayed
+  leaderboard = restoreScoreOnActivity(leaderboard, driverName, score);
+  
+  // Add new entry
+  const entry = {
+    driverName,
+    score,
+    date: new Date().toISOString(),
+    rankTier: calculateRankTier(score),
+    timestamp: Date.now(),
+    weekNumber: Math.floor((new Date().getDate() - 1) / 7) + 1,
+    lastActivity: Date.now()
+  };
+  
+  leaderboard.push(entry);
+  
+  // Sort by score (descending)
+  leaderboard.sort((a, b) => b.score - a.score);
+  
+  // Keep only top 50 for weekly
+  leaderboard = leaderboard.slice(0, 50);
+  
+  // Save updated leaderboard
+  localStorage.setItem(leaderboardKey, JSON.stringify(leaderboard));
+  
+  // Return rank position
+  const rank = leaderboard.findIndex(e => e.timestamp === entry.timestamp) + 1;
+  return { rank, totalEntries: leaderboard.length, leaderboard };
+}
+
+// Seasonal structure with theme rotation
+const SEASONS = {
+  spring: {
+    name: 'Spring Championship',
+    theme: 'rebirth',
+    color: '#90EE90',
+    weatherBias: ['clear', 'rain'],
+    contextBias: ['sprint', 'technical'],
+    description: 'Fresh starts and technical precision'
+  },
+  summer: {
+    name: 'Summer Sprint Series',
+    theme: 'speed',
+    color: '#FFD700',
+    weatherBias: ['clear', 'hot'],
+    contextBias: ['sprint', 'chaos'],
+    description: 'High-speed action and intense competition'
+  },
+  autumn: {
+    name: 'Autumn Endurance',
+    theme: 'persistence',
+    color: '#FF8C00',
+    weatherBias: ['rain', 'fog'],
+    contextBias: ['endurance', 'technical'],
+    description: 'Mental toughness and consistency'
+  },
+  winter: {
+    name: 'Winter Rally Challenge',
+    theme: 'adaptation',
+    color: '#87CEEB',
+    weatherBias: ['ice', 'snow'],
+    contextBias: ['night', 'chaos'],
+    description: 'Adaptation and resilience in harsh conditions'
+  }
+};
+
+function getCurrentSeason() {
+  const month = new Date().getMonth(); // 0-11
+  
+  if (month >= 2 && month <= 4) return 'spring'; // March, April, May
+  if (month >= 5 && month <= 7) return 'summer'; // June, July, August
+  if (month >= 8 && month <= 10) return 'autumn'; // September, October, November
+  return 'winter'; // December, January, February
+}
+
+function getSeasonalLeaderboard() {
+  const season = getCurrentSeason();
+  const year = new Date().getFullYear();
+  const seasonKey = `season_${season}_${year}`;
+  
+  return JSON.parse(localStorage.getItem(seasonKey) || '[]');
+}
+
+function submitSeasonalRun(score, driverName) {
+  const season = getCurrentSeason();
+  const year = new Date().getFullYear();
+  const seasonKey = `season_${season}_${year}`;
+  
+  // Get current seasonal leaderboard
+  let leaderboard = JSON.parse(localStorage.getItem(seasonKey) || '[]');
+  
+  // Add new entry
+  const entry = {
+    driverName,
+    score,
+    date: new Date().toISOString(),
+    rankTier: calculateRankTier(score),
+    timestamp: Date.now(),
+    season,
+    year
+  };
+  
+  leaderboard.push(entry);
+  
+  // Sort by score (descending)
+  leaderboard.sort((a, b) => b.score - a.score);
+  
+  // Keep only top 200 for seasonal
+  leaderboard = leaderboard.slice(0, 200);
+  
+  // Save updated leaderboard
+  localStorage.setItem(seasonKey, JSON.stringify(leaderboard));
+  
+  // Return rank position
+  const rank = leaderboard.findIndex(e => e.timestamp === entry.timestamp) + 1;
+  return { rank, totalEntries: leaderboard.length, leaderboard, season: SEASONS[season] };
+}
+
+function getSeasonalTheme() {
+  const season = getCurrentSeason();
+  return SEASONS[season];
+}
+
+function applySeasonalModifiers(stage) {
+  const season = getSeasonalTheme();
+  
+  // Apply weather bias
+  const weatherBias = season.weatherBias[Math.floor(Math.random() * season.weatherBias.length)];
+  
+  // Apply context bias for special events
+  const contextBias = season.contextBias[Math.floor(Math.random() * season.contextBias.length)];
+  
+  return {
+    ...stage,
+    seasonalWeather: weatherBias,
+    seasonalContext: contextBias,
+    seasonalTheme: season.theme,
+    seasonalColor: season.color
+  };
+}
+
+function getSeasonalEndTimestamp() {
+  const month = new Date().getMonth();
+  const year = new Date().getFullYear();
+  
+  // Calculate end of current season
+  let endMonth, endDay;
+  
+  if (month >= 2 && month <= 4) { // Spring
+    endMonth = 4; endDay = 30;
+  } else if (month >= 5 && month <= 7) { // Summer
+    endMonth = 7; endDay = 31;
+  } else if (month >= 8 && month <= 10) { // Autumn
+    endMonth = 10; endDay = 30;
+  } else { // Winter
+    endMonth = 1; endDay = 28; // February
+    if (month === 0 || month === 1) {
+      // Still in winter, next year's February
+      return new Date(year + 1, endMonth, endDay).getTime();
+    }
+  }
+  
+  return new Date(year, endMonth, endDay, 23, 59, 59).getTime();
+}
+
+function showSeasonalInfo() {
+  const season = getSeasonalTheme();
+  const timeUntilEnd = getSeasonalEndTimestamp() - Date.now();
+  const daysRemaining = Math.floor(timeUntilEnd / (24 * 60 * 60 * 1000));
+  
+  const info = document.createElement('div');
+  info.style.cssText = `
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: ${season.color};
+    color: #000;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 12px;
+    letter-spacing: 1px;
+    z-index: 1000;
+  `;
+  
+  info.innerHTML = `
+    <div style="font-weight: bold;">${season.name}</div>
+    <div style="font-size: 10px;">${daysRemaining} days remaining</div>
+  `;
+  
+  document.body.appendChild(info);
+  
+  // Remove after 10 seconds
+  setTimeout(() => {
+    if (info.parentNode) {
+      info.parentNode.removeChild(info);
+    }
+  }, 10000);
+}
+
+// Lightweight replays and seed sharing
+function createReplayData(runData) {
+  return {
+    version: '1.0',
+    driverName: runData.driverName || G.driver || 'Anonymous',
+    timestamp: Date.now(),
+    stageName: runData.stageName || G.stageName,
+    era: runData.era || G.era,
+    context: runData.context || RALLY_STATE.currentContext,
+    evolution: runData.evolution || RALLY_STATE.currentEvolution,
+    personality: runData.personality || RALLY_STATE.codriverPersonality,
+    weather: runData.weather || RALLY_STATE.weatherEffect,
+    seed: runData.seed || RALLY_STATE.competitiveSeed,
+    difficulty: runData.difficulty || G.diff,
+    notes: runData.notes || G.notes.map(n => ({ raw: n.raw, ans: n.ans })),
+    
+    // Performance data
+    totalScore: runData.totalScore || RALLY_STATE.totalScore,
+    accuracyScore: runData.accuracyScore || RALLY_STATE.accuracyScore,
+    speedScore: runData.speedScore || RALLY_STATE.speedScore,
+    consistencyScore: runData.consistencyScore || RALLY_STATE.consistencyScore,
+    resilienceScore: runData.resilienceScore || RALLY_STATE.resilienceScore,
+    precisionScore: runData.precisionScore || RALLY_STATE.precisionScore,
+    
+    // Detailed metrics
+    reactionTimes: [...(runData.reactionTimes || RALLY_STATE.reactionTimes)],
+    precisionGrades: [...(runData.precisionGrades || RALLY_STATE.precisionGrades || [])],
+    sectorTimes: [...(runData.sectorTimes || RALLY_STATE.splitTimes)],
+    recoverySpeeds: [...(runData.recoverySpeeds || RALLY_STATE.recoverySpeeds)],
+    
+    // Statistics
+    perfectInputs: runData.perfectInputs || RALLY_STATE.perfectInputs,
+    goodInputs: runData.goodInputs || RALLY_STATE.goodInputs,
+    safeInputs: runData.safeInputs || RALLY_STATE.safeInputs,
+    failInputs: runData.failInputs || RALLY_STATE.failInputs,
+    earlyInputs: runData.earlyInputs || RALLY_STATE.earlyInputs,
+    lateInputs: runData.lateInputs || RALLY_STATE.lateInputs,
+    
+    // Rank and progression
+    rankTier: calculateRankTier(runData.totalScore || RALLY_STATE.totalScore),
+    isNewPB: runData.isNewPB || false,
+    
+    // Context-specific data
+    fatigueLevel: runData.fatigueLevel || RALLY_STATE.fatigueLevel,
+    momentumHistory: runData.momentumHistory || [],
+    streakHistory: runData.streakHistory || []
+  };
+}
+
+function generateShareableSeed(replayData) {
+  // Create a compact, shareable string
+  const seedData = {
+    s: replayData.seed, // seed
+    st: replayData.stageName.substring(0, 10), // stage (truncated)
+    ctx: replayData.context.charAt(0), // context (first letter)
+    evo: replayData.evolution.charAt(0), // evolution (first letter)
+    diff: replayData.difficulty, // difficulty
+    w: replayData.weather ? replayData.weather.charAt(0) : 'c' // weather
+  };
+  
+  // Convert to base64 for compact sharing
+  const jsonString = JSON.stringify(seedData);
+  return btoa(jsonString).replace(/=/g, '').substring(0, 12); // 12 chars max
+}
+
+function parseShareableSeed(shareCode) {
+  try {
+    // Pad base64 string and decode
+    const padded = shareCode + '='.repeat((4 - shareCode.length % 4) % 4);
+    const jsonString = atob(padded);
+    const seedData = JSON.parse(jsonString);
+    
+    // Expand abbreviated values
+    const contextMap = { 's': 'sprint', 't': 'technical', 'e': 'endurance', 'n': 'night', 'c': 'chaos' };
+    const evolutionMap = { 'c': 'clean', 'p': 'compressed', 'h': 'high_density', 'a': 'ambiguous' };
+    const weatherMap = { 'c': 'clear', 'r': 'rain', 'i': 'ice', 'f': 'fog', 'h': 'hot' };
+    
+    return {
+      seed: seedData.s,
+      stageHint: seedData.st,
+      context: contextMap[seedData.ctx] || 'sprint',
+      evolution: evolutionMap[seedData.evo] || 'clean',
+      difficulty: seedData.diff || 1,
+      weather: weatherMap[seedData.w] || 'clear'
+    };
+  } catch (error) {
+    console.error('Invalid share code:', error);
+    return null;
+  }
+}
+
+function shareReplay(replayData) {
+  const shareCode = generateShareableSeed(replayData);
+  const shareText = `Rally Replay: ${replayData.driverName} - ${replayData.totalScore.toFixed(1)}pts\nCode: ${shareCode}\nStage: ${replayData.stageName}`;
+  
+  // Create share modal
+  const modal = document.createElement('div');
+  modal.style.cssText = `
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  `;
+  
+  const content = document.createElement('div');
+  content.style.cssText = `
+    background: var(--surf);
+    border: 2px solid var(--gold);
+    border-radius: 8px;
+    max-width: 500px;
+    width: 100%;
+    padding: 2rem;
+  `;
+  
+  content.innerHTML = `
+    <h3 style="font-family: 'Bebas Neue', sans-serif; color: var(--gold); margin-bottom: 1rem;">Share Replay</h3>
+    <div style="background: var(--bg); padding: 1rem; border-radius: 4px; margin-bottom: 1rem; font-family: 'IBM Plex Mono', monospace; font-size: 12px; word-break: break-all;">
+      ${shareCode}
+    </div>
+    <p style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text2); margin-bottom: 1rem;">
+      Share this code to let others race your ghost!
+    </p>
+    <button id="copy-share-btn" style="background: var(--gold); color: var(--bg); border: none; padding: 0.75rem 1.5rem; font-family: 'Bebas Neue', sans-serif; cursor: pointer; margin-right: 0.5rem;">Copy Code</button>
+    <button id="close-share-btn" style="background: var(--brd2); color: var(--text); border: none; padding: 0.75rem 1.5rem; font-family: 'Bebas Neue', sans-serif; cursor: pointer;">Close</button>
+  `;
+  
+  modal.appendChild(content);
+  document.body.appendChild(modal);
+  
+  // Copy functionality
+  document.getElementById('copy-share-btn').onclick = () => {
+    navigator.clipboard.writeText(shareCode).then(() => {
+      const btn = document.getElementById('copy-share-btn');
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy Code', 2000);
+    });
+  };
+  
+  // Close functionality
+  document.getElementById('close-share-btn').onclick = () => modal.remove();
+}
+
+function loadSharedReplay(shareCode) {
+  const seedData = parseShareableSeed(shareCode);
+  if (!seedData) {
+    alert('Invalid share code!');
+    return;
+  }
+  
+  // Apply shared seed settings
+  RALLY_STATE.competitiveSeed = seedData.seed;
+  RALLY_STATE.currentContext = seedData.context;
+  RALLY_STATE.currentEvolution = seedData.evolution;
+  RALLY_STATE.weatherEffect = seedData.weather;
+  G.diff = seedData.difficulty;
+  
+  // Find matching stage (use hint to narrow down)
+  let selectedStage = null;
+  Object.values(ERAS).forEach(era => {
+    era.stages.forEach(stage => {
+      if (stage.name.toLowerCase().includes(seedData.stageHint.toLowerCase())) {
+        selectedStage = stage;
+      }
+    });
+  });
+  
+  if (!selectedStage) {
+    // Fallback to first stage
+    selectedStage = ERAS.w80.stages[0];
+  }
+  
+  // Set up stage
+  G.stageName = selectedStage.name;
+  G.notes = selectedStage.notes;
+  G.era = selectedStage.era || 'w80';
+  G.timeLimit = DIFFS[G.diff].s;
+  
+  // Mark as shared replay
+  G.isSharedReplay = true;
+  G.shareCode = shareCode;
+  
+  // Start the stage
+  showGame();
+  loadNote();
+}
+
+// Evolution tracking with long-term charts
+function generateEvolutionChart(profile) {
+  const history = profile.evolutionHistory || [];
+  if (history.length < 2) return null;
+  
+  // Prepare data for chart
+  const chartData = {
+    labels: history.map(entry => {
+      const date = new Date(entry.date);
+      return `${date.getMonth() + 1}/${date.getDate()}`;
+    }),
+    scores: history.map(entry => entry.score),
+    ranks: history.map(entry => {
+      const rank = calculateRankTier(entry.score);
+      return rank.percentile;
+    }),
+    contexts: history.map(entry => entry.context)
+  };
+  
+  return chartData;
+}
+
+function showEvolutionChart(profile) {
+  const chartData = generateEvolutionChart(profile);
+  if (!chartData) {
+    alert('Need more runs to show evolution chart!');
+    return;
+  }
+  
+  // Create chart modal
+  const modal = document.createElement('div');
+  modal.style.cssText = `
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  `;
+  
+  const content = document.createElement('div');
+  content.style.cssText = `
+    background: var(--surf);
+    border: 2px solid var(--gold);
+    border-radius: 8px;
+    max-width: 800px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 2rem;
+  `;
+  
+  // Simple ASCII-style chart (since we can't use external chart libraries)
+  const maxScore = Math.max(...chartData.scores);
+  const minScore = Math.min(...chartData.scores);
+  const scoreRange = maxScore - minScore;
+  
+  let chartHTML = '<h3 style="font-family: \'Bebas Neue\', sans-serif; color: var(--gold); margin-bottom: 1rem;">Evolution Chart</h3>';
+  chartHTML += '<div style="font-family: \'IBM Plex Mono\', monospace; font-size: 12px; margin-bottom: 2rem;">';
+  
+  // Create simple line chart visualization
+  const chartHeight = 200;
+  const chartWidth = 600;
+  
+  chartHTML += `<div style="border: 1px solid var(--brd2); padding: 10px; background: var(--bg);">`;
+  
+  // Draw chart points
+  chartData.scores.forEach((score, index) => {
+    const x = (index / (chartData.scores.length - 1)) * chartWidth;
+    const y = chartHeight - ((score - minScore) / scoreRange) * chartHeight;
+    const context = chartData.contexts[index];
+    const contextColors = {
+      sprint: '#39ff14',
+      technical: '#f5c518',
+      endurance: '#ff6b6b',
+      night: '#4ecdc4',
+      chaos: '#e8291c'
+    };
+    const color = contextColors[context] || '#ffffff';
+    
+    chartHTML += `<div style="position: absolute; left: ${x}px; top: ${y}px; width: 8px; height: 8px; background: ${color}; border-radius: 50%;" title="${chartData.labels[index]}: ${score.toFixed(1)}pts"></div>`;
+  });
+  
+  chartHTML += `<div style="position: relative; height: ${chartHeight}px; width: ${chartWidth}px;"></div>`;
+  chartHTML += '</div>';
+  
+  // Add statistics
+  const avgScore = chartData.scores.reduce((a, b) => a + b, 0) / chartData.scores.length;
+  const improvement = chartData.scores[chartData.scores.length - 1] - chartData.scores[0];
+  
+  chartHTML += `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">`;
+  chartHTML += `<div style="background: var(--bg); padding: 1rem; border-radius: 4px;">`;
+  chartHTML += `<div style="color: var(--text2); font-size: 10px;">Average Score</div>`;
+  chartHTML += `<div style="color: var(--gold); font-size: 16px; font-weight: bold;">${avgScore.toFixed(1)}</div>`;
+  chartHTML += `</div>`;
+  chartHTML += `<div style="background: var(--bg); padding: 1rem; border-radius: 4px;">`;
+  chartHTML += `<div style="color: var(--text2); font-size: 10px;">Total Improvement</div>`;
+  chartHTML += `<div style="color: ${improvement >= 0 ? '#39ff14' : '#e8291c'}; font-size: 16px; font-weight: bold;">${improvement >= 0 ? '+' : ''}${improvement.toFixed(1)}</div>`;
+  chartHTML += `</div>`;
+  chartHTML += `</div>`;
+  
+  chartHTML += '</div>';
+  chartHTML += '<button id="close-chart-btn" style="background: var(--gold); color: var(--bg); border: none; padding: 0.75rem 2rem; font-family: \'Bebas Neue\', sans-serif; cursor: pointer; margin-top: 1rem; width: 100%;">Close</button>';
+  
+  content.innerHTML = chartHTML;
+  modal.appendChild(content);
+  document.body.appendChild(modal);
+  
+  // Close functionality
+  document.getElementById('close-chart-btn').onclick = () => modal.remove();
+}
+
+function getEvolutionInsights(profile) {
+  const history = profile.evolutionHistory || [];
+  if (history.length < 5) return null;
+  
+  const recentRuns = history.slice(-10);
+  const olderRuns = history.slice(-20, -10);
+  
+  const recentAvg = recentRuns.reduce((sum, run) => sum + run.score, 0) / recentRuns.length;
+  const olderAvg = olderRuns.length > 0 ? olderRuns.reduce((sum, run) => sum + run.score, 0) / olderRuns.length : recentAvg;
+  
+  const improvement = recentAvg - olderAvg;
+  const trend = improvement > 2 ? 'improving' : improvement < -2 ? 'declining' : 'stable';
+  
+  // Find most successful context
+  const contextPerformance = {};
+  recentRuns.forEach(run => {
+    if (!contextPerformance[run.context]) {
+      contextPerformance[run.context] = [];
+    }
+    contextPerformance[run.context].push(run.score);
+  });
+  
+  let bestContext = 'sprint';
+  let bestAvg = 0;
+  Object.keys(contextPerformance).forEach(context => {
+    const avg = contextPerformance[context].reduce((sum, score) => sum + score, 0) / contextPerformance[context].length;
+    if (avg > bestAvg) {
+      bestAvg = avg;
+      bestContext = context;
+    }
+  });
+  
+  return {
+    trend,
+    improvement,
+    bestContext,
+    recentAverage: recentAvg,
+    consistency: Math.min(100, 100 - (Math.max(...recentRuns.map(r => r.score)) - Math.min(...recentRuns.map(r => r.score))))
+  };
+}
+
+function getWeeklyLeaderboard() {
+  const weeklySeed = generateWeeklySeed();
+  const leaderboardKey = `weekly_leaderboard_${weeklySeed}`;
+  return JSON.parse(localStorage.getItem(leaderboardKey) || '[]');
+}
+
+function startWeeklyRally() {
+  const weeklyStage = getWeeklyRallyStage();
+  
+  // Set up the stage with weekly context
+  G.stageName = weeklyStage.name;
+  G.notes = weeklyStage.notes;
+  G.era = weeklyStage.era;
+  G.diff = 2; // Hard difficulty for weekly runs
+  G.timeLimit = DIFFS[G.diff].s;
+  
+  // Apply weekly context
+  RALLY_STATE.currentContext = weeklyStage.weeklyContext;
+  RALLY_STATE.contextModifiers = EXECUTION_CONTEXTS[weeklyStage.weeklyContext];
+  
+  // Mark as weekly run
+  G.isWeeklyRun = true;
+  
+  // Start the stage
+  showGame();
+  loadNote();
+}
+
+function getDailyRallyStage() {
+  const dailySeed = generateDailySeed();
+  const allStages = [];
+  
+  // Collect all stages from all eras
+  Object.values(ERAS).forEach(era => {
+    era.stages.forEach(stage => {
+      allStages.push({ ...stage, era: era.label });
+    });
+  });
+  
+  // Select stage based on daily seed
+  const stageIndex = dailySeed % allStages.length;
+  const selectedStage = allStages[stageIndex];
+  
+  // Add daily variations using seeded random
+  const tempSeed = dailySeed + 1000;
+  const weatherVariations = ['clear', 'rain', 'ice', 'fog'];
+  const weatherIndex = Math.floor((tempSeed % 10000) / 2500);
+  
+  return {
+    ...selectedStage,
+    dailyWeather: weatherVariations[weatherIndex],
+    dailySeed: dailySeed,
+    isDailyRun: true
+  };
+}
+
+function submitDailyRun(score, driverName) {
+  const dailySeed = generateDailySeed();
+  const leaderboardKey = `daily_leaderboard_${dailySeed}`;
+  
+  // Get current leaderboard and apply rank decay
+  let leaderboard = JSON.parse(localStorage.getItem(leaderboardKey) || '[]');
+  leaderboard = applyRankDecay(leaderboard, 'daily');
+  
+  // Add new entry
+  const entry = {
+    driverName,
+    score,
+    date: new Date().toISOString(),
+    rankTier: calculateRankTier(score),
+    timestamp: Date.now(),
+    lastActivity: Date.now()
+  };
+  
+  leaderboard.push(entry);
+  
+  // Sort by score (descending)
+  leaderboard.sort((a, b) => b.score - a.score);
+  
+  // Keep only top 100
+  leaderboard = leaderboard.slice(0, 100);
+  
+  // Save updated leaderboard
+  localStorage.setItem(leaderboardKey, JSON.stringify(leaderboard));
+  
+  // Return rank position
+  const rank = leaderboard.findIndex(e => e.timestamp === entry.timestamp) + 1;
+  return { rank, totalEntries: leaderboard.length, leaderboard };
+}
+
+// Soft rank decay system
+function applyRankDecay(leaderboard, type) {
+  const now = Date.now();
+  const decayPeriods = {
+    daily: 24 * 60 * 60 * 1000, // 24 hours
+    weekly: 7 * 24 * 60 * 60 * 1000 // 7 days
+  };
+  
+  const decayPeriod = decayPeriods[type] || decayPeriods.daily;
+  
+  return leaderboard.map(entry => {
+    const timeSinceActivity = now - (entry.lastActivity || entry.timestamp);
+    const periodsInactive = Math.floor(timeSinceActivity / decayPeriod);
+    
+    if (periodsInactive > 0) {
+      // Apply exponential decay
+      const decayMultiplier = Math.pow(0.95, periodsInactive);
+      const decayedScore = entry.score * decayMultiplier;
+      
+      return {
+        ...entry,
+        originalScore: entry.originalScore || entry.score,
+        score: decayedScore,
+        decayed: true,
+        periodsInactive
+      };
+    }
+    
+    return {
+      ...entry,
+      originalScore: entry.originalScore || entry.score
+    };
+  });
+}
+
+function restoreScoreOnActivity(leaderboard, driverName, newScore) {
+  return leaderboard.map(entry => {
+    if (entry.driverName === driverName && entry.decayed) {
+      // Restore to max of original score or new score
+      const restoredScore = Math.max(entry.originalScore, newScore);
+      return {
+        ...entry,
+        score: restoredScore,
+        originalScore: restoredScore,
+        decayed: false,
+        periodsInactive: 0,
+        lastActivity: Date.now()
+      };
+    }
+    return entry;
+  });
+}
+
+function getDailyLeaderboard() {
+  const dailySeed = generateDailySeed();
+  const leaderboardKey = `daily_leaderboard_${dailySeed}`;
+  return JSON.parse(localStorage.getItem(leaderboardKey) || '[]');
+}
+
+function showDailyLeaderboard() {
+  const leaderboard = getDailyLeaderboard();
+  const dailyStage = getDailyRallyStage();
+  
+  // Create leaderboard modal
+  const modal = document.createElement('div');
+  modal.style.cssText = `
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  `;
+  
+  const content = document.createElement('div');
+  content.style.cssText = `
+    background: var(--surf);
+    border: 2px solid var(--gold);
+    border-radius: 8px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 2rem;
+  `;
+  
+  const header = document.createElement('div');
+  header.innerHTML = `
+    <h2 style="font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 2px; color: var(--gold); margin-bottom: 0.5rem;">DAILY RALLY RUN</h2>
+    <p style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text2); margin-bottom: 1rem;">${dailyStage.name} - ${dailyStage.era}</p>
+    <p style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text3); margin-bottom: 1.5rem;">Weather: ${dailyStage.dailyWeather} | Resets in ${getTimeUntilReset()}</p>
+  `;
+  
+  const leaderboardList = document.createElement('div');
+  
+  if (leaderboard.length === 0) {
+    leaderboardList.innerHTML = '<p style="text-align: center; color: var(--text2); font-family: \'IBM Plex Mono\', monospace;">No runs yet today. Be the first!</p>';
+  } else {
+    leaderboardList.innerHTML = leaderboard.map((entry, index) => {
+      const rankColor = index === 0 ? '#FFD700' : index === 1 ? '#C0C0C0' : index === 2 ? '#CD7F32' : 'var(--text)';
+      return `
+        <div style="display: flex; align-items: center; gap: 1rem; padding: 0.5rem 0; border-bottom: 1px solid var(--brd2);">
+          <span style="font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: ${rankColor}; min-width: 30px;">${index + 1}</span>
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text); flex: 1;">${entry.driverName}</span>
+          <span style="font-family: 'Bebas Neue', sans-serif; font-size: 16px; color: ${entry.rankTier.color};">${entry.score.toFixed(1)}</span>
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text3);">${entry.rankTier.tier}</span>
+        </div>
+      `;
+    }).join('');
+  }
+  
+  const closeButton = document.createElement('button');
+  closeButton.textContent = 'Close';
+  closeButton.style.cssText = `
+    background: var(--gold);
+    color: var(--bg);
+    border: none;
+    padding: 0.75rem 2rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    margin-top: 1.5rem;
+    width: 100%;
+  `;
+  
+  closeButton.onclick = () => modal.remove();
+  
+  content.appendChild(header);
+  content.appendChild(leaderboardList);
+  content.appendChild(closeButton);
+  modal.appendChild(content);
+  document.body.appendChild(modal);
+}
+
+function getTimeUntilReset() {
+  const now = new Date();
+  const tomorrow = new Date(now);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  tomorrow.setHours(0, 0, 0, 0);
+  
+  const timeUntilReset = tomorrow - now;
+  const hours = Math.floor(timeUntilReset / (1000 * 60 * 60));
+  const minutes = Math.floor((timeUntilReset % (1000 * 60 * 60)) / (1000 * 60));
+  
+  return `${hours}h ${minutes}m`;
+}
+
+function startDailyRally() {
+  const dailyStage = getDailyRallyStage();
+  
+  // Set up the stage
+  G.stageName = dailyStage.name;
+  G.notes = dailyStage.notes;
+  G.era = dailyStage.era;
+  G.diff = 1; // Normal difficulty for daily runs
+  G.timeLimit = DIFFS[G.diff].s;
+  
+  // Apply daily weather and context
+  RALLY_STATE.weatherEffect = dailyStage.dailyWeather;
+  RALLY_STATE.currentContext = 'sprint'; // Daily runs use sprint context
+  RALLY_STATE.contextModifiers = EXECUTION_CONTEXTS.sprint;
+  
+  // Mark as daily run
+  G.isDailyRun = true;
+  
+  // Initialize ghosts for competitive run
+  initializeGhosts();
+  
+  // Start the stage
+  showGame();
+  loadNote();
+}
+
+// Identity-based progression system
+function getPlayerProfile(driverName) {
+  const profileKey = `profile_${driverName}`;
+  const savedProfile = localStorage.getItem(profileKey);
+  
+  if (savedProfile) {
+    return JSON.parse(savedProfile);
+  }
+  
+  // Create new profile
+  const newProfile = {
+    driverName,
+    createdDate: new Date().toISOString(),
+    totalRuns: 0,
+    totalScore: 0,
+    bestScore: 0,
+    averageScore: 0,
+    rankTier: { tier: 'Amateur', color: '#808080', percentile: 0 },
+    skillMetrics: {
+      accuracy: 0,
+      speed: 0,
+      consistency: 0,
+      resilience: 0,
+      precision: 0
+    },
+    evolutionHistory: [],
+    personalBests: {},
+    achievements: [],
+    currentStreak: 0,
+    bestStreak: 0,
+    favoriteContext: 'sprint',
+    playtime: 0
+  };
+  
+  localStorage.setItem(profileKey, JSON.stringify(newProfile));
+  return newProfile;
+}
+
+function updatePlayerProfile(runData) {
+  const profile = getPlayerProfile(runData.driverName || G.driver || 'Anonymous');
+  
+  // Update basic stats
+  profile.totalRuns++;
+  profile.totalScore += runData.totalScore || 0;
+  profile.averageScore = profile.totalScore / profile.totalRuns;
+  
+  if (runData.totalScore > profile.bestScore) {
+    profile.bestScore = runData.totalScore;
+  }
+  
+  // Update rank tier
+  profile.rankTier = calculateRankTier(profile.averageScore);
+  
+  // Update skill metrics
+  if (runData.skillMetrics) {
+    Object.keys(runData.skillMetrics).forEach(skill => {
+      if (profile.skillMetrics[skill] !== undefined) {
+        // Weighted average (new run has more impact)
+        profile.skillMetrics[skill] = (profile.skillMetrics[skill] * 0.7) + (runData.skillMetrics[skill] * 0.3);
+      }
+    });
+  }
+  
+  // Update evolution history
+  profile.evolutionHistory.push({
+    date: new Date().toISOString(),
+    score: runData.totalScore,
+    context: runData.context,
+    evolution: runData.evolution,
+    rankTier: profile.rankTier.tier
+  });
+  
+  // Keep only last 50 entries
+  if (profile.evolutionHistory.length > 50) {
+    profile.evolutionHistory = profile.evolutionHistory.slice(-50);
+  }
+  
+  // Update personal bests per stage
+  if (runData.stageName && runData.totalScore) {
+    const pbKey = runData.stageName;
+    if (!profile.personalBests[pbKey] || runData.totalScore > profile.personalBests[pbKey]) {
+      profile.personalBests[pbKey] = runData.totalScore;
+    }
+  }
+  
+  // Update streaks
+  if (runData.successful) {
+    profile.currentStreak++;
+    if (profile.currentStreak > profile.bestStreak) {
+      profile.bestStreak = profile.currentStreak;
+    }
+  } else {
+    profile.currentStreak = 0;
+  }
+  
+  // Update playtime
+  if (runData.duration) {
+    profile.playtime += runData.duration;
+  }
+  
+  // Save updated profile
+  const profileKey = `profile_${runData.driverName || G.driver || 'Anonymous'}`;
+  localStorage.setItem(profileKey, JSON.stringify(profile));
+  
+  return profile;
+}
+
+function getSkillReadabilityReport(runData) {
+  const report = {
+    timeLost: {
+      accuracy: 0,
+      speed: 0,
+      consistency: 0,
+      resilience: 0
+    },
+    skillBreakdown: {
+      strength: '',
+      weakness: '',
+      recommendations: []
+    },
+    improvementAreas: []
+  };
+  
+  // Calculate time lost in each skill area
+  const perfectScore = 100;
+  const accuracyLoss = (perfectScore - (runData.accuracyScore || 0)) * 0.35;
+  const speedLoss = (perfectScore - (runData.speedScore || 0)) * 0.25;
+  const consistencyLoss = (perfectScore - (runData.consistencyScore || 0)) * 0.20;
+  const resilienceLoss = (perfectScore - (runData.resilienceScore || 0)) * 0.15;
+  const precisionLoss = (perfectScore - (runData.precisionScore || 0)) * 0.05;
+  
+  report.timeLost.accuracy = accuracyLoss;
+  report.timeLost.speed = speedLoss;
+  report.timeLost.consistency = consistencyLoss;
+  report.timeLost.resilience = resilienceLoss;
+  report.timeLost.precision = precisionLoss;
+  
+  // Determine strengths and weaknesses
+  const losses = [
+    { skill: 'accuracy', loss: accuracyLoss },
+    { skill: 'speed', loss: speedLoss },
+    { skill: 'consistency', loss: consistencyLoss },
+    { skill: 'resilience', loss: resilienceLoss },
+    { skill: 'precision', loss: precisionLoss }
+  ];
+  
+  losses.sort((a, b) => b.loss - a.loss);
+  
+  report.skillBreakdown.weakness = losses[0].skill;
+  report.skillBreakdown.strength = losses[losses.length - 1].skill;
+  
+  // Generate recommendations
+  if (report.skillBreakdown.weakness === 'speed') {
+    report.recommendations.push('Focus on faster reaction times', 'Try Sprint context for speed training');
+  }
+  if (report.skillBreakdown.weakness === 'accuracy') {
+    report.recommendations.push('Practice with Technical context for precision', 'Slow down for better accuracy');
+  }
+  if (report.skillBreakdown.weakness === 'consistency') {
+    report.recommendations.push('Work on steady rhythm', 'Try Endurance context for consistency training');
+  }
+  if (report.skillBreakdown.weakness === 'resilience') {
+    report.recommendations.push('Practice quick recovery after mistakes', 'Build mental toughness with Chaos context');
+  }
+  
+  return report;
+}
+
+// 3-second retry rule optimization
+function optimizeRetryFlow() {
+  const retryButton = document.querySelector('.mpbtn');
+  if (retryButton && retryButton.textContent.includes('Quick Stage')) {
+    // Auto-focus retry button for quick restart
+    retryButton.focus();
+    
+    // Show countdown for auto-retry option
+    let countdown = 3;
+    const countdownInterval = setInterval(() => {
+      countdown--;
+      if (countdown <= 0) {
+        clearInterval(countdownInterval);
+        // Could auto-retry here if user enabled it
+      }
+    }, 1000);
+  }
+}
+
+// Auto-submit with partial correctness highlighting
 document.addEventListener('input', e => {
   if (e.target.id === 'tut-input') {
-    // Live feedback hint as user types
+    // Tutorial input handling
+  } else if (e.target.id === 'g-input' && !G.stageEnded) {
+    const typed = e.target.value.trim();
+    const currentNote = G.notes[G.idx];
+    if (!currentNote) return;
+    
+    // Update visual feedback in real-time
+    updatePartialCorrectness(typed, currentNote.ans);
+    
+    // Check for auto-submit condition
+    const similarityScore = similarity(typed, currentNote.ans);
+    const autoSubmitThreshold = RALLY_STATE.forgivenessWindow;
+    
+    if (similarityScore >= autoSubmitThreshold && typed.length > 0) {
+      // Auto-submit on correct typing
+      const reactionTime = Date.now() - RALLY_STATE.lastInputTime;
+      if (reactionTime > 100) { // Prevent instant submissions
+        autoSubmitAnswer(reactionTime);
+      }
+    }
+    
+    RALLY_STATE.lastInputTime = Date.now();
   }
 });
+
+function updatePartialCorrectness(typed, correct) {
+  const input = document.getElementById('g-input');
+  if (!input) return;
+  
+  // Calculate partial match percentage
+  const typedWords = typed.toLowerCase().split(' ');
+  const correctWords = correct.toLowerCase().split(' ');
+  let matchedWords = 0;
+  
+  typedWords.forEach((word, idx) => {
+    if (correctWords[idx] && correctWords[idx].startsWith(word)) {
+      matchedWords++;
+    }
+  });
+  
+  const matchPercentage = matchedWords / Math.max(correctWords.length, 1);
+  
+  // Visual feedback - color gradient based on correctness
+  if (matchPercentage >= 0.8) {
+    input.style.borderColor = '#39ff14'; // Green - almost correct
+    input.style.boxShadow = '0 0 8px rgba(57, 255, 20, 0.3)';
+  } else if (matchPercentage >= 0.5) {
+    input.style.borderColor = '#f5c518'; // Yellow - partial match
+    input.style.boxShadow = '0 0 8px rgba(245, 197, 24, 0.3)';
+  } else if (matchPercentage >= 0.2) {
+    input.style.borderColor = '#ff9090'; // Light red - some match
+    input.style.boxShadow = '0 0 8px rgba(255, 144, 144, 0.3)';
+  } else {
+    input.style.borderColor = 'var(--brd2)'; // Default
+    input.style.boxShadow = 'none';
+  }
+}
+
+function autoSubmitAnswer(reactionTime) {
+  if (G.idx >= G.notes.length || G.stageEnded) return;
+  
+  clearInterval(G.timer);
+  const typed = document.getElementById('g-input').value.trim();
+  const currentNote = G.notes[G.idx];
+  
+  // Record reaction time for analytics
+  RALLY_STATE.reactionTimes.push(reactionTime);
+  
+  // Calculate similarity and precision grade
+  const baseScore = similarity(typed, currentNote.ans);
+  const precisionGrade = calculatePrecisionGrade(reactionTime, G.timeLimit, baseScore);
+  const timingTier = calculateTimingTier(reactionTime, G.timeLimit);
+  
+  // Apply execution context modifiers
+  const context = EXECUTION_CONTEXTS[RALLY_STATE.currentContext];
+  let modifiedScore = baseScore;
+  
+  // Apply momentum multiplier with context modifiers
+  const momentumMultiplier = RALLY_STATE.multiplier * (1 + context.momentumGain * RALLY_STATE.streak * 0.1);
+  const momentumScore = Math.min(1.0, modifiedScore * momentumMultiplier);
+  
+  // Apply precision grading
+  const precisionScore = applyPrecisionGrade(precisionGrade, momentumScore);
+  
+  // Apply timing tier bonuses
+  const tieredScore = applyTimingTier(timingTier, precisionScore);
+  const finalScore = Math.min(1.0, tieredScore);
+  const ok = finalScore >= (RALLY_STATE.forgivenessWindow * context.forgivenessWindow);
+  
+  // Store precision grade for analytics
+  if (!RALLY_STATE.precisionGrades) RALLY_STATE.precisionGrades = [];
+  RALLY_STATE.precisionGrades.push(precisionGrade);
+  
+  // Update split times and ghost progress
+  updateSplitTimes();
+  updateGhostProgress(G.idx);
+  
+  // Update rally state with context-specific behavior
+  if (ok) {
+    RALLY_STATE.streak++;
+    RALLY_STATE.momentum = Math.min(2.0, RALLY_STATE.momentum + context.momentumGain);
+    RALLY_STATE.multiplier = 1.0 + (RALLY_STATE.streak * 0.05);
+    RALLY_STATE.forgivenessWindow = Math.min(0.8, 0.62 + (RALLY_STATE.streak * 0.02));
+    
+    // Show precision feedback
+    if (precisionGrade === 'perfect' || precisionGrade === 'good') {
+      showPrecisionBonus(precisionGrade);
+    }
+    
+    // Smooth flow transition
+    showFlowTransition(true);
+  } else {
+    // Record recovery speed before disruption
+    recordRecoverySpeed();
+    
+    // Disruption on mistake with context-specific loss
+    RALLY_STATE.streak = 0;
+    RALLY_STATE.momentum = Math.max(0.5, RALLY_STATE.momentum - context.momentumLoss);
+    RALLY_STATE.multiplier = 1.0;
+    
+    handleMistakeDisruption();
+  }
+  
+  // Update fatigue for endurance stages
+  if (context.name === 'Endurance') {
+    RALLY_STATE.fatigueLevel = Math.min(1.0, RALLY_STATE.fatigueLevel + 0.02);
+    RALLY_STATE.fatigueMultiplier = 1.0 + (RALLY_STATE.fatigueLevel * context.fatigueMultiplier);
+  }
+  
+  // Process the answer
+  processAnswer(typed, currentNote, ok, finalScore, false);
+}
+
+function showPrecisionBonus(grade) {
+  const bonusText = grade === 'perfect' ? 'PERFECT! +25%' : 'GOOD! +10%';
+  const bonusColor = grade === 'perfect' ? '#FFD700' : '#39ff14';
+  
+  const bonus = document.createElement('div');
+  bonus.className = 'precision-bonus';
+  bonus.textContent = bonusText;
+  bonus.style.cssText = `
+    position: fixed;
+    top: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: ${bonusColor};
+    color: #000;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    z-index: 1000;
+    animation: fadeInOut 1.5s ease;
+  `;
+  
+  document.body.appendChild(bonus);
+  setTimeout(() => bonus.remove(), 1500);
+}
+
+function showTimingBonus(tier) {
+  const bonusText = tier === 'early' ? 'EARLY INPUT +20%' : 'PERFECT TIMING +10%';
+  const bonusColor = tier === 'early' ? '#FFD700' : '#39ff14';
+  
+  const bonus = document.createElement('div');
+  bonus.className = 'timing-bonus';
+  bonus.textContent = bonusText;
+  bonus.style.cssText = `
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: ${bonusColor};
+    color: #000;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 2px;
+    z-index: 1000;
+    animation: fadeInOut 1.5s ease;
+  `;
+  
+  document.body.appendChild(bonus);
+  setTimeout(() => bonus.remove(), 1500);
+}
+
+function showFlowTransition(isCorrect) {
+  const gameBody = document.querySelector('.g-body');
+  if (!gameBody) return;
+  
+  if (isCorrect) {
+    // Smooth flow - gentle green pulse
+    gameBody.style.transition = 'all 0.3s ease';
+    gameBody.style.backgroundColor = 'rgba(57, 255, 20, 0.05)';
+    setTimeout(() => {
+      gameBody.style.backgroundColor = 'var(--bg)';
+    }, 300);
+    
+    // Play calm audio feedback if available
+    playFlowSound('correct');
+  } else {
+    // Disruption - screen shake and red flash
+    gameBody.style.animation = 'screenShake 0.4s';
+    gameBody.style.backgroundColor = 'rgba(232, 41, 28, 0.1)';
+    
+    setTimeout(() => {
+      gameBody.style.animation = '';
+      gameBody.style.backgroundColor = 'var(--bg)';
+    }, 400);
+    
+    // Play disruption audio
+    playFlowSound('mistake');
+  }
+}
+
+function handleMistakeDisruption() {
+  // Reset momentum on mistake
+  RALLY_STATE.streak = 0;
+  RALLY_STATE.momentum = Math.max(0.5, RALLY_STATE.momentum - 0.2);
+  RALLY_STATE.multiplier = 1.0;
+  RALLY_STATE.forgivenessWindow = 0.62;
+  
+  // Start recovery phase
+  if (!RALLY_STATE.inRecovery) {
+    RALLY_STATE.inRecovery = true;
+    
+    // Clear existing recovery timer
+    if (RALLY_STATE.recoveryTimer) {
+      clearTimeout(RALLY_STATE.recoveryTimer);
+    }
+    
+    // 0.4s recovery phase
+    RALLY_STATE.recoveryTimer = setTimeout(() => {
+      RALLY_STATE.inRecovery = false;
+      showRecoveryBonus();
+    }, 400);
+  }
+  
+  // Add forced delay (200-500ms)
+  const delay = 200 + Math.random() * 300;
+  document.getElementById('g-input').disabled = true;
+  setTimeout(() => {
+    if (!G.stageEnded) {
+      document.getElementById('g-input').disabled = false;
+      document.getElementById('g-input').focus();
+    }
+  }, delay);
+}
+
+function showRecoveryBonus() {
+  // Show stabilization bonus indicator
+  const bonus = document.createElement('div');
+  bonus.className = 'recovery-bonus';
+  bonus.textContent = 'STABILIZATION BONUS +';
+  bonus.style.cssText = `
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(57, 255, 20, 0.9);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    z-index: 1000;
+    animation: fadeInOut 1s ease;
+  `;
+  
+  document.body.appendChild(bonus);
+  setTimeout(() => bonus.remove(), 1000);
+}
+
+function processAnswer(typed, note, ok, score, skipped) {
+  // Update UI
+  document.getElementById('g-input').disabled = true;
+  document.getElementById('g-sub').disabled = true;
+  
+  if (ok) G.correct++;
+  
+  // Update progress dot
+  const dot = document.getElementById(`gd-${G.idx}`);
+  if (dot) dot.className = 'gd ' + (ok ? 'ok' : 'bad');
+  
+  // Store result with competitive data
+  G.results.push({
+    raw: note.raw,
+    ans: note.ans,
+    typed,
+    ok,
+    score,
+    skipped,
+    reactionTime: RALLY_STATE.reactionTimes[RALLY_STATE.reactionTimes.length - 1],
+    momentum: RALLY_STATE.momentum,
+    multiplier: RALLY_STATE.multiplier,
+    timingTier: calculateTimingTier(RALLY_STATE.reactionTimes[RALLY_STATE.reactionTimes.length - 1], G.timeLimit),
+    sector: RALLY_STATE.currentSector
+  });
+  
+  G.idx++;
+  const isLastNote = G.idx >= G.notes.length;
+  
+  // Check for crash (zero randomness for competitive fairness)
+  const crashChance = ok ? 0 : (0.3 / RALLY_STATE.momentum);
+  const badCrash = !ok && !isLastNote && seededRandom() < crashChance;
+  
+  showResult(ok, note, score, skipped, false, false);
+  
+  if (!badCrash || isLastNote) {
+    setTimeout(() => {
+      if (G.idx >= G.notes.length) {
+        endStage();
+      } else {
+        loadNote();
+      }
+    }, ok ? 800 : 2600); // Faster transition for correct answers
+  } else {
+    injectAtmosphere();
+    triggerCrash(note.raw);
+  }
+}
+
+function playFlowSound(type) {
+  // Audio feedback system (can be enhanced with actual sounds)
+  try {
+    const audio = new Audio();
+    if (type === 'correct') {
+      // Calm success sound
+      audio.volume = 0.3;
+      // Would load actual sound file here
+    } else if (type === 'mistake') {
+      // Disruption sound
+      audio.volume = 0.5;
+      // Would load actual sound file here
+    }
+  } catch (e) {
+    // Fallback if audio fails
+  }
+}
+
+// Add CSS animations for screen shake and flow effects
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes screenShake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+    20%, 40%, 60%, 80% { transform: translateX(2px); }
+  }
+  
+  @keyframes fadeInOut {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+  }
+  
+  .recovery-bonus {
+    pointer-events: none;
+  }
+`;
+document.head.appendChild(style);
 
 // ═══════════════════════════════════════════════════════════════
 // MENU — ROUTE TO TUTORIAL FIRST FOR NEW PLAYERS (#001)
