@@ -1168,8 +1168,12 @@ function buildTuneSummary(){
   let grip=50, stab=50, trac=50, power=50, reli=50;
 
   // Spring rates affect grip & stability
-  if(TUNE.spring_f !== undefined){
-    const sf = (TUNE.spring_f - 35) / (120-35);
+  // Calculate front spring rate as average of FL and FR
+  const spring_f = (TUNE.spr_fl !== undefined && TUNE.spr_fr !== undefined)
+    ? (TUNE.spr_fl + TUNE.spr_fr) / 2
+    : undefined;
+  if(spring_f !== undefined){
+    const sf = (spring_f - 35) / (120-35);
     grip += (sf - 0.5) * -10;
     stab += (sf - 0.5) * 15;
   }
@@ -1462,6 +1466,8 @@ function initDamage(){
   G.damage={engine:100,susp:100,tyres:100,body:100};
   G.totalTimeLost=0;G.crashCount=0;G.crashed=false;G.dnf=false;
   G.atmosIdx=0;G.crowdIdx=0;G.splitIdx=0;
+  RALLY_STATE.fatigueLevel = 0;
+  RALLY_STATE.fatigueMultiplier = 1.0;
   updateDamageHUD();
 }
 function updateDamageHUD(){
@@ -1829,6 +1835,9 @@ function beginStageWithData(stage){
   loadNote();
 }
 function loadNote(){
+  // Reset processing flag for new note
+  G.processingAnswer = false;
+  
   if(G.idx>=G.notes.length){endStage();return;}
   const n=G.notes[G.idx];
   
@@ -1841,7 +1850,7 @@ function loadNote(){
     RALLY_STATE.sectorTimes = [];
     
     // Initialize competitive seed for zero randomness
-    initializeCompetitiveSeed(G.stageName || 'Unknown', G.driver || 'Driver');
+    initializeCompetitiveSeed(G.currentStageName || 'Unknown', G.driver || 'Driver');
     
     // Load personal best if exists
     loadPersonalBest();
@@ -2175,7 +2184,8 @@ function timeUp(){
     triggerCrash(n.raw);
   }
 }
-function showResult(ok,n,score,skipped,timeout,crashFollows=false){
+// Store original showResult to prevent wrapper loops
+window.__origShowResult = function(ok,n,score,skipped,timeout,crashFollows=false){
   if(!n)return; // guard against undefined note
   const fb=document.getElementById('g-fb');
   fb.className='fb-box '+(ok?'ok':timeout?'to':'bad');
@@ -2198,7 +2208,13 @@ function showResult(ok,n,score,skipped,timeout,crashFollows=false){
     if(pref)utt.voice=pref;
     window.speechSynthesis.speak(utt);
   }
+};
+
+// Wrapper for showResult that can be overridden without breaking processAnswer
+function showResult(ok,n,score,skipped,timeout,crashFollows=false){
+  return window.__origShowResult(ok,n,score,skipped,timeout,crashFollows);
 }
+
 function speakNote(){
   if(!window.speechSynthesis)return;
   window.speechSynthesis.cancel();
@@ -2320,6 +2336,11 @@ function endStage(){
       utt.rate=0.9;utt.pitch=won?1.1:0.85;utt.volume=0.9;
       window.speechSynthesis.speak(utt);
     },600);
+  }
+  
+  // Save personal best (only if not DNF)
+  if (!G.dnf) {
+    savePersonalBest(timeStr, acc);
   }
 }
 
@@ -3255,6 +3276,31 @@ function initializeGhosts() {
   }
 }
 
+function loadPersonalBest() {
+  const key = `pb_${G.currentStageName || 'unknown'}`;
+  try {
+    const saved = localStorage.getItem(key);
+    if (saved) RALLY_STATE.personalBest = JSON.parse(saved);
+  } catch(e) { RALLY_STATE.personalBest = null; }
+}
+
+function savePersonalBest(timeStr, accuracy) {
+  const key = `pb_${G.currentStageName || 'unknown'}`;
+  const pb = {
+    time: timeStr,
+    accuracy: accuracy,
+    timestamp: Date.now(),
+    driver: G.driver,
+    codriver: G.codriver
+  };
+  try {
+    localStorage.setItem(key, JSON.stringify(pb));
+    RALLY_STATE.personalBest = pb;
+  } catch(e) {
+    // Silently fail if storage is full
+  }
+}
+
 function updateGhostProgress(currentNoteIndex) {
   if (!RALLY_STATE.ghostData) return;
   
@@ -3509,11 +3555,7 @@ function generatePerformanceHeatmap() {
 
 // ...
 
-function endStage(){
-  clearInterval(G.timer);
-  G.stageEnded=true;
-  document.getElementById('g-input').disabled=true;
-  document.getElementById('g-sub').disabled=true;
+function generateWeeklySeed(){
   const today = new Date();
   const weekNumber = Math.floor((today.getDate() - 1) / 7) + 1;
   const month = today.getMonth();
@@ -3522,6 +3564,16 @@ function endStage(){
   let seed = 0;
   for (let i = 0; i < weekString.length; i++) {
     seed += weekString.charCodeAt(i) * (i + 2);
+  }
+  return seed % 1000000;
+}
+
+function generateDailySeed() {
+  const today = new Date();
+  const dateString = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
+  let seed = 0;
+  for (let i = 0; i < dateString.length; i++) {
+    seed += dateString.charCodeAt(i) * (i + 2);
   }
   return seed % 1000000;
 }
@@ -3939,7 +3991,7 @@ function loadSharedReplay(shareCode) {
   }
   
   // Set up stage
-  G.stageName = selectedStage.name;
+  G.currentStageName = selectedStage.name;
   G.notes = selectedStage.notes;
   G.era = selectedStage.era || 'w80';
   G.timeLimit = DIFFS[G.diff].s;
@@ -3949,7 +4001,7 @@ function loadSharedReplay(shareCode) {
   G.shareCode = shareCode;
   
   // Start the stage
-  showGame();
+  show('game');
   loadNote();
 }
 
@@ -4132,7 +4184,7 @@ function startWeeklyRally() {
   G.isWeeklyRun = true;
   
   // Start the stage
-  showGame();
+  show('game');
   loadNote();
 }
 
@@ -4352,7 +4404,7 @@ function startDailyRally() {
   const dailyStage = getDailyRallyStage();
   
   // Set up the stage
-  G.stageName = dailyStage.name;
+  G.currentStageName = dailyStage.name;
   G.notes = dailyStage.notes;
   G.era = dailyStage.era;
   G.diff = 1; // Normal difficulty for daily runs
@@ -4370,7 +4422,7 @@ function startDailyRally() {
   initializeGhosts();
   
   // Start the stage
-  showGame();
+  show('game');
   loadNote();
 }
 
@@ -4840,6 +4892,10 @@ function showRecoveryBonus() {
 }
 
 function processAnswer(typed, note, ok, score, skipped) {
+  // Guard against double-processing the same note
+  if (G.processingAnswer) return;
+  G.processingAnswer = true;
+  
   // Update UI
   document.getElementById('g-input').disabled = true;
   document.getElementById('g-sub').disabled = true;
@@ -4872,7 +4928,12 @@ function processAnswer(typed, note, ok, score, skipped) {
   const crashChance = ok ? 0 : (0.3 / RALLY_STATE.momentum);
   const badCrash = !ok && !isLastNote && seededRandom() < crashChance;
   
-  showResult(ok, note, score, skipped, false, false);
+  // call original directly to avoid wrapper loop
+  if (typeof window.__origShowResult !== 'undefined') {
+    window.__origShowResult(ok, note, score, skipped, false, false);
+  } else {
+    showResult(ok, note, score, skipped, false, false);
+  }
   
   if (!badCrash || isLastNote) {
     setTimeout(() => {
