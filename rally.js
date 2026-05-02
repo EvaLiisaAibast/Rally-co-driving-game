@@ -1,5 +1,5 @@
 // ═══════════════ DATA ═══════════════
-const DIFFS=[{n:'Easy',s:12},{n:'Normal',s:9},{n:'Hard',s:7},{n:'Insane',s:5},{n:'Chaos',s:4}];
+const DIFFS=[{n:'Easy',s:18},{n:'Normal',s:14},{n:'Hard',s:11},{n:'Insane',s:9},{n:'Chaos',s:7}];
 const RIVALS=[{name:'S. Laurent',team:'Citroën'},{name:'C. MacRae',team:'Subaru'},{name:'M. Grönholm',team:'Peugeot'},{name:'K. Rovanperä',team:'Toyota'}];
 
 const ERAS={
@@ -99,6 +99,94 @@ const ERAS={
         {raw:'CREST R4 FINISH',ans:'over crest right four finish',narr:'Final corner over a crest to the timing beam.',comm:'The final note is always the most important.'},
         {raw:'L3 200 R2',ans:'left three 200 metres right two',narr:'Medium left, long straight, then tight right to finish.',comm:'200 metres to the final corner - make it count.'},
         {raw:'R3 LONG FLAT L FINISH',ans:'right three long flat left finish',narr:'Out of the village, the road opens. Final sweep, then the timing arch.',comm:'And across the line. Another Turini survived.'}
+       ]},
+      {name:'SS2 — Safari Rally Kenya',country:'Kenya',surf:'Rough gravel / sand',weather:'Hot · 35°C · dust',km:'35.2',
+       cond:'The roughest rally on Earth. Rocks, sand, wildlife crossings. Only the strongest survive. Cars run in high ambient heat.',
+       segments:['Opening','Savannah','River','Feshfesh'],
+       notes:[
+        // OPENING SEGMENT (Notes 1-8)
+        {raw:'R4 EASY',ans:'right four easy',narr:'The African sun beats down. First notes on the legendary Safari.',comm:'Safari stages are about survival first, speed second.'},
+        {raw:'L5 300',ans:'left five 300 metres',narr:'Long straight through the acacia trees.',comm:'300 metres is an eternity on Safari. Watch for wildlife.'},
+        {raw:'R3 INTO L4',ans:'right three into left four',narr:'Linked corners in the savannah.',comm:'The dust here can blind you for seconds.'},
+        {raw:'FLAT R6',ans:'flat right six',narr:'Wide open section. Watch for animals on the road.',comm:'Flat out but eyes wide. Anything can cross here.'},
+        {raw:'L3 LONG',ans:'left three long',narr:'Long left through the bush.',comm:'Long corners with visibility limited by dust.'},
+        {raw:'R4 200',ans:'right four 200 metres',narr:'Fast right with a long straight after.',comm:'200 metres between calls - unusual spacing for Safari.'},
+        {raw:'L3! OPENS',ans:'left three caution opens',narr:'Tight left that opens to a straight.',comm:'Caution calls mean hidden dangers - rocks, holes, animals.'},
+        {raw:'R3 CREST',ans:'right three over crest',narr:'Blind crest - the corner hides until commitment.',comm:'Crests hide everything on Safari. Absolute trust required.'},
+        
+        // SAVANNAH SEGMENT (Notes 9-16)
+        {raw:'R4 DONTCUT',ans:"right four don't cut",narr:'Inside line has deep ruts from previous cars.',comm:'Ruts can grab the wheel on Safari. Stay out of them.'},
+        {raw:'L3 !2 INTO R4',ans:'left three caution hairpin into right four',narr:'Three calls in under two seconds. The caution is critical.',comm:'Hairpins on Safari often have hidden rocks on the apex.'},
+        {raw:'SQUARE R NARROW',ans:'square right narrows',narr:'Nearly hairpin right with bush closing in.',comm:'Square calls mean tight. The bush is unforgiving.'},
+        {raw:'L4 TIGHTENS',ans:'left four tightens',narr:'Appears as a medium left, pulls tight mid-corner.',comm:'Tightens notes on rough terrain are deadly.'},
+        {raw:'R2!! BUMP',ans:'right two maximum caution bump',narr:'Double caution with a compression. Car goes light.',comm:'Double bang plus bump equals potential disaster.'},
+        {raw:'L3 DONTCUT 150',ans:"left three don't cut 150 metres",narr:'Inside line has a hidden ditch.',comm:'Don\'t cut notes here are survival instructions.'},
+        {raw:'R4 BUMP L3',ans:'right four bumps into left three',narr:'Compression unsettles the car before the left.',comm:'Bumps on Safari are severe. Suspension takes a beating.'},
+        {raw:'CREST R5',ans:'over crest right five',narr:'Blind crest to medium right.',comm:'The dust makes crests even more blind than usual.'},
+        
+        // RIVER SEGMENT (Notes 17-24)
+        {raw:'L3 WATER SPLASH',ans:'left three water splash',narr:'Through the river bed. Water up to the windscreen.',comm:'Water splashes are part of Safari tradition.'},
+        {raw:'R3 SAND 100',ans:'right three sand 100 metres',narr:'Deep sand section. Momentum is everything.',comm:'Sand requires commitment. Hesitate and you sink.'},
+        {raw:'L4! FESHFESH',ans:'left four caution fesh-fesh',narr:'Ultra-fine dust creates zero visibility.',comm:'Fesh-fesh is like driving through thick fog of dust.'},
+        {raw:'R5 LONG',ans:'right five long',narr:'Long fast right through the open plains.',comm:'The plains allow higher speeds but watch for wildlife.'},
+        {raw:'SQUARE L!!',ans:'square left maximum caution',narr:'Hairpin with double caution. Deep ruts on exit.',comm:'Square with double bang means something terrible awaits.'},
+        {raw:'R3 ROCKS OPENS',ans:'right three rocks opens',narr:'Rocky section then opens to clean road.',comm:'Rocks can destroy tyres in seconds.'},
+        {raw:'L4 SAND SAND',ans:'left four sand sand',narr:'Double sand section. Car plows through.',comm:'Multiple sand calls mean deep sections.'},
+        {raw:'R2 INTO SQUARE L',ans:'right two into square left',narr:'Quick right into immediate hairpin left.',comm:'Into square calls require instant direction change.'},
+        
+        // FESH-FESH FINISH (Notes 25-32)
+        {raw:'FLAT R CREST L5',ans:'flat right over crest left five',narr:'Maximum attack through the dust.',comm:'Flat out even when you cannot see. That is Safari.'},
+        {raw:'BUMP R3 BUMP L3',ans:'bumps right three bumps left three',narr:'Double compression in the rough section.',comm:'Suspension working overtime here.'},
+        {raw:'L4 100 R3',ans:'left four 100 metres right three',narr:'Medium left, short straight, then right.',comm:'Short sections require rapid note delivery.'},
+        {raw:'R6 FLAT L4',ans:'right six flat left four',narr:'Maximum attack section. Two flat calls.',comm:'Flat calls in the final section test commitment.'},
+        {raw:'L5 LONG R3',ans:'left five long right three',narr:'Fast left five with a straight to the right three.',comm:'Almost at the finish now.'},
+        {raw:'CREST R4 FINISH',ans:'over crest right four finish',narr:'Final corner over a crest to the timing beam.',comm:'Survive this and you have earned Safari respect.'},
+        {raw:'L3 200 R2',ans:'left three 200 metres right two',narr:'Medium left, long straight, then tight right to finish.',comm:'The final corner of the toughest rally on Earth.'},
+        {raw:'R3 LONG FLAT L FINISH',ans:'right three long flat left finish',narr:'Final sweep to the line. The Safari is conquered.',comm:'Across the line. You have survived the Safari.'}
+       ]},
+      {name:'SS5 — Olympus Rally',country:'USA',surf:'Gravel / loose rocks',weather:'Rain · 12°C · slippery',km:'28.5',
+       cond:'Pacific Northwest rain. Slippery gravel over hard-packed base. Trees line every corner.',
+       segments:['Opening','Forest','Mountain','Coast'],
+       notes:[
+        // OPENING SEGMENT (Notes 1-8)
+        {raw:'R3 EASY',ans:'right three easy',narr:'Wet gravel start. Slippery under the trees.',comm:'Olympus stages start slippery and get worse.'},
+        {raw:'L4 150',ans:'left four 150 metres',narr:'Medium left on the forest road.',comm:'150 metres of slippery gravel ahead.'},
+        {raw:'R3 INTO L4',ans:'right three into left four',narr:'Linked corners in the Douglas fir forest.',comm:'Into calls on wet gravel need smooth inputs.'},
+        {raw:'FLAT R5',ans:'flat right five',narr:'First flat call on the long straight.',comm:'Even flat calls need caution on wet gravel.'},
+        {raw:'L3 LONG',ans:'left three long',narr:'Long left through the dripping forest.',comm:'Long corners on wet gravel test patience.'},
+        {raw:'R4 200',ans:'right four 200 metres',narr:'Fast right with a long straight after.',comm:'200 metres is breathing room on Olympus.'},
+        {raw:'L2! OPENS',ans:'left two caution opens',narr:'Tight left that opens to a straight.',comm:'Caution calls mean the surface changes.'},
+        {raw:'R3 CREST',ans:'right three over crest',narr:'Blind crest - the corner hides in the rain.',comm:'Crests are extra blind in Pacific Northwest rain.'},
+        
+        // FOREST SEGMENT (Notes 9-16)
+        {raw:'R4 DONTCUT',ans:"right four don't cut",narr:'Inside line has loose rocks pulled out by earlier cars.',comm:'Don\'t cut on Olympus means hidden rocks.'},
+        {raw:'L3 !2 INTO R4',ans:'left three caution hairpin into right four',narr:'Hairpin in the deep forest.',comm:'Hairpins here are surrounded by trees. No run-off.'},
+        {raw:'SQUARE R NARROW',ans:'square right narrows',narr:'Nearly hairpin right with trees on both sides.',comm:'Square calls mean maximum precision required.'},
+        {raw:'L4 TIGHTENS',ans:'left four tightens',narr:'Appears as a medium left, pulls tight mid-corner.',comm:'Tightens on wet gravel are treacherous.'},
+        {raw:'R2!! JUNCTION',ans:'right two maximum caution junction',narr:'Double caution at a logging road junction.',comm:'Double bang at junctions means cross traffic danger.'},
+        {raw:'L3 DONTCUT 100',ans:"left three don't cut 100 metres",narr:'Inside line is eroded by rain.',comm:'Rain erosion makes don\'t cut notes critical.'},
+        {raw:'R4 BUMP L3',ans:'right four bumps into left three',narr:'Compression in the rough forest section.',comm:'Bumps on wet gravel unsettle the car more.'},
+        {raw:'CREST R6 NARROW',ans:'over crest right six narrows',narr:'Blind crest to fast right. Trees close in.',comm:'Fast plus narrow plus wet equals danger.'},
+        
+        // MOUNTAIN SEGMENT (Notes 17-24)
+        {raw:'L2! JUNCTION STOP',ans:'left two caution junction stop',narr:'Logging road crosses. Full stop required.',comm:'STOP means logging trucks may be crossing.'},
+        {raw:'R3 MUD 50',ans:'right three mud 50 metres',narr:'Deep mud section from recent rain.',comm:'Mud on Olympus is thick and slippery.'},
+        {raw:'L4! DONTCUT',ans:"left four caution don't cut",narr:'Fast left with a rain-washed ditch inside.',comm:'Caution plus don\'t cut equals hidden danger.'},
+        {raw:'R5 LONG TIGHTENS',ans:'right five long tightens',narr:'Long fast right that pulls tight.',comm:'Long tightens on wet gravel are deadly.'},
+        {raw:'SQUARE L!!',ans:'square left maximum caution',narr:'Hairpin with double caution. Trees very close.',comm:'Square plus double bang with trees nearby.'},
+        {raw:'R3 GRAVEL OPENS',ans:'right three gravel opens',narr:'Loose gravel on entry, then opens.',comm:'Gravel changes the line completely.'},
+        {raw:'L4 BUMP BUMP',ans:'left four bumps bumps',narr:'Double compression - car never settles.',comm:'Multiple bumps test suspension control.'},
+        {raw:'R2 INTO SQUARE L',ans:'right two into square left',narr:'Quick right into immediate hairpin left.',comm:'Into square calls require instant direction change.'},
+        
+        // COAST FINISH (Notes 25-32)
+        {raw:'FLAT R CREST L5',ans:'flat right over crest left five',narr:'Fast section near the Pacific coast.',comm:'The ocean is close now. Almost finished.'},
+        {raw:'BUMP R3 BUMP L3',ans:'bumps right three bumps left three',narr:'Double compression near the coastline.',comm:'Suspension working hard in the rough section.'},
+        {raw:'L4 100 R3',ans:'left four 100 metres right three',narr:'Medium left, short straight, then right.',comm:'Short sections require rapid notes.'},
+        {raw:'R6 FLAT L4',ans:'right six flat left four',narr:'Maximum attack section. Two flat calls.',comm:'Flat calls test commitment near the finish.'},
+        {raw:'L5 LONG R3',ans:'left five long right three',narr:'Fast left five with a straight to the right three.',comm:'The Pacific Ocean is visible now.'},
+        {raw:'CREST R4 FINISH',ans:'over crest right four finish',narr:'Final corner over a crest to the line.',comm:'Across the line with the ocean in view.'},
+        {raw:'L3 200 R2',ans:'left three 200 metres right two',narr:'Medium left, long straight, then tight right to finish.',comm:'Final corner of this American classic.'},
+        {raw:'R3 LONG FLAT L FINISH',ans:'right three long flat left finish',narr:'Final sweep to the line. Olympus conquered.',comm:'You have tamed the American wilderness.'}
        ]}
     ]
   },
@@ -135,6 +223,94 @@ const ERAS={
         {raw:'L2!! NARROW STOP',ans:'left two maximum caution narrows stop',narr:'Double caution narrow left with a full stop. Bank closes in immediately after.',comm:'Double bang. That means something was found in recce that scared the crew.'},
         {raw:'JUMP L4 BUMP R3',ans:'jump into left four bumps into right three',narr:'Jump feeding a left, then compressions before a right three. Four seconds of chaos.',comm:'Three notes in four seconds. That\'s why co-driving is harder than driving.'},
         {raw:'OVER BRIDGE L3 WET',ans:'over bridge left three wet',narr:'Wooden bridge into a tight left on a wet tarmac section. Complete surface change.',comm:'Surface change mid-corner. Good thing it\'s gravel tyres because tarmac would be fatal.'}
+       ]},
+      {name:'SS8 — Rally Australia',country:'Australia',surf:'Smooth gravel',weather:'Hot · 32°C · dust',km:'24.8',
+       cond:'Fast flowing Australian gravel. Kangaroo country. Speeds are high, notes must flow.',
+       segments:['Opening','Fast','Technical','Finish'],
+       notes:[
+        // OPENING SEGMENT (Notes 1-8)
+        {raw:'R6 FLAT',ans:'right six flat',narr:'Wide open Australian gravel. Speeds are high from the start.',comm:'Australian stages reward commitment and fast notes.'},
+        {raw:'L5 300',ans:'left five 300 metres',narr:'Long straight through the eucalyptus forest.',comm:'300 metres at high speed. Watch for wildlife.'},
+        {raw:'R4 INTO L5',ans:'right four into left five',narr:'Linked flowing corners.',comm:'Australian stages flow like no others.'},
+        {raw:'FLAT R6',ans:'flat right six',narr:'Maximum attack section.',comm:'Flat out commitment required.'},
+        {raw:'L4 LONG',ans:'left four long',narr:'Long left through the gum trees.',comm:'Long corners at speed test precision.'},
+        {raw:'R5 200',ans:'right five 200 metres',narr:'Fast right with long straight after.',comm:'200 metres is a short break at these speeds.'},
+        {raw:'L3! OPENS',ans:'left three caution opens',narr:'Tight left that opens to a long straight.',comm:'Caution calls mean hidden hazards.'},
+        {raw:'R4 CREST',ans:'right four over crest',narr:'Blind crest at high speed.',comm:'Crests at high speed require absolute trust.'},
+        
+        // FAST SEGMENT (Notes 9-16)
+        {raw:'R5 DONTCUT',ans:"right five don't cut",narr:'Inside line has loose stones.',comm:'Don\'t cut on fast stages is about line purity.'},
+        {raw:'L4 !3 INTO R5',ans:'left four caution three into right five',narr:'Flowing caution sequence.',comm:'Caution in fast sections means hidden dangers.'},
+        {raw:'R6 NARROW',ans:'right six narrows',narr:'Fast right with trees closing in.',comm:'Narrow on fast stages is dangerous.'},
+        {raw:'L5 TIGHTENS',ans:'left five tightens',narr:'Fast left that pulls tighter.',comm:'Tightens on fast stages are deceptive.'},
+        {raw:'R3!! JUNCTION',ans:'right three maximum caution junction',narr:'Double caution at a farm track junction.',comm:'Double bang at junctions means cross traffic.'},
+        {raw:'L4 DONTCUT 150',ans:"left four don't cut 150 metres",narr:'Inside line has a drainage ditch.',comm:'Don\'t cut notes protect the car.'},
+        {raw:'R5 BUMP L4',ans:'right five bumps into left four',narr:'Compression at speed into medium left.',comm:'Bumps at high speed unsettle the car.'},
+        {raw:'CREST R6',ans:'over crest right six',narr:'Blind crest to fast right.',comm:'Crests at high speed are pure trust.'},
+        
+        // TECHNICAL SEGMENT (Notes 17-24)
+        {raw:'L3! JUNCTION',ans:'left three caution junction',narr:'Farm track crosses. Hidden from distance.',comm:'Junctions in Australia are remote.'},
+        {raw:'R4 SAND 100',ans:'right four sand 100 metres',narr:'Sandy section in the dry creek bed.',comm:'Sand sections require momentum.'},
+        {raw:'L4! GRAVEL',ans:'left four caution gravel',narr:'Gravel pulled onto the racing line.',comm:'Gravel notes mean surface change.'},
+        {raw:'R5 LONG',ans:'right five long',narr:'Long fast right through open country.',comm:'Open sections allow maximum attack.'},
+        {raw:'SQUARE R!!',ans:'square right maximum caution',narr:'Hairpin with double caution.',comm:'Square plus double bang in fast terrain.'},
+        {raw:'L3 ROCKS OPENS',ans:'left three rocks opens',narr:'Rocky entry then opens.',comm:'Rocky sections can damage tyres.'},
+        {raw:'R4 BUMP BUMP',ans:'right four bumps bumps',narr:'Double compression.',comm:'Multiple bumps test suspension.'},
+        {raw:'R3 INTO SQUARE L',ans:'right three into square left',narr:'Quick right into hairpin.',comm:'Into square requires instant change.'},
+        
+        // FINISH SEGMENT (Notes 25-32)
+        {raw:'FLAT R CREST L6',ans:'flat right over crest left six',narr:'Maximum attack to the finish.',comm:'Flat out commitment near the end.'},
+        {raw:'BUMP R4 BUMP L4',ans:'bumps right four bumps left four',narr:'Double compression at speed.',comm:'Suspension working hard.'},
+        {raw:'L5 100 R4',ans:'left five 100 metres right four',narr:'Medium left to right.',comm:'Short sections need rapid notes.'},
+        {raw:'R6 FLAT L5',ans:'right six flat left five',narr:'Two flat calls in succession.',comm:'Flat calls test nerve.'},
+        {raw:'L6 LONG R4',ans:'left six long right four',narr:'Fast left six to medium right.',comm:'Almost at the finish now.'},
+        {raw:'CREST R4 FINISH',ans:'over crest right four finish',narr:'Final corner to the line.',comm:'Across the Australian line.'},
+        {raw:'L4 200 R3',ans:'left four 200 metres right three',narr:'Medium left to right.',comm:'Final corners of this fast stage.'},
+        {raw:'R4 LONG FLAT L FINISH',ans:'right four long flat left finish',narr:'Final sweep to the finish.',comm:'You have conquered Australian speed.'}
+       ]},
+      {name:'SS10 — Rally Catalunya',country:'Spain',surf:'Mixed tarmac / gravel',weather:'Warm · 24°C · dry',km:'16.2',
+       cond:'The ultimate test of adaptability. Tarmac and gravel sections alternate. Tyre choice is critical.',
+       segments:['Gravel','Tarmac','Mixed','Finish'],
+       notes:[
+        // GRAVEL OPENING (Notes 1-8)
+        {raw:'R4 EASY',ans:'right four easy',narr:'Gravel start to this mixed-surface challenge.',comm:'Catalunya tests adaptability.'},
+        {raw:'L5 150',ans:'left five 150 metres',narr:'Fast left on the gravel section.',comm:'Opening on gravel before tarmac switch.'},
+        {raw:'R3 INTO L4',ans:'right three into left four',narr:'Linked corners on loose surface.',comm:'Into calls need smooth inputs.'},
+        {raw:'FLAT R5',ans:'flat right five',narr:'Maximum attack on the gravel straight.',comm:'Even on gravel, flat calls test commitment.'},
+        {raw:'L3 LONG',ans:'left three long',narr:'Long left through the olive groves.',comm:'Olive groves line this historic stage.'},
+        {raw:'R4 200',ans:'right four 200 metres',narr:'Fast right with straight after.',comm:'200 metres of gravel before the change.'},
+        {raw:'L2! OPENS',ans:'left two caution opens',narr:'Tight left opens to the tarmac transition.',comm:'Caution before surface change.'},
+        {raw:'R3 SURFACE CHANGE',ans:'right three surface change',narr:'Onto tarmac now. Grip levels completely different.',comm:'Surface change is the Catalunya challenge.'},
+        
+        // TARMAC SECTION (Notes 9-16)
+        {raw:'R5 DONTCUT',ans:"right five don't cut",narr:'Inside curb on the tarmac left four.',comm:'Don\'t cut on tarmac means curbs.'},
+        {raw:'L4 !2 INTO R5',ans:'left four caution two into right five',narr:'Technical sequence on tarmac.',comm:'Caution on tarmac means road narrowing.'},
+        {raw:'SQUARE R NARROW',ans:'square right narrows',narr:'Hairpin with stone walls.',comm:'Square calls in villages need precision.'},
+        {raw:'L5 TIGHTENS',ans:'left five tightens',narr:'Fast left that tightens unexpectedly.',comm:'Tightens on tarmac are deceptive.'},
+        {raw:'R3!! JUNCTION',ans:'right three maximum caution junction',narr:'Double caution at village junction.',comm:'Double bang at junctions is serious.'},
+        {raw:'L4 DONTCUT 100',ans:"left four don't cut 100 metres",narr:'Inside curb will damage wheels.',comm:'Don\'t cut on tarmac protects rims.'},
+        {raw:'R5 BUMP L4',ans:'right five bumps into left four',narr:'Crest bumps on the tarmac road.',comm:'Bumps on tarmac upset the balance.'},
+        {raw:'CREST R6',ans:'over crest right six',narr:'Fast crest on the smooth tarmac.',comm:'Crests on tarmac are more predictable.'},
+        
+        // MIXED SECTION (Notes 17-24)
+        {raw:'L3! SURFACE CHANGE',ans:'left three caution surface change',narr:'Back to gravel now. Grip drops significantly.',comm:'Surface changes require mental resets.'},
+        {raw:'R4 GRAVEL 100',ans:'right four gravel 100 metres',narr:'Gravel section in the vineyard area.',comm:'Gravel pulled onto tarmac sections.'},
+        {raw:'L4! MIXED',ans:'left four caution mixed',narr:'Both surfaces visible. Choose your line.',comm:'Mixed surfaces are the ultimate test.'},
+        {raw:'R5 LONG',ans:'right five long',narr:'Long right through changing surfaces.',comm:'Long corners test adaptation.'},
+        {raw:'SQUARE L!!',ans:'square left maximum caution',narr:'Hairpin with double caution.',comm:'Square with double bang on mixed surfaces.'},
+        {raw:'R3 TARMAC OPENS',ans:'right three tarmac opens',narr:'Back onto clean tarmac.',comm:'Tarmac sections allow higher speeds.'},
+        {raw:'L4 BUMP BUMP',ans:'left four bumps bumps',narr:'Double compression on rough tarmac.',comm:'Multiple bumps test car control.'},
+        {raw:'R3 INTO SQUARE L',ans:'right three into square left',narr:'Quick right into hairpin.',comm:'Into square requires instant change.'},
+        
+        // FINISH SECTION (Notes 25-32)
+        {raw:'FLAT R CREST L5',ans:'flat right over crest left five',narr:'Maximum attack to the finish.',comm:'Flat out commitment.'},
+        {raw:'BUMP R4 BUMP L4',ans:'bumps right four bumps left four',narr:'Double compression near the end.',comm:'Suspension working hard.'},
+        {raw:'L5 100 R4',ans:'left five 100 metres right four',narr:'Medium left to right.',comm:'Short sections need rapid notes.'},
+        {raw:'R6 FLAT L5',ans:'right six flat left five',narr:'Two flat calls in succession.',comm:'Flat calls test commitment.'},
+        {raw:'L5 LONG R4',ans:'left five long right four',narr:'Fast left five to medium right.',comm:'Almost finished now.'},
+        {raw:'CREST R4 FINISH',ans:'over crest right four finish',narr:'Final corner over crest.',comm:'Across the Catalunya line.'},
+        {raw:'L4 200 R3',ans:'left four 200 metres right three',narr:'Medium left to right finish.',comm:'Final corners of this complex stage.'},
+        {raw:'R4 LONG FLAT L FINISH',ans:'right four long flat left finish',narr:'Final sweep to the finish.',comm:'You have mastered mixed surfaces.'}
        ]}
     ]
   },
@@ -171,6 +347,94 @@ const ERAS={
         {raw:'L6 HYBRID FLAT R FLAT L',ans:'left six hybrid boost flat right flat left',narr:'Gentle left, deploy hybrid, then back-to-back flat corners — the stage is singing.',comm:'Two flat calls back to back in a Rally1 car. That\'s 180km/h minimum. Extraordinary.'},
         {raw:'CREST R4 DONTCUT LONG',ans:"over crest right four don't cut long",narr:'Crest launches the car. The cut looks inviting but a ditch is on the inside.',comm:'The cut looks perfect from the air. In the car you can\'t see the ditch until too late.'},
         {raw:'L3 TIGHTENS! R4 FINISH',ans:'left three tightens caution into right four finish',narr:'Final note: the left pulls tighter than it looks, leads into the last corner before the line.',comm:'And there it is — the flying finish. This is what modern rallying feels like.'}
+       ]},
+      {name:'SS18 — Rally Japan',country:'Japan',surf:'Narrow tarmac',weather:'Wet · 18°C · rain',km:'12.4',
+       cond:'Narrow Japanese mountain roads. Rain makes the surface treacherous. Guardrails are the only run-off. Precision is everything.',
+       segments:['Mountain','Village','Technical','Finish'],
+       notes:[
+        // MOUNTAIN OPENING (Notes 1-8)
+        {raw:'REGEN R4 EASY',ans:'regen zone right four easy',narr:'Managing hybrid regeneration on the opening mountain section.',comm:'Japanese stages test precision above all else.'},
+        {raw:'L5 150',ans:'left five 150 metres',narr:'Medium left on the narrow mountain pass.',comm:'150 metres feels longer on narrow roads.'},
+        {raw:'R3 INTO L4',ans:'right three into left four',narr:'Linked corners on the mountain ridge.',comm:'Into calls need absolute precision here.'},
+        {raw:'FLAT R5',ans:'flat right five',narr:'Maximum attack on the mountain straight.',comm:'Even flat calls need caution on narrow roads.'},
+        {raw:'L3 LONG',narr:'Long left through the mountain pass.',comm:'Long corners test commitment on narrow roads.'},
+        {raw:'R4 200',ans:'right four 200 metres',narr:'Fast right with a short straight after.',comm:'200 metres is brief on these roads.'},
+        {raw:'L2! OPENS',ans:'left two caution opens',narr:'Tight left that opens to a bamboo-lined straight.',comm:'Caution calls mean the guardrail is close.'},
+        {raw:'R3 CREST',ans:'right three over crest',narr:'Blind crest on the mountain road.',comm:'Crests on narrow roads are dangerous.'},
+        
+        // VILLAGE SECTION (Notes 9-16)
+        {raw:'R4 DONTCUT',ans:"right four don't cut",narr:'Inside curb will damage the wheel.',comm:'Don\'t cut on narrow roads means guardrails.'},
+        {raw:'L3 !2 INTO R4',ans:'left three caution two into right four',narr:'Hairpin sequence through the village.',comm:'Hairpins in villages have concrete walls.'},
+        {raw:'SQUARE R NARROW',ans:'square right narrows',narr:'Hairpin with buildings on both sides.',comm:'Square calls in villages are critical.'},
+        {raw:'L4 TIGHTENS',ans:'left four tightens',narr:'Medium left that pulls tight.',comm:'Tightens on narrow roads are dangerous.'},
+        {raw:'R2!! JUNCTION',ans:'right two maximum caution junction',narr:'Double caution at a narrow village junction.',comm:'Double bang at junctions on narrow roads.'},
+        {raw:'L3 DONTCUT 100',ans:"left three don't cut 100 metres",narr:'Inside curb is concrete.',comm:'Don\'t cut protects the wheels.'},
+        {raw:'R4 BUMP L3',ans:'right four bumps into left three',narr:'Compression unsettles the car.',comm:'Bumps on narrow roads upset balance.'},
+        {raw:'CREST R5',ans:'over crest right five',narr:'Blind crest to medium right.',comm:'Crests are always blind here.'},
+        
+        // TECHNICAL SECTION (Notes 17-24)
+        {raw:'L2! JUNCTION',ans:'left two caution junction',narr:'Narrow road crosses.',comm:'Junctions on mountain roads are hidden.'},
+        {raw:'R3 WET 50',ans:'right three wet 50 metres',narr:'Wet section from recent rain.',comm:'Wet sections reduce grip significantly.'},
+        {raw:'L4! DONTCUT',ans:"left four caution don't cut",narr:'Fast left with guardrail inside.',comm:'Caution plus don\'t cut equals guardrail.'},
+        {raw:'R5 LONG TIGHTENS',ans:'right five long tightens',narr:'Long right that pulls tight.',comm:'Long tightens on narrow roads.'},
+        {raw:'SQUARE L!!',ans:'square left maximum caution',narr:'Hairpin with double caution.',comm:'Square with double bang on narrow roads.'},
+        {raw:'R3 CONCRETE OPENS',ans:'right three concrete opens',narr:'Concrete barrier then opens.',comm:'Concrete notes mean guardrails.'},
+        {raw:'L4 BUMP BUMP',ans:'left four bumps bumps',narr:'Double compression.',comm:'Multiple bumps test suspension.'},
+        {raw:'R3 INTO SQUARE L',ans:'right three into square left',narr:'Quick right into hairpin.',comm:'Into square requires instant change.'},
+        
+        // FINISH SECTION (Notes 25-32)
+        {raw:'REGEN R CREST L5',ans:'regen right over crest left five',narr:'Managing regen through the crest.',comm:'Regen on narrow roads needs care.'},
+        {raw:'BUMP R4 BUMP L4',ans:'bumps right four bumps left four',narr:'Double compression near the end.',comm:'Suspension working hard.'},
+        {raw:'L5 100 R4',ans:'left five 100 metres right four',narr:'Medium left to right.',comm:'Short sections need rapid notes.'},
+        {raw:'R6 HYBRID L5',ans:'right six hybrid boost left five',narr:'Hybrid deployment into medium left.',comm:'Hybrid boosts need careful management.'},
+        {raw:'L5 LONG R4',ans:'left five long right four',narr:'Fast left five to medium right.',comm:'Almost at the finish now.'},
+        {raw:'CREST R4 FINISH',ans:'over crest right four finish',narr:'Final corner to the line.',comm:'Across the Japanese line.'},
+        {raw:'L4 200 R3',ans:'left four 200 metres right three',narr:'Medium left to right.',comm:'Final corners of this precise stage.'},
+        {raw:'R4 LONG FLAT L FINISH',ans:'right four long flat left finish',narr:'Final sweep to the finish.',comm:'You have mastered Japanese precision.'}
+       ]},
+      {name:'SS22 — Rally Chile',country:'Chile',surf:'Rough gravel / dust',weather:'Dry · 28°C · dusty',km:'21.8',
+       cond:'Rugged Chilean gravel through the Andes. High altitude reduces engine power. Dust hangs in the valleys.',
+       segments:['Andes','Valley','Mountain','Finish'],
+       notes:[
+        // ANDES OPENING (Notes 1-8)
+        {raw:'HYBRID R5 EASY',ans:'hybrid boost right five easy',narr:'Managing hybrid power at high altitude.',comm:'Altitude reduces power. Hybrid helps compensate.'},
+        {raw:'L6 300',ans:'left six 300 metres',narr:'Long left through the Andes pass.',comm:'300 metres at altitude tests the engine.'},
+        {raw:'R4 INTO L5',ans:'right four into left five',narr:'Linked corners in the mountains.',comm:'Into calls need commitment at altitude.'},
+        {raw:'FLAT R6',ans:'flat right six',narr:'Maximum attack in the Andes.',comm:'Flat out at altitude is still fast.'},
+        {raw:'L4 LONG',ans:'left four long',narr:'Long left through the high passes.',comm:'Long corners test engine response.'},
+        {raw:'R5 200',ans:'right five 200 metres',narr:'Fast right with straight after.',comm:'200 metres gives the engine a breather.'},
+        {raw:'L3! OPENS',ans:'left three caution opens',narr:'Tight left that opens to the valley view.',comm:'Caution calls mean rocks on the road.'},
+        {raw:'R4 CREST',ans:'right four over crest',narr:'Blind crest in the Andes.',comm:'Crests hide the valley beyond.'},
+        
+        // VALLEY SECTION (Notes 9-16)
+        {raw:'R5 DONTCUT',ans:"right five don't cut",narr:'Inside line has loose rocks.',comm:'Don\'t cut in Chile means loose rocks.'},
+        {raw:'L4 !3 INTO R5',ans:'left four caution three into right five',narr:'Flowing caution sequence.',comm:'Caution means hidden rocks.'},
+        {raw:'R6 NARROW',ans:'right six narrows',narr:'Fast right with mountain wall closing in.',comm:'Narrow on mountain roads is dangerous.'},
+        {raw:'L5 TIGHTENS',ans:'left five tightens',narr:'Fast left that pulls tight.',comm:'Tightens on gravel are deceptive.'},
+        {raw:'R3!! JUNCTION',ans:'right three maximum caution junction',narr:'Double caution at a mining track junction.',comm:'Double bang at junctions means trucks.'},
+        {raw:'L4 DONTCUT 150',ans:"left four don't cut 150 metres",narr:'Inside line has loose scree.',comm:'Don\'t cut protects from loose rocks.'},
+        {raw:'R5 BUMP L4',ans:'right five bumps into left four',narr:'Compression at speed into medium left.',comm:'Bumps on gravel unsettle the car.'},
+        {raw:'CREST R6',ans:'over crest right six',narr:'Blind crest to fast right.',comm:'Crests at speed are pure trust.'},
+        
+        // MOUNTAIN SECTION (Notes 17-24)
+        {raw:'L3! REGEN',ans:'left three caution regen',narr:'Managing regen through tight left.',comm:'Regen through corners needs care.'},
+        {raw:'R4 DUST 100',ans:'right four dust 100 metres',narr:'Dust section in the dry valley.',comm:'Dust reduces visibility significantly.'},
+        {raw:'L4! ROCKS',ans:'left four caution rocks',narr:'Rocky section on the racing line.',comm:'Rock notes mean tyre danger.'},
+        {raw:'R5 LONG',ans:'right five long',narr:'Long fast right through the pass.',comm:'Open sections allow maximum attack.'},
+        {raw:'SQUARE L!!',ans:'square left maximum caution',narr:'Hairpin with double caution.',comm:'Square plus double bang in mountains.'},
+        {raw:'R3 GRAVEL OPENS',ans:'right three gravel opens',narr:'Loose gravel then opens.',comm:'Gravel sections need commitment.'},
+        {raw:'L4 BUMP BUMP',ans:'left four bumps bumps',narr:'Double compression.',comm:'Multiple bumps test suspension.'},
+        {raw:'R3 INTO SQUARE L',ans:'right three into square left',narr:'Quick right into hairpin.',comm:'Into square requires instant change.'},
+        
+        // FINISH SECTION (Notes 25-32)
+        {raw:'FLAT R CREST L6',ans:'flat right over crest left six',narr:'Maximum attack to the finish.',comm:'Flat out commitment near the end.'},
+        {raw:'BUMP R4 BUMP L4',ans:'bumps right four bumps left four',narr:'Double compression at speed.',comm:'Suspension working hard.'},
+        {raw:'L5 100 R4',ans:'left five 100 metres right four',narr:'Medium left to right.',comm:'Short sections need rapid notes.'},
+        {raw:'R6 HYBRID L5',ans:'right six hybrid boost left five',narr:'Hybrid deployment into medium left.',comm:'Hybrid boosts need management.'},
+        {raw:'L6 LONG R4',ans:'left six long right four',narr:'Fast left six to medium right.',comm:'Almost at the finish now.'},
+        {raw:'CREST R4 FINISH',ans:'over crest right four finish',narr:'Final corner to the line.',comm:'Across the Chilean line.'},
+        {raw:'L4 200 R3',ans:'left four 200 metres right three',narr:'Medium left to right.',comm:'Final corners in the Andes.'},
+        {raw:'R4 LONG FLAT L FINISH',ans:'right four long flat left finish',narr:'Final sweep to the finish.',comm:'You have conquered the Andes.'}
        ]}
     ]
   }
@@ -1450,6 +1714,74 @@ const LESSONS=[
         <button class="qb s" onclick="nextQuiz()">Next note</button>
         <button class="qb s" onclick="revealQuiz()">Reveal</button>
       </div>
+    </div>`},
+  {id:'timing',name:'Co-driver Timing',content:`
+    <div class="lhdr"><h2>Co-driver Timing</h2><p>When to speak, how fast, and why rhythm matters</p></div>
+    <div class="ltxt">A co-driver is part navigator, part metronome. Notes must arrive <strong>early enough</strong> for the driver to react, but <strong>late enough</strong> that they don't forget. The sweet spot is about 1.5–2 seconds before the driver needs to act.</div>
+    <div class="vcgrid">
+      <div class="vc"><div class="vc-r">TOO EARLY</div><div class="vc-m">3+ seconds before</div><div class="vc-e">Driver forgets the call</div></div>
+      <div class="vc"><div class="vc-r">PERFECT</div><div class="vc-m">1.5–2 seconds</div><div class="vc-e">Driver reacts instinctively</div></div>
+      <div class="vc"><div class="vc-r">TOO LATE</div><div class="vc-m">Under 1 second</div><div class="vc-e">Driver panics or misses</div></div>
+    </div>
+    <div class="ltxt"><strong>Speed affects timing.</strong> At 180km/h, you cover 50 metres per second. A 100m call gives the driver two seconds. At 100km/h, that same 100m gives three and a half seconds. You must adjust your pace to the speed.</div>
+    <div class="ndemo">150 R3 — two seconds at 75km/h<br/>150 R3 — one second at 150km/h</div>
+    <div class="tip"><strong>Professional tip:</strong> Top co-drivers rehearse stages aloud before the event. They know exactly which corners need early calls and which can wait.</div>`},
+  {id:'advanced',name:'Advanced Modifiers',content:`
+    <div class="lhdr"><h2>Advanced Modifiers</h2><p>Subtle notes that separate good co-drivers from great ones</p></div>
+    <div class="vcgrid">
+      <div class="vc"><div class="vc-r">OPENS</div><div class="vc-m">Corner widens</div><div class="vc-e">You can carry more speed out</div></div>
+      <div class="vc"><div class="vc-r">MAYBE</div><div class="vc-m">Tightens depending on grip</div><div class="vc-e">Read the road surface</div></div>
+      <div class="vc"><div class="vc-r">CREST</div><div class="vc-m">Blind summit</div><div class="vc-e">Commit before you see</div></div>
+      <div class="vc"><div class="vc-r">JUMP</div><div class="vc-m">Car leaves ground</div><div class="vc-e">Land ready to turn</div></div>
+      <div class="vc"><div class="vc-r">BUMP</div><div class="vc-m">Compression unsettles</div><div class="vc-e">Grip changes here</div></div>
+      <div class="vc"><div class="vc-r">WATER</div><div class="vc-m">Splash or crossing</div><div class="vc-e">Aquaplane risk</div></div>
+    </div>
+    <div class="ltxt"><strong>OPENS</strong> is your gift to the driver — extra speed carried out. <strong>MAYBE</strong> is your admission that conditions matter. A wet maybe is very different from a dry maybe.</div>
+    <div class="ndemo">L3 OPENS INTO R4 TIGHTENS</div>
+    <div class="ntrans">Left three widens (carry speed out), directly into right four that gets tighter (brake more than it looks)</div>
+    <div class="tip"><strong>Master class:</strong> The best co-drivers can "read" a maybe in real-time. If they see gravel on the line, they tighten the call verbally. The driver never knows the note changed.</div>`},
+  {id:'strategy',name:'Stage Strategy',content:`
+    <div class="lhdr"><h2>Stage Strategy</h2><p>How to approach different stage types</p></div>
+    <div class="era-blk">
+      <h4>Opening Stages (Notes 1-8)</h4>
+      <div class="ltxt">Start conservative. Build rhythm. The first notes set the mental pace for everything that follows. A mistake here destroys confidence for the entire stage.</div>
+    </div>
+    <div class="era-blk">
+      <h4>Technical Sections (Notes 9-24)</h4>
+      <div class="ltxt">Maximum concentration zone. Notes come rapid-fire. The co-driver's voice becomes the driver's only reality. External world — trees, rocks, crowds — ceases to exist.</div>
+    </div>
+    <div class="era-blk">
+      <h4>Sprint Finishes (Notes 25-32)</h4>
+      <div class="ltxt">Time to push if the rhythm is good. But also where crashes happen from overconfidence. A caution call 200m from the finish line can save the entire rally.</div>
+    </div>
+    <div class="ltxt"><strong>The mental game:</strong> Great co-drivers modulate their voice. Calm in technical sections, urgent in flat sections, absolutely clear in danger. The driver should feel the stage through the co-driver's tone before they see it.</div>
+    <div class="tip"><strong>Championship mindset:</strong> One perfect stage is worth three fast-but-risky stages. Consistency wins championships. Spectacular crashes end them.</div>`},
+  {id:'crashes',name:'Crashes & Recovery',content:`
+    <div class="lhdr"><h2>Crashes & Recovery</h2><p>How to survive and continue after mistakes</p></div>
+    <div class="ltxt">In rally, everyone crashes eventually. The difference between champions and also-rans is <strong>what happens after</strong>. A co-driver must do three things instantly when things go wrong:</div>
+    <div class="vcgrid">
+      <div class="vc"><div class="vc-r">1. CONFIRM</div><div class="vc-m">"We're OK"</div><div class="vc-e">Driver needs to know you're alive</div></div>
+      <div class="vc"><div class="vc-r">2. ASSESS</div><div class="vc-m">"Car still drives"</div><div class="vc-e">Can we continue or retire?</div></div>
+      <div class="vc"><div class="vc-r">3. RESET</div><div class="vc-m">"Next note is R3"</div><div class="vc-e">Get back into rhythm immediately</div></div>
+    </div>
+    <div class="ltxt"><strong>Consecutive mistakes</strong> are the killer. One wrong note is survivable. Two in a row usually means a crash. The co-driver must recognize when they're rattled and <strong>deliberately slow down</strong> to rebuild confidence.</div>
+    <div class="ndemo" style="background:#2a0800;color:#ff5533">RALLY RULE #1: Two consecutive errors = mandatory mental reset</div>
+    <div class="ltxt">After a crash, even a minor one, the co-driver must check the notes are still valid. A bent suspension changes every corner. The note that said R5 might now require an R3 approach speed.</div>
+    <div class="tip"><strong>Recovery mindset:</strong> The stage isn't over until the finish line. Marcus Grönholm once crashed twice in one stage and still won the rally. Never give up.</div>`},
+  {id:'exam',name:'Certification Exam',content:`
+    <div class="lhdr"><h2>Co-Driver Certification</h2><p>Prove your mastery across all skill areas</p></div>
+    <div class="ltxt">This final exam tests everything: vocabulary, timing, modifiers, strategy, and recovery. You need <strong>85% accuracy</strong> to earn your Professional Co-Driver certification.</div>
+    <div class="era-blk">
+      <h4>Exam Format</h4>
+      <div class="ltxt">• 32 notes across 4 eras (8 per era)<br/>• Timed responses (Normal difficulty)<br/>• Mixed surface conditions<br/>• Surprise hazard notes included</div>
+    </div>
+    <div class="era-blk">
+      <h4>Certification Levels</h4>
+      <div class="ltxt">🥉 <strong>Junior (70-79%)</strong> — Novice co-driver, continue training<br/>🥈 <strong>National (80-89%)</strong> — Qualified for national rallies<br/>🥇 <strong>World (90-100%)</strong> — Elite co-driver, ready for WRC</div>
+    </div>
+    <div class="tip"><strong>Final advice:</strong> Speed without accuracy is useless. A slow correct note saves stages. A fast wrong note ends careers. Trust your training, trust the system, trust yourself.</div>
+    <div style="text-align:center;margin-top:1rem;">
+      <button class="gbtn pri" onclick="startCertificationExam()" style="font-size:16px;padding:12px 30px;">START CERTIFICATION EXAM</button>
     </div>`}
 ];
 
@@ -1522,6 +1854,12 @@ function updateCarSVG(hits){
 function rollCrash(noteRaw, isTimeout, isBadNote){
   // Apply tuning effects if present
   const crashModifier = (G.tuneEffects && G.tuneEffects.crashMod) ? G.tuneEffects.crashMod : 1.0;
+  
+  // CRASH PROTECTION: Need 2 consecutive misreads to crash
+  if (RALLY_STATE.consecutiveWrong < 2) {
+    return false; // Not enough consecutive wrongs - no crash
+  }
+  
   // Crash probability based on note danger, timeout, bad answer, damage
   const era=ERAS[G.era];
   const hasCaution=noteRaw.includes('!');
@@ -1547,6 +1885,7 @@ function rollCrash(noteRaw, isTimeout, isBadNote){
 }
 function triggerCrash(noteRaw){
   G.crashCount++;
+  RALLY_STATE.consecutiveWrong = 0; // Reset after crash - fresh start
   // Pick crash type based on note
   let pool=CRASH_TYPES.filter(c=>c.recoverable);
   if(noteRaw.includes('JUMP')||noteRaw.includes('CREST'))pool=CRASH_TYPES.filter(c=>c.id==='off_road'||c.id==='big_off'||c.id==='spin');
@@ -1658,7 +1997,7 @@ function injectAtmosphere(){
 let CAREER={driver:'',codriver:'',car:null,currentStage:0,pts:0,completed:[],standings:[],started:false};
 let lessonsCompleted=new Set();
 let currentLesson='intro';
-let quizBank=[],quizIdx=0,quizCurrent=null;
+let quizBank=[],quizIdx=0,quizCurrent=null,quizStartTime=null,quizTelemetry=[];
 
 // ═══════════════ SCREEN NAV ═══════════════
 function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
@@ -1841,6 +2180,10 @@ function loadNote(){
   if(G.idx>=G.notes.length){endStage();return;}
   const n=G.notes[G.idx];
   
+  // Apply co-driver style transformations to note display
+  const style = typeof CoDriverAudio !== 'undefined' ? CoDriverAudio.getVoiceCharacter() : 'measured';
+  const transformedNote = applyStyleToNote(n.raw, style);
+  
   // Initialize rally state for first note
   if(G.idx === 0) {
     RALLY_STATE.startTime = Date.now();
@@ -1866,12 +2209,12 @@ function loadNote(){
     noteElement.style.transition = 'opacity 0.3s ease';
     
     setTimeout(() => {
-      // Fade in new note
-      noteElement.textContent = n.raw;
+      // Fade in new note with style transformation
+      noteElement.textContent = transformedNote;
       noteElement.style.opacity = '1';
     }, 150);
   } else {
-    noteElement.textContent = n.raw;
+    noteElement.textContent = transformedNote;
     noteElement.style.opacity = '1';
   }
   
@@ -2102,6 +2445,39 @@ function updateTimer(){
   document.getElementById('t-arc').setAttribute('stroke',G.remaining<=3?'#e8291c':G.remaining<=5?'#f5c518':'#39ff14');
   document.getElementById('g-timer').textContent=G.remaining;
 }
+
+// Apply co-driver style transformations to pace notes
+function applyStyleToNote(rawNote, style) {
+  if (!rawNote) return rawNote;
+  
+  let transformed = rawNote;
+  
+  switch(style) {
+    case 'intense': // Aggressive style
+      // Use urgent linking
+      transformed = transformed.replace(/\bINTO\b/g, '>>');
+      transformed = transformed.replace(/\binto\b/g, '>>');
+      // Emphasize cautions
+      transformed = transformed.replace(/!/g, '!!');
+      break;
+      
+    case 'fearless': // McRae style
+      // Minimal linking - aggressive shorthand
+      transformed = transformed.replace(/\bINTO\b/g, '>');
+      transformed = transformed.replace(/\binto\b/g, '>');
+      // Remove single cautions (trust the driver)
+      transformed = transformed.replace(/([^!])!/g, '$1');
+      break;
+      
+    case 'measured': // Calm style (default)
+    default:
+      // Keep standard format
+      break;
+  }
+  
+  return transformed;
+}
+
 function similarity(a,b){
   a=a.toLowerCase().replace(/[^a-z0-9 ]/g,'').trim();
   b=b.toLowerCase().replace(/[^a-z0-9 ]/g,'').trim();
@@ -2132,6 +2508,7 @@ function submitAnswer(){
   // Update rally state
   if (ok) {
     RALLY_STATE.streak++;
+    RALLY_STATE.consecutiveWrong = 0; // Reset on correct answer
     RALLY_STATE.momentum = Math.min(2.0, RALLY_STATE.momentum + 0.1);
     RALLY_STATE.multiplier = 1.0 + (RALLY_STATE.streak * 0.05);
     RALLY_STATE.forgivenessWindow = Math.min(0.8, 0.62 + (RALLY_STATE.streak * 0.02));
@@ -2286,29 +2663,102 @@ function endStage(){
   document.getElementById('r-date').textContent=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}).toUpperCase();
   document.getElementById('r-outlet').textContent=era.outlet;
   document.getElementById('r-issue').textContent=`${era.label} · ${stageName}`;
+  // Get co-driver style for story tone
+  const storyTone = typeof CoDriverAudio !== 'undefined' ? CoDriverAudio.getStoryTone() : 'professional';
+  const narratorStyle = typeof CoDriverAudio !== 'undefined' ? CoDriverAudio.getNarratorStyle() : 'analytical';
+  
   const stageShort=stageName.split('—')[1]?.trim().toUpperCase()||stageName.toUpperCase();
-  const hl=G.dnf
-    ?`<span>${G.driver.toUpperCase()}</span> RETIRES FROM ${stageShort} — CAR TOO DAMAGED TO CONTINUE`
-    :won
-    ?`<span>${G.driver.toUpperCase()}</span> & ${G.codriver.toUpperCase()} NAIL IT FOR ${pos} ON THE ${stageShort}`
-    :`<span>${G.driver.toUpperCase()}</span> STRUGGLES ON NOTES — ${pos} ON ${stageShort}`;
+  
+  // Style-specific headlines
+  let hl;
+  if (G.dnf) {
+    hl = `<span>${G.driver.toUpperCase()}</span> RETIRES FROM ${stageShort} — CAR TOO DAMAGED TO CONTINUE`;
+  } else if (won) {
+    switch(storyTone) {
+      case 'aggressive':
+        hl = `<span>${G.driver.toUpperCase()}</span> & ${G.codriver.toUpperCase()} ATTACK FOR ${pos} ON ${stageShort}`;
+        break;
+      case 'bold':
+        hl = `<span>${G.driver.toUpperCase()}</span> DOMINATES ${stageShort} — LEGENDARY ${pos} PERFORMANCE`;
+        break;
+      default:
+        hl = `<span>${G.driver.toUpperCase()}</span> & ${G.codriver.toUpperCase()} NAIL IT FOR ${pos} ON THE ${stageShort}`;
+    }
+  } else {
+    switch(storyTone) {
+      case 'aggressive':
+        hl = `<span>${G.driver.toUpperCase()}</span> FIGHTS BACK FROM DIFFICULT RUN — ${pos} ON ${stageShort}`;
+        break;
+      case 'bold':
+        hl = `<span>${G.driver.toUpperCase()}</span> SHOWS GRIT DESPITE CHALLENGES — ${pos} ON ${stageShort}`;
+        break;
+      default:
+        hl = `<span>${G.driver.toUpperCase()}</span> STRUGGLES ON NOTES — ${pos} ON ${stageShort}`;
+    }
+  }
   document.getElementById('r-headline').innerHTML=hl;
-  document.getElementById('r-pos-badge').textContent=`${pos} — ${acc}% ACCURACY`;
   document.getElementById('r-deck').textContent=won
     ?`The crew translated ${G.correct} of ${total} pacenotes correctly. Stage time: ${timeStr}.`
     :`Only ${G.correct} of ${total} notes read correctly. Time lost across multiple corners.`;
   const crashWords=G.crashCount>0?`After ${G.crashCount} incident${G.crashCount>1?'s':''} costing over ${Math.round(G.totalTimeLost)} seconds, `:' ';
-  const art=G.dnf
-    ?`<p>${G.driver} and ${G.codriver} were forced to retire from ${stageName} after damage accumulated beyond the point of recovery. The ${G.car?.n||'car'} was too badly damaged to continue.</p><p>"It's heartbreaking," said ${G.driver} at the stage end. "The notes were there but we lost the car. That's rallying."</p><p>The retirement means no points from this stage. But the car can be rebuilt — the knowledge stays.</p>`
-    :won
-    ?`<p>${G.driver}, navigating from the notes of ${G.codriver} in the ${G.car?.n||'car'}, produced a ${acc>=85?'dominant':'controlled'} performance on ${stageName}. The crew translated ${G.correct} of ${total} pacenotes correctly across ${era.surf} conditions.</p><p>${crashWords}the stage time of ${timeStr} reflects the effort. "The notes were exactly right," said ${G.driver}. "When you trust them, the car goes where it needs to go."</p><p>The ${era.label} machinery performed as expected and the note-reading held under pressure.</p>`
-    :`<p>${G.driver} and ${G.codriver} endured a difficult run through ${stageName}, with only ${G.correct} of ${total} pacenotes translated accurately. ${crashWords}time was lost at multiple corners where hesitation cost precious seconds.</p><p>"We got caught out on the sequences," admitted ${G.driver}. "The notes came quicker than expected." ${G.codriver}: "We'll study the vocab before the next one."</p><p>The crew brought the car home in ${timeStr}. Work is needed before the next round.</p>`
+  
+  // Style-specific article text
+  let art;
+  if (G.dnf) {
+    art = `<p>${G.driver} and ${G.codriver} were forced to retire from ${stageName} after damage accumulated beyond the point of recovery. The ${G.car?.n||'car'} was too badly damaged to continue.</p><p>"It's heartbreaking," said ${G.driver} at the stage end. "The notes were there but we lost the car. That's rallying."</p><p>The retirement means no points from this stage. But the car can be rebuilt — the knowledge stays.</p>`;
+  } else if (won) {
+    switch(narratorStyle) {
+      case 'dramatic':
+        art = `<p>${G.driver} and ${G.codriver} LAUNCHED an all-out assault on ${stageName}, delivering a ${acc>=85?'commanding':'strong'} performance that left the competition in their wake. ${G.correct} of ${total} pacenotes were executed with surgical precision.</p><p>${crashWords}the stage time of ${timeStr} stands as testament to their relentless attack. "We came here to WIN," declared ${G.driver}. "Every note was MAXIMUM COMMITMENT."</p><p>The ${era.label} machine screamed through every corner, the crew pushing beyond conventional limits.</p>`;
+        break;
+      case 'legendary':
+        art = `<p>In a display of sheer bravery that echoes the greats of rally history, ${G.driver} and ${G.codriver} conquered ${stageName} with ${acc>=85?'flawless':'exceptional'} precision. ${G.correct} of ${total} pacenotes translated at the absolute limit.</p><p>${crashWords}the stage time of ${timeStr} will be remembered. "No fear, full commitment," said ${G.driver}. "That's how you make history."</p><p>The ${era.label} era has found its new heroes.</p>`;
+        break;
+      default:
+        art = `<p>${G.driver}, navigating from the notes of ${G.codriver} in the ${G.car?.n||'car'}, produced a ${acc>=85?'dominant':'controlled'} performance on ${stageName}. The crew translated ${G.correct} of ${total} pacenotes correctly across ${era.surf} conditions.</p><p>${crashWords}the stage time of ${timeStr} reflects the effort. "The notes were exactly right," said ${G.driver}. "When you trust them, the car goes where it needs to go."</p><p>The ${era.label} machinery performed as expected and the note-reading held under pressure.</p>`;
+    }
+  } else {
+    switch(narratorStyle) {
+      case 'dramatic':
+        art = `<p>${G.driver} and ${G.codriver} BATTLED through adversity on ${stageName}, salvaging ${pos} despite only ${G.correct} of ${total} pacenotes hitting the mark. The stage demanded everything they had.</p><p>${crashWords}"We NEVER gave up," insisted ${G.driver}. "Even when the notes went wrong, we kept attacking. We'll be back STRONGER."</p><p>The ${era.label} machine took a beating but carried them to the finish. The fight continues.</p>`;
+        break;
+      case 'legendary':
+        art = `<p>Even legends have difficult days. ${G.driver} and ${G.codriver} showed TRUE GRIT on ${stageName}, dragging the ${G.car?.n||'car'} to ${pos} despite ${G.correct} of ${total} pacenotes causing chaos.</p><p>${crashWords}"The greats aren't defined by perfect stages," reflected ${G.driver}. "They're defined by how they respond to the tough ones. We go again."</p><p>The ${era.label} spirit burns bright even in defeat.</p>`;
+        break;
+      default:
+        art = `<p>${G.driver} and ${G.codriver} endured a difficult run through ${stageName}, with only ${G.correct} of ${total} pacenotes translated accurately. ${crashWords}time was lost at multiple corners where hesitation cost precious seconds.</p><p>"We got caught out on the sequences," admitted ${G.driver}. "The notes came quicker than expected." ${G.codriver}: "We'll study the vocab before the next one."</p><p>The crew brought the car home in ${timeStr}. Work is needed before the next round.</p>`;
+    }
+  }
+  
   // Add crash/damage section to article
   const dmgLine=G.crashCount>0?`<p>The car suffered ${G.crashCount} incident${G.crashCount>1?'s':''} during the stage, costing an estimated ${Math.round(G.totalTimeLost)} seconds in total. Average car damage was ${Math.round(avgDmg)}% at the finish — ${avgDmg>80?'remarkable considering the conditions':'visible on the bodywork and underneath'}.`:`<p>The car came through clean — no incidents, no damage beyond the normal wear of a gravel stage.`;
   document.getElementById('r-article').innerHTML=art+dmgLine+'</p>';
-  const q=won
-    ?`"The notes were perfect. When you trust them completely, the car goes exactly where it needs to go."`
-    :`"We lost time in the sequences. We'll review and come back stronger next time."`;
+  
+  // Style-specific quotes
+  let q;
+  if (won) {
+    switch(storyTone) {
+      case 'aggressive':
+        q = `"We came to attack and we delivered. Maximum commitment, maximum result."`;
+        break;
+      case 'bold':
+        q = `"No fear, flat out. That's how you become a legend."`;
+        break;
+      default:
+        q = `"The notes were perfect. When you trust them completely, the car goes exactly where it needs to go."`;
+    }
+  } else {
+    switch(storyTone) {
+      case 'aggressive':
+        q = `"We never stopped attacking. Next stage, we go even harder."`;
+        break;
+      case 'bold':
+        q = `"Setbacks fuel comebacks. Watch what we do next."`;
+        break;
+      default:
+        q = `"We lost time in the sequences. We'll review and come back stronger next time."`;
+    }
+  }
   document.getElementById('r-quote').textContent=q;
   document.getElementById('r-quote-attr').textContent=`— ${G.driver}, post-stage`;
   document.getElementById('r-pos').textContent=pos;
@@ -2379,6 +2829,7 @@ function switchLesson(id,el){
 }
 function initQuiz(){
   quizBank=[];
+  quizTelemetry=[];
   Object.values(ERAS).forEach(era=>era.stages.forEach(stage=>stage.notes.forEach(n=>quizBank.push({raw:n.raw,ans:n.ans,era:era.label}))));
   quizBank.sort(()=>Math.random()-.5);quizIdx=0;nextQuiz();
 }
@@ -2388,14 +2839,177 @@ function nextQuiz(){
   const qn=document.getElementById('qz-note');const qi=document.getElementById('qz-input');const qf=document.getElementById('qz-fb');const qt=document.getElementById('qz-era-tag');
   if(qn)qn.textContent=quizCurrent.raw;if(qi){qi.value='';qi.disabled=false;}
   if(qf){qf.textContent='';qf.className='quiz-fb';}if(qt)qt.textContent=quizCurrent.era;
+  quizStartTime=Date.now(); // Start timing for telemetry
 }
 function checkQuiz(){
   const qi=document.getElementById('qz-input');const qf=document.getElementById('qz-fb');
   if(!qi||!qf||!quizCurrent)return;
+  
+  // Record telemetry
+  const reactionTime=quizStartTime ? Date.now()-quizStartTime : 0;
   const score=similarity(qi.value.trim(),quizCurrent.ans);
   const ok=score>=0.60;
+  
+  quizTelemetry.push({
+    note:quizCurrent.raw,
+    answer:quizCurrent.ans,
+    userAnswer:qi.value.trim(),
+    score:score,
+    correct:ok,
+    reactionTime:reactionTime,
+    timestamp:Date.now()
+  });
+  
   qf.textContent=ok?`Correct! ${Math.round(score*100)}% — Answer: ${quizCurrent.ans}`:`Not quite (${Math.round(score*100)}%) — Answer: ${quizCurrent.ans}`;
   qf.className='quiz-fb '+(ok?'ok':'bad');
+  
+  // Show telemetry button after 5 attempts
+  if(quizTelemetry.length>=5){
+    showTelemetryButton();
+  }
+}
+
+function showTelemetryButton(){
+  const container=document.querySelector('.qbtns');
+  if(!container||document.getElementById('telemetry-btn'))return;
+  const btn=document.createElement('button');
+  btn.id='telemetry-btn';
+  btn.className='qb s';
+  btn.textContent='📊 View Telemetry';
+  btn.onclick=showTelemetryGraph;
+  btn.style.cssText='background:var(--gold);color:#0a0a0c;border-color:var(--gold);';
+  container.appendChild(btn);
+}
+
+function showTelemetryGraph(){
+  const overlay=document.createElement('div');
+  overlay.id='telemetry-overlay';
+  overlay.className='screen active';
+  overlay.style.cssText='z-index:10000;background:rgba(10,10,12,0.98);';
+  
+  // Calculate stats
+  const times=quizTelemetry.map(t=>t.reactionTime);
+  const avgTime=times.reduce((a,b)=>a+b,0)/times.length;
+  const minTime=Math.min(...times);
+  const maxTime=Math.max(...times);
+  const accuracy=quizTelemetry.filter(t=>t.correct).length/quizTelemetry.length*100;
+  
+  overlay.innerHTML=`
+    <div class="page-hdr">
+      <button class="bk" onclick="document.getElementById('telemetry-overlay').remove();">← Back to Quiz</button>
+      <div class="page-hdr-title">📊 Telemetry Analysis</div>
+    </div>
+    <div style="flex:1;padding:2rem;max-width:900px;margin:0 auto;width:100%;overflow:auto;">
+      
+      <!-- Stats Cards -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;">
+        <div style="background:var(--surf2);border:1px solid var(--brd2);padding:1rem;text-align:center;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--gold);">${Math.round(avgTime/100)/10}s</div>
+          <div style="font-size:11px;color:var(--text3);">Avg Response</div>
+        </div>
+        <div style="background:var(--surf2);border:1px solid var(--brd2);padding:1rem;text-align:center;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--gold);">${Math.round(minTime/100)/10}s</div>
+          <div style="font-size:11px;color:var(--text3);">Best Time</div>
+        </div>
+        <div style="background:var(--surf2);border:1px solid var(--brd2);padding:1rem;text-align:center;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--gold);">${Math.round(accuracy)}%</div>
+          <div style="font-size:11px;color:var(--text3);">Accuracy</div>
+        </div>
+        <div style="background:var(--surf2);border:1px solid var(--brd2);padding:1rem;text-align:center;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--gold);">${quizTelemetry.length}</div>
+          <div style="font-size:11px;color:var(--text3);">Notes Answered</div>
+        </div>
+      </div>
+      
+      <!-- Graph Canvas -->
+      <div style="background:var(--surf2);border:1px solid var(--brd2);padding:1.5rem;margin-bottom:2rem;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text3);margin-bottom:1rem;">REACTION TIME GRAPH (seconds)</div>
+        <canvas id="telemetry-canvas" width="800" height="300" style="width:100%;height:300px;background:#0a0a0c;border:1px solid var(--brd);"></canvas>
+      </div>
+      
+      <!-- Recent History -->
+      <div style="background:var(--surf2);border:1px solid var(--brd2);padding:1.5rem;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text3);margin-bottom:1rem;">RECENT ATTEMPTS</div>
+        <div style="display:flex;flex-direction:column;gap:0.5rem;max-height:200px;overflow-y:auto;">
+          ${quizTelemetry.slice(-10).reverse().map((t,i)=>`
+            <div style="display:flex;align-items:center;gap:1rem;padding:0.5rem;background:var(--surf);border-radius:4px;font-size:12px;">
+              <span style="color:var(--text3);width:30px;">${quizTelemetry.length-i}</span>
+              <span style="flex:1;color:var(--text);font-family:'IBM Plex Mono',monospace;">${t.note}</span>
+              <span style="color:${t.correct?'#39ff14':'#e8291c'};width:60px;text-align:center;">${t.correct?'✓':'✗'} ${Math.round(t.score*100)}%</span>
+              <span style="color:var(--gold);width:70px;text-align:right;">${Math.round(t.reactionTime/100)/10}s</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      
+    </div>
+  `;
+  
+  document.body.appendChild(overlay);
+  
+  // Draw graph
+  setTimeout(()=>drawTelemetryGraph(),50);
+}
+
+function drawTelemetryGraph(){
+  const canvas=document.getElementById('telemetry-canvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const w=canvas.width;
+  const h=canvas.height;
+  
+  // Clear
+  ctx.fillStyle='#0a0a0c';
+  ctx.fillRect(0,0,w,h);
+  
+  if(quizTelemetry.length<2)return;
+  
+  // Get data
+  const times=quizTelemetry.map(t=>t.reactionTime/1000);
+  const maxTime=Math.max(...times,5);
+  const minTime=Math.min(...times,0);
+  const range=maxTime-minTime||1;
+  
+  // Draw grid
+  ctx.strokeStyle='#252530';
+  ctx.lineWidth=1;
+  for(let i=0;i<=5;i++){
+    const y=h-30-(i*(h-60)/5);
+    ctx.beginPath();
+    ctx.moveTo(40,y);
+    ctx.lineTo(w-20,y);
+    ctx.stroke();
+    // Labels
+    ctx.fillStyle='#5a5a70';
+    ctx.font='10px "IBM Plex Mono"';
+    ctx.textAlign='right';
+    ctx.fillText((minTime+(i*range/5)).toFixed(1)+'s',35,y+3);
+  }
+  
+  // Draw bars
+  const barW=Math.max(20,(w-80)/quizTelemetry.length-4);
+  quizTelemetry.forEach((t,i)=>{
+    const x=40+i*((w-80)/Math.max(quizTelemetry.length,10))+2;
+    const barH=(t.reactionTime/1000-minTime)/range*(h-60);
+    const y=h-30-barH;
+    
+    // Bar
+    ctx.fillStyle=t.correct?'#39ff14':'#e8291c';
+    ctx.fillRect(x,y,barW,barH);
+    
+    // Highlight best time
+    if(t.reactionTime===Math.min(...quizTelemetry.map(tt=>tt.reactionTime))){
+      ctx.strokeStyle='#f5c518';
+      ctx.lineWidth=2;
+      ctx.strokeRect(x-1,y-1,barW+2,barH+2);
+    }
+  });
+  
+  // Title
+  ctx.fillStyle='#f5c518';
+  ctx.font='bold 12px "IBM Plex Mono"';
+  ctx.textAlign='center';
+  ctx.fillText('Response Time per Note',w/2,20);
 }
 function revealQuiz(){
   const qf=document.getElementById('qz-fb');
@@ -2421,6 +3035,25 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Enter'){
     if(document.getElementById('game').classList.contains('active')&&!document.getElementById('g-sub').disabled)submitAnswer();
     if(document.getElementById('training').classList.contains('active')&&document.activeElement===document.getElementById('qz-input'))checkQuiz();
+  }
+  
+  // Global input focus for game screen - typing starts without clicking
+  if(document.getElementById('game').classList.contains('active')) {
+    const input = document.getElementById('g-input');
+    // Only capture if game is active, input exists, isn't disabled, and isn't already focused
+    if(input && !input.disabled && document.activeElement !== input) {
+      // Ignore control keys and special keys
+      const ignoreKeys = ['Control', 'Alt', 'Shift', 'Meta', 'Escape', 'Tab', 
+                          'CapsLock', 'NumLock', 'ScrollLock', 'Insert', 'Delete',
+                          'Home', 'End', 'PageUp', 'PageDown', 'ArrowUp', 'ArrowDown', 
+                          'ArrowLeft', 'ArrowRight', 'F1', 'F2', 'F3', 'F4', 'F5', 
+                          'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12'];
+      
+      if(!ignoreKeys.includes(e.key) && !e.ctrlKey && !e.altKey && !e.metaKey) {
+        // Focus the input and let the character be typed
+        input.focus();
+      }
+    }
   }
 });
 window.speechSynthesis&&window.speechSynthesis.getVoices();
@@ -3119,7 +3752,9 @@ const RALLY_STATE = {
   competitiveSeed: 0,
   // Fatigue system
   fatigueLevel: 0,
-  fatigueMultiplier: 1.0
+  fatigueMultiplier: 1.0,
+  // Crash prevention - consecutive wrong counter (need 2 for crash)
+  consecutiveWrong: 0
 };
 
 // Zero randomness for competitive fairness
@@ -4613,7 +5248,7 @@ function optimizeRetryFlow() {
   }
 }
 
-// Auto-submit with partial correctness highlighting
+// Input handler for partial correctness highlighting (auto-submit removed)
 document.addEventListener('input', e => {
   if (e.target.id === 'tut-input') {
     // Tutorial input handling
@@ -4622,20 +5257,10 @@ document.addEventListener('input', e => {
     const currentNote = G.notes[G.idx];
     if (!currentNote) return;
     
-    // Update visual feedback in real-time
+    // Update visual feedback in real-time only
     updatePartialCorrectness(typed, currentNote.ans);
     
-    // Check for auto-submit condition
-    const similarityScore = similarity(typed, currentNote.ans);
-    const autoSubmitThreshold = RALLY_STATE.forgivenessWindow;
-    
-    if (similarityScore >= autoSubmitThreshold && typed.length > 0) {
-      // Auto-submit on correct typing
-      const reactionTime = Date.now() - RALLY_STATE.lastInputTime;
-      if (reactionTime > 100) { // Prevent instant submissions
-        autoSubmitAnswer(reactionTime);
-      }
-    }
+    // Auto-submit removed - players must press Enter to submit
     
     RALLY_STATE.lastInputTime = Date.now();
   }
@@ -4716,6 +5341,7 @@ function autoSubmitAnswer(reactionTime) {
   // Update rally state with context-specific behavior
   if (ok) {
     RALLY_STATE.streak++;
+    RALLY_STATE.consecutiveWrong = 0; // Reset on correct answer
     RALLY_STATE.momentum = Math.min(2.0, RALLY_STATE.momentum + context.momentumGain);
     RALLY_STATE.multiplier = 1.0 + (RALLY_STATE.streak * 0.05);
     RALLY_STATE.forgivenessWindow = Math.min(0.8, 0.62 + (RALLY_STATE.streak * 0.02));
@@ -4838,6 +5464,9 @@ function handleMistakeDisruption() {
   RALLY_STATE.momentum = Math.max(0.5, RALLY_STATE.momentum - 0.2);
   RALLY_STATE.multiplier = 1.0;
   RALLY_STATE.forgivenessWindow = 0.62;
+  
+  // Increment consecutive wrong counter (crash requires 2 misreads)
+  RALLY_STATE.consecutiveWrong++;
   
   // Start recovery phase
   if (!RALLY_STATE.inRecovery) {
@@ -4996,3 +5625,3044 @@ document.head.appendChild(style);
 // openSetup is intentionally not overridden here.
 // A previous override caused routing regressions due duplicate function declarations.
 
+// ═══════════════════════════════════════════════════════════════
+// MULTIPLAYER CLIENT (#028)
+// ═══════════════════════════════════════════════════════════════
+
+const Multiplayer = {
+  socket: null,
+  connected: false,
+  currentLobby: null,
+  playerId: null,
+  playerName: null,
+  isMultiplayerMode: false,
+  raceInProgress: false,
+  otherPlayers: new Map(),
+  
+  // Connect to multiplayer server
+  connect(serverUrl = 'http://localhost:3000') {
+    if (typeof io === 'undefined') {
+      console.log('Socket.IO not available - multiplayer disabled');
+      return false;
+    }
+    
+    try {
+      this.socket = io(serverUrl);
+      this.setupEventHandlers();
+      return true;
+    } catch (e) {
+      console.error('Failed to connect to multiplayer server:', e);
+      return false;
+    }
+  },
+  
+  // Setup Socket.IO event handlers
+  setupEventHandlers() {
+    this.socket.on('connect', () => {
+      this.connected = true;
+      this.playerId = this.socket.id;
+      console.log('Connected to multiplayer server:', this.playerId);
+    });
+    
+    this.socket.on('disconnect', () => {
+      this.connected = false;
+      this.currentLobby = null;
+      this.isMultiplayerMode = false;
+      console.log('Disconnected from multiplayer server');
+    });
+    
+    // Lobby events
+    this.socket.on('player-joined', (data) => {
+      console.log('Player joined:', data.player);
+      this.otherPlayers.set(data.player.id, data.player);
+      this.updateLobbyUI();
+    });
+    
+    this.socket.on('player-left', (data) => {
+      console.log('Player left:', data.playerId);
+      this.otherPlayers.delete(data.playerId);
+      this.updateLobbyUI();
+    });
+    
+    this.socket.on('player-ready', (data) => {
+      const player = this.otherPlayers.get(data.playerId);
+      if (player) player.ready = data.ready;
+      this.updateLobbyUI();
+    });
+    
+    this.socket.on('lobby-updated', (data) => {
+      this.currentLobby = data.lobby;
+      this.updateLobbyUI();
+    });
+    
+    this.socket.on('lobby-settings-updated', (data) => {
+      if (this.currentLobby) {
+        this.currentLobby.settings = data.settings;
+      }
+    });
+    
+    // Race events
+    this.socket.on('race-countdown', (data) => {
+      this.showRaceCountdown(data.countdown);
+    });
+    
+    this.socket.on('race-start', (data) => {
+      this.startMultiplayerRace(data);
+    });
+    
+    this.socket.on('player-progress', (data) => {
+      this.updatePlayerProgress(data);
+    });
+    
+    this.socket.on('player-finished', (data) => {
+      this.showPlayerFinished(data);
+    });
+    
+    this.socket.on('race-complete', (data) => {
+      this.showRaceResults(data.results);
+    });
+    
+    this.socket.on('rematch-available', (data) => {
+      this.showRematchOption(data.lobby);
+    });
+    
+    this.socket.on('player-disconnected', (data) => {
+      console.log('Player disconnected:', data.playerName);
+      this.showNotification(`${data.playerName} disconnected`);
+    });
+  },
+  
+  // Create a new lobby
+  createLobby(settings = {}) {
+    if (!this.connected) {
+      this.showNotification('Not connected to server');
+      return;
+    }
+    
+    this.playerName = prompt('Enter your name:') || 'Player';
+    
+    this.socket.emit('create-lobby', {
+      playerName: this.playerName,
+      settings: settings
+    }, (response) => {
+      if (response.success) {
+        this.currentLobby = response.lobby;
+        // Save to localStorage
+        this.saveLobbyToStorage();
+        this.showLobbyBar();
+        this.showLobbyScreen();
+      } else {
+        this.showNotification('Failed to create lobby');
+      }
+    });
+  },
+  
+  // Join an existing lobby
+  joinLobby(lobbyCode) {
+    if (!this.connected) {
+      this.showNotification('Not connected to server');
+      return;
+    }
+    
+    this.playerName = prompt('Enter your name:') || 'Player';
+    
+    this.socket.emit('join-lobby', {
+      lobbyCode: lobbyCode,
+      playerName: this.playerName
+    }, (response) => {
+      if (response.success) {
+        this.currentLobby = response.lobby;
+        this.otherPlayers = new Map(
+          response.lobby.players.filter(p => p.id !== this.playerId).map(p => [p.id, p])
+        );
+        // Save to localStorage
+        this.saveLobbyToStorage();
+        this.showLobbyBar();
+        this.showLobbyScreen();
+      } else {
+        this.showNotification(response.error || 'Failed to join lobby');
+      }
+    });
+  },
+  
+  // Save lobby info to localStorage
+  saveLobbyToStorage() {
+    if (this.currentLobby) {
+      const lobbyData = {
+        code: this.currentLobby.code,
+        server: window.location.origin,
+        playerName: this.playerName,
+        timestamp: Date.now()
+      };
+      localStorage.setItem('rpa_last_lobby', JSON.stringify(lobbyData));
+    }
+  },
+  
+  // Load saved lobby info
+  loadSavedLobby() {
+    try {
+      const saved = localStorage.getItem('rpa_last_lobby');
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch (e) {
+      console.error('Error loading saved lobby:', e);
+    }
+    return null;
+  },
+  
+  // Show lobby info bar at top
+  showLobbyBar() {
+    if (this.currentLobby) {
+      const bar = document.getElementById('lobby-info-bar');
+      const code = document.getElementById('lobby-display-id');
+      const server = document.getElementById('lobby-display-server');
+      if (bar && code && server) {
+        code.textContent = this.currentLobby.code;
+        server.textContent = new URL(this.API_URL || window.location.origin).hostname;
+        bar.style.display = 'flex';
+        // Adjust menu to account for lobby bar
+        const menuWrap = document.getElementById('menu-wrap');
+        if (menuWrap) menuWrap.style.marginTop = '40px';
+      }
+    }
+  },
+  
+  // Hide lobby info bar
+  hideLobbyBar() {
+    const bar = document.getElementById('lobby-info-bar');
+    if (bar) bar.style.display = 'none';
+    const menuWrap = document.getElementById('menu-wrap');
+    if (menuWrap) menuWrap.style.marginTop = '0';
+    localStorage.removeItem('rpa_last_lobby');
+  },
+  
+  // Leave current lobby
+  leaveLobby() {
+    if (this.socket) {
+      this.socket.emit('leave-lobby');
+    }
+    this.currentLobby = null;
+    this.otherPlayers.clear();
+    this.isMultiplayerMode = false;
+    this.hideLobbyBar();
+    localStorage.removeItem('rpa_last_lobby');
+  },
+  
+  // Set ready status
+  setReady(ready) {
+    if (this.socket) {
+      this.socket.emit('set-ready', { ready });
+    }
+  },
+  
+  // Start race (host only)
+  startRace() {
+    if (this.socket) {
+      this.socket.emit('start-race', (response) => {
+        if (!response.success) {
+          this.showNotification(response.error);
+        }
+      });
+    }
+  },
+  
+  // Submit note result during race
+  submitNoteResult(noteIndex, correct, totalNotes) {
+    if (this.socket && this.isMultiplayerMode) {
+      this.socket.emit('submit-note-result', {
+        noteIndex,
+        correct,
+        totalNotes
+      });
+    }
+  },
+  
+  // Finish race
+  finishRace(correctNotes, totalNotes, crashCount, totalTime, dnf = false) {
+    if (this.socket && this.isMultiplayerMode) {
+      this.socket.emit('finish-race', {
+        correctNotes,
+        totalNotes,
+        crashCount,
+        totalTime,
+        dnf
+      });
+    }
+    this.raceInProgress = false;
+  },
+  
+  // Request rematch
+  requestRematch() {
+    if (this.socket) {
+      this.socket.emit('request-rematch');
+    }
+  },
+  
+  // UI Functions
+  showLobbyScreen() {
+    // Create lobby UI overlay
+    let lobbyDiv = document.getElementById('mp-lobby-screen');
+    if (!lobbyDiv) {
+      lobbyDiv = document.createElement('div');
+      lobbyDiv.id = 'mp-lobby-screen';
+      lobbyDiv.className = 'screen';
+      document.body.appendChild(lobbyDiv);
+    }
+    
+    this.updateLobbyUI();
+    show('mp-lobby-screen');
+  },
+  
+  updateLobbyUI() {
+    const lobbyDiv = document.getElementById('mp-lobby-screen');
+    if (!lobbyDiv || !this.currentLobby) return;
+    
+    const isHost = this.currentLobby.hostId === this.playerId;
+    const allReady = this.currentLobby.players.every(p => p.ready);
+    
+    lobbyDiv.innerHTML = `
+      <div class="page-hdr">
+        <button class="bk" onclick="Multiplayer.leaveLobby();showMenu();">← Menu</button>
+        <div class="page-hdr-title">Multiplayer Lobby</div>
+      </div>
+      <div style="flex:1;padding:1.5rem;max-width:600px;margin:0 auto;">
+        <div style="background:var(--surf2);border:1px solid var(--brd2);padding:1rem;margin-bottom:1rem;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text3);margin-bottom:0.5rem;">LOBBY CODE</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:4px;color:var(--gold);">${this.currentLobby.code}</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:0.5rem;">Share this code with friends to join</div>
+        </div>
+        
+        <div style="background:var(--surf2);border:1px solid var(--brd2);padding:1rem;margin-bottom:1rem;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text3);margin-bottom:0.5rem;">PLAYERS</div>
+          ${this.currentLobby.players.map(p => `
+            <div style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem;border-bottom:1px solid var(--brd);">
+              <span style="font-size:16px;">${p.id === this.currentLobby.hostId ? '👑' : '👤'}</span>
+              <span style="flex:1;">${p.name} ${p.id === this.playerId ? '(You)' : ''}</span>
+              <span style="color:${p.ready ? '#39ff14' : '#f5c518'};">${p.ready ? '✓ Ready' : '⏳ Waiting'}</span>
+            </div>
+          `).join('')}
+        </div>
+        
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+          <button class="gbtn ${this.currentLobby.players.find(p => p.id === this.playerId)?.ready ? '' : 'pri'}" 
+                  onclick="Multiplayer.setReady(${!this.currentLobby.players.find(p => p.id === this.playerId)?.ready})">
+            ${this.currentLobby.players.find(p => p.id === this.playerId)?.ready ? 'Not Ready' : 'Ready Up'}
+          </button>
+          ${isHost ? `
+            <button class="gbtn pri" onclick="Multiplayer.startRace()" ${!allReady ? 'disabled style="opacity:0.5;"' : ''}>
+              Start Race
+            </button>
+          ` : ''}
+        </div>
+      </div>
+    `;
+  },
+  
+  showRaceCountdown(countdown) {
+    // Show countdown overlay
+    const overlay = document.createElement('div');
+    overlay.id = 'mp-countdown';
+    overlay.style.cssText = `
+      position:fixed;inset:0;z-index:99999;
+      background:rgba(0,0,0,0.9);
+      display:flex;align-items:center;justify-content:center;
+      flex-direction:column;gap:1rem;
+    `;
+    overlay.innerHTML = `
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:4px;color:var(--text3);">RACE STARTING</div>
+      <div id="mp-countdown-num" style="font-family:'Bebas Neue',sans-serif;font-size:120px;letter-spacing:8px;color:var(--gold);">${countdown}</div>
+    `;
+    document.body.appendChild(overlay);
+    
+    // Animate countdown
+    let count = countdown;
+    const interval = setInterval(() => {
+      count--;
+      const numEl = document.getElementById('mp-countdown-num');
+      if (numEl) numEl.textContent = count > 0 ? count : 'GO!';
+      if (count <= 0) {
+        clearInterval(interval);
+        setTimeout(() => overlay.remove(), 500);
+      }
+    }, 1000);
+  },
+  
+  startMultiplayerRace(data) {
+    this.isMultiplayerMode = true;
+    this.raceInProgress = true;
+    
+    // Use server-provided stage notes for synchronization
+    if (data.stageNotes) {
+      G.notes = data.stageNotes;
+    }
+    
+    // Hide lobby and start game
+    const lobbyScreen = document.getElementById('mp-lobby-screen');
+    if (lobbyScreen) lobbyScreen.classList.remove('active');
+    
+    // Show game screen
+    show('game');
+    
+    // Initialize game state
+    G.idx = 0;
+    G.correct = 0;
+    G.skipped = 0;
+    G.results = [];
+    G.stageEnded = false;
+    G.multiplayerMode = true;
+    
+    initDamage();
+    loadNote();
+    
+    this.showNotification('Multiplayer race started!');
+  },
+  
+  updatePlayerProgress(data) {
+    // Update UI showing other players' progress
+    const progressBar = document.getElementById('mp-progress');
+    if (!progressBar) {
+      // Create progress bar if not exists
+      const bar = document.createElement('div');
+      bar.id = 'mp-progress';
+      bar.style.cssText = `
+        position:fixed;top:70px;left:50%;transform:translateX(-50%);
+        background:rgba(0,0,0,0.8);border:1px solid var(--gold);
+        padding:0.5rem 1rem;z-index:1000;
+        font-family:'IBM Plex Mono',monospace;font-size:11px;
+        display:flex;gap:1rem;flex-wrap:wrap;
+      `;
+      document.body.appendChild(bar);
+    }
+    
+    // Update the specific player's progress
+    this.otherPlayers.set(data.playerId, {
+      ...this.otherPlayers.get(data.playerId),
+      noteIndex: data.noteIndex,
+      correct: data.correct
+    });
+    
+    this.updateProgressUI();
+  },
+  
+  updateProgressUI() {
+    const bar = document.getElementById('mp-progress');
+    if (!bar) return;
+    
+    bar.innerHTML = Array.from(this.otherPlayers.values()).map(p => `
+      <div style="display:flex;align-items:center;gap:0.3rem;">
+        <span style="color:var(--text3);">${p.name}:</span>
+        <span style="color:var(--gold);">${p.noteIndex || 0}/${G.notes.length}</span>
+        <span style="color:#39ff14;">✓${p.correct || 0}</span>
+      </div>
+    `).join('');
+  },
+  
+  showPlayerFinished(data) {
+    this.showNotification(`${data.playerName} finished!`);
+  },
+  
+  showRaceResults(results) {
+    // Show multiplayer results overlay
+    const overlay = document.createElement('div');
+    overlay.id = 'mp-results';
+    overlay.style.cssText = `
+      position:fixed;inset:0;z-index:99999;
+      background:rgba(0,0,0,0.95);
+      display:flex;align-items:center;justify-content:center;
+      padding:2rem;
+    `;
+    
+    overlay.innerHTML = `
+      <div style="background:var(--surf2);border:2px solid var(--gold);max-width:500px;width:100%;padding:1.5rem;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;color:var(--gold);text-align:center;margin-bottom:1rem;">
+          RACE RESULTS
+        </div>
+        ${results.map((r, i) => `
+          <div style="display:flex;align-items:center;gap:1rem;padding:0.75rem;border-bottom:1px solid var(--brd);${r.playerId === this.playerId ? 'background:rgba(245,197,24,0.1);' : ''}">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:${i === 0 ? '#FFD700' : i === 1 ? '#C0C0C0' : i === 2 ? '#CD7F32' : 'var(--text)'};">
+              ${i + 1}
+            </div>
+            <div style="flex:1;">
+              <div style="font-weight:600;">${r.playerName} ${r.playerId === this.playerId ? '(You)' : ''}</div>
+              <div style="font-size:11px;color:var(--text3);">
+                ${r.dnf ? 'DNF' : `${r.correctNotes}/${r.totalNotes} correct`}
+                ${r.crashCount > 0 ? `• ${r.crashCount} crashes` : ''}
+              </div>
+            </div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:var(--gold);">
+              ${r.dnf ? '---' : new Date(r.totalTime).toISOString().substr(14, 8)}
+            </div>
+          </div>
+        `).join('')}
+        <div style="display:flex;gap:0.5rem;margin-top:1rem;">
+          <button class="gbtn" onclick="document.getElementById('mp-results').remove();showMenu();">Menu</button>
+          <button class="gbtn pri" onclick="Multiplayer.requestRematch();document.getElementById('mp-results').remove();">Rematch</button>
+        </div>
+      </div>
+    `;
+    
+    document.body.appendChild(overlay);
+  },
+  
+  showRematchOption(lobby) {
+    this.currentLobby = lobby;
+    this.showNotification('Rematch available! Returning to lobby...');
+    setTimeout(() => this.showLobbyScreen(), 1500);
+  },
+  
+  showNotification(message) {
+    const notif = document.createElement('div');
+    notif.style.cssText = `
+      position:fixed;top:20px;left:50%;transform:translateX(-50%);
+      background:var(--surf2);border:1px solid var(--gold);
+      padding:0.75rem 1.5rem;z-index:10000;
+      font-family:'IBM Plex Mono',monospace;font-size:12px;
+      animation:fadeInOut 3s ease;
+    `;
+    notif.textContent = message;
+    document.body.appendChild(notif);
+    setTimeout(() => notif.remove(), 3000);
+  }
+};
+
+// Initialize multiplayer on load (but don't auto-connect)
+// Multiplayer.connect(); // Call this when user clicks "Multiplayer" button
+
+// Add multiplayer button to menu
+function addMultiplayerButton() {
+  const menuNav = document.querySelector('.menu-nav');
+  if (!menuNav || document.getElementById('mp-btn')) return;
+  
+  const btn = document.createElement('button');
+  btn.id = 'mp-btn';
+  btn.className = 'mnbtn';
+  btn.innerHTML = 'Multiplayer <span style="font-size:14px">👥</span>';
+  btn.onclick = () => {
+    if (!Multiplayer.connected) {
+      Multiplayer.connect();
+    }
+    showMultiplayerMenu();
+  };
+  
+  // Insert before the last button
+  menuNav.insertBefore(btn, menuNav.lastElementChild);
+}
+
+function showMultiplayerMenu() {
+  const choice = prompt('Enter lobby code to join, or leave blank to create a new lobby:');
+  if (choice === null) return; // Cancelled
+  
+  if (choice.trim()) {
+    Multiplayer.joinLobby(choice.trim().toUpperCase());
+  } else {
+    const era = prompt('Select era (grpb, w90, w24):', 'grpb') || 'grpb';
+    Multiplayer.createLobby({ era });
+  }
+}
+
+// Hook into endStage to report multiplayer results
+const _originalEndStage = endStage;
+endStage = function() {
+  // Call original function
+  _originalEndStage();
+  
+  // Report multiplayer results if in multiplayer mode
+  if (Multiplayer.isMultiplayerMode) {
+    const total = G.notes.length;
+    const timeMs = G.stageTime || Date.now() - RALLY_STATE.startTime;
+    Multiplayer.finishRace(G.correct, total, G.crashCount, timeMs, G.dnf);
+  }
+};
+
+// Hook into processAnswer to report progress
+const _originalProcessAnswer = processAnswer;
+processAnswer = function(typed, note, ok, score, skipped) {
+  // Call original function
+  _originalProcessAnswer(typed, note, ok, score, skipped);
+  
+  // Report progress if in multiplayer mode
+  if (Multiplayer.isMultiplayerMode && Multiplayer.raceInProgress) {
+    Multiplayer.submitNoteResult(G.idx, G.correct, G.notes.length);
+  }
+};
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ACCOUNT SYSTEM & LEADERBOARD (#029)
+// ═══════════════════════════════════════════════════════════════════════════
+
+
+// Auto-detect server URL (works for localhost, LAN, or hosted)
+const getServerUrl = () => {
+  const currentUrl = window.location.origin;
+  // If running on file:// protocol (local file), default to localhost:3000
+  if (currentUrl.startsWith('file://')) {
+    return 'http://localhost:3000';
+  }
+  // Otherwise use the same host:port as the current page
+  return currentUrl;
+};
+
+const AccountSystem = {
+  API_URL: getServerUrl(),
+  token: localStorage.getItem('rpa_token') || null,
+  account: null,
+  savefile: null,
+  
+  async init() {
+    if (this.token) {
+      await this.loadAccount();
+    }
+  },
+  
+  async register(email, username, password, displayName) {
+    try {
+      const response = await fetch(`${this.API_URL}/api/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, username, password, displayName })
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        this.token = data.token;
+        this.account = data.account;
+        localStorage.setItem('rpa_token', this.token);
+        await this.loadSavefile();
+        return { success: true };
+      }
+      return { error: data.error };
+    } catch (e) {
+      return { error: 'Failed to connect to server' };
+    }
+  },
+  
+  async login(emailOrUsername, password) {
+    try {
+      const response = await fetch(`${this.API_URL}/api/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ emailOrUsername, password })
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        this.token = data.token;
+        this.account = data.account;
+        localStorage.setItem('rpa_token', this.token);
+        await this.loadSavefile();
+        return { success: true };
+      }
+      return { error: data.error };
+    } catch (e) {
+      return { error: 'Failed to connect to server' };
+    }
+  },
+  
+  async requestPasswordReset(email) {
+    try {
+      const response = await fetch(`${this.API_URL}/api/auth/forgot-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      return await response.json();
+    } catch (e) {
+      return { error: 'Failed to connect to server' };
+    }
+  },
+  
+  async resetPassword(resetToken, newPassword) {
+    try {
+      const response = await fetch(`${this.API_URL}/api/auth/reset-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ resetToken, newPassword })
+      });
+      return await response.json();
+    } catch (e) {
+      return { error: 'Failed to connect to server' };
+    }
+  },
+  
+  async updateProfile(updates) {
+    try {
+      const response = await fetch(`${this.API_URL}/api/account/profile`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': this.token 
+        },
+        body: JSON.stringify(updates)
+      });
+      const data = await response.json();
+      if (data.success) {
+        this.account = data.account;
+      }
+      return data;
+    } catch (e) {
+      return { error: 'Failed to connect to server' };
+    }
+  },
+  
+  async deleteAccount(password) {
+    try {
+      const response = await fetch(`${this.API_URL}/api/account/delete`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': this.token 
+        },
+        body: JSON.stringify({ password })
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        // Clear local storage and reset account
+        localStorage.removeItem('rpa_token');
+        this.token = null;
+        this.account = null;
+        this.savefile = null;
+      }
+      
+      return data;
+    } catch (e) {
+      return { error: 'Failed to connect to server' };
+    }
+  },
+  
+  async getPublicProfile(username) {
+    try {
+      const response = await fetch(`${this.API_URL}/api/account/profile/${username}`);
+      return await response.json();
+    } catch (e) {
+      return { error: 'Failed to load profile' };
+    }
+  },
+  
+  // Forum methods
+  async getForumBoards() {
+    try {
+      const response = await fetch(`${this.API_URL}/api/forum/boards`);
+      return await response.json();
+    } catch (e) {
+      return { boards: [] };
+    }
+  },
+  
+  async getForumBoard(boardId, page = 1, sort = 'hot') {
+    try {
+      const response = await fetch(`${this.API_URL}/api/forum/board/${boardId}?page=${page}&sort=${sort}`);
+      return await response.json();
+    } catch (e) {
+      return { error: 'Failed to load board' };
+    }
+  },
+  
+  async createForumThread(boardId, title, content) {
+    try {
+      const response = await fetch(`${this.API_URL}/api/forum/thread`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': this.token 
+        },
+        body: JSON.stringify({ boardId, title, content })
+      });
+      return await response.json();
+    } catch (e) {
+      return { error: 'Failed to create thread' };
+    }
+  },
+  
+  async getForumThread(threadId) {
+    try {
+      const response = await fetch(`${this.API_URL}/api/forum/thread/${threadId}`);
+      return await response.json();
+    } catch (e) {
+      return { error: 'Failed to load thread' };
+    }
+  },
+  
+  async createForumPost(threadId, content, parentId = null) {
+    try {
+      const response = await fetch(`${this.API_URL}/api/forum/post`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': this.token 
+        },
+        body: JSON.stringify({ threadId, content, parentId })
+      });
+      return await response.json();
+    } catch (e) {
+      return { error: 'Failed to create post' };
+    }
+  },
+  
+  async voteOnPost(postId, voteType) {
+    try {
+      const response = await fetch(`${this.API_URL}/api/forum/vote`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': this.token 
+        },
+        body: JSON.stringify({ postId, voteType })
+      });
+      return await response.json();
+    } catch (e) {
+      return { error: 'Failed to vote' };
+    }
+  },
+  
+  async uploadForumFile(filename, data, threadId = null) {
+    try {
+      const response = await fetch(`${this.API_URL}/api/forum/upload`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': this.token 
+        },
+        body: JSON.stringify({ filename, data, threadId })
+      });
+      return await response.json();
+    } catch (e) {
+      return { error: 'Failed to upload file' };
+    }
+  },
+  
+  async getRecentThreads(limit = 10) {
+    try {
+      const response = await fetch(`${this.API_URL}/api/forum/recent?limit=${limit}`);
+      return await response.json();
+    } catch (e) {
+      return { threads: [] };
+    }
+  },
+  
+  logout() {
+    this.token = null;
+    this.account = null;
+    this.savefile = null;
+    localStorage.removeItem('rpa_token');
+  },
+  
+  async loadAccount() {
+    try {
+      const response = await fetch(`${this.API_URL}/api/account`, {
+        headers: { 'Authorization': this.token }
+      });
+      const data = await response.json();
+      
+      if (data.account) {
+        this.account = data.account;
+        return true;
+      }
+      this.logout();
+      return false;
+    } catch (e) {
+      return false;
+    }
+  },
+  
+  async loadSavefile() {
+    try {
+      const response = await fetch(`${this.API_URL}/api/savefile`, {
+        headers: { 'Authorization': this.token }
+      });
+      const data = await response.json();
+      
+      if (data.savefile) {
+        this.savefile = data.savefile;
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
+  },
+  
+  async saveSavefile(data) {
+    try {
+      const response = await fetch(`${this.API_URL}/api/savefile`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': this.token 
+        },
+        body: JSON.stringify(data)
+      });
+      return response.ok;
+    } catch (e) {
+      return false;
+    }
+  },
+  
+  async getLeaderboard(page = 1) {
+    try {
+      const response = await fetch(`${this.API_URL}/api/leaderboard?page=${page}`);
+      return await response.json();
+    } catch (e) {
+      return { entries: [], total: 0 };
+    }
+  },
+  
+  async getPlayerRank() {
+    try {
+      const response = await fetch(`${this.API_URL}/api/leaderboard/rank`, {
+        headers: { 'Authorization': this.token }
+      });
+      return await response.json();
+    } catch (e) {
+      return { rank: null };
+    }
+  },
+  
+  isLoggedIn() {
+    return this.token !== null && this.account !== null;
+  },
+  
+  getDisplayName() {
+    return this.account?.displayName || this.account?.username || 'Guest';
+  },
+  
+  getRank() {
+    return this.account?.stats?.rank || 'Novice';
+  },
+  
+  getLevel() {
+    return this.account?.stats?.careerLevel || 1;
+  },
+  
+  // SMTP Settings methods
+  async saveSmtpSettings(settings) {
+    try {
+      const response = await fetch(`${this.API_URL}/api/account/smtp`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': this.token
+        },
+        body: JSON.stringify(settings)
+      });
+      const data = await response.json();
+      if (data.success) {
+        // Update local account
+        if (this.account) {
+          this.account.smtpSettings = {
+            ...settings,
+            pass: undefined // Don't store password locally
+          };
+        }
+      }
+      return data;
+    } catch (e) {
+      return { error: 'Failed to save SMTP settings' };
+    }
+  },
+  
+  async getSmtpSettings() {
+    try {
+      const response = await fetch(`${this.API_URL}/api/account/smtp`, {
+        headers: { 'Authorization': this.token }
+      });
+      return await response.json();
+    } catch (e) {
+      return { configured: false, error: 'Failed to load SMTP settings' };
+    }
+  },
+  
+  async testSmtpConnection() {
+    try {
+      const response = await fetch(`${this.API_URL}/api/account/smtp/test`, {
+        method: 'POST',
+        headers: { 'Authorization': this.token }
+      });
+      return await response.json();
+    } catch (e) {
+      return { error: 'Failed to test SMTP connection' };
+    }
+  }
+};
+
+// Story Campaign System
+const StoryCampaign = {
+  async loadProgress() {
+    try {
+      const response = await fetch(`${AccountSystem.API_URL}/api/story/progress`, {
+        headers: { 'Authorization': AccountSystem.token }
+      });
+      return await response.json();
+    } catch (e) {
+      return null;
+    }
+  },
+  
+  async completeStage(stageId, accuracy, time, era) {
+    try {
+      const response = await fetch(`${AccountSystem.API_URL}/api/story/complete`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': AccountSystem.token 
+        },
+        body: JSON.stringify({ stageId, accuracy, time, era })
+      });
+      return await response.json();
+    } catch (e) {
+      return { success: false };
+    }
+  }
+};
+
+// Certification Exam Function
+function startCertificationExam() {
+  // Generate 32 mixed notes from all eras
+  const examNotes = [];
+  const eras = ['grpb', 'w90', 'w24'];
+  
+  eras.forEach(era => {
+    const eraData = ERAS[era];
+    if (eraData && eraData.stages) {
+      // Pick random stages from this era
+      const stages = eraData.stages.slice().sort(() => Math.random() - 0.5).slice(0, 2);
+      stages.forEach(stage => {
+        if (stage.notes) {
+          // Pick 8-10 random notes from each stage
+          const notes = stage.notes.slice().sort(() => Math.random() - 0.5).slice(0, 8);
+          notes.forEach(note => {
+            examNotes.push({
+              ...note,
+              era: era,
+              stageName: stage.name
+            });
+          });
+        }
+      });
+    }
+  });
+  
+  // Shuffle all exam notes
+  examNotes.sort(() => Math.random() - 0.5);
+  
+  // Set up exam mode
+  G.notes = examNotes.slice(0, 32); // Ensure exactly 32 notes
+  G.era = 'exam';
+  G.driver = AccountSystem.getDisplayName();
+  G.codriver = 'Examiner';
+  G.diff = 1; // Normal difficulty
+  G.timeLimit = DIFFS[1].s; // 14 seconds
+  G.examMode = true;
+  G.examStartTime = Date.now();
+  
+  // Hide training screen and show game
+  show('game');
+  
+  // Initialize exam
+  G.idx = 0;
+  G.correct = 0;
+  G.skipped = 0;
+  G.results = [];
+  G.stageEnded = false;
+  
+  loadNote();
+  
+  showNotification('Certification Exam Started! 32 notes, 85% required to pass.');
+}
+
+// Hook exam completion into endStage
+const _originalExamEndStage = endStage;
+endStage = function() {
+  _originalExamEndStage();
+  
+  if (G.examMode) {
+    G.examMode = false;
+    const total = G.notes.length;
+    const accuracy = Math.round((G.correct / total) * 100);
+    const time = Date.now() - G.examStartTime;
+    
+    let certification = null;
+    if (accuracy >= 90) certification = 'World';
+    else if (accuracy >= 80) certification = 'National';
+    else if (accuracy >= 70) certification = 'Junior';
+    
+    // Show exam results
+    setTimeout(() => {
+      const overlay = document.createElement('div');
+      overlay.style.cssText = `
+        position:fixed;inset:0;z-index:99999;
+        background:rgba(0,0,0,0.95);
+        display:flex;align-items:center;justify-content:center;
+        padding:2rem;
+      `;
+      
+      const certEmoji = certification === 'World' ? '🥇' : certification === 'National' ? '🥈' : certification === 'Junior' ? '🥉' : '❌';
+      const certColor = certification === 'World' ? '#FFD700' : certification === 'National' ? '#C0C0C0' : certification === 'Junior' ? '#CD7F32' : '#ff4444';
+      
+      overlay.innerHTML = `
+        <div style="background:var(--surf2);border:2px solid ${certColor};max-width:500px;width:100%;padding:2rem;text-align:center;">
+          <div style="font-size:64px;margin-bottom:1rem;">${certEmoji}</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:3px;color:${certColor};margin-bottom:0.5rem;">
+            ${certification ? certification + ' CERTIFICATION' : 'EXAM FAILED'}
+          </div>
+          <div style="font-size:16px;color:var(--text);margin-bottom:1.5rem;">
+            Accuracy: ${accuracy}% | Time: ${Math.round(time/1000)}s
+          </div>
+          <div style="font-size:14px;color:var(--text3);margin-bottom:1.5rem;">
+            ${certification 
+              ? `Congratulations! You are now a ${certification}-certified co-driver.` 
+              : 'You need 70% accuracy to earn certification. Try again!'}
+          </div>
+          <div style="display:flex;gap:0.5rem;justify-content:center;">
+            <button class="gbtn" onclick="document.getElementById('exam-result').remove();showMenu();">Main Menu</button>
+            ${!certification ? `<button class="gbtn pri" onclick="document.getElementById('exam-result').remove();startCertificationExam();">Retry Exam</button>` : ''}
+          </div>
+        </div>
+      `;
+      overlay.id = 'exam-result';
+      document.body.appendChild(overlay);
+    }, 500);
+    
+    // If logged in, save exam results
+    if (AccountSystem.isLoggedIn() && certification) {
+      AccountSystem.saveSavefile({
+        certification: certification,
+        examAccuracy: accuracy,
+        examTime: time,
+        examDate: Date.now()
+      });
+    }
+  }
+};
+
+// Add Account button to menu
+function addAccountButton() {
+  const menuNav = document.querySelector('.menu-nav');
+  if (!menuNav || document.getElementById('account-btn')) return;
+  
+  const btn = document.createElement('button');
+  btn.id = 'account-btn';
+  btn.className = 'mnbtn';
+  btn.innerHTML = AccountSystem.isLoggedIn() 
+    ? `👤 ${AccountSystem.getDisplayName()}`
+    : 'Account 👤';
+  btn.onclick = () => showAccountScreen();
+  
+  // Insert before the last button
+  menuNav.insertBefore(btn, menuNav.lastElementChild);
+}
+
+function showAccountScreen() {
+  if (AccountSystem.isLoggedIn()) {
+    showLoggedInScreen();
+  } else {
+    showLoginScreen();
+  }
+}
+
+function showLoginScreen() {
+  const overlay = document.createElement('div');
+  overlay.id = 'account-overlay';
+  overlay.className = 'screen active';
+  overlay.style.cssText = 'z-index:10000;';
+  
+  overlay.innerHTML = `
+    <div class="page-hdr">
+      <button class="bk" onclick="document.getElementById('account-overlay').remove();showMenu();">← Menu</button>
+      <div class="page-hdr-title">Account</div>
+    </div>
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:2rem;">
+      <div style="background:var(--surf2);border:1px solid var(--brd2);padding:2rem;max-width:400px;width:100%;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gold);margin-bottom:1.5rem;text-align:center;">LOGIN</div>
+        <input type="text" id="login-username" placeholder="Email or Username" style="width:100%;padding:0.75rem;margin-bottom:0.75rem;background:var(--surf);border:1px solid var(--brd);color:var(--text);">
+        <input type="password" id="login-password" placeholder="Password" style="width:100%;padding:0.75rem;margin-bottom:0.5rem;background:var(--surf);border:1px solid var(--brd);color:var(--text);">
+        <div style="text-align:right;margin-bottom:1rem;">
+          <button class="gbtn" onclick="showForgotPasswordScreen()" style="font-size:11px;padding:4px 8px;background:none;border:none;color:var(--text3);">Forgot Password?</button>
+        </div>
+        <div id="login-error" style="color:#e8291c;font-size:12px;margin-bottom:1rem;display:none;"></div>
+        <button class="gbtn pri" onclick="handleLogin()" style="width:100%;margin-bottom:0.5rem;">Login</button>
+        <button class="gbtn" onclick="showRegisterScreen()" style="width:100%;">Create Account</button>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(overlay);
+}
+
+function showForgotPasswordScreen() {
+  document.getElementById('account-overlay').remove();
+  
+  const overlay = document.createElement('div');
+  overlay.id = 'account-overlay';
+  overlay.className = 'screen active';
+  overlay.style.cssText = 'z-index:10000;';
+  
+  overlay.innerHTML = `
+    <div class="page-hdr">
+      <button class="bk" onclick="document.getElementById('account-overlay').remove();showLoginScreen();">← Back</button>
+      <div class="page-hdr-title">Account</div>
+    </div>
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:2rem;">
+      <div style="background:var(--surf2);border:1px solid var(--brd2);padding:2rem;max-width:400px;width:100%;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gold);margin-bottom:1.5rem;text-align:center;">RESET PASSWORD</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:1rem;text-align:center;">Enter your email and we'll send you a reset link</div>
+        
+        <div style="background:#1e1e0e;border:1px solid var(--brd);padding:0.75rem;margin-bottom:1rem;font-size:11px;color:#f5c518;">
+          <strong>ℹ️ Important:</strong> You must have configured your email settings in Account Settings to receive password reset emails. The game sends emails using your own email account.
+        </div>
+        
+        <input type="email" id="reset-email" placeholder="Email" style="width:100%;padding:0.75rem;margin-bottom:1rem;background:var(--surf);border:1px solid var(--brd);color:var(--text);">
+        <div id="reset-error" style="color:#e8291c;font-size:12px;margin-bottom:1rem;display:none;"></div>
+        <div id="reset-success" style="color:#39ff14;font-size:12px;margin-bottom:1rem;display:none;"></div>
+        <button class="gbtn pri" onclick="handleForgotPassword()" style="width:100%;margin-bottom:0.5rem;">Send Reset Link</button>
+        <button class="gbtn" onclick="showLoginScreen()" style="width:100%;">Back to Login</button>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(overlay);
+}
+
+async function handleForgotPassword() {
+  const email = document.getElementById('reset-email').value;
+  const errorDiv = document.getElementById('reset-error');
+  const successDiv = document.getElementById('reset-success');
+  
+  if (!email || !email.includes('@')) {
+    errorDiv.textContent = 'Please enter a valid email address';
+    errorDiv.style.display = 'block';
+    return;
+  }
+  
+  const result = await AccountSystem.requestPasswordReset(email);
+  
+  if (result.success) {
+    errorDiv.style.display = 'none';
+    successDiv.textContent = result.message || 'Reset link sent! Check your email.';
+    successDiv.style.display = 'block';
+  } else {
+    successDiv.style.display = 'none';
+    errorDiv.textContent = result.error;
+    errorDiv.style.display = 'block';
+  }
+}
+
+function showRegisterScreen() {
+  document.getElementById('account-overlay').remove();
+  
+  const overlay = document.createElement('div');
+  overlay.id = 'account-overlay';
+  overlay.className = 'screen active';
+  overlay.style.cssText = 'z-index:10000;';
+  
+  overlay.innerHTML = `
+    <div class="page-hdr">
+      <button class="bk" onclick="document.getElementById('account-overlay').remove();showMenu();">← Menu</button>
+      <div class="page-hdr-title">Account</div>
+    </div>
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:2rem;">
+      <div style="background:var(--surf2);border:1px solid var(--brd2);padding:2rem;max-width:400px;width:100%;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gold);margin-bottom:1.5rem;text-align:center;">CREATE ACCOUNT</div>
+        <input type="email" id="reg-email" placeholder="Email" style="width:100%;padding:0.75rem;margin-bottom:0.75rem;background:var(--surf);border:1px solid var(--brd);color:var(--text);">
+        <input type="text" id="reg-username" placeholder="Username (3-20 chars)" style="width:100%;padding:0.75rem;margin-bottom:0.75rem;background:var(--surf);border:1px solid var(--brd);color:var(--text);">
+        <input type="text" id="reg-display" placeholder="Display Name (optional)" style="width:100%;padding:0.75rem;margin-bottom:0.75rem;background:var(--surf);border:1px solid var(--brd);color:var(--text);">
+        <input type="password" id="reg-password" placeholder="Password (min 6 chars)" style="width:100%;padding:0.75rem;margin-bottom:1rem;background:var(--surf);border:1px solid var(--brd);color:var(--text);">
+        <div id="reg-error" style="color:#e8291c;font-size:12px;margin-bottom:1rem;display:none;"></div>
+        <button class="gbtn pri" onclick="handleRegister()" style="width:100%;margin-bottom:0.5rem;">Create Account</button>
+        <button class="gbtn" onclick="showLoginScreen()" style="width:100%;">Back to Login</button>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(overlay);
+}
+
+function showLoggedInScreen() {
+  const overlay = document.createElement('div');
+  overlay.id = 'account-overlay';
+  overlay.className = 'screen active';
+  overlay.style.cssText = 'z-index:10000;';
+  
+  const stats = AccountSystem.account?.stats || {};
+  const profile = AccountSystem.account?.profile || {};
+  const displayStyle = profile.displayStyle || {};
+  
+  // Generate display name with custom styling using CSS classes
+  const effects = displayStyle.effects || [];
+  let displayNameClasses = [];
+  let displayNameStyle = `font-family:'${displayStyle.fontFamily || 'Bebas Neue'}',sans-serif;font-size:28px;`;
+  
+  // Apply color (or rainbow overrides it)
+  if (effects.includes('rainbow')) {
+    displayNameClasses.push('username-rainbow');
+  } else if (effects.includes('fire')) {
+    displayNameClasses.push('username-fire');
+  } else {
+    displayNameStyle += `color:${displayStyle.color || 'var(--gold)'};`;
+  }
+  
+  // Apply effect classes
+  if (effects.includes('glow')) displayNameClasses.push('username-glow');
+  if (effects.includes('glow-strong')) displayNameClasses.push('username-glow-strong');
+  if (effects.includes('neon')) {
+    displayNameClasses.push('username-neon');
+    displayNameStyle += `--neon-color:${displayStyle.color || '#f5c518'};`;
+  }
+  if (effects.includes('glitch')) displayNameClasses.push('username-glitch');
+  if (effects.includes('pulse')) displayNameClasses.push('username-pulse');
+  if (effects.includes('shimmer')) {
+    displayNameClasses.push('username-shimmer');
+    displayNameStyle += `--text-color:${displayStyle.color || '#f5c518'};`;
+  }
+  
+  const effectClassString = displayNameClasses.join(' ');
+  const displayName = AccountSystem.getDisplayName();
+  
+  overlay.innerHTML = `
+    <div class="page-hdr">
+      <button class="bk" onclick="document.getElementById('account-overlay').remove();showMenu();">← Menu</button>
+      <div class="page-hdr-title">My Profile</div>
+    </div>
+    <div style="flex:1;padding:2rem;max-width:600px;margin:0 auto;width:100%;overflow:auto;">
+      ${profile.bannerUrl ? `<div style="width:100%;height:150px;margin-bottom:1rem;border-radius:8px;overflow:hidden;"><img src="${profile.bannerUrl}" style="width:100%;height:100%;object-fit:cover;"></div>` : ''}
+      <div style="background:var(--surf2);border:1px solid var(--brd2);padding:1.5rem;margin-bottom:1rem;text-align:center;">
+        ${profile.avatarUrl ? `<img src="${profile.avatarUrl}" style="width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);margin-bottom:0.5rem;">` : `<div style="font-size:48px;margin-bottom:0.5rem;">${displayStyle.avatar || '👤'}</div>`}
+        <div class="${effectClassString}" style="${displayNameStyle}" ${effects.includes('glitch') ? `data-text="${displayName}"` : ''}>${displayName}</div>
+        <div style="font-size:14px;color:var(--text3);">${displayStyle.badge || AccountSystem.getRank()} • Level ${AccountSystem.getLevel()}</div>
+        ${profile.bio ? `<div style="font-size:12px;color:var(--text3);margin-top:0.5rem;font-style:italic;">"${profile.bio}"</div>` : ''}
+      </div>
+      
+      <div style="background:var(--surf2);border:1px solid var(--brd2);padding:1rem;margin-bottom:1rem;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text3);margin-bottom:0.75rem;">STATISTICS</div>
+        <div style="display:grid;grid-template-columns:repeat(2, 1fr);gap:1rem;">
+          <div style="text-align:center;">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gold);">${stats.totalRaces || 0}</div>
+            <div style="font-size:11px;color:var(--text3);">Total Races</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gold);">${stats.wins || 0}</div>
+            <div style="font-size:11px;color:var(--text3);">Wins</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gold);">${Math.round(stats.bestAccuracy || 0)}%</div>
+            <div style="font-size:11px;color:var(--text3);">Best Accuracy</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gold);">${stats.perfectStages || 0}</div>
+            <div style="font-size:11px;color:var(--text3);">Perfect Stages</div>
+          </div>
+        </div>
+      </div>
+      
+      ${profile.social && (profile.social.youtube || profile.social.twitch || profile.social.twitter) ? `
+      <div style="background:var(--surf2);border:1px solid var(--brd2);padding:1rem;margin-bottom:1rem;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text3);margin-bottom:0.75rem;">SOCIAL</div>
+        <div style="display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap;">
+          ${profile.social.youtube ? `<a href="https://youtube.com/${profile.social.youtube}" target="_blank" style="color:#ff0000;font-size:20px;text-decoration:none;">📺</a>` : ''}
+          ${profile.social.twitch ? `<a href="https://twitch.tv/${profile.social.twitch}" target="_blank" style="color:#9146ff;font-size:20px;text-decoration:none;">📡</a>` : ''}
+          ${profile.social.twitter ? `<a href="https://twitter.com/${profile.social.twitter}" target="_blank" style="color:#1da1f2;font-size:20px;text-decoration:none;">🐦</a>` : ''}
+          ${profile.social.discord ? `<span style="color:#5865f2;font-size:20px;">💬 ${profile.social.discord}</span>` : ''}
+        </div>
+      </div>
+      ` : ''}
+      
+      <div style="display:grid;grid-template-columns:repeat(2, 1fr);gap:0.5rem;margin-bottom:1rem;">
+        <button class="gbtn" onclick="showLeaderboard()">🏆 Leaderboard</button>
+        <button class="gbtn" onclick="showForumBoards()">💬 Forum</button>
+        <button class="gbtn" onclick="showProfileCustomization()">🎨 Customize</button>
+        <button class="gbtn" onclick="showAccountSettings()">⚙️ Settings</button>
+      </div>
+      
+      <button class="gbtn" onclick="AccountSystem.logout();document.getElementById('account-overlay').remove();addAccountButton();showMenu();" style="width:100%;">Logout</button>
+    </div>
+  `;
+  
+  document.body.appendChild(overlay);
+}
+
+async function showLeaderboard() {
+  const data = await AccountSystem.getLeaderboard(1);
+  
+  const overlay = document.createElement('div');
+  overlay.id = 'leaderboard-overlay';
+  overlay.className = 'screen active';
+  overlay.style.cssText = 'z-index:10001;';
+  
+  overlay.innerHTML = `
+    <div class="page-hdr">
+      <button class="bk" onclick="document.getElementById('leaderboard-overlay').remove();">← Back</button>
+      <div class="page-hdr-title">Global Leaderboard</div>
+    </div>
+    <div style="flex:1;padding:1rem;max-width:700px;margin:0 auto;width:100%;overflow:auto;">
+      <div style="background:var(--surf2);border:1px solid var(--brd2);">
+        ${data.entries.map((entry, i) => `
+          <div style="display:flex;align-items:center;gap:1rem;padding:0.75rem 1rem;border-bottom:1px solid var(--brd);${entry.username === AccountSystem.account?.username ? 'background:rgba(245,197,24,0.1);' : ''}">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:${i < 3 ? '#FFD700' : 'var(--text3)'};width:30px;text-align:center;">${entry.rank}</div>
+            <div style="flex:1;">
+              <div style="font-weight:600;">${entry.displayName}</div>
+              <div style="font-size:11px;color:var(--text3);">${entry.rank} • Level ${entry.level}</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:var(--gold);">${entry.totalRaces} races</div>
+              <div style="font-size:11px;color:var(--text3);">${entry.winRate || 0}% win rate</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(overlay);
+}
+
+async function handleLogin() {
+  const emailOrUsername = document.getElementById('login-username').value;
+  const password = document.getElementById('login-password').value;
+  const errorDiv = document.getElementById('login-error');
+  
+  const result = await AccountSystem.login(emailOrUsername, password);
+  
+  if (result.success) {
+    document.getElementById('account-overlay').remove();
+    addAccountButton();
+    showMenu();
+  } else {
+    errorDiv.textContent = result.error;
+    errorDiv.style.display = 'block';
+  }
+}
+
+async function handleRegister() {
+  const email = document.getElementById('reg-email').value;
+  const username = document.getElementById('reg-username').value;
+  const displayName = document.getElementById('reg-display').value;
+  const password = document.getElementById('reg-password').value;
+  const errorDiv = document.getElementById('reg-error');
+  
+  const result = await AccountSystem.register(email, username, password, displayName);
+  
+  if (result.success) {
+    document.getElementById('account-overlay').remove();
+    addAccountButton();
+    showMenu();
+  } else {
+    errorDiv.textContent = result.error;
+    errorDiv.style.display = 'block';
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// PROFILE CUSTOMIZATION UI
+// ═══════════════════════════════════════════════════════════════════════════
+
+function showProfileCustomization() {
+  const profile = AccountSystem.account?.profile || {};
+  const displayStyle = profile.displayStyle || {};
+  const social = profile.social || {};
+  
+  const overlay = document.createElement('div');
+  overlay.id = 'customize-overlay';
+  overlay.className = 'screen active';
+  overlay.style.cssText = 'z-index:10001;';
+  
+  overlay.innerHTML = `
+    <div class="page-hdr">
+      <button class="bk" onclick="document.getElementById('customize-overlay').remove();">← Back</button>
+      <div class="page-hdr-title">Customize Profile</div>
+    </div>
+    <div style="flex:1;padding:1rem;max-width:600px;margin:0 auto;width:100%;overflow:auto;">
+      
+      <!-- Display Name Style -->
+      <div style="background:var(--surf2);border:1px solid var(--brd2);padding:1rem;margin-bottom:1rem;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text3);margin-bottom:0.75rem;">DISPLAY NAME STYLE</div>
+        
+        <div style="margin-bottom:0.75rem;">
+          <label style="font-size:12px;color:var(--text3);display:block;margin-bottom:0.25rem;">Font</label>
+          <select id="custom-font" style="width:100%;padding:0.5rem;background:var(--surf);border:1px solid var(--brd);color:var(--text);">
+            <option value="Bebas Neue" ${displayStyle.fontFamily === 'Bebas Neue' ? 'selected' : ''}>Bebas Neue (Default)</option>
+            <option value="IBM Plex Mono" ${displayStyle.fontFamily === 'IBM Plex Mono' ? 'selected' : ''}>IBM Plex Mono</option>
+            <option value="Impact" ${displayStyle.fontFamily === 'Impact' ? 'selected' : ''}>Impact</option>
+            <option value="Arial Black" ${displayStyle.fontFamily === 'Arial Black' ? 'selected' : ''}>Arial Black</option>
+            <option value="Georgia" ${displayStyle.fontFamily === 'Georgia' ? 'selected' : ''}>Georgia</option>
+            <option value="Courier New" ${displayStyle.fontFamily === 'Courier New' ? 'selected' : ''}>Courier New</option>
+          </select>
+        </div>
+        
+        <div style="margin-bottom:0.75rem;">
+          <label style="font-size:12px;color:var(--text3);display:block;margin-bottom:0.25rem;">Color</label>
+          <input type="color" id="custom-color" value="${displayStyle.color || '#f5c518'}" style="width:100%;height:40px;background:var(--surf);border:1px solid var(--brd);">
+        </div>
+        
+        <div style="margin-bottom:0.75rem;">
+          <label style="font-size:12px;color:var(--text3);display:block;margin-bottom:0.25rem;">Effects (CSS Styles)</label>
+          <div style="display:grid;grid-template-columns:repeat(2, 1fr);gap:0.5rem;">
+            <label style="display:flex;align-items:center;gap:0.25rem;font-size:12px;cursor:pointer;">
+              <input type="checkbox" id="effect-glow" ${(displayStyle.effects || []).includes('glow') ? 'checked' : ''}> ✨ Glow
+            </label>
+            <label style="display:flex;align-items:center;gap:0.25rem;font-size:12px;cursor:pointer;">
+              <input type="checkbox" id="effect-glow-strong" ${(displayStyle.effects || []).includes('glow-strong') ? 'checked' : ''}> 🌟 Strong Glow
+            </label>
+            <label style="display:flex;align-items:center;gap:0.25rem;font-size:12px;cursor:pointer;">
+              <input type="checkbox" id="effect-rainbow" ${(displayStyle.effects || []).includes('rainbow') ? 'checked' : ''}> 🌈 Rainbow
+            </label>
+            <label style="display:flex;align-items:center;gap:0.25rem;font-size:12px;cursor:pointer;">
+              <input type="checkbox" id="effect-fire" ${(displayStyle.effects || []).includes('fire') ? 'checked' : ''}> 🔥 Fire
+            </label>
+            <label style="display:flex;align-items:center;gap:0.25rem;font-size:12px;cursor:pointer;">
+              <input type="checkbox" id="effect-neon" ${(displayStyle.effects || []).includes('neon') ? 'checked' : ''}> 💡 Neon
+            </label>
+            <label style="display:flex;align-items:center;gap:0.25rem;font-size:12px;cursor:pointer;">
+              <input type="checkbox" id="effect-glitch" ${(displayStyle.effects || []).includes('glitch') ? 'checked' : ''}> 👾 Glitch
+            </label>
+            <label style="display:flex;align-items:center;gap:0.25rem;font-size:12px;cursor:pointer;">
+              <input type="checkbox" id="effect-pulse" ${(displayStyle.effects || []).includes('pulse') ? 'checked' : ''}> 💓 Pulse
+            </label>
+            <label style="display:flex;align-items:center;gap:0.25rem;font-size:12px;cursor:pointer;">
+              <input type="checkbox" id="effect-shimmer" ${(displayStyle.effects || []).includes('shimmer') ? 'checked' : ''}> ✨ Shimmer
+            </label>
+          </div>
+        </div>
+        
+        <div style="margin-bottom:0.75rem;">
+          <label style="font-size:12px;color:var(--text3);display:block;margin-bottom:0.25rem;">Avatar Emoji</label>
+          <input type="text" id="custom-avatar" value="${displayStyle.avatar || '👤'}" maxlength="2" style="width:60px;padding:0.5rem;background:var(--surf);border:1px solid var(--brd);color:var(--text);font-size:24px;text-align:center;">
+        </div>
+        
+        <div style="margin-bottom:0.75rem;">
+          <label style="font-size:12px;color:var(--text3);display:block;margin-bottom:0.25rem;">Badge Text (optional)</label>
+          <input type="text" id="custom-badge" value="${displayStyle.badge || ''}" maxlength="20" placeholder="e.g. Champion, Legend..." style="width:100%;padding:0.5rem;background:var(--surf);border:1px solid var(--brd);color:var(--text);">
+        </div>
+      </div>
+      
+      <!-- Profile Picture Upload -->
+      <div style="background:var(--surf2);border:1px solid var(--brd2);padding:1rem;margin-bottom:1rem;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text3);margin-bottom:0.75rem;">PROFILE PICTURE (PNG, JPG, GIF)</div>
+        
+        <div style="text-align:center;margin-bottom:1rem;">
+          ${profile.avatarUrl ? `<img src="${profile.avatarUrl}" id="avatar-preview" class="profile-preview" style="margin-bottom:0.5rem;">` : `<div id="avatar-preview-placeholder" style="width:100px;height:100px;border-radius:50%;background:var(--surf);border:3px solid var(--gold);display:flex;align-items:center;justify-content:center;margin:0 auto 0.5rem;font-size:48px;">${displayStyle.avatar || '👤'}</div>`}
+        </div>
+        
+        <input type="file" id="profile-picture-input" accept="image/png,image/jpeg,image/jpg,image/gif" style="display:none;" onchange="handleProfilePictureUpload(this)">
+        <div class="profile-upload-area" onclick="document.getElementById('profile-picture-input').click()" ondragover="event.preventDefault();this.classList.add('dragover');" ondragleave="this.classList.remove('dragover');" ondrop="event.preventDefault();handleProfilePictureDrop(event);">
+          <div style="font-size:32px;margin-bottom:0.5rem;">📷</div>
+          <div style="font-size:12px;color:var(--text3);">Click or drag image here<br>Max 2MB (PNG, JPG, GIF)</div>
+        </div>
+        <div id="profile-picture-data" style="display:none;"></div>
+      </div>
+      
+      <!-- Banner Upload -->
+      <div style="background:var(--surf2);border:1px solid var(--brd2);padding:1rem;margin-bottom:1rem;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text3);margin-bottom:0.75rem;">PROFILE BANNER (PNG, JPG, GIF)</div>
+        
+        <div style="text-align:center;margin-bottom:1rem;">
+          ${profile.bannerUrl ? `<img src="${profile.bannerUrl}" id="banner-preview" class="banner-preview" style="margin-bottom:0.5rem;">` : `<div id="banner-preview-placeholder" style="width:100%;height:150px;border-radius:8px;background:linear-gradient(135deg, var(--surf), var(--surf2));border:2px solid var(--brd2);display:flex;align-items:center;justify-content:center;margin-bottom:0.5rem;"><span style="color:var(--text3);">No banner set</span></div>`}
+        </div>
+        
+        <input type="file" id="banner-input" accept="image/png,image/jpeg,image/jpg,image/gif" style="display:none;" onchange="handleBannerUpload(this)">
+        <div class="profile-upload-area" onclick="document.getElementById('banner-input').click()" ondragover="event.preventDefault();this.classList.add('dragover');" ondragleave="this.classList.remove('dragover');" ondrop="event.preventDefault();handleBannerDrop(event);">
+          <div style="font-size:32px;margin-bottom:0.5rem;">🖼️</div>
+          <div style="font-size:12px;color:var(--text3);">Click or drag banner image here<br>Max 5MB (PNG, JPG, GIF)</div>
+        </div>
+        <div id="banner-data" style="display:none;"></div>
+      </div>
+      
+      <!-- Profile Info -->
+      <div style="background:var(--surf2);border:1px solid var(--brd2);padding:1rem;margin-bottom:1rem;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text3);margin-bottom:0.75rem;">PROFILE INFO</div>
+        
+        <div style="margin-bottom:0.75rem;">
+          <label style="font-size:12px;color:var(--text3);display:block;margin-bottom:0.25rem;">Bio</label>
+          <textarea id="profile-bio" maxlength="200" placeholder="Tell us about yourself..." style="width:100%;padding:0.5rem;background:var(--surf);border:1px solid var(--brd);color:var(--text);resize:vertical;height:60px;">${profile.bio || ''}</textarea>
+        </div>
+        
+        <div style="margin-bottom:0.75rem;">
+          <label style="font-size:12px;color:var(--text3);display:block;margin-bottom:0.25rem;">Location</label>
+          <input type="text" id="profile-location" value="${profile.location || ''}" maxlength="50" placeholder="Your country/city" style="width:100%;padding:0.5rem;background:var(--surf);border:1px solid var(--brd);color:var(--text);">
+        </div>
+        
+        <div style="margin-bottom:0.75rem;">
+          <label style="font-size:12px;color:var(--text3);display:block;margin-bottom:0.25rem;">Favorite Car</label>
+          <input type="text" id="profile-car" value="${profile.favoriteCar || ''}" maxlength="50" placeholder="e.g. Subaru Impreza" style="width:100%;padding:0.5rem;background:var(--surf);border:1px solid var(--brd);color:var(--text);">
+        </div>
+        
+        <div style="margin-bottom:0.75rem;">
+          <label style="font-size:12px;color:var(--text3);display:block;margin-bottom:0.25rem;">Favorite Stage</label>
+          <input type="text" id="profile-stage" value="${profile.favoriteStage || ''}" maxlength="50" placeholder="e.g. Monte Carlo" style="width:100%;padding:0.5rem;background:var(--surf);border:1px solid var(--brd);color:var(--text);">
+        </div>
+      </div>
+      
+      <!-- Social Links -->
+      <div style="background:var(--surf2);border:1px solid var(--brd2);padding:1rem;margin-bottom:1rem;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text3);margin-bottom:0.75rem;">SOCIAL LINKS</div>
+        
+        <div style="margin-bottom:0.5rem;">
+          <label style="font-size:12px;color:var(--text3);display:block;margin-bottom:0.25rem;">YouTube Channel</label>
+          <input type="text" id="social-youtube" value="${social.youtube || ''}" placeholder="@channelname" style="width:100%;padding:0.5rem;background:var(--surf);border:1px solid var(--brd);color:var(--text);">
+        </div>
+        
+        <div style="margin-bottom:0.5rem;">
+          <label style="font-size:12px;color:var(--text3);display:block;margin-bottom:0.25rem;">Twitch</label>
+          <input type="text" id="social-twitch" value="${social.twitch || ''}" placeholder="username" style="width:100%;padding:0.5rem;background:var(--surf);border:1px solid var(--brd);color:var(--text);">
+        </div>
+        
+        <div style="margin-bottom:0.5rem;">
+          <label style="font-size:12px;color:var(--text3);display:block;margin-bottom:0.25rem;">Twitter/X</label>
+          <input type="text" id="social-twitter" value="${social.twitter || ''}" placeholder="@username" style="width:100%;padding:0.5rem;background:var(--surf);border:1px solid var(--brd);color:var(--text);">
+        </div>
+        
+        <div style="margin-bottom:0.5rem;">
+          <label style="font-size:12px;color:var(--text3);display:block;margin-bottom:0.25rem;">Discord</label>
+          <input type="text" id="social-discord" value="${social.discord || ''}" placeholder="username#0000" style="width:100%;padding:0.5rem;background:var(--surf);border:1px solid var(--brd);color:var(--text);">
+        </div>
+      </div>
+      
+      <div id="customize-error" style="color:#e8291c;font-size:12px;margin-bottom:1rem;display:none;"></div>
+      <div id="customize-success" style="color:#39ff14;font-size:12px;margin-bottom:1rem;display:none;"></div>
+      
+      <button class="gbtn pri" onclick="saveProfileCustomization()" style="width:100%;margin-bottom:0.5rem;">Save Changes</button>
+      <button class="gbtn" onclick="document.getElementById('customize-overlay').remove();" style="width:100%;">Cancel</button>
+    </div>
+  `;
+  
+  document.body.appendChild(overlay);
+}
+
+async function saveProfileCustomization() {
+  const errorDiv = document.getElementById('customize-error');
+  const successDiv = document.getElementById('customize-success');
+  
+  // Collect effects
+  const effects = [];
+  if (document.getElementById('effect-glow').checked) effects.push('glow');
+  if (document.getElementById('effect-glow-strong').checked) effects.push('glow-strong');
+  if (document.getElementById('effect-rainbow').checked) effects.push('rainbow');
+  if (document.getElementById('effect-fire').checked) effects.push('fire');
+  if (document.getElementById('effect-neon').checked) effects.push('neon');
+  if (document.getElementById('effect-glitch').checked) effects.push('glitch');
+  if (document.getElementById('effect-pulse').checked) effects.push('pulse');
+  if (document.getElementById('effect-shimmer').checked) effects.push('shimmer');
+  
+  const updates = {
+    profile: {
+      bio: document.getElementById('profile-bio').value,
+      location: document.getElementById('profile-location').value,
+      favoriteCar: document.getElementById('profile-car').value,
+      favoriteStage: document.getElementById('profile-stage').value,
+      social: {
+        youtube: document.getElementById('social-youtube').value,
+        twitch: document.getElementById('social-twitch').value,
+        twitter: document.getElementById('social-twitter').value,
+        discord: document.getElementById('social-discord').value
+      }
+    },
+    displayStyle: {
+      fontFamily: document.getElementById('custom-font').value,
+      color: document.getElementById('custom-color').value,
+      effects: effects,
+      avatar: document.getElementById('custom-avatar').value || '👤',
+      badge: document.getElementById('custom-badge').value
+    }
+  };
+  
+  // Include profile picture if uploaded
+  const profilePicData = document.getElementById('profile-picture-data').textContent;
+  if (profilePicData) {
+    updates.profilePicture = profilePicData;
+  }
+  
+  // Include banner if uploaded
+  const bannerData = document.getElementById('banner-data').textContent;
+  if (bannerData) {
+    updates.banner = bannerData;
+  }
+  
+  const result = await AccountSystem.updateProfile(updates);
+  
+  if (result.success) {
+    errorDiv.style.display = 'none';
+    successDiv.textContent = 'Profile updated successfully!';
+    successDiv.style.display = 'block';
+    setTimeout(() => {
+      document.getElementById('customize-overlay').remove();
+      showLoggedInScreen();
+    }, 1000);
+  } else {
+    successDiv.style.display = 'none';
+    errorDiv.textContent = result.error || 'Failed to save changes';
+    errorDiv.style.display = 'block';
+  }
+}
+
+function showMyProfileDetails() {
+  // Just refresh the profile screen
+  document.getElementById('account-overlay')?.remove();
+  showLoggedInScreen();
+}
+
+async function showAccountSettings() {
+  const overlay = document.createElement('div');
+  overlay.id = 'account-settings-overlay';
+  overlay.className = 'screen active';
+  overlay.style.cssText = 'z-index:10002;';
+  
+  // Load SMTP settings
+  const smtpStatus = await AccountSystem.getSmtpSettings();
+  const smtpConfigured = smtpStatus.configured;
+  
+  overlay.innerHTML = `
+    <div class="page-hdr">
+      <button class="bk" onclick="document.getElementById('account-settings-overlay').remove();">← Back</button>
+      <div class="page-hdr-title">Account Settings</div>
+    </div>
+    <div style="flex:1;padding:2rem;max-width:500px;margin:0 auto;width:100%;overflow:auto;">
+      
+      <!-- Email Settings -->
+      <div style="background:var(--surf2);border:1px solid var(--brd2);padding:1.5rem;margin-bottom:1rem;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);margin-bottom:1rem;">📧 Email Settings</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:1rem;">
+          Configure your own SMTP settings to receive password reset emails. Your email password is encrypted on the server.
+        </div>
+        
+        <div id="smtp-status" style="background:${smtpConfigured ? '#0e1e0e' : '#1e1e0e'};border:1px solid ${smtpConfigured ? '#39ff14' : 'var(--brd)'};padding:1rem;margin-bottom:1rem;">
+          <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;">
+            <span style="color:${smtpConfigured ? '#39ff14' : '#f5c518'};">${smtpConfigured ? '✓' : '⚠'}</span>
+            <span style="font-weight:600;color:${smtpConfigured ? '#39ff14' : '#f5c518'};">
+              ${smtpConfigured ? 'Email Configured' : 'Email Not Configured'}
+            </span>
+          </div>
+          ${smtpConfigured ? `
+            <div style="font-size:11px;color:var(--text3);">
+              <div>Host: ${smtpStatus.host}</div>
+              <div>Port: ${smtpStatus.port}</div>
+              <div>User: ${smtpStatus.user}</div>
+              <div style="margin-top:0.5rem;color:#39ff14;">✓ Password reset emails will be sent from your account</div>
+            </div>
+          ` : `
+            <div style="font-size:11px;color:var(--text3);">
+              You need to configure SMTP to use password reset. Click "Configure Email" below.
+            </div>
+          `}
+        </div>
+        
+        <div id="smtp-form" style="display:none;margin-bottom:1rem;">
+          <div style="font-size:12px;color:var(--text3);margin-bottom:0.5rem;">SMTP Host (e.g., smtp.outlook.com, smtp.gmail.com):</div>
+          <input type="text" id="smtp-host" placeholder="smtp.outlook.com" style="width:100%;padding:0.5rem;background:var(--surf);border:1px solid var(--brd);color:var(--text);margin-bottom:0.5rem;">
+          
+          <div style="font-size:12px;color:var(--text3);margin-bottom:0.5rem;">Port (usually 587 for TLS, 465 for SSL):</div>
+          <input type="number" id="smtp-port" placeholder="587" value="587" style="width:100%;padding:0.5rem;background:var(--surf);border:1px solid var(--brd);color:var(--text);margin-bottom:0.5rem;">
+          
+          <div style="font-size:12px;color:var(--text3);margin-bottom:0.5rem;">Email Address:</div>
+          <input type="email" id="smtp-user" placeholder="your@email.com" style="width:100%;padding:0.5rem;background:var(--surf);border:1px solid var(--brd);color:var(--text);margin-bottom:0.5rem;">
+          
+          <div style="font-size:12px;color:var(--text3);margin-bottom:0.5rem;">Password (or App Password):</div>
+          <input type="password" id="smtp-pass" placeholder="Your email password" style="width:100%;padding:0.5rem;background:var(--surf);border:1px solid var(--brd);color:var(--text);margin-bottom:0.5rem;">
+          <div style="font-size:10px;color:var(--text3);margin-bottom:0.75rem;">
+            For Outlook/Gmail, you may need to create an "App Password" in your account security settings.
+          </div>
+          
+          <div style="font-size:12px;color:var(--text3);margin-bottom:0.5rem;">From Name (optional):</div>
+          <input type="text" id="smtp-from" placeholder="Rally Pacenote Academy" style="width:100%;padding:0.5rem;background:var(--surf);border:1px solid var(--brd);color:var(--text);margin-bottom:0.75rem;">
+          
+          <div id="smtp-error" style="color:#e8291c;font-size:12px;margin-bottom:0.5rem;display:none;"></div>
+          <div id="smtp-success" style="color:#39ff14;font-size:12px;margin-bottom:0.5rem;display:none;"></div>
+          
+          <div style="display:flex;gap:0.5rem;">
+            <button class="gbtn pri" onclick="saveSmtpSettings()" style="flex:1;">Save Settings</button>
+            <button class="gbtn" onclick="testSmtpSettings()" style="flex:1;">Test Email</button>
+          </div>
+        </div>
+        
+        <button class="gbtn" onclick="toggleSmtpForm()" id="smtp-toggle-btn" style="width:100%;">
+          ${smtpConfigured ? 'Update Email Settings' : 'Configure Email'}
+        </button>
+      </div>
+      
+      <div style="background:var(--surf2);border:1px solid var(--brd2);padding:1.5rem;margin-bottom:1rem;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);margin-bottom:1rem;">⚠️ Danger Zone</div>
+        
+        <div style="background:#1e0e0e;border:1px solid #e8291c;padding:1rem;margin-bottom:1rem;">
+          <div style="font-size:14px;color:#e8291c;margin-bottom:0.5rem;font-weight:600;">Delete Account</div>
+          <div style="font-size:12px;color:var(--text3);margin-bottom:1rem;">
+            This will permanently delete your account, all save data, forum posts, and uploaded files. This action cannot be undone.
+          </div>
+          <button class="gbtn" onclick="showDeleteAccountConfirmation()" style="background:#e8291c;color:#fff;border-color:#e8291c;width:100%;">Delete My Account</button>
+        </div>
+      </div>
+      
+      <div style="background:var(--surf2);border:1px solid var(--brd2);padding:1.5rem;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);margin-bottom:1rem;">ℹ️ Account Info</div>
+        <div style="font-size:12px;color:var(--text3);">
+          <div style="margin-bottom:0.5rem;"><strong>Username:</strong> ${AccountSystem.account?.username}</div>
+          <div style="margin-bottom:0.5rem;"><strong>Email:</strong> ${AccountSystem.account?.email}</div>
+          <div style="margin-bottom:0.5rem;"><strong>Member Since:</strong> ${new Date(AccountSystem.account?.createdAt).toLocaleDateString()}</div>
+          <div><strong>Account ID:</strong> ${AccountSystem.account?.id?.substring(0, 8)}...</div>
+        </div>
+      </div>
+      
+    </div>
+  `;
+  
+  document.body.appendChild(overlay);
+}
+
+function toggleSmtpForm() {
+  const form = document.getElementById('smtp-form');
+  const btn = document.getElementById('smtp-toggle-btn');
+  if (form.style.display === 'none') {
+    form.style.display = 'block';
+    btn.textContent = 'Cancel';
+  } else {
+    form.style.display = 'none';
+    btn.textContent = 'Configure Email';
+  }
+}
+
+async function saveSmtpSettings() {
+  const host = document.getElementById('smtp-host').value.trim();
+  const port = document.getElementById('smtp-port').value.trim();
+  const user = document.getElementById('smtp-user').value.trim();
+  const pass = document.getElementById('smtp-pass').value;
+  const from = document.getElementById('smtp-from').value.trim();
+  const errorDiv = document.getElementById('smtp-error');
+  const successDiv = document.getElementById('smtp-success');
+  
+  errorDiv.style.display = 'none';
+  successDiv.style.display = 'none';
+  
+  if (!host || !port || !user || !pass) {
+    errorDiv.textContent = 'Please fill in all required fields';
+    errorDiv.style.display = 'block';
+    return;
+  }
+  
+  errorDiv.textContent = 'Saving...';
+  errorDiv.style.color = 'var(--text3)';
+  errorDiv.style.display = 'block';
+  
+  const result = await AccountSystem.saveSmtpSettings({ host, port, user, pass, from });
+  
+  if (result.success) {
+    errorDiv.style.display = 'none';
+    successDiv.textContent = 'Email settings saved! You can now use password reset.';
+    successDiv.style.display = 'block';
+    setTimeout(() => {
+      document.getElementById('account-settings-overlay').remove();
+      showAccountSettings(); // Reload to show updated status
+    }, 1500);
+  } else {
+    errorDiv.textContent = result.error || 'Failed to save settings';
+    errorDiv.style.color = '#e8291c';
+    errorDiv.style.display = 'block';
+  }
+}
+
+async function testSmtpSettings() {
+  const errorDiv = document.getElementById('smtp-error');
+  const successDiv = document.getElementById('smtp-success');
+  
+  errorDiv.style.display = 'none';
+  successDiv.style.display = 'none';
+  
+  // First save the settings
+  const host = document.getElementById('smtp-host').value.trim();
+  const port = document.getElementById('smtp-port').value.trim();
+  const user = document.getElementById('smtp-user').value.trim();
+  const pass = document.getElementById('smtp-pass').value;
+  const from = document.getElementById('smtp-from').value.trim();
+  
+  if (!host || !port || !user || !pass) {
+    errorDiv.textContent = 'Please fill in all required fields first';
+    errorDiv.style.display = 'block';
+    return;
+  }
+  
+  errorDiv.textContent = 'Saving and testing...';
+  errorDiv.style.color = 'var(--text3)';
+  errorDiv.style.display = 'block';
+  
+  const saveResult = await AccountSystem.saveSmtpSettings({ host, port, user, pass, from });
+  
+  if (!saveResult.success) {
+    errorDiv.textContent = saveResult.error || 'Failed to save settings';
+    errorDiv.style.color = '#e8291c';
+    return;
+  }
+  
+  // Now test
+  const testResult = await AccountSystem.testSmtpConnection();
+  
+  if (testResult.success) {
+    errorDiv.style.display = 'none';
+    successDiv.textContent = '✓ Test email sent! Check your inbox.';
+    successDiv.style.display = 'block';
+  } else {
+    errorDiv.textContent = 'Test failed: ' + testResult.error;
+    errorDiv.style.color = '#e8291c';
+  }
+}
+
+function showDeleteAccountConfirmation() {
+  const overlay = document.createElement('div');
+  overlay.id = 'delete-confirm-overlay';
+  overlay.className = 'screen active';
+  overlay.style.cssText = 'z-index:10003;';
+  
+  overlay.innerHTML = `
+    <div class="page-hdr">
+      <button class="bk" onclick="document.getElementById('delete-confirm-overlay').remove();">← Cancel</button>
+      <div class="page-hdr-title" style="color:#e8291c;">Delete Account</div>
+    </div>
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:2rem;">
+      <div style="background:#1e0e0e;border:2px solid #e8291c;padding:2rem;max-width:400px;width:100%;text-align:center;">
+        <div style="font-size:48px;margin-bottom:1rem;">⚠️</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#e8291c;margin-bottom:1rem;">ARE YOU SURE?</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:1.5rem;line-height:1.6;">
+          This action is <strong>PERMANENT</strong> and cannot be undone. All your data will be erased including:
+          <ul style="text-align:left;margin-top:0.5rem;">
+            <li>Account information</li>
+            <li>Game save data</li>
+            <li>Forum posts and reputation</li>
+            <li>Profile pictures and banners</li>
+          </ul>
+        </div>
+        
+        <div style="background:#0e0e12;border:1px solid var(--brd);padding:1rem;margin-bottom:1rem;">
+          <div style="font-size:12px;color:var(--text3);margin-bottom:0.5rem;">Type your password to confirm:</div>
+          <input type="password" id="delete-password" placeholder="Your password" style="width:100%;padding:0.75rem;background:var(--surf);border:1px solid var(--brd);color:var(--text);margin-bottom:0.5rem;">
+          <div id="delete-error" style="color:#e8291c;font-size:12px;display:none;"></div>
+        </div>
+        
+        <button class="gbtn" onclick="handleDeleteAccount()" style="background:#e8291c;color:#fff;border-color:#e8291c;width:100%;margin-bottom:0.5rem;">Permanently Delete Account</button>
+        <button class="gbtn" onclick="document.getElementById('delete-confirm-overlay').remove();" style="width:100%;">Cancel - Keep My Account</button>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(overlay);
+}
+
+async function handleDeleteAccount() {
+  const password = document.getElementById('delete-password').value;
+  const errorDiv = document.getElementById('delete-error');
+  
+  if (!password) {
+    errorDiv.textContent = 'Please enter your password';
+    errorDiv.style.display = 'block';
+    return;
+  }
+  
+  errorDiv.textContent = 'Deleting account...';
+  errorDiv.style.color = 'var(--text3)';
+  errorDiv.style.display = 'block';
+  
+  const result = await AccountSystem.deleteAccount(password);
+  
+  if (result.success) {
+    document.getElementById('delete-confirm-overlay').remove();
+    document.getElementById('account-settings-overlay')?.remove();
+    document.getElementById('account-overlay')?.remove();
+    addAccountButton();
+    showMenu();
+    alert('Your account has been permanently deleted.');
+  } else {
+    errorDiv.style.color = '#e8291c';
+    errorDiv.textContent = result.error || 'Failed to delete account';
+    errorDiv.style.display = 'block';
+  }
+}
+
+// Profile Picture Upload Handlers
+function handleProfilePictureUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+  
+  if (file.size > 2 * 1024 * 1024) {
+    alert('Profile picture must be under 2MB');
+    return;
+  }
+  
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const dataUrl = e.target.result;
+    document.getElementById('profile-picture-data').textContent = dataUrl;
+    
+    // Update preview
+    const preview = document.getElementById('avatar-preview');
+    const placeholder = document.getElementById('avatar-preview-placeholder');
+    if (preview) {
+      preview.src = dataUrl;
+    } else if (placeholder) {
+      placeholder.innerHTML = `<img src="${dataUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+function handleProfilePictureDrop(event) {
+  event.target.classList.remove('dragover');
+  const file = event.dataTransfer.files[0];
+  if (!file) return;
+  
+  if (!file.type.match(/^image\/(png|jpeg|jpg|gif)$/)) {
+    alert('Only PNG, JPG, and GIF files are allowed');
+    return;
+  }
+  
+  if (file.size > 2 * 1024 * 1024) {
+    alert('Profile picture must be under 2MB');
+    return;
+  }
+  
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const dataUrl = e.target.result;
+    document.getElementById('profile-picture-data').textContent = dataUrl;
+    
+    const preview = document.getElementById('avatar-preview');
+    const placeholder = document.getElementById('avatar-preview-placeholder');
+    if (preview) {
+      preview.src = dataUrl;
+    } else if (placeholder) {
+      placeholder.innerHTML = `<img src="${dataUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+// Banner Upload Handlers
+function handleBannerUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+  
+  if (file.size > 5 * 1024 * 1024) {
+    alert('Banner must be under 5MB');
+    return;
+  }
+  
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const dataUrl = e.target.result;
+    document.getElementById('banner-data').textContent = dataUrl;
+    
+    // Update preview
+    const preview = document.getElementById('banner-preview');
+    const placeholder = document.getElementById('banner-preview-placeholder');
+    if (preview) {
+      preview.src = dataUrl;
+    } else if (placeholder) {
+      placeholder.innerHTML = `<img src="${dataUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">`;
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+function handleBannerDrop(event) {
+  event.target.classList.remove('dragover');
+  const file = event.dataTransfer.files[0];
+  if (!file) return;
+  
+  if (!file.type.match(/^image\/(png|jpeg|jpg|gif)$/)) {
+    alert('Only PNG, JPG, and GIF files are allowed');
+    return;
+  }
+  
+  if (file.size > 5 * 1024 * 1024) {
+    alert('Banner must be under 5MB');
+    return;
+  }
+  
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const dataUrl = e.target.result;
+    document.getElementById('banner-data').textContent = dataUrl;
+    
+    const preview = document.getElementById('banner-preview');
+    const placeholder = document.getElementById('banner-preview-placeholder');
+    if (preview) {
+      preview.src = dataUrl;
+    } else if (placeholder) {
+      placeholder.innerHTML = `<img src="${dataUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">`;
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// FORUM UI (Reddit-style Message Board)
+// ═══════════════════════════════════════════════════════════════════════════
+
+async function showForumBoards() {
+  const data = await AccountSystem.getForumBoards();
+  
+  const overlay = document.createElement('div');
+  overlay.id = 'forum-overlay';
+  overlay.className = 'screen active';
+  overlay.style.cssText = 'z-index:10001;';
+  
+  overlay.innerHTML = `
+    <div class="page-hdr">
+      <button class="bk" onclick="document.getElementById('forum-overlay').remove();">← Back</button>
+      <div class="page-hdr-title">Community Forum</div>
+    </div>
+    <div style="flex:1;padding:1rem;max-width:900px;margin:0 auto;width:100%;overflow:auto;">
+      <div style="background:var(--surf2);border:1px solid var(--brd2);padding:1rem;margin-bottom:1rem;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);margin-bottom:0.5rem;">📢 Discussion Boards</div>
+        <div style="font-size:12px;color:var(--text3);">Join the conversation with fellow rally enthusiasts</div>
+      </div>
+      
+      ${data.boards.map(board => `
+        <div onclick="showForumBoard('${board.id}')" style="background:var(--surf2);border:1px solid var(--brd2);padding:1rem;margin-bottom:0.75rem;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--brd2)'">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div style="font-weight:600;font-size:16px;color:var(--text);">${board.name}</div>
+              <div style="font-size:12px;color:var(--text3);margin-top:0.25rem;">${board.description}</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--gold);">${board.threadCount || 0} threads</div>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text3);">${board.postCount || 0} posts</div>
+            </div>
+          </div>
+          ${board.recentThreads && board.recentThreads.length > 0 ? `
+          <div style="margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid var(--brd);">
+            <div style="font-size:11px;color:var(--text3);margin-bottom:0.5rem;">Recent activity:</div>
+            ${board.recentThreads.map(t => `
+              <div style="font-size:12px;color:var(--text);margin-bottom:0.25rem;">• ${t.title} <span style="color:var(--text3);">by ${t.author}</span></div>
+            `).join('')}
+          </div>
+          ` : ''}
+        </div>
+      `).join('')}
+    </div>
+  `;
+  
+  document.body.appendChild(overlay);
+}
+
+async function showForumBoard(boardId, page = 1, sort = 'hot') {
+  const data = await AccountSystem.getForumBoard(boardId, page, sort);
+  if (data.error) return;
+  
+  const overlay = document.getElementById('forum-overlay');
+  
+  overlay.innerHTML = `
+    <div class="page-hdr">
+      <button class="bk" onclick="showForumBoards();">← Boards</button>
+      <div class="page-hdr-title">${data.board.name}</div>
+    </div>
+    <div style="flex:1;padding:1rem;max-width:900px;margin:0 auto;width:100%;overflow:auto;">
+      <div style="background:var(--surf2);border:1px solid var(--brd2);padding:1rem;margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-size:12px;color:var(--text3);">${data.board.description}</div>
+        </div>
+        <button class="gbtn pri" onclick="showCreateThread('${boardId}')">+ New Thread</button>
+      </div>
+      
+      <div style="display:flex;gap:0.5rem;margin-bottom:1rem;">
+        <button class="gbtn ${sort === 'hot' ? 'pri' : ''}" onclick="showForumBoard('${boardId}', 1, 'hot')" style="font-size:12px;">🔥 Hot</button>
+        <button class="gbtn ${sort === 'new' ? 'pri' : ''}" onclick="showForumBoard('${boardId}', 1, 'new')" style="font-size:12px;">🆕 New</button>
+        <button class="gbtn ${sort === 'top' ? 'pri' : ''}" onclick="showForumBoard('${boardId}', 1, 'top')" style="font-size:12px;">🏆 Top</button>
+      </div>
+      
+      ${data.threads.length === 0 ? `
+        <div style="text-align:center;padding:3rem;color:var(--text3);">
+          <div style="font-size:48px;margin-bottom:1rem;">📝</div>
+          <div>No threads yet. Be the first to post!</div>
+        </div>
+      ` : data.threads.map(thread => `
+        <div onclick="showForumThread('${thread.id}')" style="background:var(--surf2);border:1px solid var(--brd2);padding:1rem;margin-bottom:0.5rem;cursor:pointer;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--brd2)'">
+          <div style="display:flex;align-items:flex-start;gap:1rem;">
+            <div style="display:flex;flex-direction:column;align-items:center;min-width:50px;">
+              <button class="vote-btn" onclick="event.stopPropagation();voteOnThread('${thread.id}', 'up')" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;">▲</button>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:var(--gold);font-weight:bold;">${thread.voteScore || 0}</div>
+              <button class="vote-btn" onclick="event.stopPropagation();voteOnThread('${thread.id}', 'down')" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;">▼</button>
+            </div>
+            <div style="flex:1;">
+              <div style="font-weight:600;color:var(--text);font-size:15px;">${thread.title} ${thread.isPinned ? '📌' : ''}</div>
+              <div style="font-size:12px;color:var(--text3);margin-top:0.25rem;">
+                Posted by ${getStyledDisplayName(thread.author, thread.authorDisplayName, thread.authorStyle)} 
+                • ${formatTimeAgo(thread.createdAt)} 
+                • ${thread.replyCount || 0} replies
+                • ${thread.views || 0} views
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('')}
+      
+      ${data.totalPages > 1 ? `
+      <div style="display:flex;justify-content:center;gap:0.5rem;margin-top:1rem;">
+        ${Array.from({length: Math.min(5, data.totalPages)}, (_, i) => i + 1).map(p => `
+          <button class="gbtn ${p === page ? 'pri' : ''}" onclick="showForumBoard('${boardId}', ${p}, '${sort}')" style="min-width:40px;">${p}</button>
+        `).join('')}
+      </div>
+      ` : ''}
+    </div>
+  `;
+}
+
+async function showForumThread(threadId) {
+  const data = await AccountSystem.getForumThread(threadId);
+  if (data.error) return;
+  
+  const overlay = document.getElementById('forum-overlay');
+  const thread = data.thread;
+  
+  overlay.innerHTML = `
+    <div class="page-hdr">
+      <button class="bk" onclick="showForumBoard('${thread.boardId}');">← Board</button>
+      <div class="page-hdr-title" style="font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${thread.title}</div>
+    </div>
+    <div style="flex:1;padding:1rem;max-width:900px;margin:0 auto;width:100%;overflow:auto;">
+      
+      <!-- Original Post -->
+      <div style="background:var(--surf2);border:1px solid var(--brd2);padding:1rem;margin-bottom:1rem;">
+        <div style="display:flex;align-items:flex-start;gap:1rem;">
+          <div style="display:flex;flex-direction:column;align-items:center;min-width:50px;">
+            <button class="vote-btn" onclick="voteOnPost('${thread.id}', 'up')" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;">▲</button>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:var(--gold);font-weight:bold;">${thread.voteScore || 0}</div>
+            <button class="vote-btn" onclick="voteOnPost('${thread.id}', 'down')" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;">▼</button>
+          </div>
+          <div style="flex:1;">
+            <div style="font-weight:600;font-size:18px;color:var(--text);margin-bottom:0.5rem;">${thread.title}</div>
+            <div style="font-size:12px;color:var(--text3);margin-bottom:0.75rem;">
+              Posted by ${getStyledDisplayName(thread.author, thread.authorDisplayName, thread.authorStyle)} 
+              • ${formatTimeAgo(thread.createdAt)}
+            </div>
+            <div style="color:var(--text);line-height:1.6;white-space:pre-wrap;">${thread.content}</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Reply Form -->
+      <div style="background:var(--surf2);border:1px solid var(--brd2);padding:1rem;margin-bottom:1rem;">
+        <textarea id="reply-content" placeholder="Write a reply..." style="width:100%;padding:0.75rem;background:var(--surf);border:1px solid var(--brd);color:var(--text);resize:vertical;height:80px;margin-bottom:0.5rem;"></textarea>
+        
+        <!-- File Upload Area -->
+        <div id="forum-file-preview" style="display:none;margin-bottom:0.5rem;"></div>
+        <input type="file" id="forum-file-input" style="display:none;" onchange="handleForumFileUpload(this, '${threadId}')">
+        <div style="display:flex;gap:0.5rem;margin-bottom:0.5rem;">
+          <button class="gbtn" onclick="document.getElementById('forum-file-input').click()" style="font-size:12px;padding:4px 12px;" title="Upload video, audio, image, or any file">📎 Attach File</button>
+          <span id="forum-file-status" style="font-size:11px;color:var(--text3);align-self:center;"></span>
+        </div>
+        
+        <div id="reply-error" style="color:#e8291c;font-size:12px;margin-bottom:0.5rem;display:none;"></div>
+        <button class="gbtn pri" onclick="submitReply('${threadId}')">Post Reply</button>
+      </div>
+      
+      <!-- Replies -->
+      ${data.posts.length === 0 ? `
+        <div style="text-align:center;padding:2rem;color:var(--text3);">
+          <div style="font-size:32px;margin-bottom:0.5rem;">💬</div>
+          <div>No replies yet. Be the first to comment!</div>
+        </div>
+      ` : `
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text3);margin-bottom:0.75rem;">
+          ${data.posts.length} ${data.posts.length === 1 ? 'reply' : 'replies'}
+        </div>
+        ${renderForumPosts(data.posts)}
+      `}
+    </div>
+  `;
+}
+
+function renderForumPosts(posts, depth = 0) {
+  return posts.map(post => {
+    // Parse content for attachments
+    let renderedContent = renderPostContent(post.content);
+    
+    return `
+    <div style="background:var(--surf2);border:1px solid var(--brd2);padding:1rem;margin-bottom:0.5rem;margin-left:${depth * 20}px;">
+      <div style="display:flex;align-items:flex-start;gap:1rem;">
+        <div style="display:flex;flex-direction:column;align-items:center;min-width:40px;">
+          <button class="vote-btn" onclick="voteOnPost('${post.id}', 'up')" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;">▲</button>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--gold);font-weight:bold;">${post.voteScore || 0}</div>
+          <button class="vote-btn" onclick="voteOnPost('${post.id}', 'down')" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;">▼</button>
+        </div>
+        <div style="flex:1;">
+          <div style="font-size:12px;color:var(--text3);margin-bottom:0.5rem;">
+            ${getStyledDisplayName(post.author, post.authorDisplayName, post.authorStyle)} 
+            • ${formatTimeAgo(post.createdAt)}
+            ${post.isEdited ? '• edited' : ''}
+          </div>
+          <div style="color:var(--text);line-height:1.6;white-space:pre-wrap;">${renderedContent}</div>
+          <div style="margin-top:0.75rem;">
+            <button class="gbtn" onclick="showReplyForm('${post.id}')" style="font-size:11px;padding:4px 12px;">Reply</button>
+          </div>
+          <div id="reply-form-${post.id}" style="display:none;margin-top:0.75rem;">
+            <textarea id="reply-content-${post.id}" placeholder="Write a reply..." style="width:100%;padding:0.5rem;background:var(--surf);border:1px solid var(--brd);color:var(--text);resize:vertical;height:60px;margin-bottom:0.5rem;"></textarea>
+            <button class="gbtn pri" onclick="submitNestedReply('${post.threadId}', '${post.id}')" style="font-size:11px;padding:4px 12px;">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    ${post.replies && post.replies.length > 0 ? renderForumPosts(post.replies, depth + 1) : ''}
+  `}).join('');
+}
+
+function renderPostContent(content) {
+  if (!content) return '';
+  
+  // Replace attachment tags with media elements
+  let rendered = content
+    // Video attachments
+    .replace(/\[VIDEO:([^\]]+)\]/g, '<div style="margin:0.5rem 0;"><video src="$1" controls style="max-width:100%;max-height:300px;border-radius:8px;"></video></div>')
+    // Audio attachments  
+    .replace(/\[AUDIO:([^\]]+)\]/g, '<div style="margin:0.5rem 0;"><audio src="$1" controls style="width:100%;max-width:300px;"></audio></div>')
+    // Image attachments
+    .replace(/\[IMAGE:([^\]]+)\]/g, '<div style="margin:0.5rem 0;"><img src="$1" style="max-width:100%;max-height:300px;border-radius:8px;cursor:pointer;" onclick="window.open(\'$1\',\'_blank\')"></div>')
+    // File attachments
+    .replace(/\[FILE:([^:]+):([^\]]+)\]/g, '<div style="margin:0.5rem 0;"><a href="$1" target="_blank" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;background:var(--surf);border:1px solid var(--brd);border-radius:4px;color:var(--text);text-decoration:none;">📎 $2</a></div>');
+  
+  return rendered;
+}
+
+function showCreateThread(boardId) {
+  const overlay = document.getElementById('forum-overlay');
+  
+  const originalContent = overlay.innerHTML;
+  
+  overlay.innerHTML = `
+    <div class="page-hdr">
+      <button class="bk" onclick="document.getElementById('forum-overlay').innerHTML = \`${originalContent.replace(/\\/g, '\\\\').replace(/`/g, '\\`')}\`;showForumBoard('${boardId}');">← Cancel</button>
+      <div class="page-hdr-title">Create New Thread</div>
+    </div>
+    <div style="flex:1;padding:1rem;max-width:700px;margin:0 auto;width:100%;overflow:auto;">
+      <div style="background:var(--surf2);border:1px solid var(--brd2);padding:1.5rem;">
+        <div style="margin-bottom:1rem;">
+          <label style="font-size:12px;color:var(--text3);display:block;margin-bottom:0.5rem;">Title</label>
+          <input type="text" id="new-thread-title" placeholder="What's on your mind?" style="width:100%;padding:0.75rem;background:var(--surf);border:1px solid var(--brd);color:var(--text);">
+        </div>
+        <div style="margin-bottom:1rem;">
+          <label style="font-size:12px;color:var(--text3);display:block;margin-bottom:0.5rem;">Content</label>
+          <textarea id="new-thread-content" placeholder="Share your thoughts..." style="width:100%;padding:0.75rem;background:var(--surf);border:1px solid var(--brd);color:var(--text);resize:vertical;height:200px;"></textarea>
+        </div>
+        <div id="create-thread-error" style="color:#e8291c;font-size:12px;margin-bottom:1rem;display:none;"></div>
+        <button class="gbtn pri" onclick="submitNewThread('${boardId}')" style="width:100%;">Post Thread</button>
+      </div>
+    </div>
+  `;
+}
+
+async function submitNewThread(boardId) {
+  const title = document.getElementById('new-thread-title').value;
+  const content = document.getElementById('new-thread-content').value;
+  const errorDiv = document.getElementById('create-thread-error');
+  
+  if (!title || title.length < 3) {
+    errorDiv.textContent = 'Title must be at least 3 characters';
+    errorDiv.style.display = 'block';
+    return;
+  }
+  
+  if (!content || content.length < 10) {
+    errorDiv.textContent = 'Content must be at least 10 characters';
+    errorDiv.style.display = 'block';
+    return;
+  }
+  
+  const result = await AccountSystem.createForumThread(boardId, title, content);
+  
+  if (result.success) {
+    showForumThread(result.thread.id);
+  } else {
+    errorDiv.textContent = result.error || 'Failed to create thread';
+    errorDiv.style.display = 'block';
+  }
+}
+
+async function submitReply(threadId) {
+  const content = document.getElementById('reply-content').value;
+  const errorDiv = document.getElementById('reply-error');
+  const fileData = document.getElementById('forum-file-data')?.textContent;
+  
+  if (!content || content.length < 2) {
+    errorDiv.textContent = 'Reply must be at least 2 characters';
+    errorDiv.style.display = 'block';
+    return;
+  }
+  
+  // Build content with file attachment if present
+  let fullContent = content;
+  if (fileData) {
+    try {
+      const fileInfo = JSON.parse(fileData);
+      if (fileInfo.isVideo) {
+        fullContent += `\n\n[VIDEO:${fileInfo.url}]`;
+      } else if (fileInfo.isAudio) {
+        fullContent += `\n\n[AUDIO:${fileInfo.url}]`;
+      } else if (fileInfo.isImage) {
+        fullContent += `\n\n[IMAGE:${fileInfo.url}]`;
+      } else {
+        fullContent += `\n\n[FILE:${fileInfo.url}:${fileInfo.filename}]`;
+      }
+    } catch (e) {
+      console.error('Error parsing file data:', e);
+    }
+  }
+  
+  const result = await AccountSystem.createForumPost(threadId, fullContent);
+  
+  if (result.success) {
+    showForumThread(threadId);
+  } else {
+    errorDiv.textContent = result.error || 'Failed to post reply';
+    errorDiv.style.display = 'block';
+  }
+}
+
+async function handleForumFileUpload(input, threadId) {
+  const file = input.files[0];
+  if (!file) return;
+  
+  const statusSpan = document.getElementById('forum-file-status');
+  const previewDiv = document.getElementById('forum-file-preview');
+  
+  // Check file size (50MB limit)
+  if (file.size > 50 * 1024 * 1024) {
+    statusSpan.textContent = 'File too large (max 50MB)';
+    statusSpan.style.color = '#e8291c';
+    return;
+  }
+  
+  statusSpan.textContent = 'Uploading...';
+  statusSpan.style.color = 'var(--gold)';
+  
+  const reader = new FileReader();
+  reader.onload = async function(e) {
+    const dataUrl = e.target.result;
+    
+    const result = await AccountSystem.uploadForumFile(file.name, dataUrl, threadId);
+    
+    if (result.success) {
+      statusSpan.textContent = `✓ ${file.name}`;
+      statusSpan.style.color = '#39ff14';
+      
+      // Store file data for inclusion in post
+      let fileDataDiv = document.getElementById('forum-file-data');
+      if (!fileDataDiv) {
+        fileDataDiv = document.createElement('div');
+        fileDataDiv.id = 'forum-file-data';
+        fileDataDiv.style.display = 'none';
+        document.body.appendChild(fileDataDiv);
+      }
+      fileDataDiv.textContent = JSON.stringify(result);
+      
+      // Show preview
+      previewDiv.style.display = 'block';
+      if (result.isImage) {
+        previewDiv.innerHTML = `<img src="${result.url}" style="max-width:200px;max-height:150px;border-radius:8px;border:1px solid var(--brd);">`;
+      } else if (result.isVideo) {
+        previewDiv.innerHTML = `<video src="${result.url}" controls style="max-width:200px;max-height:150px;border-radius:8px;"></video>`;
+      } else if (result.isAudio) {
+        previewDiv.innerHTML = `<audio src="${result.url}" controls style="width:200px;"></audio>`;
+      } else {
+        previewDiv.innerHTML = `<div style="padding:0.5rem;background:var(--surf);border-radius:4px;display:inline-block;">📎 ${file.name}</div>`;
+      }
+    } else {
+      statusSpan.textContent = 'Upload failed';
+      statusSpan.style.color = '#e8291c';
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+function showReplyForm(postId) {
+  const form = document.getElementById(`reply-form-${postId}`);
+  form.style.display = form.style.display === 'none' ? 'block' : 'none';
+}
+
+async function submitNestedReply(threadId, parentId) {
+  const content = document.getElementById(`reply-content-${parentId}`).value;
+  
+  if (!content || content.length < 2) return;
+  
+  const result = await AccountSystem.createForumPost(threadId, content, parentId);
+  
+  if (result.success) {
+    showForumThread(threadId);
+  }
+}
+
+async function voteOnPost(postId, voteType) {
+  const result = await AccountSystem.voteOnPost(postId, voteType);
+  if (result.success) {
+    // Refresh current view to show updated score
+    // This is a simplified approach
+  }
+}
+
+async function voteOnThread(threadId, voteType) {
+  await voteOnPost(threadId, voteType);
+}
+
+// Helper function to format display name with custom styles
+function getStyledDisplayName(username, displayName, style = {}) {
+  const effects = style.effects || [];
+  let nameClasses = [];
+  let nameStyle = `font-family:'${style.fontFamily || 'Bebas Neue'}',sans-serif;`;
+  
+  // Apply color/effect classes
+  if (effects.includes('rainbow')) {
+    nameClasses.push('username-rainbow');
+  } else if (effects.includes('fire')) {
+    nameClasses.push('username-fire');
+  } else {
+    nameStyle += `color:${style.color || 'var(--gold)'};`;
+  }
+  
+  // Apply effect classes
+  if (effects.includes('glow')) nameClasses.push('username-glow');
+  if (effects.includes('glow-strong')) nameClasses.push('username-glow-strong');
+  if (effects.includes('neon')) {
+    nameClasses.push('username-neon');
+    nameStyle += `--neon-color:${style.color || '#f5c518'};`;
+  }
+  if (effects.includes('glitch')) nameClasses.push('username-glitch');
+  if (effects.includes('pulse')) nameClasses.push('username-pulse');
+  if (effects.includes('shimmer')) {
+    nameClasses.push('username-shimmer');
+    nameStyle += `--text-color:${style.color || '#f5c518'};`;
+  }
+  
+  const classString = nameClasses.join(' ');
+  const glitchAttr = effects.includes('glitch') ? `data-text="${displayName || username}"` : '';
+  
+  return `<span class="${classString}" style="${nameStyle}cursor:pointer;" ${glitchAttr} onclick="showPublicProfile('${username}');event.stopPropagation();">${displayName || username}</span>`;
+}
+
+function formatTimeAgo(timestamp) {
+  const seconds = Math.floor((Date.now() - timestamp) / 1000);
+  
+  if (seconds < 60) return 'just now';
+  if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+  if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`;
+  return `${Math.floor(seconds / 604800)}w ago`;
+}
+
+// View Other User's Profile
+async function showPublicProfile(username) {
+  const data = await AccountSystem.getPublicProfile(username);
+  if (data.error) return;
+  
+  const profile = data.profile;
+  const stats = data.stats;
+  const displayStyle = profile.displayStyle || {};
+  
+  // Generate styled display name using CSS classes
+  const effects = displayStyle.effects || [];
+  let displayNameClasses = [];
+  let displayNameStyle = `font-family:'${displayStyle.fontFamily || 'Bebas Neue'}',sans-serif;font-size:24px;`;
+  
+  if (effects.includes('rainbow')) {
+    displayNameClasses.push('username-rainbow');
+  } else if (effects.includes('fire')) {
+    displayNameClasses.push('username-fire');
+  } else {
+    displayNameStyle += `color:${displayStyle.color || 'var(--gold)'};`;
+  }
+  
+  if (effects.includes('glow')) displayNameClasses.push('username-glow');
+  if (effects.includes('glow-strong')) displayNameClasses.push('username-glow-strong');
+  if (effects.includes('neon')) {
+    displayNameClasses.push('username-neon');
+    displayNameStyle += `--neon-color:${displayStyle.color || '#f5c518'};`;
+  }
+  if (effects.includes('glitch')) displayNameClasses.push('username-glitch');
+  if (effects.includes('pulse')) displayNameClasses.push('username-pulse');
+  if (effects.includes('shimmer')) {
+    displayNameClasses.push('username-shimmer');
+    displayNameStyle += `--text-color:${displayStyle.color || '#f5c518'};`;
+  }
+  
+  const effectClassString = displayNameClasses.join(' ');
+  const displayName = profile.displayName || username;
+  
+  const overlay = document.createElement('div');
+  overlay.id = 'public-profile-overlay';
+  overlay.className = 'screen active';
+  overlay.style.cssText = 'z-index:10002;';
+  
+  overlay.innerHTML = `
+    <div class="page-hdr">
+      <button class="bk" onclick="document.getElementById('public-profile-overlay').remove();">← Back</button>
+      <div class="page-hdr-title">User Profile</div>
+    </div>
+    <div style="flex:1;padding:2rem;max-width:600px;margin:0 auto;width:100%;overflow:auto;">
+      ${profile.bannerUrl ? `<div style="width:100%;height:150px;margin-bottom:1rem;border-radius:8px;overflow:hidden;"><img src="${profile.bannerUrl}" style="width:100%;height:100%;object-fit:cover;"></div>` : ''}
+      <div style="background:var(--surf2);border:1px solid var(--brd2);padding:1.5rem;margin-bottom:1rem;text-align:center;">
+        ${profile.avatarUrl ? `<img src="${profile.avatarUrl}" style="width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);margin-bottom:0.5rem;">` : `<div style="font-size:48px;margin-bottom:0.5rem;">${displayStyle.avatar || '👤'}</div>`}
+        <div class="${effectClassString}" style="${displayNameStyle}" ${effects.includes('glitch') ? `data-text="${displayName}"` : ''}>${displayName}</div>
+        <div style="font-size:14px;color:var(--text3);">
+          ${data.rank} • Level ${data.level}
+          ${data.isOnline ? ' <span style="color:#39ff14;">● Online</span>' : ''}
+        </div>
+        ${profile.bio ? `<div style="font-size:12px;color:var(--text3);margin-top:0.5rem;font-style:italic;">"${profile.bio}"</div>` : ''}
+        ${profile.location ? `<div style="font-size:12px;color:var(--text3);margin-top:0.25rem;">📍 ${profile.location}</div>` : ''}
+      </div>
+      
+      ${profile.favoriteCar || profile.favoriteStage ? `
+      <div style="background:var(--surf2);border:1px solid var(--brd2);padding:1rem;margin-bottom:1rem;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text3);margin-bottom:0.75rem;">FAVORITES</div>
+        ${profile.favoriteCar ? `<div style="font-size:12px;margin-bottom:0.25rem;">🚗 ${profile.favoriteCar}</div>` : ''}
+        ${profile.favoriteStage ? `<div style="font-size:12px;">🏁 ${profile.favoriteStage}</div>` : ''}
+      </div>
+      ` : ''}
+      
+      <div style="background:var(--surf2);border:1px solid var(--brd2);padding:1rem;margin-bottom:1rem;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text3);margin-bottom:0.75rem;">STATISTICS</div>
+        <div style="display:grid;grid-template-columns:repeat(2, 1fr);gap:1rem;">
+          <div style="text-align:center;">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gold);">${stats.totalRaces || 0}</div>
+            <div style="font-size:11px;color:var(--text3);">Races</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gold);">${stats.wins || 0}</div>
+            <div style="font-size:11px;color:var(--text3);">Wins</div>
+          </div>
+        </div>
+      </div>
+      
+      ${profile.social && (profile.social.youtube || profile.social.twitch || profile.social.twitter) ? `
+      <div style="background:var(--surf2);border:1px solid var(--brd2);padding:1rem;margin-bottom:1rem;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text3);margin-bottom:0.75rem;">SOCIAL</div>
+        <div style="display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap;">
+          ${profile.social.youtube ? `<a href="https://youtube.com/${profile.social.youtube}" target="_blank" style="color:#ff0000;font-size:20px;text-decoration:none;">📺</a>` : ''}
+          ${profile.social.twitch ? `<a href="https://twitch.tv/${profile.social.twitch}" target="_blank" style="color:#9146ff;font-size:20px;text-decoration:none;">📡</a>` : ''}
+          ${profile.social.twitter ? `<a href="https://twitter.com/${profile.social.twitter}" target="_blank" style="color:#1da1f2;font-size:20px;text-decoration:none;">🐦</a>` : ''}
+        </div>
+      </div>
+      ` : ''}
+      
+      <div style="background:var(--surf2);border:1px solid var(--brd2);padding:1rem;margin-bottom:1rem;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text3);margin-bottom:0.75rem;">REPUTATION</div>
+        <div style="text-align:center;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--gold);">${profile.stats?.reputation || 0}</div>
+          <div style="font-size:11px;color:var(--text3);">Forum Karma</div>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(overlay);
+}
+
+// Initialize account system on load
+async function initAccountSystem() {
+  await AccountSystem.init();
+  addAccountButton();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// INITIALIZATION
+// ═══════════════════════════════════════════════════════════════════════════
+
+// Add multiplayer button when page loads
+document.addEventListener('DOMContentLoaded', () => {
+  addMultiplayerButton();
+  initAccountSystem();
+  checkForSavedLobby();
+});
+
+// Check for saved lobby and offer to rejoin
+function checkForSavedLobby() {
+  const saved = Multiplayer.loadSavedLobby();
+  if (saved) {
+    const age = Date.now() - saved.timestamp;
+    const ageMinutes = Math.floor(age / 60000);
+    
+    if (ageMinutes < 60) { // Only offer if less than 1 hour old
+      setTimeout(() => {
+        if (confirm(`Rejoin lobby ${saved.code} on ${new URL(saved.server).hostname}?\n(Last played ${ageMinutes} min ago)`)) {
+          Multiplayer.playerName = saved.playerName;
+          Multiplayer.joinLobby(saved.code);
+        } else {
+          localStorage.removeItem('rpa_last_lobby');
+        }
+      }, 1000);
+    } else {
+      localStorage.removeItem('rpa_last_lobby');
+    }
+  }
+}
+
+// Global helper to hide lobby bar
+function hideLobbyInfo() {
+  Multiplayer.hideLobbyBar();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// PACENOTE TEMPLATES & AI GENERATOR
+// ═══════════════════════════════════════════════════════════════════════════
+
+const PACENOTE_TEMPLATES = {
+  finnish: {
+    name: 'Finnish Forest',
+    country: 'Finland',
+    notes: [
+      { raw: 'L3', ans: 'Left three' },
+      { raw: 'R4 INTO L3', ans: 'Right four into left three' },
+      { raw: 'L5 100', ans: 'Left five one hundred' },
+      { raw: 'R2!', ans: 'Right two hairpin' },
+      { raw: 'L4 JUMP', ans: 'Left four jump' },
+      { raw: 'R3 INTO L3', ans: 'Right three into left three' },
+      { raw: 'CREST 80', ans: 'Crest eighty' },
+      { raw: 'L2! INTO R3', ans: 'Left two hairpin into right three' },
+      { raw: 'L4 50 R4', ans: 'Left four fifty right four' },
+      { raw: 'L6 INTO R5', ans: 'Left six into right five' },
+      { raw: 'R2! DITCH', ans: 'Right two hairpin ditch outside' },
+      { raw: 'L3 100', ans: 'Left three one hundred' },
+      { raw: 'R4 CREST', ans: 'Right four crest' },
+      { raw: 'L3 INTO R2!', ans: 'Left three into right two hairpin' },
+      { raw: 'L5 80', ans: 'Left five eighty' }
+    ]
+  },
+  monte: {
+    name: 'Monte Carlo Tarmac',
+    country: 'Monaco',
+    notes: [
+      { raw: 'L4', ans: 'Left four' },
+      { raw: 'R3 INTO L3', ans: 'Right three into left three' },
+      { raw: 'HAIRPIN R', ans: 'Hairpin right' },
+      { raw: 'L3 50', ans: 'Left three fifty' },
+      { raw: 'R2! INTO L2!', ans: 'Right two hairpin into left two hairpin' },
+      { raw: 'L4 ICY', ans: 'Left four icy' },
+      { raw: 'R3 NARROWS', ans: 'Right three narrows' },
+      { raw: 'L2! 30', ans: 'Left two hairpin thirty' },
+      { raw: 'R4 INTO L3', ans: 'Right four into left three' },
+      { raw: 'L3 TARMAC', ans: 'Left three tarmac' },
+      { raw: 'R2! WALL', ans: 'Right two hairpin wall outside' },
+      { raw: 'L4 100', ans: 'Left four one hundred' },
+      { raw: 'R3 INTO L2!', ans: 'Right three into left two hairpin' },
+      { raw: 'L5 80', ans: 'Left five eighty' },
+      { raw: 'R4 BRAKE', ans: 'Right four brake' }
+    ]
+  },
+  safari: {
+    name: 'Safari Rough',
+    country: 'Kenya',
+    notes: [
+      { raw: 'L4', ans: 'Left four' },
+      { raw: 'R3 ROUGH', ans: 'Right three rough' },
+      { raw: 'L5 200', ans: 'Left five two hundred' },
+      { raw: 'R3 DUST', ans: 'Right three dust' },
+      { raw: 'L4 INTO R3', ans: 'Left four into right three' },
+      { raw: 'R4 BUMP', ans: 'Right four bump' },
+      { raw: 'L3 SAND', ans: 'Left three sand' },
+      { raw: 'R4 150', ans: 'Right four one fifty' },
+      { raw: 'L3 INTO R2!', ans: 'Left three into right two hairpin' },
+      { raw: 'L4 ROCKS', ans: 'Left four rocks' },
+      { raw: 'R3 DEEP', ans: 'Right three deep ruts' },
+      { raw: 'L5 100', ans: 'Left five one hundred' },
+      { raw: 'R4 WASHBOARD', ans: 'Right four washboard' },
+      { raw: 'L3 CARE', ans: 'Left three care' },
+      { raw: 'R4 INTO L4', ans: 'Right four into left four' }
+    ]
+  },
+  snow: {
+    name: 'Snow/Ice',
+    country: 'Sweden',
+    notes: [
+      { raw: 'L4', ans: 'Left four' },
+      { raw: 'R3 ICY', ans: 'Right three icy' },
+      { raw: 'L5 100', ans: 'Left five one hundred' },
+      { raw: 'R2! SNOW', ans: 'Right two hairpin snow' },
+      { raw: 'L3 INTO R3', ans: 'Left three into right three' },
+      { raw: 'R4 SLUSH', ans: 'Right four slush' },
+      { raw: 'L3 TREE', ans: 'Left three tree inside' },
+      { raw: 'R4 80', ans: 'Right four eighty' },
+      { raw: 'L2! INTO R3', ans: 'Left two hairpin into right three' },
+      { raw: 'L4 FROZEN', ans: 'Left four frozen' },
+      { raw: 'R3 DITCH', ans: 'Right three ditch' },
+      { raw: 'L5 150', ans: 'Left five one fifty' },
+      { raw: 'R4 SNOWBANK', ans: 'Right four snowbank' },
+      { raw: 'L3 CARE', ans: 'Left three care' },
+      { raw: 'R4 INTO L3', ans: 'Right four into left three' }
+    ]
+  }
+};
+
+function loadTemplate(templateId) {
+  const template = PACENOTE_TEMPLATES[templateId];
+  if (!template) return;
+  
+  if (!confirm('Load template: ' + template.name + '? This will replace current notes.')) return;
+  
+  StageEditor.notes = template.notes.map(function(n) {
+    return {
+      id: Date.now() + Math.random(),
+      raw: n.raw,
+      ans: n.ans,
+      narr: 'Template note',
+      comm: 'From ' + template.name + ' template'
+    };
+  });
+  StageEditor.stageName = template.name;
+  StageEditor.country = template.country;
+  
+  document.getElementById('editor-stage-name').value = template.name;
+  document.getElementById('editor-country').value = template.country;
+  
+  renderEditorNotes();
+}
+
+function generatePacenotes() {
+  const terrain = document.getElementById('ai-terrain').value;
+  const difficulty = document.getElementById('ai-difficulty').value;
+  const count = parseInt(document.getElementById('ai-note-count').value) || 20;
+  
+  const leftTurns = ['L2!', 'L3', 'L3', 'L4', 'L4', 'L5', 'L6'];
+  const rightTurns = ['R2!', 'R3', 'R3', 'R4', 'R4', 'R5', 'R6'];
+  const distances = ['30', '50', '80', '100', '100', '150', '200'];
+  const terrainMods = {
+    gravel: ['', '', 'DUST', 'ROUGH', 'GRAVEL'],
+    tarmac: ['', '', 'TARMAC', 'BRAKE', 'NARROWS'],
+    snow: ['', 'ICY', 'SNOW', 'FROZEN', 'SLUSH'],
+    mixed: ['', 'ROUGH', 'ICY', 'DUST', 'NARROWS']
+  };
+  
+  const mods = terrainMods[terrain];
+  const notes = [];
+  
+  for (let i = 0; i < count; i++) {
+    const isLeft = Math.random() < 0.5;
+    const turnPool = isLeft ? leftTurns : rightTurns;
+    let turn = turnPool[Math.floor(Math.random() * turnPool.length)];
+    
+    // Add modifier based on difficulty
+    if (Math.random() < 0.3) {
+      const mod = mods[Math.floor(Math.random() * mods.length)];
+      if (mod) turn = turn + ' ' + mod;
+    }
+    
+    // Create note
+    let raw = turn;
+    
+    // Add distance call sometimes
+    if (Math.random() < 0.4 && i < count - 1) {
+      const dist = distances[Math.floor(Math.random() * distances.length)];
+      raw = raw + ' ' + dist;
+    }
+    
+    // Add link word sometimes
+    if (Math.random() < 0.25 && i < count - 1) {
+      const nextTurn = (!isLeft ? leftTurns : rightTurns)[Math.floor(Math.random() * 3)];
+      raw = raw + ' INTO ' + nextTurn.split(' ')[0];
+    }
+    
+    const translated = PacenoteSystem.translate(raw);
+    notes.push({
+      id: Date.now() + Math.random() + i,
+      raw: raw,
+      ans: translated,
+      narr: 'AI generated note',
+      comm: 'AI generated ' + terrain + ' stage'
+    });
+  }
+  
+  StageEditor.notes = notes;
+  StageEditor.stageName = 'AI ' + terrain.charAt(0).toUpperCase() + terrain.slice(1) + ' Stage';
+  StageEditor.country = 'Generated';
+  
+  document.getElementById('editor-stage-name').value = StageEditor.stageName;
+  document.getElementById('editor-country').value = StageEditor.country;
+  
+  renderEditorNotes();
+  alert('Generated ' + count + ' pacenotes for ' + terrain + ' terrain!');
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// GAMEPLAY RECORDING MODE
+// ═══════════════════════════════════════════════════════════════════════════
+
+const RecordingMode = {
+  enabled: false,
+  recording: false,
+  data: [],
+  startTime: 0,
+  
+  toggle: function() {
+    this.enabled = !this.enabled;
+    try {
+      localStorage.setItem('rpa_recording_enabled', this.enabled ? '1' : '0');
+    } catch(e) {}
+    this.updateUI();
+    return this.enabled;
+  },
+  
+  loadSetting: function() {
+    try {
+      this.enabled = localStorage.getItem('rpa_recording_enabled') === '1';
+    } catch(e) {
+      this.enabled = false;
+    }
+    this.updateUI();
+  },
+  
+  updateUI: function() {
+    const btn = document.getElementById('recording-toggle-btn');
+    if (btn) {
+      btn.textContent = this.enabled ? '🔴 Recording ON' : '⚪ Recording OFF';
+      btn.style.background = this.enabled ? '#e8291c' : 'var(--surf2)';
+    }
+  },
+  
+  start: function() {
+    if (!this.enabled) return;
+    this.recording = true;
+    this.data = [];
+    this.startTime = Date.now();
+  },
+  
+  stop: function() {
+    this.recording = false;
+    if (this.data.length > 0) {
+      this.saveRecording();
+    }
+  },
+  
+  recordEvent: function(type, data) {
+    if (!this.recording) return;
+    this.data.push({
+      time: Date.now() - this.startTime,
+      type: type,
+      data: data
+    });
+  },
+  
+  saveRecording: function() {
+    const recording = {
+      date: new Date().toISOString(),
+      duration: Date.now() - this.startTime,
+      events: this.data,
+      stage: G.currentStageName || 'Unknown',
+      era: G.era || 'Unknown'
+    };
+    
+    const blob = new Blob([JSON.stringify(recording, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'rpa-recording-' + Date.now() + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+};
+
+// Hook into game functions to record events
+const originalSubmitAnswer = submitAnswer;
+submitAnswer = function() {
+  const result = originalSubmitAnswer.apply(this, arguments);
+  RecordingMode.recordEvent('answer', {
+    note: G.notes[G.idx - 1]?.raw,
+    input: document.getElementById('g-input')?.value,
+    idx: G.idx - 1
+  });
+  return result;
+};
+
+const originalAutoSubmit = autoSubmitAnswer;
+autoSubmitAnswer = function() {
+  RecordingMode.recordEvent('autosubmit', {
+    note: G.notes[G.idx]?.raw,
+    score: arguments[0]
+  });
+  return originalAutoSubmit.apply(this, arguments);
+};
+
+const originalEndStage = endStage;
+endStage = function() {
+  RecordingMode.stop();
+  return originalEndStage.apply(this, arguments);
+};
+
+// ═══════════════════════════════════════════════════════════════════════════
+// LAN PARTY HOSTING HELPERS
+// ═══════════════════════════════════════════════════════════════════════════
+
+const LanParty = {
+  // Quick host function with auto-detection
+  quickHost: function() {
+    // Get local IP for LAN parties
+    const rtc = new RTCPeerConnection({ iceServers: [] });
+    rtc.createDataChannel('');
+    rtc.createOffer().then(function(offer) {
+      rtc.setLocalDescription(offer);
+    });
+    
+    rtc.onicecandidate = function(evt) {
+      if (evt.candidate) {
+        const ip = evt.candidate.candidate.split(' ')[4];
+        if (ip && ip !== '127.0.0.1' && !ip.startsWith('0.')) {
+          LanParty.showHostInfo(ip);
+          rtc.close();
+        }
+      }
+    };
+    
+    // Fallback after 1 second
+    setTimeout(function() {
+      LanParty.showHostInfo(window.location.hostname);
+    }, 1000);
+  },
+  
+  showHostInfo: function(localIp) {
+    const overlay = document.createElement('div');
+    overlay.className = 'screen active';
+    overlay.style.cssText = 'z-index:10000;background:rgba(10,10,12,0.98);';
+    overlay.innerHTML = [
+      '<div class="page-hdr">',
+      '<button class="bk" onclick="this.parentElement.parentElement.remove();showMenu();">Back</button>',
+      '<div class="page-hdr-title">LAN Party Host</div>',
+      '</div>',
+      '<div style="flex:1;display:flex;align-items:center;justify-content:center;padding:2rem;">',
+      '<div style="background:var(--surf2);border:1px solid var(--brd2);padding:2rem;max-width:500px;width:100%;text-align:center;">',
+      '<div style="font-size:64px;margin-bottom:1rem;">🎮</div>',
+      '<div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:var(--gold);margin-bottom:1rem;">HOST A LAN PARTY</div>',
+      '<div style="background:#0a0a0c;border:1px solid var(--brd2);padding:1.5rem;margin-bottom:1rem;">',
+      '<div style="font-size:12px;color:var(--text3);margin-bottom:0.5rem;">YOUR SERVER IP (for friends to join):</div>',
+      '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:24px;color:#39ff14;letter-spacing:2px;">' + localIp + ':3000</div>',
+      '</div>',
+      '<div style="font-size:12px;color:var(--text3);line-height:1.6;margin-bottom:1.5rem;text-align:left;">',
+      '<strong>Instructions:</strong><br>',
+      '1. Make sure all players are on the same WiFi/LAN<br>',
+      '2. Tell friends to enter this IP when joining<br>',
+      '3. Server must be running (npm start)<br>',
+      '4. Check Windows Firewall allows port 3000',
+      '</div>',
+      '<button class="gbtn pri" onclick="Multiplayer.createLobby();overlay.remove();" style="width:100%;margin-bottom:0.5rem;">Create Lobby Now</button>',
+      '<button class="gbtn" onclick="LanParty.copyIp(\'' + localIp + '\');" style="width:100%;">📋 Copy IP Address</button>',
+      '</div>',
+      '</div>'
+    ].join('');
+    document.body.appendChild(overlay);
+  },
+  
+  copyIp: function(ip) {
+    navigator.clipboard.writeText(ip + ':3000').then(function() {
+      alert('IP copied to clipboard: ' + ip + ':3000');
+    });
+  },
+  
+  // Quick join with saved server
+  quickJoin: function() {
+    const lastServer = localStorage.getItem('rpa_last_server');
+    if (lastServer) {
+      if (confirm('Join last server: ' + lastServer + '?')) {
+        window.location.href = lastServer;
+        return;
+      }
+    }
+    const ip = prompt('Enter host IP (e.g., 192.168.1.5:3000):');
+    if (ip) {
+      localStorage.setItem('rpa_last_server', ip);
+      window.location.href = 'http://' + ip;
+    }
+  }
+};
+
+// Load recording setting on startup
+document.addEventListener('DOMContentLoaded', function() {
+  RecordingMode.loadSetting();
+});
