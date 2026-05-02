@@ -2,19 +2,228 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+<style>
+  html, body {
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    touch-action: none;
+  }
+</style>
 <title>Rally Pacenote Academy</title>
 <link rel="icon" href="data:,"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Anton&family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&display=swap"/>
 <link rel="stylesheet" href="styles.css"/>
 
+<!-- Profile Customization CSS -->
+<style>
+/* Glow Effects */
+.username-glow {
+  text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 20px currentColor;
+  animation: glow-pulse 2s ease-in-out infinite alternate;
+}
+
+.username-glow-strong {
+  text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor, 0 0 40px currentColor;
+  animation: glow-pulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes glow-pulse {
+  from { text-shadow: 0 0 5px currentColor, 0 0 10px currentColor; }
+  to { text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor; }
+}
+
+/* Fire Effect */
+.username-fire {
+  background: linear-gradient(180deg, #ff4400 0%, #ff8800 50%, #ffaa00 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 5px #ff4400) drop-shadow(0 0 10px #ff8800);
+  animation: fire-flicker 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes fire-flicker {
+  0% { filter: drop-shadow(0 0 5px #ff4400) drop-shadow(0 0 10px #ff8800); }
+  100% { filter: drop-shadow(0 0 8px #ff6600) drop-shadow(0 0 15px #ffaa00) drop-shadow(0 0 20px #ffcc00); }
+}
+
+/* Rainbow Effect */
+.username-rainbow {
+  background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3, #ff0000);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rainbow-shift 3s linear infinite;
+}
+
+@keyframes rainbow-shift {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+/* Neon Effect */
+.username-neon {
+  color: #fff;
+  text-shadow: 
+    0 0 5px #fff,
+    0 0 10px #fff,
+    0 0 20px var(--neon-color, #f5c518),
+    0 0 40px var(--neon-color, #f5c518),
+    0 0 80px var(--neon-color, #f5c518);
+  animation: neon-flicker 1.5s infinite alternate;
+}
+
+@keyframes neon-flicker {
+  0%, 18%, 22%, 25%, 53%, 57%, 100% {
+    text-shadow: 
+      0 0 5px #fff,
+      0 0 10px #fff,
+      0 0 20px var(--neon-color, #f5c518),
+      0 0 40px var(--neon-color, #f5c518);
+  }
+  20%, 24%, 55% {
+    text-shadow: none;
+  }
+}
+
+/* Glitch Effect */
+.username-glitch {
+  position: relative;
+  animation: glitch-skew 1s infinite linear alternate-reverse;
+}
+
+.username-glitch::before,
+.username-glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.username-glitch::before {
+  left: 2px;
+  text-shadow: -2px 0 #00fff9;
+  clip: rect(44px, 450px, 56px, 0);
+  animation: glitch-anim 5s infinite linear alternate-reverse;
+}
+
+.username-glitch::after {
+  left: -2px;
+  text-shadow: -2px 0 #ff00c1;
+  clip: rect(44px, 450px, 56px, 0);
+  animation: glitch-anim2 5s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-anim {
+  0% { clip: rect(12px, 9999px, 52px, 0); }
+  20% { clip: rect(65px, 9999px, 99px, 0); }
+  40% { clip: rect(29px, 9999px, 75px, 0); }
+  60% { clip: rect(82px, 9999px, 8px, 0); }
+  80% { clip: rect(44px, 9999px, 13px, 0); }
+  100% { clip: rect(58px, 9999px, 89px, 0); }
+}
+
+@keyframes glitch-anim2 {
+  0% { clip: rect(65px, 9999px, 99px, 0); }
+  20% { clip: rect(12px, 9999px, 52px, 0); }
+  40% { clip: rect(82px, 9999px, 8px, 0); }
+  60% { clip: rect(29px, 9999px, 75px, 0); }
+  80% { clip: rect(58px, 9999px, 89px, 0); }
+  100% { clip: rect(44px, 9999px, 13px, 0); }
+}
+
+@keyframes glitch-skew {
+  0% { transform: skew(0deg); }
+  10% { transform: skew(-2deg); }
+  20% { transform: skew(2deg); }
+  30% { transform: skew(0deg); }
+  100% { transform: skew(0deg); }
+}
+
+/* Pulse Effect */
+.username-pulse {
+  animation: pulse-scale 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-scale {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Shimmer Effect */
+.username-shimmer {
+  background: linear-gradient(90deg, var(--text-color, #f5c518) 0%, #fff 50%, var(--text-color, #f5c518) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 2s linear infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+/* Profile Picture Upload */
+.profile-upload-area {
+  border: 2px dashed var(--brd);
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.profile-upload-area:hover {
+  border-color: var(--gold);
+  background: rgba(245, 197, 24, 0.05);
+}
+
+.profile-upload-area.dragover {
+  border-color: var(--gold);
+  background: rgba(245, 197, 24, 0.1);
+}
+
+.profile-preview {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--gold);
+}
+
+.banner-preview {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid var(--brd2);
+}
+</style>
+
 </head>
 <body>
 
 <!-- MENU -->
 <div class="screen active" id="menu">
-<div class="menu-wrap">
+<!-- Lobby Info Bar -->
+<div id="lobby-info-bar" style="position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(10,10,12,0.95);border-bottom:1px solid var(--brd2);padding:8px 16px;display:none;align-items:center;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:12px;">
+  <div style="display:flex;align-items:center;gap:12px;">
+    <span style="color:var(--gold);font-weight:600;">🎮 LOBBY: <span id="lobby-display-id">—</span></span>
+    <span style="color:var(--text3);">|</span>
+    <span style="color:var(--text3);">Server: <span id="lobby-display-server">—</span></span>
+  </div>
+  <button onclick="Multiplayer.leaveLobby();hideLobbyInfo();" style="background:none;border:none;color:#e8291c;cursor:pointer;font-size:11px;font-family:inherit;">✕ Leave</button>
+</div>
+<div class="menu-wrap" id="menu-wrap">
   <div class="menu-left">
     <video class="menu-hero" autoplay muted loop playsinline>
       <source src="1000216126.mp4" type="video/mp4"/>
@@ -32,9 +241,13 @@
   <span>SELECT MODE</span>
   <button id="mode-toggle-btn" title="Toggle Game/Training mode">🎮 Game Mode</button>
 </div>
-<div style="padding:.6rem 1.5rem;background:#0a0a0c;border-bottom:1px solid #252530;font-size:12px;color:#5a5a70;font-family:'IBM Plex Mono',monospace;line-height:1.5">
-  Read the pacenotes. Keep the driver alive.<br>
-  <span style="color:#9090a8">One wrong call and you're in the trees.</span>
+<div style="padding:.6rem 1.5rem;background:#0a0a0c;border-bottom:1px solid #252530;font-size:12px;color:#5a5a70;font-family:'IBM Plex Mono',monospace;line-height:1.5;display:flex;justify-content:space-between;align-items:center;">
+  <div>Read the pacenotes. Keep the driver alive.<br>
+  <span style="color:#f5c518">Training Mode</span> = lessons & telemetry. <span style="color:#39ff14">Game Mode</span> = full rally simulation.</div>
+  <div style="display:flex;gap:8px;">
+    <button id="recording-toggle-btn" class="gbtn" onclick="RecordingMode.toggle()" style="font-size:11px;padding:4px 10px;">⚪ Recording OFF</button>
+    <button class="gbtn" onclick="LanParty.quickHost()" style="font-size:11px;padding:4px 10px;background:#39ff14;color:#0a0a0c;border-color:#39ff14;">🎮 Host LAN</button>
+  </div>
 </div>
     <div class="menu-nav">
       <button class="mnbtn pri" onclick="openCareer()">Career Mode <span>→</span></button>
@@ -409,6 +622,7 @@
 
 <!-- SPLIT TIME TICKER -->
 <div id="split-ticker" style="display:none;position:fixed;top:1.5rem;left:50%;transform:translateX(-50%);z-index:7000;pointer-events:none;padding:.4rem 1rem;background:#000;border:1px solid #f5c518;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#f5c518"></div>
+<script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
 <script src="rally.js"></script>
 
 
@@ -495,12 +709,36 @@
       </div>
     </div>
     <div style="background:var(--surf);border-left:1px solid var(--brd2);padding:1.25rem;overflow-y:auto">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:var(--text2);margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid var(--brd)">Notation Format</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:var(--text2);margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid var(--brd)">Templates</div>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:1rem">
+        <button class="gbtn" onclick="loadTemplate('finnish')">Finnish Forest</button>
+        <button class="gbtn" onclick="loadTemplate('monte')">Monte Carlo Tarmac</button>
+        <button class="gbtn" onclick="loadTemplate('safari')">Safari Rough</button>
+        <button class="gbtn" onclick="loadTemplate('snow')">Snow/Ice</button>
+      </div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:var(--text2);margin:.75rem 0 .4rem;padding-bottom:.4rem;border-bottom:1px solid var(--brd)">AI Generator</div>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:1rem">
+        <select id="ai-terrain" style="background:var(--surf2);border:1px solid var(--brd2);color:var(--text);padding:6px;font-size:12px;">
+          <option value="gravel">Gravel</option>
+          <option value="tarmac">Tarmac</option>
+          <option value="snow">Snow</option>
+          <option value="mixed">Mixed</option>
+        </select>
+        <select id="ai-difficulty" style="background:var(--surf2);border:1px solid var(--brd2);color:var(--text);padding:6px;font-size:12px;">
+          <option value="easy">Easy</option>
+          <option value="medium" selected>Medium</option>
+          <option value="hard">Hard</option>
+          <option value="expert">Expert</option>
+        </select>
+        <input id="ai-note-count" type="number" value="20" min="5" max="100" style="background:var(--surf2);border:1px solid var(--brd2);color:var(--text);padding:6px;font-size:12px;" placeholder="Note count"/>
+        <button class="gbtn pri" onclick="generatePacenotes()" style="font-size:12px;">Generate Stage</button>
+      </div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:var(--text2);margin:.75rem 0 .4rem;padding-bottom:.4rem;border-bottom:1px solid var(--brd)">Notation Format</div>
       <div id="editor-format-btns" style="display:flex;flex-direction:column;gap:6px;margin-bottom:1rem"></div>
       <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:var(--text2);margin:.75rem 0 .4rem;padding-bottom:.4rem;border-bottom:1px solid var(--brd)">Co-driver Style</div>
       <div id="editor-audio-btns" style="display:flex;flex-direction:column;gap:6px;margin-bottom:1rem"></div>
       <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:var(--text2);margin:.75rem 0 .4rem;padding-bottom:.4rem;border-bottom:1px solid var(--brd)">Import Stage</div>
-      <textarea id="editor-import-json" placeholder="Paste exported stage JSON here..." style="width:100%;height:80px;background:var(--surf2);border:1px solid var(--brd2);color:var(--text2);padding:8px;font-size:11px;font-family:'IBM Plex Mono',monospace;resize:vertical"></textarea>
+      <textarea id="editor-import-json" placeholder="Paste exported stage JSON here..." style="width:100%;height:60px;background:var(--surf2);border:1px solid var(--brd2);color:var(--text2);padding:8px;font-size:11px;font-family:'IBM Plex Mono',monospace;resize:vertical"></textarea>
       <button class="gbtn" onclick="editorImport()" style="width:100%;margin-top:6px">Import</button>
     </div>
   </div>
