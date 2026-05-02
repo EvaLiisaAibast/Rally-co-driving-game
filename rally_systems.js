@@ -690,17 +690,47 @@ const CoDriverAudio = {
     calm: {
       label: 'Calm & Precise',
       rate: 1.1, pitch: 1.0,
-      preDelay: 200, description: 'Clear, measured calls. Like Nicky Grist.'
+      preDelay: 200, description: 'Clear, measured calls. Like Nicky Grist.',
+      // Pace note generation modifiers
+      noteIntensity: 0.7,           // Less aggressive notes
+      cautionFrequency: 1.0,        // Standard caution usage
+      distanceVerbosity: 'high',    // Detailed distance calls
+      linkWord: 'into',             // Gentle linking
+      // Story/voice character
+      voiceCharacter: 'measured',
+      storyTone: 'professional',      // Professional, analytical post-stage comments
+      commPhrases: ['Good pace', 'Measured approach', 'Clean execution', 'Precise notes'],
+      narratorStyle: 'analytical'   // Analytical stage descriptions
     },
     aggressive: {
       label: 'Aggressive',
       rate: 1.45, pitch: 1.15,
-      preDelay: 100, description: 'Fast, sharp calls. High pressure.'
+      preDelay: 100, description: 'Fast, sharp calls. High pressure.',
+      // Pace note generation modifiers
+      noteIntensity: 1.3,           // More aggressive notes, higher stakes
+      cautionFrequency: 1.3,        // More cautions (aggressive driving needs warnings)
+      distanceVerbosity: 'low',     // Minimal distance calls - just corners
+      linkWord: 'INTO',             // Urgent linking
+      // Story/voice character
+      voiceCharacter: 'intense',
+      storyTone: 'aggressive',      // Intense, attacking post-stage comments
+      commPhrases: ['Push harder', 'Attack the stage', 'Maximum commitment', 'Flat out everywhere'],
+      narratorStyle: 'dramatic'     // Dramatic, high-tension descriptions
     },
     mcrae: {
       label: 'McRae Pace',
       rate: 1.6, pitch: 1.05,
-      preDelay: 50, description: 'Maximum urgency. For the brave.'
+      preDelay: 50, description: 'Maximum urgency. For the brave.',
+      // Pace note generation modifiers
+      noteIntensity: 1.5,           // Extreme intensity
+      cautionFrequency: 0.8,      // Fewer cautions - trust the driver
+      distanceVerbosity: 'minimal', // Very sparse calls
+      linkWord: '>>',               // Very urgent linking
+      // Story/voice character
+      voiceCharacter: 'fearless',
+      storyTone: 'bold',            // Fearless, legendary post-stage comments
+      commPhrases: ['Flat to the floor', 'Give it everything', 'No fear', 'Maximum attack'],
+      narratorStyle: 'legendary'    // Legendary, heroic descriptions
     }
   },
 
@@ -778,6 +808,55 @@ const CoDriverAudio = {
       utt.volume = 0.85;
       window.speechSynthesis.speak(utt);
     }, delay);
+  },
+
+  // Get style-specific commentary phrase
+  getCommPhrase() {
+    const style = this.STYLES[this.style];
+    const phrases = style.commPhrases || ['Good pace'];
+    return phrases[Math.floor(Math.random() * phrases.length)];
+  },
+
+  // Get style-specific link word for pace notes
+  getLinkWord() {
+    const style = this.STYLES[this.style];
+    return style.linkWord || 'into';
+  },
+
+  // Get story tone for post-stage reports
+  getStoryTone() {
+    const style = this.STYLES[this.style];
+    return style.storyTone || 'professional';
+  },
+
+  // Get narrator style for stage descriptions
+  getNarratorStyle() {
+    const style = this.STYLES[this.style];
+    return style.narratorStyle || 'analytical';
+  },
+
+  // Get note intensity modifier (for generating notes)
+  getNoteIntensity() {
+    const style = this.STYLES[this.style];
+    return style.noteIntensity || 1.0;
+  },
+
+  // Get caution frequency modifier
+  getCautionFrequency() {
+    const style = this.STYLES[this.style];
+    return style.cautionFrequency || 1.0;
+  },
+
+  // Get distance verbosity level
+  getDistanceVerbosity() {
+    const style = this.STYLES[this.style];
+    return style.distanceVerbosity || 'high';
+  },
+
+  // Get voice character type
+  getVoiceCharacter() {
+    const style = this.STYLES[this.style];
+    return style.voiceCharacter || 'measured';
   }
 };
 
@@ -1913,6 +1992,20 @@ function renderAccessibilitySettings() {
           ${MODE.isPro ? '🧠 Training Mode — Click to switch to Game' : '🎮 Game Mode — Click to switch to Training'}
         </button>
       </div>
+
+      <div style="background:var(--surf);border:1px solid var(--brd2);padding:.85rem 1rem">
+        <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:.25rem">💬 Send Feedback</div>
+        <div style="font-size:12px;color:var(--text2);margin-bottom:.5rem">
+          Have a suggestion, bug report, or just want to say hi? Send a message directly to the developer.
+        </div>
+        <button onclick="showFeedbackForm()" style="
+          padding:6px 14px;border:1px solid var(--gold);
+          background:#1a1400;
+          color:var(--gold);
+          font-family:'IBM Plex Mono',monospace;font-size:12px;cursor:pointer;transition:all .15s">
+          Send Message
+        </button>
+      </div>
     </div>
   `;
 }
@@ -1936,3 +2029,91 @@ MODE.toggle = function() {
 
 // Run on init
 setTimeout(updateMenuForMode, 200);
+
+// ── FEEDBACK SYSTEM ──
+function showFeedbackForm() {
+  const overlay = document.createElement('div');
+  overlay.id = 'feedback-overlay';
+  overlay.className = 'screen active';
+  overlay.style.cssText = 'z-index:10000;';
+  
+  overlay.innerHTML = `
+    <div class="page-hdr">
+      <button class="bk" onclick="document.getElementById('feedback-overlay').remove();">← Back</button>
+      <div class="page-hdr-title">Send Feedback</div>
+    </div>
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:2rem;">
+      <div style="background:var(--surf2);border:1px solid var(--brd2);padding:2rem;max-width:500px;width:100%;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gold);margin-bottom:1rem;text-align:center;">💬 Send Feedback</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:1.5rem;text-align:center;">
+          Your feedback helps improve the game! Send suggestions, bug reports, or just say hello.
+        </div>
+        
+        <div style="margin-bottom:1rem;">
+          <div style="font-size:12px;color:var(--text3);margin-bottom:0.5rem;">Your Name (optional):</div>
+          <input type="text" id="feedback-name" placeholder="Your name or username" style="width:100%;padding:0.75rem;background:var(--surf);border:1px solid var(--brd);color:var(--text);">
+        </div>
+        
+        <div style="margin-bottom:1rem;">
+          <div style="font-size:12px;color:var(--text3);margin-bottom:0.5rem;">Your Email (optional):</div>
+          <input type="email" id="feedback-email" placeholder="your@email.com" style="width:100%;padding:0.75rem;background:var(--surf);border:1px solid var(--brd);color:var(--text);">
+        </div>
+        
+        <div style="margin-bottom:1rem;">
+          <div style="font-size:12px;color:var(--text3);margin-bottom:0.5rem;">Message *</div>
+          <textarea id="feedback-message" placeholder="Write your feedback here..." style="width:100%;padding:0.75rem;background:var(--surf);border:1px solid var(--brd);color:var(--text);min-height:120px;resize:vertical;font-family:inherit;"></textarea>
+        </div>
+        
+        <div id="feedback-error" style="color:#e8291c;font-size:12px;margin-bottom:1rem;display:none;"></div>
+        <div id="feedback-success" style="color:#39ff14;font-size:12px;margin-bottom:1rem;display:none;"></div>
+        
+        <button class="gbtn pri" onclick="sendFeedback()" style="width:100%;margin-bottom:0.5rem;">Send Feedback</button>
+        <button class="gbtn" onclick="document.getElementById('feedback-overlay').remove();" style="width:100%;">Cancel</button>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(overlay);
+}
+
+async function sendFeedback() {
+  const name = document.getElementById('feedback-name').value.trim() || 'Anonymous';
+  const email = document.getElementById('feedback-email').value.trim() || 'no-reply@rallyacademy.game';
+  const message = document.getElementById('feedback-message').value.trim();
+  const errorDiv = document.getElementById('feedback-error');
+  const successDiv = document.getElementById('feedback-success');
+  
+  errorDiv.style.display = 'none';
+  successDiv.style.display = 'none';
+  
+  if (!message || message.length < 10) {
+    errorDiv.textContent = 'Please write a message (at least 10 characters)';
+    errorDiv.style.display = 'block';
+    return;
+  }
+  
+  try {
+    const response = await fetch('/api/feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, message })
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      successDiv.textContent = '✓ Feedback sent! Thank you for your input.';
+      successDiv.style.display = 'block';
+      document.getElementById('feedback-message').value = '';
+      setTimeout(() => {
+        document.getElementById('feedback-overlay').remove();
+      }, 2000);
+    } else {
+      errorDiv.textContent = result.error || 'Failed to send feedback. Please try again.';
+      errorDiv.style.display = 'block';
+    }
+  } catch (e) {
+    errorDiv.textContent = 'Network error. Please check your connection.';
+    errorDiv.style.display = 'block';
+  }
+}
