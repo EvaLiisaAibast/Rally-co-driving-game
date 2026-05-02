@@ -8595,7 +8595,7 @@ const LanParty = {
       if (evt.candidate) {
         const ip = evt.candidate.candidate.split(' ')[4];
         if (ip && ip !== '127.0.0.1' && !ip.startsWith('0.')) {
-          LanParty.showHostInfo(ip);
+          LanParty.showHostInfoAndCreateLobby(ip);
           rtc.close();
         }
       }
@@ -8603,10 +8603,48 @@ const LanParty = {
     
     // Fallback after 1 second
     setTimeout(function() {
-      LanParty.showHostInfo(window.location.hostname);
+      LanParty.showHostInfoAndCreateLobby(window.location.hostname);
     }, 1000);
   },
   
+  showHostInfoAndCreateLobby: function(localIp) {
+    // Show host info and automatically create lobby
+    const overlay = document.createElement('div');
+    overlay.className = 'screen active';
+    overlay.style.cssText = 'z-index:10000;background:rgba(10,10,12,0.98);';
+    overlay.innerHTML = [
+      '<div class="page-hdr">',
+      '<button class="bk" onclick="this.parentElement.parentElement.remove();showMenu();">Back</button>',
+      '<div class="page-hdr-title">LAN Party Host</div>',
+      '</div>',
+      '<div style="flex:1;display:flex;align-items:center;justify-content:center;padding:2rem;">',
+      '<div style="background:var(--surf2);border:1px solid var(--brd2);padding:2rem;max-width:500px;width:100%;text-align:center;">',
+      '<div style="font-size:64px;margin-bottom:1rem;">🎮</div>',
+      '<div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:var(--gold);margin-bottom:1rem;">HOST A LAN PARTY</div>',
+      '<div style="background:#0a0a0c;border:1px solid var(--brd2);padding:1.5rem;margin-bottom:1rem;">',
+      '<div style="font-size:12px;color:var(--text3);margin-bottom:0.5rem;">YOUR SERVER IP (for friends to join):</div>',
+      '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:24px;color:#39ff14;letter-spacing:2px;">' + localIp + ':3000</div>',
+      '</div>',
+      '<div style="font-size:12px;color:var(--text3);line-height:1.6;margin-bottom:1.5rem;text-align:left;">',
+      '<strong>Instructions:</strong><br>',
+      '1. Make sure all players are on the same WiFi/LAN<br>',
+      '2. Tell friends to enter this IP when joining<br>',
+      '3. Server must be running (npm start)<br>',
+      '4. Check Windows Firewall allows port 3000',
+      '</div>',
+      '<div style="color:var(--green);font-size:14px;margin-bottom:1rem;">✓ Lobby created automatically!</div>',
+      '<button class="gbtn" onclick="LanParty.copyIp(\'' + localIp + '\');" style="width:100%;">📋 Copy IP Address</button>',
+      '</div>',
+      '</div>'
+    ].join('');
+    document.body.appendChild(overlay);
+    
+    // Automatically create the lobby
+    setTimeout(function() {
+      Multiplayer.createLobby();
+    }, 500);
+  },
+
   showHostInfo: function(localIp) {
     const overlay = document.createElement('div');
     overlay.className = 'screen active';
