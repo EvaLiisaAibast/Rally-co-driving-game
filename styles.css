@@ -704,3 +704,33 @@ body.pro-mode #g-stage::after {
   letter-spacing: .15em;
   vertical-align: middle;
 }
+
+/* ── RESPONSIVE DESIGN FOR SMALLER SCREENS ── */
+@media (max-height: 768px) {
+  .menu-button {
+    padding: 0.6rem 1rem;
+    font-size: 14px;
+  }
+  
+  .mnbtn {
+    padding: 0.8rem 1.2rem;
+    font-size: 18px;
+  }
+  
+  .menu-wrap {
+    min-height: 100vh;
+    overflow-y: auto;
+  }
+  
+  .screen {
+    overflow-y: auto;
+  }
+  
+  .menu-left {
+    padding: 1.5rem;
+  }
+  
+  .menu-right {
+    min-height: 100vh;
+  }
+}
