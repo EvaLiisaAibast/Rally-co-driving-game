@@ -9,8 +9,8 @@ const ERAS={
     vocab:{L:'left',R:'right','!':'caution','!!':'max caution',FLAT:'flat out',CREST:'over crest',
       JUNCTION:'junction',DONTCUT:"don't cut",NARROW:'narrows',JUMP:'jump',LONG:'long',
       INTO:'into',TIGHT:'tightens',STOP:'full stop',HAIRPIN:'hairpin',ICE:'ice',BUMP:'bumps',SQUARE:'square corner'},
-    cars:[{n:'Audi Sport Quattro',d:'720hp · turbo · 4WD',img:'assets/audi-sport_quattro.png'},{n:'Lancia 037',d:'320hp · RWD',img:'assets/lancia_037.png'},{n:'Peugeot 205 T16',d:'480hp · 4WD',img:'assets/pergeot_205_T16.png'},
-          {n:'Ford RS200',d:'450hp · 4WD',img:'assets/ford_rs2000.png'},{n:'MG Metro 6R4',d:'380hp · V6',img:'assets/MG_metro_6R4.png'},{n:'Renault 5 Maxi',d:'350hp · FWD',img:'assets/renault_5_maxi.png'}],
+    cars:[{n:'Audi Sport Quattro',d:'720hp · turbo · 4WD',img:'audi-sport_quattro.png'},{n:'Lancia 037',d:'320hp · RWD',img:'lancia_037.png'},{n:'Peugeot 205 T16',d:'480hp · 4WD',img:'pergeot_205_T16.png'},
+          {n:'Ford RS200',d:'450hp · 4WD',img:'ford_rs2000.png'},{n:'MG Metro 6R4',d:'380hp · V6',img:'MG_metro_6R4.png'},{n:'Renault 5 Maxi',d:'350hp · FWD',img:'renault_5_maxi.png'}],
     stages:[
       {name:'SS7 — Manta Road',country:'Portugal',surf:'Rough gravel',weather:'Overcast · 14°C',km:'22.4',
        cond:'Very rough. Rocks on inside of corners. Crowd three-deep on hairpins. One wrong line ends your stage.',
@@ -168,8 +168,8 @@ const ERAS={
     vocab:{L:'left',R:'right','!':'caution','!!':'max caution',FLAT:'flat out',CREST:'over crest',
       JUMP:'jump',LONG:'long',INTO:'into',TIGHTENS:'tightens',OPENS:'opens',DONTCUT:"don't cut",
       BRIDGE:'bridge',GRAVEL:'gravel patch',SQUARE:'square',MAYBE:'maybe',MUD:'mud'},
-    cars:[{n:'Subaru Impreza WRC97',d:'300hp · STi · 4WD',img:'assets/subaru_impreza_WRC97.png'},{n:'Mitsubishi Lancer Evo IV',d:'280hp · Ralliart',img:'assets/Mitsubishi_Lancer_Evo_IV.png'},{n:'Toyota Corolla WRC',d:'300hp · Castrol',img:'assets/toyota_corolla_WRC.png'},
-          {n:'Ford Escort WRC',d:'300hp · M-Sport',img:'assets/ford_rs2000.png'},{n:'Seat Cordoba WRC',d:'280hp · Kit car',img:'assets/seat_coroba_WRC.png'},{n:'Skoda Octavia WRC',d:'270hp · Works',img:'assets/skoda_octavia_wrc.png'}],
+    cars:[{n:'Subaru Impreza WRC97',d:'300hp · STi · 4WD',img:'subaru_impreza_WRC97.png'},{n:'Mitsubishi Lancer Evo IV',d:'280hp · Ralliart',img:'Mitsubishi_Lancer_Evo_IV.png'},{n:'Toyota Corolla WRC',d:'300hp · Castrol',img:'toyota_corolla_WRC.png'},
+          {n:'Ford Escort WRC',d:'300hp · M-Sport',img:'ford_escort_WRC.png'},{n:'Seat Cordoba WRC',d:'280hp · Kit car',img:'seat_coroba_WRC.png'},{n:'Skoda Octavia WRC',d:'270hp · Works',img:'skoda_octavia_wrc.png'}],
     stages:[
       {name:'SS12 — Ouninpohja',country:'Finland',surf:'Fast gravel',weather:'Sunny · 22°C · dusty',km:'33.6',
        cond:'Fastest stage in the championship. Crests hide corners. Jumps reach 40m. Huge crowds everywhere. Notes must be perfect.',
@@ -278,8 +278,8 @@ const ERAS={
     vocab:{L:'left',R:'right','!':'caution','!!':'max caution',FLAT:'flat out',CREST:'over crest',
       LONG:'long',INTO:'into',TIGHTENS:'tightens',OPENS:'opens',DONTCUT:"don't cut",
       JUNCTION:'junction',ICE:'ice',REGEN:'regen zone',SQUARE:'square',HYBRID:'hybrid boost',BUMPS:'compressions'},
-    cars:[{n:'Toyota GR Yaris Rally1',d:'500hp · Hybrid',img:'assets/toyota_GR_Yaris_Rally1.png'},{n:'Hyundai i20 N Rally1',d:'500hp · Hybrid',img:'assets/hyundai_I20N_Rally_1.png'},{n:'Ford Puma Rally1',d:'500hp · Hybrid',img:'assets/ford_puma_rally_1.png'},
-          {n:'Citroën C3 Rally2',d:'280hp · WRC2',img:'assets/citröen_c3_rally2.png'},{n:'Skoda Fabia RS Rally2',d:'280hp · WRC2',img:'assets/skoda_fabia_R5_rally_2.png'},{n:'VW Polo GTI R5',d:'270hp · R5',img:'assets/ww_polo_gti_r5.png'}],
+    cars:[{n:'Toyota GR Yaris Rally1',d:'500hp · Hybrid',img:'toyota_GR_Yaris_Rally1.png'},{n:'Hyundai i20 N Rally1',d:'500hp · Hybrid',img:'hyundai_I20N_Rally_1.png'},{n:'Ford Puma Rally1',d:'500hp · Hybrid',img:'ford_puma_rally_1.png'},
+          {n:'Citroën C3 Rally2',d:'280hp · WRC2',img:'citröen_c3_rally2.png'},{n:'Skoda Fabia RS Rally2',d:'280hp · WRC2',img:'skoda_fabia_R5_rally_2.png'},{n:'VW Polo GTI R5',d:'270hp · R5',img:'ww_polo_gti_r5.png'}],
     stages:[
       {name:'SS14 — Col de Turini',country:'Monte-Carlo',surf:'Tarmac / ice',weather:'Night · 1°C · ice',km:'18.7',
        cond:'Night stage. Spectator floodlights on corners. Temperature dropped since last car. Ice patches not on the map.',
