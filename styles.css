@@ -10,7 +10,7 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--tex
 button{cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
 input{font-family:'IBM Plex Mono',monospace}
 img{display:block;max-width:100%}
-.screen{display:none;min-height:100vh;flex-direction:column;overflow-y:auto}
+.screen{display:none;position:fixed;inset:0;flex-direction:column;overflow-y:auto;background:var(--bg)}
 .screen.active{display:flex}
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-track{background:var(--surf)}
@@ -49,9 +49,9 @@ img{display:block;max-width:100%}
   color:var(--mp-red);margin-top:.6rem;text-transform:uppercase;
 }
 .menu-quote{font-size:13px;color:var(--text2);margin-top:.6rem;font-style:italic}
-.menu-right{background:#0e0e12;border-left:2px solid var(--brd2);display:flex;flex-direction:column;overflow-y:auto;max-height:100vh}
+.menu-right{background:#0e0e12;border-left:2px solid var(--brd2);display:flex;flex-direction:column;position:relative;z-index:5}
 .menu-right-top{background:var(--mp-red);padding:.9rem 1.5rem;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:4px;color:#fff}
-.menu-nav{flex:1;padding:1.5rem;display:flex;flex-direction:column;gap:10px}
+.menu-nav{flex:1;padding:1.5rem;display:flex;flex-direction:column;gap:10px;overflow-y:auto;min-height:0}
 .mnbtn{
   width:100%;padding:1.1rem 1.5rem;border:1px solid var(--brd2);background:var(--surf);
   color:var(--text);font-family:'Bebas Neue','Anton',sans-serif;font-size:22px;letter-spacing:3px;
