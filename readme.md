@@ -4,6 +4,83 @@
 
 A high-intensity rally co-driver simulator where you read pacenotes under pressure, translate them instantly, and keep the car out of the trees.
 
+Now with **multiplayer support** — host LAN parties or play online with friends.
+
+---
+
+## SERVER INSTALLATION
+
+### Requirements
+
+* Node.js 18+ (https://nodejs.org)
+* npm (comes with Node.js)
+* Redis (optional, for multi-server support)
+
+### Quick Setup
+
+1. **Clone or download the game files**
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Start the server**
+   ```bash
+   npm start
+   ```
+
+4. **Open your browser**
+   ```
+   http://localhost:3000
+   ```
+
+### LAN Party Setup
+
+1. Find your local IP address:
+   * Windows: Run `ipconfig` in Command Prompt
+   * Mac/Linux: Run `ifconfig` or `ip addr`
+
+2. Start the server on the host machine
+
+3. Other players join using the host's IP:
+   ```
+   http://192.168.x.x:3000
+   ```
+
+   Or click the **"Host LAN"** button in-game to automatically create a lobby and show connection info.
+
+### Environment Variables
+
+Create a `.env` file in the root directory (optional):
+
+```
+REDIS_URL=redis://localhost:6379
+SMTP_KEY=your_secret_key_for_email_encryption
+```
+
+### Account System
+
+The server includes a full account system with:
+* User registration and login
+* Password hashing with bcrypt
+* Email verification support
+* Leaderboards and stats tracking
+* Save file system
+
+Accounts are stored in `data/accounts.json`.
+
+### Troubleshooting
+
+**Port 3000 is already in use**
+Change the port in `server.js` or kill the process using it.
+
+**Windows Firewall blocking connections**
+Add an exception for Node.js or port 3000 in Windows Firewall settings.
+
+**Redis connection failed**
+The server will run in single-server mode without Redis. Install Redis only if you need multi-server support.
+
 ---
 
 ## ABOUT THIS GAME
