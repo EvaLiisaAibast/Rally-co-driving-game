@@ -1,4 +1,3 @@
-// ═══════════════ DATA ═══════════════
 const DIFFS=[{n:'Easy',s:18},{n:'Normal',s:14},{n:'Hard',s:11},{n:'Insane',s:9},{n:'Chaos',s:7}];
 const RIVALS=[{name:'S. Laurent',team:'Citroën'},{name:'C. MacRae',team:'Subaru'},{name:'M. Grönholm',team:'Peugeot'},{name:'K. Rovanperä',team:'Toyota'}];
 
@@ -17,7 +16,6 @@ const ERAS={
        cond:'Very rough. Rocks on inside of corners. Crowd three-deep on hairpins. One wrong line ends your stage.',
        segments:['Opening','Technical','Pressure','Sprint'],
        notes:[
-        // OPENING SEGMENT (Notes 1-8)
         {raw:'R3 EASY',ans:'right three easy',narr:'Gentle introduction to the stage. Find your rhythm early.',comm:'The opening notes set the pace for the entire stage.'},
         {raw:'L4 150',ans:'left four 150 metres',narr:'Medium left with plenty of time to set up.',comm:'Early confidence builder before the technical section.'},
         {raw:'R2 INTO L3',ans:'right two into left three',narr:'Linked corners - the first test of your flow.',comm:'Into calls require smooth transitions.'},
@@ -26,8 +24,6 @@ const ERAS={
         {raw:'R4 200',ans:'right four 200 metres',narr:'Fast right with a long straight after.',comm:'200 metres is about three seconds at rally pace.'},
         {raw:'L2! OPENS',ans:'left two caution opens',narr:'Tight left that opens to a straight.',comm:'Caution calls demand immediate attention.'},
         {raw:'R3 CREST',ans:'right three over crest',narr:'Blind crest - the corner hides until commitment.',comm:'Crest notes are pure trust in your co-driver.'},
-        
-        // TECHNICAL SEGMENT (Notes 9-16)
         {raw:'R5 DONTCUT',ans:"right five don't cut",narr:'A deceptive medium-speed right. The inside drops into the valley below.',comm:'Every year this corner claims someone. The crowd knows exactly why.'},
         {raw:'L3 !2 INTO R4',ans:'left three caution hairpin into right four',narr:'Three calls in under two seconds. The caution between them is the one that matters.',comm:'You\'ll hear the engine note change twice before the next call arrives.'},
         {raw:'SQUARE R NARROW',ans:'square right narrows',narr:'Nearly hairpin right with stone walls closing in.',comm:'Square calls mean near-90-degree corners.'},
@@ -36,8 +32,6 @@ const ERAS={
         {raw:'L3 DONTCUT 100',ans:"left three don't cut 100 metres",narr:'Inside line drops away. Stay wide and survive.',comm:'Don\'t cut notes are there for a reason.'},
         {raw:'R4 BUMP L3',ans:'right four bumps into left three',narr:'Compression unsettles the car before the left.',comm:'Bumps require car control and note precision.'},
         {raw:'CREST R6 NARROW',ans:'over crest right six narrows',narr:'The crest makes the R6 invisible until you\'re already in it. Stone walls close in.',comm:'Flat over the top if you trust the notes. That\'s the only way through here.'},
-        
-        // PRESSURE SEGMENT (Notes 17-24)
         {raw:'L2! JUNCTION STOP',ans:'left two caution junction stop',narr:'Full braking. Another road crosses here, blind at speed.',comm:'STOP means stop. Not a scrub. The notes are literal here.'},
         {raw:'R3 ICE 50',ans:'right three ice 50 metres',narr:'Ice patch discovered this morning. Extreme caution.',comm:'Ice notes appear when conditions change overnight.'},
         {raw:'L4! DONTCUT',ans:"left four caution don't cut",narr:'Fast left with a dangerous inside line.',comm:'Caution plus don\'t cut equals maximum concentration.'},
@@ -46,8 +40,6 @@ const ERAS={
         {raw:'R3 MUD OPENS',ans:'right three mud opens',narr:'Deep ruts on entry, then opens to clean exit.',comm:'Mud notes change the line completely.'},
         {raw:'L4 BUMP BUMP',ans:'left four bumps bumps',narr:'Double compression - car never settles.',comm:'Multiple bumps test suspension and rhythm.'},
         {raw:'R2 INTO SQUARE L',ans:'right two into square left',narr:'Quick right into immediate hairpin left.',comm:'Into square calls require instant direction change.'},
-        
-        // SPRINT SEGMENT (Notes 25-32)
         {raw:'FLAT R CREST L5 LONG',ans:'flat right over crest long left five',narr:'The gift section. Back-to-back flat calls if you believe the recce.',comm:'This is what Group B felt like. This is why they came.'},
         {raw:'BUMP R3 BUMP L3',ans:'bumps right three bumps left three',narr:'Double compression — the car goes light both times. Steer on the way down.',comm:'These compressions can bottom the car if the setup is wrong.'},
         {raw:'L4 ICE 100 R3',ans:'left four ice 100 metres right three',narr:'Ice on entry to the left, then 100 metres to set up the right three.',comm:'At night this stage becomes a completely different animal.'},
@@ -61,7 +53,6 @@ const ERAS={
        cond:'Night stage. Spectator torches on corners. Temperature dropped since afternoon. Ice patches not mapped from earlier run.',
        segments:['Opening','Technical','Pressure','Sprint'],
        notes:[
-        // OPENING SEGMENT (Notes 1-8)
         {raw:'L3 EASY',ans:'left three easy',narr:'Gentle start to the night stage. Find your rhythm in the dark.',comm:'Night driving demands absolute trust in your co-driver.'},
         {raw:'R4 150',ans:'right four 150 metres',narr:'Medium right with torches lighting the apex.',comm:'Spectator torches help, but the headlights do the work.'},
         {raw:'L2 INTO R3',ans:'left two into right three',narr:'Linked corners in the forest section.',comm:'Into calls at night require extra precision.'},
@@ -70,8 +61,6 @@ const ERAS={
         {raw:'R4 200',ans:'right four 200 metres',narr:'Fast right with a long straight after.',comm:'200 metres of darkness before the next call.'},
         {raw:'L2! OPENS',ans:'left two caution opens',narr:'Tight left that opens to a straight.',comm:'Caution calls at night demand immediate attention.'},
         {raw:'R3 CREST',ans:'right three over crest',narr:'Blind crest - the corner hides until commitment.',comm:'Crest notes at night are pure faith.'},
-        
-        // TECHNICAL SEGMENT (Notes 9-16)
         {raw:'L3 ICE DONTCUT',ans:"left three ice don't cut",narr:'Night Turini. Your headlights find a left three — the inside is glazed.',comm:'Several crews hit ice there. Not everyone brought the car back.'},
         {raw:'R2!! INTO L4',ans:'right two maximum caution into left four',narr:'Double exclamation. A cliff on the wrong line feeds directly into a hairpin.',comm:'Double bang means they found something terrifying in recce. Trust the note.'},
         {raw:'SQUARE R NARROW',ans:'square right narrows',narr:'Nearly hairpin right with stone walls closing in.',comm:'Square calls in the village require precision.'},
@@ -80,8 +69,6 @@ const ERAS={
         {raw:'L3 DONTCUT 100',ans:"left three don't cut 100 metres",narr:'Inside line drops away. Stay wide and survive.',comm:'Don\'t cut notes at night are survival instructions.'},
         {raw:'R4 BUMP L3',ans:'right four bumps into left three',narr:'Compression unsettles the car before the left.',comm:'Bumps at night can unsettle even the best drivers.'},
         {raw:'CREST L5 LONG 200',ans:'over crest long left five 200 metres',narr:'The mountain crest opens to total darkness. Two hundred metres to breathe.',comm:'At this speed, 200 metres is about three seconds. That\'s all the rest you get.'},
-        
-        // PRESSURE SEGMENT (Notes 17-24)
         {raw:'L4 OVER CREST TIGHT R3',ans:'left four over crest tightens into right three',narr:'Crest hides the tightener before feeding the right three. You can\'t see it early.',comm:'You cannot see the tighten from the entry. That\'s the whole point of recce.'},
         {raw:'R3 ICE 50',ans:'right three ice 50 metres',narr:'Ice patch discovered this morning. Extreme caution.',comm:'Ice notes appear when conditions change overnight.'},
         {raw:'L4! DONTCUT',ans:"left four caution don't cut",narr:'Fast left with a dangerous inside line.',comm:'Caution plus don\'t cut equals maximum concentration.'},
@@ -90,8 +77,6 @@ const ERAS={
         {raw:'R3 MUD OPENS',ans:'right three mud opens',narr:'Deep ruts on entry, then opens to clean exit.',comm:'Mud notes change the line completely.'},
         {raw:'L4 BUMP BUMP',ans:'left four bumps bumps',narr:'Double compression - car never settles.',comm:'Multiple bumps test suspension and rhythm.'},
         {raw:'JUNCTION R1!! STOP 50',ans:'junction right one maximum caution stop 50 metres',narr:'Into the village. Double caution and stop. Old stone walls all around.',comm:'Right one into the village. Every generation of co-driver has this in their nightmares.'},
-        
-        // SPRINT SEGMENT (Notes 25-32)
         {raw:'BUMP L2! 50',ans:'bumps left two caution 50 metres',narr:'Compression into a tight caution left. Very little run-off beyond.',comm:'Nasty corner. Very little time to react to the bump at this pace.'},
         {raw:'SQUARE R ICE INTO L4',ans:'square right ice into left four',narr:'U-turn on ice feeding directly into a medium left. The worst combination this stage has.',comm:'Two cars went off here in practice. The ice doesn\'t show in the headlights.'},
         {raw:'R6 FLAT L4',ans:'right six flat left four',narr:'Maximum attack section. Two flat calls back-to-back.',comm:'Flat calls in succession test your nerve at night.'},
@@ -104,7 +89,6 @@ const ERAS={
        cond:'The roughest rally on Earth. Rocks, sand, wildlife crossings. Only the strongest survive. Cars run in high ambient heat.',
        segments:['Opening','Savannah','River','Feshfesh'],
        notes:[
-        // OPENING SEGMENT (Notes 1-8)
         {raw:'R4 EASY',ans:'right four easy',narr:'The African sun beats down. First notes on the legendary Safari.',comm:'Safari stages are about survival first, speed second.'},
         {raw:'L5 300',ans:'left five 300 metres',narr:'Long straight through the acacia trees.',comm:'300 metres is an eternity on Safari. Watch for wildlife.'},
         {raw:'R3 INTO L4',ans:'right three into left four',narr:'Linked corners in the savannah.',comm:'The dust here can blind you for seconds.'},
@@ -113,8 +97,6 @@ const ERAS={
         {raw:'R4 200',ans:'right four 200 metres',narr:'Fast right with a long straight after.',comm:'200 metres between calls - unusual spacing for Safari.'},
         {raw:'L3! OPENS',ans:'left three caution opens',narr:'Tight left that opens to a straight.',comm:'Caution calls mean hidden dangers - rocks, holes, animals.'},
         {raw:'R3 CREST',ans:'right three over crest',narr:'Blind crest - the corner hides until commitment.',comm:'Crests hide everything on Safari. Absolute trust required.'},
-        
-        // SAVANNAH SEGMENT (Notes 9-16)
         {raw:'R4 DONTCUT',ans:"right four don't cut",narr:'Inside line has deep ruts from previous cars.',comm:'Ruts can grab the wheel on Safari. Stay out of them.'},
         {raw:'L3 !2 INTO R4',ans:'left three caution hairpin into right four',narr:'Three calls in under two seconds. The caution is critical.',comm:'Hairpins on Safari often have hidden rocks on the apex.'},
         {raw:'SQUARE R NARROW',ans:'square right narrows',narr:'Nearly hairpin right with bush closing in.',comm:'Square calls mean tight. The bush is unforgiving.'},
@@ -123,8 +105,6 @@ const ERAS={
         {raw:'L3 DONTCUT 150',ans:"left three don't cut 150 metres",narr:'Inside line has a hidden ditch.',comm:'Don\'t cut notes here are survival instructions.'},
         {raw:'R4 BUMP L3',ans:'right four bumps into left three',narr:'Compression unsettles the car before the left.',comm:'Bumps on Safari are severe. Suspension takes a beating.'},
         {raw:'CREST R5',ans:'over crest right five',narr:'Blind crest to medium right.',comm:'The dust makes crests even more blind than usual.'},
-        
-        // RIVER SEGMENT (Notes 17-24)
         {raw:'L3 WATER SPLASH',ans:'left three water splash',narr:'Through the river bed. Water up to the windscreen.',comm:'Water splashes are part of Safari tradition.'},
         {raw:'R3 SAND 100',ans:'right three sand 100 metres',narr:'Deep sand section. Momentum is everything.',comm:'Sand requires commitment. Hesitate and you sink.'},
         {raw:'L4! FESHFESH',ans:'left four caution fesh-fesh',narr:'Ultra-fine dust creates zero visibility.',comm:'Fesh-fesh is like driving through thick fog of dust.'},
@@ -133,8 +113,6 @@ const ERAS={
         {raw:'R3 ROCKS OPENS',ans:'right three rocks opens',narr:'Rocky section then opens to clean road.',comm:'Rocks can destroy tyres in seconds.'},
         {raw:'L4 SAND SAND',ans:'left four sand sand',narr:'Double sand section. Car plows through.',comm:'Multiple sand calls mean deep sections.'},
         {raw:'R2 INTO SQUARE L',ans:'right two into square left',narr:'Quick right into immediate hairpin left.',comm:'Into square calls require instant direction change.'},
-        
-        // FESH-FESH FINISH (Notes 25-32)
         {raw:'FLAT R CREST L5',ans:'flat right over crest left five',narr:'Maximum attack through the dust.',comm:'Flat out even when you cannot see. That is Safari.'},
         {raw:'BUMP R3 BUMP L3',ans:'bumps right three bumps left three',narr:'Double compression in the rough section.',comm:'Suspension working overtime here.'},
         {raw:'L4 100 R3',ans:'left four 100 metres right three',narr:'Medium left, short straight, then right.',comm:'Short sections require rapid note delivery.'},
@@ -148,7 +126,6 @@ const ERAS={
        cond:'Pacific Northwest rain. Slippery gravel over hard-packed base. Trees line every corner.',
        segments:['Opening','Forest','Mountain','Coast'],
        notes:[
-        // OPENING SEGMENT (Notes 1-8)
         {raw:'R3 EASY',ans:'right three easy',narr:'Wet gravel start. Slippery under the trees.',comm:'Olympus stages start slippery and get worse.'},
         {raw:'L4 150',ans:'left four 150 metres',narr:'Medium left on the forest road.',comm:'150 metres of slippery gravel ahead.'},
         {raw:'R3 INTO L4',ans:'right three into left four',narr:'Linked corners in the Douglas fir forest.',comm:'Into calls on wet gravel need smooth inputs.'},
@@ -157,8 +134,6 @@ const ERAS={
         {raw:'R4 200',ans:'right four 200 metres',narr:'Fast right with a long straight after.',comm:'200 metres is breathing room on Olympus.'},
         {raw:'L2! OPENS',ans:'left two caution opens',narr:'Tight left that opens to a straight.',comm:'Caution calls mean the surface changes.'},
         {raw:'R3 CREST',ans:'right three over crest',narr:'Blind crest - the corner hides in the rain.',comm:'Crests are extra blind in Pacific Northwest rain.'},
-        
-        // FOREST SEGMENT (Notes 9-16)
         {raw:'R4 DONTCUT',ans:"right four don't cut",narr:'Inside line has loose rocks pulled out by earlier cars.',comm:'Don\'t cut on Olympus means hidden rocks.'},
         {raw:'L3 !2 INTO R4',ans:'left three caution hairpin into right four',narr:'Hairpin in the deep forest.',comm:'Hairpins here are surrounded by trees. No run-off.'},
         {raw:'SQUARE R NARROW',ans:'square right narrows',narr:'Nearly hairpin right with trees on both sides.',comm:'Square calls mean maximum precision required.'},
@@ -167,8 +142,6 @@ const ERAS={
         {raw:'L3 DONTCUT 100',ans:"left three don't cut 100 metres",narr:'Inside line is eroded by rain.',comm:'Rain erosion makes don\'t cut notes critical.'},
         {raw:'R4 BUMP L3',ans:'right four bumps into left three',narr:'Compression in the rough forest section.',comm:'Bumps on wet gravel unsettle the car more.'},
         {raw:'CREST R6 NARROW',ans:'over crest right six narrows',narr:'Blind crest to fast right. Trees close in.',comm:'Fast plus narrow plus wet equals danger.'},
-        
-        // MOUNTAIN SEGMENT (Notes 17-24)
         {raw:'L2! JUNCTION STOP',ans:'left two caution junction stop',narr:'Logging road crosses. Full stop required.',comm:'STOP means logging trucks may be crossing.'},
         {raw:'R3 MUD 50',ans:'right three mud 50 metres',narr:'Deep mud section from recent rain.',comm:'Mud on Olympus is thick and slippery.'},
         {raw:'L4! DONTCUT',ans:"left four caution don't cut",narr:'Fast left with a rain-washed ditch inside.',comm:'Caution plus don\'t cut equals hidden danger.'},
@@ -177,8 +150,6 @@ const ERAS={
         {raw:'R3 GRAVEL OPENS',ans:'right three gravel opens',narr:'Loose gravel on entry, then opens.',comm:'Gravel changes the line completely.'},
         {raw:'L4 BUMP BUMP',ans:'left four bumps bumps',narr:'Double compression - car never settles.',comm:'Multiple bumps test suspension control.'},
         {raw:'R2 INTO SQUARE L',ans:'right two into square left',narr:'Quick right into immediate hairpin left.',comm:'Into square calls require instant direction change.'},
-        
-        // COAST FINISH (Notes 25-32)
         {raw:'FLAT R CREST L5',ans:'flat right over crest left five',narr:'Fast section near the Pacific coast.',comm:'The ocean is close now. Almost finished.'},
         {raw:'BUMP R3 BUMP L3',ans:'bumps right three bumps left three',narr:'Double compression near the coastline.',comm:'Suspension working hard in the rough section.'},
         {raw:'L4 100 R3',ans:'left four 100 metres right three',narr:'Medium left, short straight, then right.',comm:'Short sections require rapid notes.'},
@@ -228,7 +199,6 @@ const ERAS={
        cond:'Fast flowing Australian gravel. Kangaroo country. Speeds are high, notes must flow.',
        segments:['Opening','Fast','Technical','Finish'],
        notes:[
-        // OPENING SEGMENT (Notes 1-8)
         {raw:'R6 FLAT',ans:'right six flat',narr:'Wide open Australian gravel. Speeds are high from the start.',comm:'Australian stages reward commitment and fast notes.'},
         {raw:'L5 300',ans:'left five 300 metres',narr:'Long straight through the eucalyptus forest.',comm:'300 metres at high speed. Watch for wildlife.'},
         {raw:'R4 INTO L5',ans:'right four into left five',narr:'Linked flowing corners.',comm:'Australian stages flow like no others.'},
@@ -237,8 +207,6 @@ const ERAS={
         {raw:'R5 200',ans:'right five 200 metres',narr:'Fast right with long straight after.',comm:'200 metres is a short break at these speeds.'},
         {raw:'L3! OPENS',ans:'left three caution opens',narr:'Tight left that opens to a long straight.',comm:'Caution calls mean hidden hazards.'},
         {raw:'R4 CREST',ans:'right four over crest',narr:'Blind crest at high speed.',comm:'Crests at high speed require absolute trust.'},
-        
-        // FAST SEGMENT (Notes 9-16)
         {raw:'R5 DONTCUT',ans:"right five don't cut",narr:'Inside line has loose stones.',comm:'Don\'t cut on fast stages is about line purity.'},
         {raw:'L4 !3 INTO R5',ans:'left four caution three into right five',narr:'Flowing caution sequence.',comm:'Caution in fast sections means hidden dangers.'},
         {raw:'R6 NARROW',ans:'right six narrows',narr:'Fast right with trees closing in.',comm:'Narrow on fast stages is dangerous.'},
@@ -247,8 +215,6 @@ const ERAS={
         {raw:'L4 DONTCUT 150',ans:"left four don't cut 150 metres",narr:'Inside line has a drainage ditch.',comm:'Don\'t cut notes protect the car.'},
         {raw:'R5 BUMP L4',ans:'right five bumps into left four',narr:'Compression at speed into medium left.',comm:'Bumps at high speed unsettle the car.'},
         {raw:'CREST R6',ans:'over crest right six',narr:'Blind crest to fast right.',comm:'Crests at high speed are pure trust.'},
-        
-        // TECHNICAL SEGMENT (Notes 17-24)
         {raw:'L3! JUNCTION',ans:'left three caution junction',narr:'Farm track crosses. Hidden from distance.',comm:'Junctions in Australia are remote.'},
         {raw:'R4 SAND 100',ans:'right four sand 100 metres',narr:'Sandy section in the dry creek bed.',comm:'Sand sections require momentum.'},
         {raw:'L4! GRAVEL',ans:'left four caution gravel',narr:'Gravel pulled onto the racing line.',comm:'Gravel notes mean surface change.'},
@@ -257,8 +223,6 @@ const ERAS={
         {raw:'L3 ROCKS OPENS',ans:'left three rocks opens',narr:'Rocky entry then opens.',comm:'Rocky sections can damage tyres.'},
         {raw:'R4 BUMP BUMP',ans:'right four bumps bumps',narr:'Double compression.',comm:'Multiple bumps test suspension.'},
         {raw:'R3 INTO SQUARE L',ans:'right three into square left',narr:'Quick right into hairpin.',comm:'Into square requires instant change.'},
-        
-        // FINISH SEGMENT (Notes 25-32)
         {raw:'FLAT R CREST L6',ans:'flat right over crest left six',narr:'Maximum attack to the finish.',comm:'Flat out commitment near the end.'},
         {raw:'BUMP R4 BUMP L4',ans:'bumps right four bumps left four',narr:'Double compression at speed.',comm:'Suspension working hard.'},
         {raw:'L5 100 R4',ans:'left five 100 metres right four',narr:'Medium left to right.',comm:'Short sections need rapid notes.'},
@@ -272,7 +236,6 @@ const ERAS={
        cond:'The ultimate test of adaptability. Tarmac and gravel sections alternate. Tyre choice is critical.',
        segments:['Gravel','Tarmac','Mixed','Finish'],
        notes:[
-        // GRAVEL OPENING (Notes 1-8)
         {raw:'R4 EASY',ans:'right four easy',narr:'Gravel start to this mixed-surface challenge.',comm:'Catalunya tests adaptability.'},
         {raw:'L5 150',ans:'left five 150 metres',narr:'Fast left on the gravel section.',comm:'Opening on gravel before tarmac switch.'},
         {raw:'R3 INTO L4',ans:'right three into left four',narr:'Linked corners on loose surface.',comm:'Into calls need smooth inputs.'},
@@ -281,8 +244,6 @@ const ERAS={
         {raw:'R4 200',ans:'right four 200 metres',narr:'Fast right with straight after.',comm:'200 metres of gravel before the change.'},
         {raw:'L2! OPENS',ans:'left two caution opens',narr:'Tight left opens to the tarmac transition.',comm:'Caution before surface change.'},
         {raw:'R3 SURFACE CHANGE',ans:'right three surface change',narr:'Onto tarmac now. Grip levels completely different.',comm:'Surface change is the Catalunya challenge.'},
-        
-        // TARMAC SECTION (Notes 9-16)
         {raw:'R5 DONTCUT',ans:"right five don't cut",narr:'Inside curb on the tarmac left four.',comm:'Don\'t cut on tarmac means curbs.'},
         {raw:'L4 !2 INTO R5',ans:'left four caution two into right five',narr:'Technical sequence on tarmac.',comm:'Caution on tarmac means road narrowing.'},
         {raw:'SQUARE R NARROW',ans:'square right narrows',narr:'Hairpin with stone walls.',comm:'Square calls in villages need precision.'},
@@ -291,8 +252,6 @@ const ERAS={
         {raw:'L4 DONTCUT 100',ans:"left four don't cut 100 metres",narr:'Inside curb will damage wheels.',comm:'Don\'t cut on tarmac protects rims.'},
         {raw:'R5 BUMP L4',ans:'right five bumps into left four',narr:'Crest bumps on the tarmac road.',comm:'Bumps on tarmac upset the balance.'},
         {raw:'CREST R6',ans:'over crest right six',narr:'Fast crest on the smooth tarmac.',comm:'Crests on tarmac are more predictable.'},
-        
-        // MIXED SECTION (Notes 17-24)
         {raw:'L3! SURFACE CHANGE',ans:'left three caution surface change',narr:'Back to gravel now. Grip drops significantly.',comm:'Surface changes require mental resets.'},
         {raw:'R4 GRAVEL 100',ans:'right four gravel 100 metres',narr:'Gravel section in the vineyard area.',comm:'Gravel pulled onto tarmac sections.'},
         {raw:'L4! MIXED',ans:'left four caution mixed',narr:'Both surfaces visible. Choose your line.',comm:'Mixed surfaces are the ultimate test.'},
@@ -301,8 +260,6 @@ const ERAS={
         {raw:'R3 TARMAC OPENS',ans:'right three tarmac opens',narr:'Back onto clean tarmac.',comm:'Tarmac sections allow higher speeds.'},
         {raw:'L4 BUMP BUMP',ans:'left four bumps bumps',narr:'Double compression on rough tarmac.',comm:'Multiple bumps test car control.'},
         {raw:'R3 INTO SQUARE L',ans:'right three into square left',narr:'Quick right into hairpin.',comm:'Into square requires instant change.'},
-        
-        // FINISH SECTION (Notes 25-32)
         {raw:'FLAT R CREST L5',ans:'flat right over crest left five',narr:'Maximum attack to the finish.',comm:'Flat out commitment.'},
         {raw:'BUMP R4 BUMP L4',ans:'bumps right four bumps left four',narr:'Double compression near the end.',comm:'Suspension working hard.'},
         {raw:'L5 100 R4',ans:'left five 100 metres right four',narr:'Medium left to right.',comm:'Short sections need rapid notes.'},
@@ -352,7 +309,6 @@ const ERAS={
        cond:'Narrow Japanese mountain roads. Rain makes the surface treacherous. Guardrails are the only run-off. Precision is everything.',
        segments:['Mountain','Village','Technical','Finish'],
        notes:[
-        // MOUNTAIN OPENING (Notes 1-8)
         {raw:'REGEN R4 EASY',ans:'regen zone right four easy',narr:'Managing hybrid regeneration on the opening mountain section.',comm:'Japanese stages test precision above all else.'},
         {raw:'L5 150',ans:'left five 150 metres',narr:'Medium left on the narrow mountain pass.',comm:'150 metres feels longer on narrow roads.'},
         {raw:'R3 INTO L4',ans:'right three into left four',narr:'Linked corners on the mountain ridge.',comm:'Into calls need absolute precision here.'},
@@ -361,8 +317,6 @@ const ERAS={
         {raw:'R4 200',ans:'right four 200 metres',narr:'Fast right with a short straight after.',comm:'200 metres is brief on these roads.'},
         {raw:'L2! OPENS',ans:'left two caution opens',narr:'Tight left that opens to a bamboo-lined straight.',comm:'Caution calls mean the guardrail is close.'},
         {raw:'R3 CREST',ans:'right three over crest',narr:'Blind crest on the mountain road.',comm:'Crests on narrow roads are dangerous.'},
-        
-        // VILLAGE SECTION (Notes 9-16)
         {raw:'R4 DONTCUT',ans:"right four don't cut",narr:'Inside curb will damage the wheel.',comm:'Don\'t cut on narrow roads means guardrails.'},
         {raw:'L3 !2 INTO R4',ans:'left three caution two into right four',narr:'Hairpin sequence through the village.',comm:'Hairpins in villages have concrete walls.'},
         {raw:'SQUARE R NARROW',ans:'square right narrows',narr:'Hairpin with buildings on both sides.',comm:'Square calls in villages are critical.'},
@@ -371,8 +325,6 @@ const ERAS={
         {raw:'L3 DONTCUT 100',ans:"left three don't cut 100 metres",narr:'Inside curb is concrete.',comm:'Don\'t cut protects the wheels.'},
         {raw:'R4 BUMP L3',ans:'right four bumps into left three',narr:'Compression unsettles the car.',comm:'Bumps on narrow roads upset balance.'},
         {raw:'CREST R5',ans:'over crest right five',narr:'Blind crest to medium right.',comm:'Crests are always blind here.'},
-        
-        // TECHNICAL SECTION (Notes 17-24)
         {raw:'L2! JUNCTION',ans:'left two caution junction',narr:'Narrow road crosses.',comm:'Junctions on mountain roads are hidden.'},
         {raw:'R3 WET 50',ans:'right three wet 50 metres',narr:'Wet section from recent rain.',comm:'Wet sections reduce grip significantly.'},
         {raw:'L4! DONTCUT',ans:"left four caution don't cut",narr:'Fast left with guardrail inside.',comm:'Caution plus don\'t cut equals guardrail.'},
@@ -381,8 +333,6 @@ const ERAS={
         {raw:'R3 CONCRETE OPENS',ans:'right three concrete opens',narr:'Concrete barrier then opens.',comm:'Concrete notes mean guardrails.'},
         {raw:'L4 BUMP BUMP',ans:'left four bumps bumps',narr:'Double compression.',comm:'Multiple bumps test suspension.'},
         {raw:'R3 INTO SQUARE L',ans:'right three into square left',narr:'Quick right into hairpin.',comm:'Into square requires instant change.'},
-        
-        // FINISH SECTION (Notes 25-32)
         {raw:'REGEN R CREST L5',ans:'regen right over crest left five',narr:'Managing regen through the crest.',comm:'Regen on narrow roads needs care.'},
         {raw:'BUMP R4 BUMP L4',ans:'bumps right four bumps left four',narr:'Double compression near the end.',comm:'Suspension working hard.'},
         {raw:'L5 100 R4',ans:'left five 100 metres right four',narr:'Medium left to right.',comm:'Short sections need rapid notes.'},
@@ -396,7 +346,6 @@ const ERAS={
        cond:'Rugged Chilean gravel through the Andes. High altitude reduces engine power. Dust hangs in the valleys.',
        segments:['Andes','Valley','Mountain','Finish'],
        notes:[
-        // ANDES OPENING (Notes 1-8)
         {raw:'HYBRID R5 EASY',ans:'hybrid boost right five easy',narr:'Managing hybrid power at high altitude.',comm:'Altitude reduces power. Hybrid helps compensate.'},
         {raw:'L6 300',ans:'left six 300 metres',narr:'Long left through the Andes pass.',comm:'300 metres at altitude tests the engine.'},
         {raw:'R4 INTO L5',ans:'right four into left five',narr:'Linked corners in the mountains.',comm:'Into calls need commitment at altitude.'},
@@ -405,8 +354,6 @@ const ERAS={
         {raw:'R5 200',ans:'right five 200 metres',narr:'Fast right with straight after.',comm:'200 metres gives the engine a breather.'},
         {raw:'L3! OPENS',ans:'left three caution opens',narr:'Tight left that opens to the valley view.',comm:'Caution calls mean rocks on the road.'},
         {raw:'R4 CREST',ans:'right four over crest',narr:'Blind crest in the Andes.',comm:'Crests hide the valley beyond.'},
-        
-        // VALLEY SECTION (Notes 9-16)
         {raw:'R5 DONTCUT',ans:"right five don't cut",narr:'Inside line has loose rocks.',comm:'Don\'t cut in Chile means loose rocks.'},
         {raw:'L4 !3 INTO R5',ans:'left four caution three into right five',narr:'Flowing caution sequence.',comm:'Caution means hidden rocks.'},
         {raw:'R6 NARROW',ans:'right six narrows',narr:'Fast right with mountain wall closing in.',comm:'Narrow on mountain roads is dangerous.'},
@@ -415,8 +362,6 @@ const ERAS={
         {raw:'L4 DONTCUT 150',ans:"left four don't cut 150 metres",narr:'Inside line has loose scree.',comm:'Don\'t cut protects from loose rocks.'},
         {raw:'R5 BUMP L4',ans:'right five bumps into left four',narr:'Compression at speed into medium left.',comm:'Bumps on gravel unsettle the car.'},
         {raw:'CREST R6',ans:'over crest right six',narr:'Blind crest to fast right.',comm:'Crests at speed are pure trust.'},
-        
-        // MOUNTAIN SECTION (Notes 17-24)
         {raw:'L3! REGEN',ans:'left three caution regen',narr:'Managing regen through tight left.',comm:'Regen through corners needs care.'},
         {raw:'R4 DUST 100',ans:'right four dust 100 metres',narr:'Dust section in the dry valley.',comm:'Dust reduces visibility significantly.'},
         {raw:'L4! ROCKS',ans:'left four caution rocks',narr:'Rocky section on the racing line.',comm:'Rock notes mean tyre danger.'},
@@ -425,8 +370,6 @@ const ERAS={
         {raw:'R3 GRAVEL OPENS',ans:'right three gravel opens',narr:'Loose gravel then opens.',comm:'Gravel sections need commitment.'},
         {raw:'L4 BUMP BUMP',ans:'left four bumps bumps',narr:'Double compression.',comm:'Multiple bumps test suspension.'},
         {raw:'R3 INTO SQUARE L',ans:'right three into square left',narr:'Quick right into hairpin.',comm:'Into square requires instant change.'},
-        
-        // FINISH SECTION (Notes 25-32)
         {raw:'FLAT R CREST L6',ans:'flat right over crest left six',narr:'Maximum attack to the finish.',comm:'Flat out commitment near the end.'},
         {raw:'BUMP R4 BUMP L4',ans:'bumps right four bumps left four',narr:'Double compression at speed.',comm:'Suspension working hard.'},
         {raw:'L5 100 R4',ans:'left five 100 metres right four',narr:'Medium left to right.',comm:'Short sections need rapid notes.'},
@@ -439,8 +382,6 @@ const ERAS={
     ]
   }
 };
-
-// ── STAGE ATMOSPHERE EVENTS ──
 const ATMO = {
   grpb:{
     opening:[
@@ -515,8 +456,6 @@ const ATMO = {
     ]
   }
 };
-
-// ── CRASH TYPES ──
 const CRASH_TYPES = [
   {id:'off_road', title:'OFF THE ROAD!', emoji:'🚗💨',
    descs:["The front pushed wide — not enough braking for the corner.",
@@ -569,11 +508,6 @@ const CRASH_TYPES = [
           "Full contact with the concrete barrier. Both airbags deploy. The stage is over."],
    dmg:{engine:[30,60],susp:[25,55],body:[40,70],tyres:[20,45]},timeLost:[60,180],recoverable:false}
 ];
-
-
-// ════════════════════════════════════════════════════════
-// OBSESSIVE TUNING DATA — per car, per component
-// ════════════════════════════════════════════════════════
 
 const TUNING_DEFS = {
 
@@ -1194,9 +1128,6 @@ const TUNING_DEFS = {
   }
 
 };
-
-
-// ── TUNING STATE ──
 let TUNE = {};
 const TUNE_SECTIONS = Object.keys(TUNING_DEFS);
 let activeTuneSection = TUNE_SECTIONS[0];
@@ -1212,19 +1143,15 @@ function defaultTune(){
   });
   return t;
 }
-
-// ── TUNING ACCESS FUNCTIONS ──
 let tunReturnScreen = 'setup'; // where to go when done
 
 function openTuningStandalone(){
-  // From main menu — no era required, show era picker first
   tunReturnScreen = 'menu';
   if(!Object.keys(TUNE).length) TUNE = defaultTune();
   activeTuneSection = TUNE_SECTIONS[0];
   show('tuning');
   document.getElementById('tun-back-btn').textContent = '← Menu';
   document.getElementById('tun-title').textContent = 'Tuning Garage';
-  // If no era, force the picker open
   if(!G.era){
     openTuningEraSelect();
   } else {
@@ -1235,10 +1162,8 @@ function openTuningStandalone(){
 }
 
 function openTuningFromSetup(){
-  // From setup screen — era may or may not be selected
   tunReturnScreen = 'setup';
   if(!G.era){
-    // Show era picker before anything else
     show('tuning');
     document.getElementById('tun-back-btn').textContent = '← Setup';
     document.getElementById('tun-title').textContent = 'Tuning Garage';
@@ -1256,7 +1181,6 @@ function openTuningFromSetup(){
 }
 
 function openTuning(){
-  // Legacy call — route through setup version
   openTuningFromSetup();
 }
 
@@ -1274,13 +1198,11 @@ function _refreshTuningHeader(){
 function openTuningEraSelect(){
   const picker = document.getElementById('tun-era-picker');
   picker.style.display = 'block';
-  // Pre-select current era
   const eraDrop = document.getElementById('tun-era-drop');
   if(G.era) eraDrop.value = G.era;
   tunEraChanged(); // populate car list
   if(G.car){
     const carDrop = document.getElementById('tun-car-drop');
-    // select matching car if possible
     for(let i=0;i<carDrop.options.length;i++){
       if(carDrop.options[i].text === G.car.n){ carDrop.selectedIndex=i; break; }
     }
@@ -1302,9 +1224,7 @@ function confirmTunEra(){
   G.era = eraDrop.value;
   const carIdx = parseInt(carDrop.value);
   G.car = ERAS[G.era].cars[carIdx];
-  // Also update setup screen if visible
   if(document.getElementById('inp-drv')) {
-    // Rebuild car grid in setup if era changed there too
   }
   document.getElementById('tun-era-picker').style.display = 'none';
   if(!Object.keys(TUNE).length) TUNE = defaultTune();
@@ -1334,8 +1254,6 @@ function renderTuneSection(key){
   const sec = TUNING_DEFS[key];
   const main = document.getElementById('tun-main');
   if(!sec){main.innerHTML='';return;}
-
-  // Summary bar at top
   const summary = buildTuneSummary();
 
   let html = `<div class="tun-section-hdr"><h2>${sec.label}</h2><p>${sec.label} configuration — all values persist to stage</p></div>`;
@@ -1351,7 +1269,6 @@ function renderTuneSection(key){
   });
 
   main.innerHTML = html;
-  // Attach listeners
   main.querySelectorAll('.tun-slider').forEach(sl => {
     sl.addEventListener('input', function(){ onTuneChange(this.dataset.id, parseFloat(this.value)); });
   });
@@ -1389,13 +1306,11 @@ function buildParamRow(p){
 
 function onTuneChange(id, val){
   TUNE[id] = val;
-  // Update display
   const el = document.getElementById('tv-'+id);
   if(el){
     const display = typeof val === 'number' && !Number.isInteger(val) ? val.toFixed(2) : val;
     el.textContent = display;
   }
-  // Update effects
   const param = findParam(id);
   if(param){
     const eff = document.getElementById('te-'+id);
@@ -1403,7 +1318,6 @@ function onTuneChange(id, val){
       const effs = param.effects(val);
       eff.innerHTML = effs.map(e=>`<span class="eff-pill eff-${e.t}">${e.s}</span>`).join('');
     }
-    // Re-colour slider
     const sl = document.querySelector(`.tun-slider[data-id="${id}"]`);
     if(sl){
       const pct = (val - param.min) / (param.max - param.min);
@@ -1411,7 +1325,6 @@ function onTuneChange(id, val){
       sl.style.background = `linear-gradient(to right,${colour} 0%,${colour} ${Math.round(pct*100)}%,var(--surf2) ${Math.round(pct*100)}%,var(--surf2) 100%)`;
     }
   }
-  // Update summary
   const summary = buildTuneSummary();
   const sumEl = document.getElementById('tun-summary');
   if(sumEl) sumEl.outerHTML = buildTuneSummaryHTML(summary);
@@ -1428,11 +1341,7 @@ function findParam(id){
 }
 
 function buildTuneSummary(){
-  // Compute aggregate scores from current TUNE values
   let grip=50, stab=50, trac=50, power=50, reli=50;
-
-  // Spring rates affect grip & stability
-  // Calculate front spring rate as average of FL and FR
   const spring_f = (TUNE.spr_fl !== undefined && TUNE.spr_fr !== undefined)
     ? (TUNE.spr_fl + TUNE.spr_fr) / 2
     : undefined;
@@ -1441,54 +1350,45 @@ function buildTuneSummary(){
     grip += (sf - 0.5) * -10;
     stab += (sf - 0.5) * 15;
   }
-  // ARB
   if(TUNE.arb_f !== undefined){
     const af = (TUNE.arb_f - 50) / (400-50);
     grip += (af - 0.5) * -8;
     stab += (af - 0.5) * 12;
   }
-  // Diff lock
   if(TUNE.rdiff_lock !== undefined){
     const dl = TUNE.rdiff_lock / 100;
     trac += dl * 20 - 10;
     grip += (dl - 0.5) * -8;
   }
-  // Boost
   if(TUNE.boost !== undefined){
     const b = (TUNE.boost - 1.0) / (2.8-1.0);
     power += b * 30 - 10;
     reli -= b * 20;
   }
-  // Anti-lag
   if(TUNE.anti_lag !== undefined){
     power += TUNE.anti_lag * 3;
     reli -= TUNE.anti_lag * 5;
   }
-  // Tyre pressure
   if(TUNE.pres_fl !== undefined){
     const p = (TUNE.pres_fl - 22) / (50-22);
     grip += (0.5 - p) * 12;
     reli += (p - 0.5) * 10;
   }
-  // Rear wing
   if(TUNE.rear_wing !== undefined){
     const w = TUNE.rear_wing / 30;
     stab += w * 15;
     power -= w * 8;
   }
-  // Fuel load
   if(TUNE.fuel_load !== undefined){
     const f = (TUNE.fuel_load - 20) / (80-20);
     power -= f * 8;
     reli += f * 5;
   }
-  // Camber
   if(TUNE.camber_f !== undefined){
     const c = Math.abs(TUNE.camber_f) / 4;
     grip += c * 15;
     reli -= c * 10;
   }
-  // Clamping to 0–100
   const clamp = v => Math.min(100, Math.max(0, Math.round(v)));
   return { grip:clamp(grip), stab:clamp(stab), trac:clamp(trac), power:clamp(power), reli:clamp(reli) };
 }
@@ -1527,7 +1427,6 @@ function resetTuning(){
 function loadPreset(type){
   TUNE = defaultTune();
   if(type === 'safe'){
-    // Conservative: softer chassis, lower power, stable diff setup
     if('spr_fl' in TUNE) TUNE.spr_fl = 46;
     if('spr_fr' in TUNE) TUNE.spr_fr = 48;
     if('spr_rl' in TUNE) TUNE.spr_rl = 42;
@@ -1563,7 +1462,6 @@ function loadPreset(type){
     if('camber_rl' in TUNE) TUNE.camber_rl = -1.4;
     if('camber_rr' in TUNE) TUNE.camber_rr = -1.4;
   } else if(type === 'attack'){
-    // Maximum attack: stiffer, high boost, aggressive diffs, lighter fuel
     if('spr_fl' in TUNE) TUNE.spr_fl = 96;
     if('spr_fr' in TUNE) TUNE.spr_fr = 98;
     if('spr_rl' in TUNE) TUNE.spr_rl = 84;
@@ -1606,15 +1504,11 @@ function loadPreset(type){
   }
   renderTuneSection(activeTuneSection);
 }
-
-// Hook tune effects into crash probability
 const _origRollCrash = rollCrash;
 function rollCrashTuned(noteRaw, isTimeout, isBadNote){
   const base = _origRollCrash(noteRaw, isTimeout, isBadNote);
-  // Already a boolean — we can't modify, so we hook the probability calculation
   return base;
 }
-
 
 const CAREER_CAL=[
   {era:'grpb',sIdx:0,rally:'Rally de Portugal',pts:[25,18,15,12,10,8,6,4,2,1]},
@@ -1784,16 +1678,12 @@ const LESSONS=[
       <button class="gbtn pri" onclick="startCertificationExam()" style="font-size:16px;padding:12px 30px;">START CERTIFICATION EXAM</button>
     </div>`}
 ];
-
-// ═══════════════ STATE ═══════════════
 let G={era:null,driver:'Driver',codriver:'Co-driver',car:null,diff:0,timeLimit:12,
   notes:[],idx:0,correct:0,skipped:0,timer:null,remaining:0,results:[],
   careerMode:false,careerIdx:0,currentStageName:'',tuneEffects:null,stageEnded:false,
   damage:{engine:100,susp:100,tyres:100,body:100},
   crashed:false,dnf:false,totalTimeLost:0,crashCount:0,
   atmosIdx:0,crowdIdx:0,splitIdx:0};
-
-// ── DAMAGE SYSTEM ──
 function initDamage(){
   G.damage={engine:100,susp:100,tyres:100,body:100};
   G.totalTimeLost=0;G.crashCount=0;G.crashed=false;G.dnf=false;
@@ -1824,7 +1714,6 @@ function updateDamageHUD(){
 }
 function applyDamage(dmgSpec){
   const dmgModifier = (G.tuneEffects && G.tuneEffects.damageMod) ? G.tuneEffects.damageMod : 1.0;
-  // dmgSpec like {susp:[15,35], body:[20,40]}
   const hits={};
   Object.entries(dmgSpec).forEach(([part,[min,max]])=>{
     const amount=(min+Math.random()*(max-min))*dmgModifier;
@@ -1836,7 +1725,6 @@ function applyDamage(dmgSpec){
   return hits;
 }
 function updateCarSVG(hits){
-  // Flash hit areas
   const partMap={engine:'hit-body',susp:['hit-wfl','hit-wfr','hit-wrl','hit-wrr'],
     tyres:['hit-wfl','hit-wfr'],body:['hit-front','hit-rear','hit-body'],roof:'hit-roof'};
   Object.keys(hits).forEach(part=>{
@@ -1852,15 +1740,10 @@ function updateCarSVG(hits){
   });
 }
 function rollCrash(noteRaw, isTimeout, isBadNote){
-  // Apply tuning effects if present
   const crashModifier = (G.tuneEffects && G.tuneEffects.crashMod) ? G.tuneEffects.crashMod : 1.0;
-  
-  // CRASH PROTECTION: Need 2 consecutive misreads to crash
   if (RALLY_STATE.consecutiveWrong < 2) {
     return false; // Not enough consecutive wrongs - no crash
   }
-  
-  // Crash probability based on note danger, timeout, bad answer, damage
   const era=ERAS[G.era];
   const hasCaution=noteRaw.includes('!');
   const hasDbl=noteRaw.includes('!!');
@@ -1886,7 +1769,6 @@ function rollCrash(noteRaw, isTimeout, isBadNote){
 function triggerCrash(noteRaw){
   G.crashCount++;
   RALLY_STATE.consecutiveWrong = 0; // Reset after crash - fresh start
-  // Pick crash type based on note
   let pool=CRASH_TYPES.filter(c=>c.recoverable);
   if(noteRaw.includes('JUMP')||noteRaw.includes('CREST'))pool=CRASH_TYPES.filter(c=>c.id==='off_road'||c.id==='big_off'||c.id==='spin');
   if(noteRaw.includes('ICE')||noteRaw.includes('WET'))pool=CRASH_TYPES.filter(c=>c.id==='spin'||c.id==='off_road');
@@ -1904,10 +1786,8 @@ function triggerCrash(noteRaw){
   const avgAfter=(G.damage.engine+G.damage.susp+G.damage.tyres+G.damage.body)/4;
   const isDNF=!crash.recoverable||(avgAfter<10);
   showCrashModal(crash,desc,narr,hits,timeLost,isDNF,crash.longStop);
-  // Shake the game screen
   document.getElementById('game').classList.add('shake-screen');
   setTimeout(()=>document.getElementById('game').classList.remove('shake-screen'),450);
-  // Speak crash
   if(window.speechSynthesis){
     window.speechSynthesis.cancel();
     const msg=isDNF?'The stage is over. Retirement confirmed.':crash.title.replace('!','')+'. '+desc;
@@ -1930,6 +1810,7 @@ function showCrashModal(crash,desc,narr,hits,timeLost,isDNF,longStop){
     </div>`).join('');
   const modal=document.getElementById('crash-modal');
   modal.style.display='flex';
+  startStickCrashAnimation(crash.id);
   const okBtn=document.getElementById('crash-ok-btn');
   const dnfBtn=document.getElementById('crash-dnf-btn');
   const repWrap=document.getElementById('crash-repair-wrap');
@@ -1952,21 +1833,184 @@ function showCrashModal(crash,desc,narr,hits,timeLost,isDNF,longStop){
 }
 function dismissCrash(){
   document.getElementById('crash-modal').style.display='none';
+  stopStickAnimation();
   G.crashed=false;
   loadNote();
 }
 function crashDNF(){
   document.getElementById('crash-modal').style.display='none';
+  stopStickAnimation();
   G.dnf=true;
-  // Force end stage with DNF result
   G.idx=G.notes.length;
   endStage();
 }
-// ── ATMOSPHERE INJECTION ──
+
+let stickAnimId=null;
+function startStickCrashAnimation(crashType){
+  const canvas=document.getElementById('stick-canvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const w=canvas.width,h=canvas.height;
+  let frame=0;
+  let stickX=-60;
+  let stickY=h/2+20;
+  let velX=8;
+  let velY=-6;
+  let rotation=0;
+  let impact=false;
+  let impactFrame=0;
+  let splatParticles=[];
+  let stars=[];
+  const treeX=w-80;
+  const treeY=h/2-40;
+  if(stickAnimId)cancelAnimationFrame(stickAnimId);
+  function drawTree(){
+    ctx.fillStyle='#1a1a1a';
+    ctx.fillRect(treeX,treeY+60,20,40);
+    ctx.beginPath();
+    ctx.moveTo(treeX-30,treeY+70);
+    ctx.lineTo(treeX+10,treeY-20);
+    ctx.lineTo(treeX+50,treeY+70);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle='#0a3a0a';
+    ctx.beginPath();
+    ctx.arc(treeX+10,treeY-10,35,0,Math.PI*2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(treeX-15,treeY+20,25,0,Math.PI*2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(treeX+35,treeY+20,28,0,Math.PI*2);
+    ctx.fill();
+  }
+  function drawStickFigure(x,y,rot,squash){
+    ctx.save();
+    ctx.translate(x,y);
+    ctx.rotate(rot);
+    const s=squash||1;
+    ctx.scale(1,s);
+    ctx.strokeStyle='#fff';
+    ctx.lineWidth=2;
+    ctx.beginPath();
+    ctx.arc(0,-25,8,0,Math.PI*2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(0,-17);
+    ctx.lineTo(0,5);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(0,5);
+    ctx.lineTo(-12,20);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(0,5);
+    ctx.lineTo(12,20);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(-15,-10);
+    ctx.lineTo(15,-5);
+    ctx.stroke();
+    if(impact){
+      ctx.fillStyle='#e8291c';
+      ctx.beginPath();
+      ctx.arc(-8,-30,4,0,Math.PI*2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(8,-20,3,0,Math.PI*2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+  function drawSplat(){
+    ctx.fillStyle='#e8291c';
+    splatParticles.forEach(p=>{
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fill();
+    });
+    ctx.fillStyle='#ff6600';
+    stars.forEach((s,i)=>{
+      ctx.save();
+      ctx.translate(s.x,s.y);
+      ctx.rotate(s.rot);
+      ctx.fillRect(-4,-4,8,8);
+      ctx.restore();
+    });
+    if(impactFrame>10&&impactFrame<40){
+      ctx.fillStyle='#e8291c';
+      ctx.font='bold 24px "Bebas Neue",sans-serif';
+      ctx.textAlign='center';
+      const scale=1+Math.sin(impactFrame*0.3)*0.2;
+      ctx.save();
+      ctx.translate(treeX+10,treeY-50);
+      ctx.scale(scale,scale);
+      ctx.fillText('SPLAT!',0,0);
+      ctx.restore();
+    }
+  }
+  function animate(){
+    ctx.fillStyle='#0a0a0c';
+    ctx.fillRect(0,0,w,h);
+    drawTree();
+    if(!impact){
+      stickX+=velX;
+      stickY+=velY;
+      velY+=0.4;
+      rotation+=0.15;
+      if(stickX>treeX-20){
+        impact=true;
+        impactFrame=0;
+        for(let i=0;i<15;i++){
+          splatParticles.push({
+            x:treeX+10+Math.random()*40-20,
+            y:treeY+30+Math.random()*30,
+            r:Math.random()*6+2,
+            vx:Math.random()*6-3,
+            vy:Math.random()*6-3
+          });
+        }
+        for(let i=0;i<6;i++){
+          stars.push({
+            x:treeX+10+Math.random()*60-30,
+            y:treeY+Math.random()*60-30,
+            rot:Math.random()*Math.PI
+          });
+        }
+      }
+      drawStickFigure(stickX,stickY,rotation);
+    }else{
+      impactFrame++;
+      splatParticles.forEach(p=>{
+        p.x+=p.vx;
+        p.y+=p.vy;
+        p.vy+=0.2;
+      });
+      stars.forEach((s,i)=>{
+        s.y-=2;
+        s.rot+=0.1;
+        if(s.y<0)s.y=h+20;
+      });
+      drawSplat();
+      const squash=1+Math.sin(impactFrame*0.5)*0.3;
+      drawStickFigure(treeX-15,treeY+45,Math.PI/2-0.3,squash);
+    }
+    frame++;
+    if(impactFrame<60){
+      stickAnimId=requestAnimationFrame(animate);
+    }
+  }
+  animate();
+}
+function stopStickAnimation(){
+  if(stickAnimId){
+    cancelAnimationFrame(stickAnimId);
+    stickAnimId=null;
+  }
+}
 function getAtmosEvent(){
   const era=G.era;if(!ATMO[era])return null;
   const a=ATMO[era];
-  // Rotate through atmosphere types
   const type=G.idx%3;
   if(type===0&&a.crowd.length>0){
     const txt=a.crowd[G.crowdIdx%a.crowd.length];G.crowdIdx++;
@@ -1987,7 +2031,6 @@ function injectAtmosphere(){
   else if(ev.type==='split')div.className='split-time';
   else if(ev.type==='danger')div.className='danger-warning';
   div.textContent=ev.txt;
-  // Insert before input block
   const inp=document.querySelector('.inp-block');
   if(inp&&main.contains(inp)){
     main.insertBefore(div,inp);
@@ -1998,12 +2041,8 @@ let CAREER={driver:'',codriver:'',car:null,currentStage:0,pts:0,completed:[],sta
 let lessonsCompleted=new Set();
 let currentLesson='intro';
 let quizBank=[],quizIdx=0,quizCurrent=null,quizStartTime=null,quizTelemetry=[];
-
-// ═══════════════ SCREEN NAV ═══════════════
 function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
 function showMenu(){if(G.timer)clearInterval(G.timer);show('menu');}
-
-// ═══════════════ SETUP ═══════════════
 function openSetup(){
   G.careerMode=false;
   buildSetup();show('setup');
@@ -2043,8 +2082,6 @@ function pickDiff(i,el){
   G.diff=i;G.timeLimit=DIFFS[i].s;
   document.querySelectorAll('.diff-btn').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');
 }
-
-// ═══════════════ CAREER ═══════════════
 function openCareer(){
   if(!CAREER.started){
     G.driver=prompt('Your driver name:','Mikko Lahti')||'Mikko Lahti';
@@ -2106,7 +2143,6 @@ function startCareerStage(i){
   G.careerMode=true;G.careerIdx=i;
   const c=CAREER_CAL[i];G.era=c.era;G.diff=1;G.timeLimit=DIFFS[1].s;
   G.car=CAREER.car||ERAS[c.era].cars[0];G.driver=CAREER.driver;G.codriver=CAREER.codriver;
-  // Offer tuning before starting
   if(confirm('Open Tuning Garage before this stage?\n\nOK = Open Tuning | Cancel = Start immediately')){
     activeTuneSection=TUNE_SECTIONS[0];
     if(!TUNE||Object.keys(TUNE).length===0) TUNE=defaultTune();
@@ -2128,8 +2164,6 @@ function resetCareer(){
   if(!confirm('Reset all career progress?'))return;
   CAREER.started=false;CAREER.completed=[];CAREER.pts=0;CAREER.currentStage=0;openCareer();
 }
-
-// ═══════════════ GAME ═══════════════
 function beginStage(stageOverride){
   G.driver=document.getElementById('inp-drv').value.trim()||'Driver';
   G.codriver=document.getElementById('inp-cod').value.trim()||'Co-driver';
@@ -2157,14 +2191,12 @@ function beginStageWithData(stage){
     <div class="hrow"><span class="hkey">${k}</span><span class="hval">${v}</span></div>`).join('');
   document.getElementById('g-dots').innerHTML=G.notes.map((_,i)=>`<div class="gd" id="gd-${i}"></div>`).join('');
   show('game');
-  // Show opening atmosphere line
   if(ATMO[G.era]&&ATMO[G.era].opening){
     const op=ATMO[G.era].opening[Math.floor(Math.random()*ATMO[G.era].opening.length)];
     const atmoEl=document.createElement('div');
     atmoEl.className='atmo-bar';atmoEl.textContent=op;
     const gMain=document.getElementById('g-main');
     if(gMain)gMain.prepend(atmoEl);
-    // Speak it
     if(window.speechSynthesis){
       window.speechSynthesis.cancel();
       const u=new SpeechSynthesisUtterance(op);u.rate=0.82;u.pitch=0.9;u.volume=0.7;
@@ -2174,42 +2206,28 @@ function beginStageWithData(stage){
   loadNote();
 }
 function loadNote(){
-  // Reset processing flag for new note
   G.processingAnswer = false;
   
   if(G.idx>=G.notes.length){endStage();return;}
   const n=G.notes[G.idx];
-  
-  // Apply co-driver style transformations to note display
   const style = typeof CoDriverAudio !== 'undefined' ? CoDriverAudio.getVoiceCharacter() : 'measured';
   const transformedNote = applyStyleToNote(n.raw, style);
-  
-  // Initialize rally state for first note
   if(G.idx === 0) {
     RALLY_STATE.startTime = Date.now();
     RALLY_STATE.lastInputTime = Date.now();
     RALLY_STATE.currentSector = 0;
     RALLY_STATE.splitTimes = [];
     RALLY_STATE.sectorTimes = [];
-    
-    // Initialize competitive seed for zero randomness
     initializeCompetitiveSeed(G.currentStageName || 'Unknown', G.driver || 'Driver');
-    
-    // Load personal best if exists
     loadPersonalBest();
   }
-  
-  // Note streaming with fade transitions
   const noteElement = document.getElementById('g-note');
   const narrElement = document.getElementById('g-narr');
-  
-  // Fade out current note
   if(G.idx > 0) {
     noteElement.style.opacity = '0';
     noteElement.style.transition = 'opacity 0.3s ease';
     
     setTimeout(() => {
-      // Fade in new note with style transformation
       noteElement.textContent = transformedNote;
       noteElement.style.opacity = '1';
     }, 150);
@@ -2217,8 +2235,6 @@ function loadNote(){
     noteElement.textContent = transformedNote;
     noteElement.style.opacity = '1';
   }
-  
-  // Overlapping narration - start narration before previous note fully completes
   if(n.narr) {
     setTimeout(() => {
       narrElement.style.display = 'block';
@@ -2229,8 +2245,6 @@ function loadNote(){
       setTimeout(() => {
         narrElement.style.opacity = '1';
       }, 50);
-      
-      // Auto-hide narration after reading time
       setTimeout(() => {
         narrElement.style.opacity = '0';
         setTimeout(() => {
@@ -2239,8 +2253,6 @@ function loadNote(){
       }, 3000 + n.narr.length * 50); // Longer narration gets more time
     }, G.idx > 0 ? 200 : 500); // Overlap timing
   }
-  
-  // Update UI elements
   document.getElementById('g-fb').style.display='none';
   document.getElementById('g-comm').style.display='none';
   document.getElementById('g-comm-ph').style.display='block';
@@ -2251,8 +2263,6 @@ function loadNote(){
   document.getElementById('g-foot-note').textContent=`Note ${G.idx+1} of ${G.notes.length}`;
   document.getElementById('g-prog').style.width=(G.idx/G.notes.length*100)+'%';
   document.getElementById('g-corr').textContent=G.correct;
-  
-  // Update progress dots with smooth transitions
   if(G.idx>0){
     const pd=document.getElementById(`gd-${G.idx-1}`);
     if(pd&&!pd.classList.contains('bad')&&!pd.classList.contains('sk')){
@@ -2265,47 +2275,30 @@ function loadNote(){
     cur.style.transition = 'all 0.3s ease';
     cur.className='gd now';
   }
-  
-  // Dynamic difficulty based on performance
   updateDynamicDifficulty();
-  
-  // Rhythm shifts every 5-8 notes
   if(G.idx > 0 && (G.idx % 6 === 0 || G.idx % 7 === 0)) {
     applyRhythmShift();
   }
-  
-  // Weather effects as tempo
   applyWeatherTempo();
-  
-  // Update urgency states
   updateUrgencyState();
-  
-  // Timer with dynamic adjustment
   G.remaining = calculateDynamicTimeLimit();
   updateTimer();
   clearInterval(G.timer);
   G.timer=setInterval(()=>{G.remaining--;updateTimer();if(G.remaining<=0){clearInterval(G.timer);timeUp();}},1000);
   
   setTimeout(()=>document.getElementById('g-input').focus(),50);
-  
-  // Inject atmosphere event every 2nd note (reduced frequency for flow)
   if(G.idx>0&&G.idx%3===0)setTimeout(injectAtmosphere,800);
-  
-  // Reset visual feedback
   const input = document.getElementById('g-input');
   input.style.borderColor = 'var(--brd2)';
   input.style.boxShadow = 'none';
 }
 
 function updateDynamicDifficulty() {
-  // Adjust timer and threshold based on current streak
   const baseTime = DIFFS[G.diff].s;
   const streakBonus = Math.min(RALLY_STATE.streak * 0.5, 3); // Max 3 seconds bonus
   const momentumBonus = (RALLY_STATE.momentum - 1.0) * 2; // Momentum affects time
   
   G.timeLimit = Math.max(5, baseTime - streakBonus + momentumBonus);
-  
-  // Adjust forgiveness window based on performance
   if(RALLY_STATE.streak >= 5) {
     RALLY_STATE.forgivenessWindow = Math.min(0.75, 0.62 + RALLY_STATE.streak * 0.02);
   } else if(RALLY_STATE.streak === 0 && RALLY_STATE.momentum < 0.8) {
@@ -2315,8 +2308,6 @@ function updateDynamicDifficulty() {
 
 function calculateDynamicTimeLimit() {
   let timeLimit = G.timeLimit;
-  
-  // Weather effects
   if(RALLY_STATE.weatherEffect === 'rain') {
     timeLimit += 2; // Slower transitions
   } else if(RALLY_STATE.weatherEffect === 'ice') {
@@ -2324,8 +2315,6 @@ function calculateDynamicTimeLimit() {
   } else if(RALLY_STATE.weatherEffect === 'fog') {
     timeLimit += 1.5; // Delayed reveal
   }
-  
-  // Urgency state effects
   if(RALLY_STATE.urgencyLevel === 'critical') {
     timeLimit -= 1; // Less time under pressure
   } else if(RALLY_STATE.urgencyLevel === 'calm' && RALLY_STATE.streak >= 3) {
@@ -2336,11 +2325,8 @@ function calculateDynamicTimeLimit() {
 }
 
 function applyRhythmShift() {
-  // Change pace every 5-8 notes to prevent monotony
   const shifts = ['normal', 'fast', 'technical', 'sprint'];
   const currentShift = shifts[Math.floor((G.idx / 6) % shifts.length)];
-  
-  // Show rhythm shift indicator
   const indicator = document.createElement('div');
   indicator.className = 'rhythm-shift';
   indicator.textContent = currentShift.toUpperCase() + ' SECTION';
@@ -2362,8 +2348,6 @@ function applyRhythmShift() {
   
   document.body.appendChild(indicator);
   setTimeout(() => indicator.remove(), 2000);
-  
-  // Adjust parameters based on rhythm
   switch(currentShift) {
     case 'fast':
       G.timeLimit *= 0.8; // 20% faster
@@ -2378,15 +2362,11 @@ function applyRhythmShift() {
 }
 
 function applyWeatherTempo() {
-  // Weather as tempo system
   if(!RALLY_STATE.weatherEffect) {
-    // Randomly assign weather for competitive fairness (seeded)
     const weatherTypes = ['clear', 'rain', 'ice', 'fog'];
     const seed = G.idx + G.stageName.charCodeAt(0); // Deterministic seed
     RALLY_STATE.weatherEffect = weatherTypes[seed % weatherTypes.length];
   }
-  
-  // Update conditions display
   const conditionsElement = document.getElementById('g-cond');
   if(conditionsElement) {
     const weatherDescriptions = {
@@ -2400,7 +2380,6 @@ function applyWeatherTempo() {
 }
 
 function updateUrgencyState() {
-  // Adaptive co-driver voice tone based on performance
   let newUrgency = 'calm';
   
   if(RALLY_STATE.streak >= 5) {
@@ -2413,8 +2392,6 @@ function updateUrgencyState() {
   
   if(newUrgency !== RALLY_STATE.urgencyLevel) {
     RALLY_STATE.urgencyLevel = newUrgency;
-    
-    // Visual indicator of urgency change
     const urgencyIndicator = document.createElement('div');
     urgencyIndicator.className = 'urgency-change';
     urgencyIndicator.textContent = `CO-DRIVER: ${newUrgency.toUpperCase()}`;
@@ -2445,8 +2422,6 @@ function updateTimer(){
   document.getElementById('t-arc').setAttribute('stroke',G.remaining<=3?'#e8291c':G.remaining<=5?'#f5c518':'#39ff14');
   document.getElementById('g-timer').textContent=G.remaining;
 }
-
-// Apply co-driver style transformations to pace notes
 function applyStyleToNote(rawNote, style) {
   if (!rawNote) return rawNote;
   
@@ -2454,24 +2429,19 @@ function applyStyleToNote(rawNote, style) {
   
   switch(style) {
     case 'intense': // Aggressive style
-      // Use urgent linking
       transformed = transformed.replace(/\bINTO\b/g, '>>');
       transformed = transformed.replace(/\binto\b/g, '>>');
-      // Emphasize cautions
       transformed = transformed.replace(/!/g, '!!');
       break;
       
     case 'fearless': // McRae style
-      // Minimal linking - aggressive shorthand
       transformed = transformed.replace(/\bINTO\b/g, '>');
       transformed = transformed.replace(/\binto\b/g, '>');
-      // Remove single cautions (trust the driver)
       transformed = transformed.replace(/([^!])!/g, '$1');
       break;
       
     case 'measured': // Calm style (default)
     default:
-      // Keep standard format
       break;
   }
   
@@ -2487,8 +2457,6 @@ function similarity(a,b){
   return hit/Math.max(wa.size,wb.size);
 }
 function submitAnswer(){
-  // Legacy function - now uses auto-submit system
-  // Only called if user manually presses Enter
   clearInterval(G.timer);
   if(G.idx>=G.notes.length||G.stageEnded)return;
   const typed=document.getElementById('g-input').value.trim();
@@ -2496,16 +2464,10 @@ function submitAnswer(){
   
   const currentNote = G.notes[G.idx];
   const reactionTime = Date.now() - RALLY_STATE.lastInputTime;
-  
-  // Use the same processing as auto-submit
   const baseScore = similarity(typed, currentNote.ans);
   const finalScore = Math.min(1.0, baseScore * RALLY_STATE.multiplier);
   const ok = finalScore >= RALLY_STATE.forgivenessWindow;
-  
-  // Record reaction time
   RALLY_STATE.reactionTimes.push(reactionTime);
-  
-  // Update rally state
   if (ok) {
     RALLY_STATE.streak++;
     RALLY_STATE.consecutiveWrong = 0; // Reset on correct answer
@@ -2561,7 +2523,6 @@ function timeUp(){
     triggerCrash(n.raw);
   }
 }
-// Store original showResult to prevent wrapper loops
 window.__origShowResult = function(ok,n,score,skipped,timeout,crashFollows=false){
   if(!n)return; // guard against undefined note
   const fb=document.getElementById('g-fb');
@@ -2575,7 +2536,6 @@ window.__origShowResult = function(ok,n,score,skipped,timeout,crashFollows=false
   document.getElementById('g-comm-ph').style.display='none';
   document.getElementById('g-comm-txt').textContent=`"${n.comm}" — ${ERAS[G.era].commentator}`;
   document.getElementById('btn-hear-trans').style.display='flex';
-  // AUTO-PLAY commentator voice (not the note — that stays manual)
   const voices=window.speechSynthesis?window.speechSynthesis.getVoices():[];
   if(window.speechSynthesis){
     window.speechSynthesis.cancel();
@@ -2586,8 +2546,6 @@ window.__origShowResult = function(ok,n,score,skipped,timeout,crashFollows=false
     window.speechSynthesis.speak(utt);
   }
 };
-
-// Wrapper for showResult that can be overridden without breaking processAnswer
 function showResult(ok,n,score,skipped,timeout,crashFollows=false){
   return window.__origShowResult(ok,n,score,skipped,timeout,crashFollows);
 }
@@ -2619,8 +2577,6 @@ function speakTranslation(){
   window.speechSynthesis.speak(utt);
 }
 function abandonStage(){if(confirm('Abandon this stage?')){clearInterval(G.timer);showMenu();}}
-
-// ═══════════════ END STAGE ═══════════════
 function endStage(){
   if(G.stageEnded)return; // prevent double-call
   G.stageEnded=true;
@@ -2658,18 +2614,14 @@ function endStage(){
     document.getElementById('r-career-btn').style.display='none';
     document.getElementById('r-std-box').style.display='none';
   }
-  // Newspaper fill
   document.getElementById('r-era-tag').textContent=`${era.label} Special — Stage Report`;
   document.getElementById('r-date').textContent=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}).toUpperCase();
   document.getElementById('r-outlet').textContent=era.outlet;
   document.getElementById('r-issue').textContent=`${era.label} · ${stageName}`;
-  // Get co-driver style for story tone
   const storyTone = typeof CoDriverAudio !== 'undefined' ? CoDriverAudio.getStoryTone() : 'professional';
   const narratorStyle = typeof CoDriverAudio !== 'undefined' ? CoDriverAudio.getNarratorStyle() : 'analytical';
   
   const stageShort=stageName.split('—')[1]?.trim().toUpperCase()||stageName.toUpperCase();
-  
-  // Style-specific headlines
   let hl;
   if (G.dnf) {
     hl = `<span>${G.driver.toUpperCase()}</span> RETIRES FROM ${stageShort} — CAR TOO DAMAGED TO CONTINUE`;
@@ -2701,8 +2653,6 @@ function endStage(){
     ?`The crew translated ${G.correct} of ${total} pacenotes correctly. Stage time: ${timeStr}.`
     :`Only ${G.correct} of ${total} notes read correctly. Time lost across multiple corners.`;
   const crashWords=G.crashCount>0?`After ${G.crashCount} incident${G.crashCount>1?'s':''} costing over ${Math.round(G.totalTimeLost)} seconds, `:' ';
-  
-  // Style-specific article text
   let art;
   if (G.dnf) {
     art = `<p>${G.driver} and ${G.codriver} were forced to retire from ${stageName} after damage accumulated beyond the point of recovery. The ${G.car?.n||'car'} was too badly damaged to continue.</p><p>"It's heartbreaking," said ${G.driver} at the stage end. "The notes were there but we lost the car. That's rallying."</p><p>The retirement means no points from this stage. But the car can be rebuilt — the knowledge stays.</p>`;
@@ -2729,12 +2679,8 @@ function endStage(){
         art = `<p>${G.driver} and ${G.codriver} endured a difficult run through ${stageName}, with only ${G.correct} of ${total} pacenotes translated accurately. ${crashWords}time was lost at multiple corners where hesitation cost precious seconds.</p><p>"We got caught out on the sequences," admitted ${G.driver}. "The notes came quicker than expected." ${G.codriver}: "We'll study the vocab before the next one."</p><p>The crew brought the car home in ${timeStr}. Work is needed before the next round.</p>`;
     }
   }
-  
-  // Add crash/damage section to article
   const dmgLine=G.crashCount>0?`<p>The car suffered ${G.crashCount} incident${G.crashCount>1?'s':''} during the stage, costing an estimated ${Math.round(G.totalTimeLost)} seconds in total. Average car damage was ${Math.round(avgDmg)}% at the finish — ${avgDmg>80?'remarkable considering the conditions':'visible on the bodywork and underneath'}.`:`<p>The car came through clean — no incidents, no damage beyond the normal wear of a gravel stage.`;
   document.getElementById('r-article').innerHTML=art+dmgLine+'</p>';
-  
-  // Style-specific quotes
   let q;
   if (won) {
     switch(storyTone) {
@@ -2775,7 +2721,6 @@ function endStage(){
       <div class="bd-r ${r.ok?'ok':'bad'}"></div>
     </div>`).join('');
   show('result');
-  // Auto-play win/lose jingle via TTS
   if(window.speechSynthesis){
     setTimeout(()=>{
       window.speechSynthesis.cancel();
@@ -2787,14 +2732,10 @@ function endStage(){
       window.speechSynthesis.speak(utt);
     },600);
   }
-  
-  // Save personal best (only if not DNF)
   if (!G.dnf) {
     savePersonalBest(timeStr, acc);
   }
 }
-
-// ═══════════════ TRAINING ═══════════════
 function openTraining(){
   buildLessonList();
   loadLesson('intro');
@@ -2844,8 +2785,6 @@ function nextQuiz(){
 function checkQuiz(){
   const qi=document.getElementById('qz-input');const qf=document.getElementById('qz-fb');
   if(!qi||!qf||!quizCurrent)return;
-  
-  // Record telemetry
   const reactionTime=quizStartTime ? Date.now()-quizStartTime : 0;
   const score=similarity(qi.value.trim(),quizCurrent.ans);
   const ok=score>=0.60;
@@ -2862,8 +2801,6 @@ function checkQuiz(){
   
   qf.textContent=ok?`Correct! ${Math.round(score*100)}% — Answer: ${quizCurrent.ans}`:`Not quite (${Math.round(score*100)}%) — Answer: ${quizCurrent.ans}`;
   qf.className='quiz-fb '+(ok?'ok':'bad');
-  
-  // Show telemetry button after 5 attempts
   if(quizTelemetry.length>=5){
     showTelemetryButton();
   }
@@ -2886,8 +2823,6 @@ function showTelemetryGraph(){
   overlay.id='telemetry-overlay';
   overlay.className='screen active';
   overlay.style.cssText='z-index:10000;background:rgba(10,10,12,0.98);';
-  
-  // Calculate stats
   const times=quizTelemetry.map(t=>t.reactionTime);
   const avgTime=times.reduce((a,b)=>a+b,0)/times.length;
   const minTime=Math.min(...times);
@@ -2946,8 +2881,6 @@ function showTelemetryGraph(){
   `;
   
   document.body.appendChild(overlay);
-  
-  // Draw graph
   setTimeout(()=>drawTelemetryGraph(),50);
 }
 
@@ -2957,20 +2890,14 @@ function drawTelemetryGraph(){
   const ctx=canvas.getContext('2d');
   const w=canvas.width;
   const h=canvas.height;
-  
-  // Clear
   ctx.fillStyle='#0a0a0c';
   ctx.fillRect(0,0,w,h);
   
   if(quizTelemetry.length<2)return;
-  
-  // Get data
   const times=quizTelemetry.map(t=>t.reactionTime/1000);
   const maxTime=Math.max(...times,5);
   const minTime=Math.min(...times,0);
   const range=maxTime-minTime||1;
-  
-  // Draw grid
   ctx.strokeStyle='#252530';
   ctx.lineWidth=1;
   for(let i=0;i<=5;i++){
@@ -2979,33 +2906,24 @@ function drawTelemetryGraph(){
     ctx.moveTo(40,y);
     ctx.lineTo(w-20,y);
     ctx.stroke();
-    // Labels
     ctx.fillStyle='#5a5a70';
     ctx.font='10px "IBM Plex Mono"';
     ctx.textAlign='right';
     ctx.fillText((minTime+(i*range/5)).toFixed(1)+'s',35,y+3);
   }
-  
-  // Draw bars
   const barW=Math.max(20,(w-80)/quizTelemetry.length-4);
   quizTelemetry.forEach((t,i)=>{
     const x=40+i*((w-80)/Math.max(quizTelemetry.length,10))+2;
     const barH=(t.reactionTime/1000-minTime)/range*(h-60);
     const y=h-30-barH;
-    
-    // Bar
     ctx.fillStyle=t.correct?'#39ff14':'#e8291c';
     ctx.fillRect(x,y,barW,barH);
-    
-    // Highlight best time
     if(t.reactionTime===Math.min(...quizTelemetry.map(tt=>tt.reactionTime))){
       ctx.strokeStyle='#f5c518';
       ctx.lineWidth=2;
       ctx.strokeRect(x-1,y-1,barW+2,barH+2);
     }
   });
-  
-  // Title
   ctx.fillStyle='#f5c518';
   ctx.font='bold 12px "IBM Plex Mono"';
   ctx.textAlign='center';
@@ -3030,19 +2948,14 @@ function hearQuiz(){
   window.speechSynthesis.speak(utt);
 }
 
-
 document.addEventListener('keydown',e=>{
   if(e.key==='Enter'){
     if(document.getElementById('game').classList.contains('active')&&!document.getElementById('g-sub').disabled)submitAnswer();
     if(document.getElementById('training').classList.contains('active')&&document.activeElement===document.getElementById('qz-input'))checkQuiz();
   }
-  
-  // Global input focus for game screen - typing starts without clicking
   if(document.getElementById('game').classList.contains('active')) {
     const input = document.getElementById('g-input');
-    // Only capture if game is active, input exists, isn't disabled, and isn't already focused
     if(input && !input.disabled && document.activeElement !== input) {
-      // Ignore control keys and special keys
       const ignoreKeys = ['Control', 'Alt', 'Shift', 'Meta', 'Escape', 'Tab', 
                           'CapsLock', 'NumLock', 'ScrollLock', 'Insert', 'Delete',
                           'Home', 'End', 'PageUp', 'PageDown', 'ArrowUp', 'ArrowDown', 
@@ -3050,18 +2963,12 @@ document.addEventListener('keydown',e=>{
                           'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12'];
       
       if(!ignoreKeys.includes(e.key) && !e.ctrlKey && !e.altKey && !e.metaKey) {
-        // Focus the input and let the character be typed
         input.focus();
       }
     }
   }
 });
 window.speechSynthesis&&window.speechSynthesis.getVoices();
-
-
-// ═══════════════════════════════════════════════════════════════
-// TUTORIAL SYSTEM (#001, #005)
-// ═══════════════════════════════════════════════════════════════
 
 const TUTORIAL_STEPS = [
   {
@@ -3143,7 +3050,6 @@ function openTutorial() {
 function skipTutorial() {
   document.getElementById('tut-overlay').style.display = 'none';
   clearInterval(tutTimer);
-  // Go straight to setup
   openSetup();
 }
 
@@ -3152,14 +3058,10 @@ function renderTutStep() {
   tutTimerRunning = false;
   const step = TUTORIAL_STEPS[tutStep];
   const total = TUTORIAL_STEPS.length;
-
-  // Progress bar
   document.getElementById('tut-prog-fill').style.width = ((tutStep / (total-1)) * 100) + '%';
   document.getElementById('tut-step-label').textContent = `Tutorial · Step ${tutStep+1} of ${total}`;
   document.getElementById('tut-title').textContent = step.title;
   document.getElementById('tut-body').innerHTML = step.body;
-
-  // Note display
   const noteEl = document.getElementById('tut-note-display');
   if (step.note) {
     noteEl.style.display = 'block';
@@ -3167,8 +3069,6 @@ function renderTutStep() {
   } else {
     noteEl.style.display = 'none';
   }
-
-  // Highlight box
   const hlEl = document.getElementById('tut-highlight-box');
   if (step.highlight) {
     hlEl.style.display = 'block';
@@ -3176,8 +3076,6 @@ function renderTutStep() {
   } else {
     hlEl.style.display = 'none';
   }
-
-  // Input
   const inputWrap = document.getElementById('tut-input-wrap');
   const inputEl = document.getElementById('tut-input');
   const hintEl = document.getElementById('tut-input-hint');
@@ -3191,8 +3089,6 @@ function renderTutStep() {
     feedbackEl.style.color = '';
     document.getElementById('tut-next').style.display = 'none';
     setTimeout(() => inputEl.focus(), 80);
-
-    // Timed step
     if (step.timedStep) {
       let remaining = step.timeLimit;
       hintEl.textContent = `${remaining}s remaining`;
@@ -3215,8 +3111,6 @@ function renderTutStep() {
     inputWrap.style.display = 'none';
     document.getElementById('tut-next').style.display = 'block';
   }
-
-  // Next button label
   document.getElementById('tut-next').textContent = step.nextLabel || 'Continue';
 }
 
@@ -3225,13 +3119,10 @@ function checkTutInput() {
   if (!step || !step.needsInput) return;
   const val = document.getElementById('tut-input').value.trim().toLowerCase().replace(/[^a-z0-9 ]/g,'');
   if (!val) return;
-
-  // Check against accepted answers (fuzzy)
   const accepted = step.accept || [];
   let matched = false;
   for (const a of accepted) {
     const aClean = a.toLowerCase().replace(/[^a-z0-9 ]/g,'');
-    // Word-overlap match
     const wordsVal = new Set(val.split(/\s+/));
     const wordsAns = new Set(aClean.split(/\s+/));
     let hits = 0;
@@ -3251,7 +3142,6 @@ function checkTutInput() {
   } else {
     feedbackEl.textContent = "Not quite — try again.";
     feedbackEl.style.color = '#ff9090';
-    // Shake the input
     inputEl.style.animation = 'none';
     requestAnimationFrame(() => { inputEl.style.animation = 'tutShake .3s ease'; });
   }
@@ -3274,10 +3164,6 @@ function tutNext() {
   renderTutStep();
 }
 
-// ═══════════════════════════════════════════════════════════════
-// ENHANCED CRASH FEEDBACK (#002, #004)
-// ═══════════════════════════════════════════════════════════════
-
 const CRASH_MESSAGES = {
   off_road:   { title: 'OFF THE ROAD!',    sub: 'Ran wide — missed the corner entry' },
   rock_strike:{ title: 'ROCK STRIKE!',     sub: 'Debris hit — suspension taking damage' },
@@ -3289,12 +3175,8 @@ const CRASH_MESSAGES = {
 
 function showCrashImpact(crashType) {
   const msg = CRASH_MESSAGES[crashType] || { title: 'INCIDENT!', sub: 'Car off the road' };
-
-  // Screen freeze simulation — briefly lock everything
   document.body.style.pointerEvents = 'none';
   setTimeout(() => { document.body.style.pointerEvents = ''; }, 350);
-
-  // Red flash overlay
   const flash = document.getElementById('crash-flash-overlay');
   flash.style.display = 'block';
   flash.style.opacity = '1';
@@ -3306,8 +3188,6 @@ function showCrashImpact(crashType) {
       flash.style.transition = '';
     }, 400);
   }, 200);
-
-  // Big centered message
   const bigMsg = document.getElementById('crash-big-msg');
   const bigTitle = document.getElementById('crash-big-title');
   const bigSub = document.getElementById('crash-big-sub');
@@ -3315,18 +3195,12 @@ function showCrashImpact(crashType) {
   bigSub.textContent = msg.sub;
   bigMsg.style.display = 'flex';
   setTimeout(() => { bigMsg.style.display = 'none'; }, 1800);
-
-  // Screen shake on game element
   const gameEl = document.getElementById('game');
   if (gameEl) {
     gameEl.classList.add('shake-screen');
     setTimeout(() => gameEl.classList.remove('shake-screen'), 450);
   }
 }
-
-// ═══════════════════════════════════════════════════════════════
-// POSITIVE FEEDBACK FLASHES (#008)
-// ═══════════════════════════════════════════════════════════════
 
 const CORRECT_MESSAGES = [
   'CLEAN CALL', 'GOOD FLOW', 'DRIVER TRUST +', 'SHARP READ',
@@ -3352,16 +3226,11 @@ function showCorrectFlash() {
   }, 900);
 }
 
-// ═══════════════════════════════════════════════════════════════
-// SPLIT TIME TICKER (#007)
-// ═══════════════════════════════════════════════════════════════
-
 let splitGap = 0; // seconds behind/ahead of target
 
 function updateSplitTicker(noteCorrect, noteIdx, total) {
   if (noteIdx < 1) return;
   const ticker = document.getElementById('split-ticker');
-  // Each wrong note costs ~3.5s, each correct saves ~1s vs target
   if (noteCorrect) splitGap -= 1.0 + Math.random() * 0.8;
   else splitGap += 2.5 + Math.random() * 2.0;
 
@@ -3382,24 +3251,13 @@ function updateSplitTicker(noteCorrect, noteIdx, total) {
 
 function resetSplitGap() { splitGap = 0; }
 
-// ═══════════════════════════════════════════════════════════════
-// IMPROVED DNF DECISION (#004)
-// ═══════════════════════════════════════════════════════════════
-
 function showImprovedCrashModal(crash, desc, narr, hits, timeLost, isDNF, longStop) {
-  // Calculate risk level for the dramatic DNF screen
   const avgDmg = (G.damage.engine + G.damage.susp + G.damage.tyres + G.damage.body) / 4;
   const riskLevel = avgDmg < 30 ? 'EXTREME' : avgDmg < 55 ? 'HIGH' : 'MODERATE';
   const riskColor = avgDmg < 30 ? '#e8291c' : avgDmg < 55 ? '#f5c518' : '#39ff14';
-
-  // Show crash impact animation first
   showCrashImpact(crash.id || 'big_off');
-
-  // Then show modal with improved button labels after brief delay
   setTimeout(() => {
     showCrashModal(crash, desc, narr, hits, timeLost, isDNF, longStop);
-
-    // Override button labels for dramatic effect
     const okBtn = document.getElementById('crash-ok-btn');
     const dnfBtn = document.getElementById('crash-dnf-btn');
     const hdr = document.querySelector('#crash-modal [style*="background:#e8291c"]') ||
@@ -3412,7 +3270,6 @@ function showImprovedCrashModal(crash, desc, narr, hits, timeLost, isDNF, longSt
         dnfBtn.style.background = '#e8291c';
         dnfBtn.style.color = '#fff';
       }
-      // Add risk display
       const modal = document.querySelector('#crash-modal .crash-inner, #crash-modal > div > div');
       if (modal) {
         const riskEl = document.createElement('div');
@@ -3431,10 +3288,6 @@ function showImprovedCrashModal(crash, desc, narr, hits, timeLost, isDNF, longSt
   }, 300);
 }
 
-// ═══════════════════════════════════════════════════════════════
-// MISTAKE EXPLANATION (#003)
-// ═══════════════════════════════════════════════════════════════
-
 function getMistakeExplanation(noteRaw, typed, answerCorrect) {
   if (answerCorrect) return null;
   const raw = noteRaw.toUpperCase();
@@ -3451,27 +3304,13 @@ function getMistakeExplanation(noteRaw, typed, answerCorrect) {
   if (!typed || typed.trim() === '') return 'No answer given — timer ran out';
   return 'Translation incomplete — check all parts of the note';
 }
-
-// ═══════════════════════════════════════════════════════════════
-// HOOK INTO EXISTING FUNCTIONS
-// ═══════════════════════════════════════════════════════════════
-
-// Override showResult to add correct flash, split ticker, mistake explanation
 if (typeof window.showResult === 'function' && !window.__rpaShowResultWrapped) {
   const _origShowResult = window.showResult;
   window.showResult = function(ok, n, score, skipped, timeout, crashFollows) {
     if (!n) return;
-
-    // Call original renderer once
     _origShowResult(ok, n, score, skipped, timeout, crashFollows);
-
-    // Correct flash
     if (ok) showCorrectFlash();
-
-    // Split ticker
     updateSplitTicker(ok, G.idx, G.notes.length);
-
-    // Enhanced mistake explanation
     if (!ok && !skipped) {
       const exp = getMistakeExplanation(n.raw, '', false);
       const fbAns = document.getElementById('g-fb-ans');
@@ -3482,8 +3321,6 @@ if (typeof window.showResult === 'function' && !window.__rpaShowResultWrapped) {
   };
   window.__rpaShowResultWrapped = true;
 }
-
-// Override triggerCrash to use improved modal
 const _origTriggerCrash = triggerCrash;
 function triggerCrash(noteRaw) {
   G.crashCount++;
@@ -3502,8 +3339,6 @@ function triggerCrash(noteRaw) {
   const narr = crash.narrs[Math.floor(Math.random() * crash.narrs.length)];
   const avgAfter = (G.damage.engine + G.damage.susp + G.damage.tyres + G.damage.body) / 4;
   const isDNF = !crash.recoverable || (avgAfter < 10);
-
-  // Use improved modal
   showImprovedCrashModal(crash, desc, narr, hits, timeLost, isDNF, crash.longStop);
 
   if (window.speechSynthesis) {
@@ -3515,10 +3350,6 @@ function triggerCrash(noteRaw) {
   }
   return isDNF;
 }
-
-// Stage start reset is handled by the safe wrapper in rally_systems.js.
-
-// Tutorial keyboard
 document.addEventListener('keydown', e => {
   if (document.getElementById('tut-overlay').style.display === 'flex') {
     if (e.key === 'Enter') {
@@ -3536,12 +3367,6 @@ document.addEventListener('keydown', e => {
     }
   }
 });
-
-// ═══════════════════════════════════════════════════════════════
-// COMPETITIVE RALLY EXPERIENCE - AUTO-SUBMIT & VISUAL FLOW
-// ═══════════════════════════════════════════════════════════════
-
-// Execution contexts for different rally experiences
 const EXECUTION_CONTEXTS = {
   sprint: {
     name: 'Sprint',
@@ -3612,8 +3437,6 @@ const EXECUTION_CONTEXTS = {
     ambiguousPacing: true
   }
 };
-
-// Co-driver personality variants
 const CODRIVER_PERSONALITIES = {
   professional: {
     name: 'Professional',
@@ -3664,8 +3487,6 @@ const CODRIVER_PERSONALITIES = {
     }
   }
 };
-
-// Pacenote evolution system
 const PACENOTE_EVOLUTION = {
   clean: {
     level: 1,
@@ -3700,8 +3521,6 @@ const PACENOTE_EVOLUTION = {
     visualDensity: 1.2
   }
 };
-
-// Competitive rally state management
 const RALLY_STATE = {
   momentum: 1.0,
   streak: 0,
@@ -3717,49 +3536,34 @@ const RALLY_STATE = {
   urgencyLevel: 'calm',
   startTime: 0,
   splitTimes: [],
-  // Execution context
   currentContext: 'sprint',
   contextModifiers: {},
-  // Pacenote evolution
   currentEvolution: 'clean',
   evolutionLevel: 1,
-  // Co-driver personality
   codriverPersonality: 'professional',
-  // Advanced scoring
   accuracyScore: 0,
   speedScore: 0,
   consistencyScore: 0,
   resilienceScore: 0,
   totalScore: 0,
-  // Precision grading
   perfectInputs: 0,
   goodInputs: 0,
   safeInputs: 0,
   failInputs: 0,
-  // Recovery metrics
   recoverySpeeds: [],
   averageRecoveryTime: 0,
-  // Timing tiers
   earlyInputs: 0,
   lateInputs: 0,
-  // Personal best tracking
   personalBest: null,
   currentPB: null,
-  // Ghost system
   activeGhost: null,
   ghostData: null,
-  // Zero randomness seed
   competitiveSeed: 0,
-  // Fatigue system
   fatigueLevel: 0,
   fatigueMultiplier: 1.0,
-  // Crash prevention - consecutive wrong counter (need 2 for crash)
   consecutiveWrong: 0
 };
-
-// Zero randomness for competitive fairness
 function initializeCompetitiveSeed(stageName, driverName) {
-  // Create deterministic seed from stage and driver names
   let seed = 0;
   for (let i = 0; i < stageName.length; i++) {
     seed += stageName.charCodeAt(i) * (i + 1);
@@ -3769,44 +3573,26 @@ function initializeCompetitiveSeed(stageName, driverName) {
   }
   RALLY_STATE.competitiveSeed = seed % 1000000; // Keep it manageable
 }
-
-// Seeded random number generator for competitive fairness
 function seededRandom() {
   const x = Math.sin(RALLY_STATE.competitiveSeed++) * 10000;
   return x - Math.floor(x);
 }
-
-// Advanced composite scoring system (35% accuracy, 25% speed, 20% consistency, 15% resilience, 5% precision)
 function calculateCompositeScore() {
   const totalNotes = G.notes.length;
   const correctNotes = G.correct;
-  
-  // Accuracy score (35% weight) - weighted by execution context
   const context = EXECUTION_CONTEXTS[RALLY_STATE.currentContext];
   const accuracyWeight = context.name === 'Technical' ? 1.2 : 
                        context.name === 'Sprint' ? 0.9 : 1.0;
   RALLY_STATE.accuracyScore = (correctNotes / totalNotes) * 35 * accuracyWeight;
-  
-  // Speed score (25% weight) - based on average reaction time with fatigue consideration
   const avgReactionTime = RALLY_STATE.reactionTimes.length > 0 
     ? RALLY_STATE.reactionTimes.reduce((a, b) => a + b, 0) / RALLY_STATE.reactionTimes.length 
     : 5000; // Default slow time
-  
-  // Apply fatigue multiplier for endurance stages
   const adjustedTime = avgReactionTime * RALLY_STATE.fatigueMultiplier;
-  
-  // Faster reaction = higher score (optimal around 800ms)
   const optimalTime = 800;
   const speedRatio = Math.max(0, Math.min(1, 1 - (adjustedTime - optimalTime) / optimalTime));
   RALLY_STATE.speedScore = speedRatio * 25;
-  
-  // Consistency score (20% weight) - using weighted consistency
   RALLY_STATE.consistencyScore = calculateConsistencyWeightedScore();
-  
-  // Resilience score (15% weight) - recovery speed metric
   RALLY_STATE.resilienceScore = calculateResilienceScore();
-  
-  // Precision score (5% weight) - based on perfect/good/safe ratios
   const totalGradedInputs = RALLY_STATE.perfectInputs + RALLY_STATE.goodInputs + RALLY_STATE.safeInputs + RALLY_STATE.failInputs;
   if (totalGradedInputs > 0) {
     const precisionRatio = ((RALLY_STATE.perfectInputs * 1.0) + 
@@ -3816,15 +3602,11 @@ function calculateCompositeScore() {
   } else {
     RALLY_STATE.precisionScore = 2.5; // Default middle score
   }
-  
-  // Total composite score
   RALLY_STATE.totalScore = Math.min(100, RALLY_STATE.accuracyScore + RALLY_STATE.speedScore + 
                                    RALLY_STATE.consistencyScore + RALLY_STATE.resilienceScore + RALLY_STATE.precisionScore);
   
   return RALLY_STATE.totalScore;
 }
-
-// Ghost ecosystem implementation
 function createGhostData(runData) {
   return {
     driverName: runData.driverName || G.driver,
@@ -3855,8 +3637,6 @@ function saveGhostData(type, ghostData) {
 function getNearRankRival() {
   const leaderboard = getDailyLeaderboard();
   const playerScore = RALLY_STATE.totalScore;
-  
-  // Find the closest score above and below the player
   let aboveRival = null;
   let belowRival = null;
   
@@ -3867,8 +3647,6 @@ function getNearRankRival() {
       belowRival = entry;
     }
   }
-  
-  // Return the closer rival
   if (aboveRival && belowRival) {
     return (aboveRival.score - playerScore) < (playerScore - belowRival.score) ? aboveRival : belowRival;
   }
@@ -3876,14 +3654,11 @@ function getNearRankRival() {
 }
 
 function initializeGhosts() {
-  // Load Personal Best ghost
   const pbGhost = loadGhostData('pb');
   if (pbGhost) {
     RALLY_STATE.activeGhost = pbGhost;
     RALLY_STATE.ghostData = pbGhost;
   }
-  
-  // Load Global Top ghost (from daily leaderboard)
   const leaderboard = getDailyLeaderboard();
   if (leaderboard.length > 0) {
     const topEntry = leaderboard[0];
@@ -3896,8 +3671,6 @@ function initializeGhosts() {
     };
     saveGhostData('global', globalGhost);
   }
-  
-  // Load Near Rank rival ghost
   const nearRival = getNearRankRival();
   if (nearRival) {
     const rivalGhost = {
@@ -3932,49 +3705,34 @@ function savePersonalBest(timeStr, accuracy) {
     localStorage.setItem(key, JSON.stringify(pb));
     RALLY_STATE.personalBest = pb;
   } catch(e) {
-    // Silently fail if storage is full
   }
 }
 
 function updateGhostProgress(currentNoteIndex) {
   if (!RALLY_STATE.ghostData) return;
-  
-  // Calculate ghost progress based on their reaction times
   let ghostProgress = 0;
   for (let i = 0; i < currentNoteIndex && i < RALLY_STATE.ghostData.reactionTimes.length; i++) {
     ghostProgress += RALLY_STATE.ghostData.reactionTimes[i];
   }
-  
-  // Update ghost visual indicator
   const ghostIndicator = document.getElementById('ghost-progress');
   if (ghostIndicator) {
     const progress = Math.min(100, (ghostProgress / 1000) / G.timeLimit * 100);
     ghostIndicator.style.width = `${progress}%`;
   }
 }
-
-// Split system with sector times and PB comparisons
 function updateSplitTimes() {
   const currentNote = G.idx;
   const totalNotes = G.notes.length;
-  
-  // Define sectors (every 8 notes for 32-note stages)
   const sectorSize = Math.floor(totalNotes / 4);
   const currentSector = Math.floor(currentNote / sectorSize);
   
   if (currentSector > RALLY_STATE.currentSector && currentNote > 0) {
-    // Completed a sector
     const sectorTime = Date.now() - RALLY_STATE.sectorTimes[RALLY_STATE.currentSector] || 0;
     RALLY_STATE.splitTimes.push(sectorTime);
     RALLY_STATE.currentSector = currentSector;
-    
-    // Start timing new sector
     RALLY_STATE.sectorTimes[currentSector] = Date.now();
-    
-    // Show split time comparison to PB
     showSplitComparison(currentSector, sectorTime);
   } else if (RALLY_STATE.sectorTimes.length === 0) {
-    // Initialize first sector timing
     RALLY_STATE.sectorTimes[0] = Date.now();
   }
 }
@@ -4002,8 +3760,6 @@ function showSplitComparison(sectorNumber, sectorTime) {
     deltaText = 'NEW PB';
     deltaColor = '#f5c518'; // Yellow
   }
-  
-  // Show split ticker
   const splitTicker = document.getElementById('split-ticker');
   if (splitTicker) {
     splitTicker.style.display = 'block';
@@ -4015,30 +3771,21 @@ function showSplitComparison(sectorNumber, sectorTime) {
     }, 3000);
   }
 }
-
-// Precision grading windows (rhythm-game style)
 function calculatePrecisionGrade(reactionTime, timeLimit, similarity) {
   const timeRatio = reactionTime / (timeLimit * 1000); // Convert to ms
-  
-  // Perfect: Excellent timing + high accuracy
   if (timeRatio <= 0.25 && similarity >= 0.95) {
     return 'perfect';
   }
-  // Good: Good timing + decent accuracy
   else if (timeRatio <= 0.5 && similarity >= 0.8) {
     return 'good';
   }
-  // Safe: Acceptable timing + minimum accuracy
   else if (timeRatio <= 0.85 && similarity >= RALLY_STATE.forgivenessWindow) {
     return 'safe';
   }
-  // Fail: Too slow or too inaccurate
   else {
     return 'fail';
   }
 }
-
-// Timing tiers for early/late input rewards
 function calculateTimingTier(reactionTime, timeLimit) {
   const timeRatio = reactionTime / (timeLimit * 1000); // Convert to ms
   
@@ -4054,8 +3801,6 @@ function calculateTimingTier(reactionTime, timeLimit) {
     return 'timeout'; // Too late
   }
 }
-
-// Apply precision grading with risk vs reward
 function applyPrecisionGrade(grade, baseScore) {
   switch (grade) {
     case 'perfect':
@@ -4079,7 +3824,6 @@ function applyTimingTier(tier, score) {
   switch (tier) {
     case 'early':
       RALLY_STATE.earlyInputs++;
-      // Risk vs reward: early inputs are risky but rewarding
       return score * 1.2; // 20% bonus for early inputs
     case 'perfect':
       RALLY_STATE.perfectInputs++;
@@ -4095,8 +3839,6 @@ function applyTimingTier(tier, score) {
       return score;
   }
 }
-
-// Consistency weighted scoring
 function calculateConsistencyWeightedScore() {
   if (RALLY_STATE.reactionTimes.length < 2) return 0;
   
@@ -4104,32 +3846,22 @@ function calculateConsistencyWeightedScore() {
   const variance = RALLY_STATE.reactionTimes.reduce((acc, time) => {
     return acc + Math.pow(time - avgTime, 2);
   }, 0) / RALLY_STATE.reactionTimes.length;
-  
-  // Lower variance = higher consistency score
   const consistencyRatio = Math.max(0, Math.min(1, 1 - variance / 1000000));
-  
-  // Weight by execution context
   const context = EXECUTION_CONTEXTS[RALLY_STATE.currentContext];
   const consistencyWeight = context.name === 'Technical' ? 1.3 : 
                           context.name === 'Sprint' ? 0.8 : 1.0;
   
   return consistencyRatio * consistencyWeight * 25; // Max 25 points
 }
-
-// Resilience metric - recovery speed after mistakes
 function calculateResilienceScore() {
   if (RALLY_STATE.recoverySpeeds.length === 0) return 10; // Base score
   
   const avgRecoveryTime = RALLY_STATE.recoverySpeeds.reduce((a, b) => a + b, 0) / RALLY_STATE.recoverySpeeds.length;
-  
-  // Faster recovery = higher resilience score
   const optimalRecoveryTime = 2000; // 2 seconds
   const resilienceRatio = Math.max(0, Math.min(1, 1 - (avgRecoveryTime - optimalRecoveryTime) / optimalRecoveryTime));
   
   return resilienceRatio * 15 + 5; // Max 20 points
 }
-
-// Record recovery speed after mistake
 function recordRecoverySpeed() {
   if (RALLY_STATE.lastInputTime > 0) {
     const recoveryTime = Date.now() - RALLY_STATE.lastInputTime;
@@ -4137,8 +3869,6 @@ function recordRecoverySpeed() {
     RALLY_STATE.averageRecoveryTime = RALLY_STATE.recoverySpeeds.reduce((a, b) => a + b, 0) / RALLY_STATE.recoverySpeeds.length;
   }
 }
-
-// Percentile-based rank tiers (Bronze through World Class)
 function calculateRankTier(score) {
   if (score >= 95) return { tier: 'World Class', color: '#FFD700', percentile: 99 };
   if (score >= 90) return { tier: 'Elite', color: '#C0C0C0', percentile: 95 };
@@ -4154,8 +3884,6 @@ function calculateRankTier(score) {
   if (score >= 40) return { tier: 'Rookie', color: '#A52A2A', percentile: 2 };
   return { tier: 'Amateur', color: '#808080', percentile: 0 };
 }
-
-// Performance heatmap for post-run analysis
 function generatePerformanceHeatmap() {
   const heatmap = {
     accuracy: [],
@@ -4165,21 +3893,14 @@ function generatePerformanceHeatmap() {
   };
   
   G.results.forEach((result, index) => {
-    // Accuracy per note
     heatmap.accuracy.push(result.ok ? 1 : 0);
-    
-    // Speed per note (reaction time normalized)
     if (result.reactionTime) {
       const normalizedSpeed = Math.max(0, Math.min(1, 1 - (result.reactionTime - 500) / 2000));
       heatmap.speed.push(normalizedSpeed);
     } else {
       heatmap.speed.push(0);
     }
-    
-    // Consistency per note (based on momentum)
     heatmap.consistency.push(result.momentum || 1);
-    
-    // Mistakes marked
     if (!result.ok) {
       heatmap.mistakes.push(index);
     }
@@ -4187,8 +3908,6 @@ function generatePerformanceHeatmap() {
   
   return heatmap;
 }
-
-// ...
 
 function generateWeeklySeed(){
   const today = new Date();
@@ -4216,19 +3935,13 @@ function generateDailySeed() {
 function getWeeklyRallyStage() {
   const weeklySeed = generateWeeklySeed();
   const allStages = [];
-  
-  // Collect all stages from all eras
   Object.values(ERAS).forEach(era => {
     era.stages.forEach(stage => {
       allStages.push({ ...stage, era: era.label });
     });
   });
-  
-  // Select stage based on weekly seed
   const stageIndex = weeklySeed % allStages.length;
   const selectedStage = allStages[stageIndex];
-  
-  // Add weekly variations - more challenging than daily
   const tempSeed = weeklySeed + 2000;
   const contexts = ['technical', 'endurance', 'chaos'];
   const contextIndex = Math.floor((tempSeed % 10000) / 3333);
@@ -4245,15 +3958,9 @@ function getWeeklyRallyStage() {
 function submitWeeklyRun(score, driverName) {
   const weeklySeed = generateWeeklySeed();
   const leaderboardKey = `weekly_leaderboard_${weeklySeed}`;
-  
-  // Get current leaderboard and apply rank decay
   let leaderboard = JSON.parse(localStorage.getItem(leaderboardKey) || '[]');
   leaderboard = applyRankDecay(leaderboard, 'weekly');
-  
-  // Restore score if player was decayed
   leaderboard = restoreScoreOnActivity(leaderboard, driverName, score);
-  
-  // Add new entry
   const entry = {
     driverName,
     score,
@@ -4265,22 +3972,12 @@ function submitWeeklyRun(score, driverName) {
   };
   
   leaderboard.push(entry);
-  
-  // Sort by score (descending)
   leaderboard.sort((a, b) => b.score - a.score);
-  
-  // Keep only top 50 for weekly
   leaderboard = leaderboard.slice(0, 50);
-  
-  // Save updated leaderboard
   localStorage.setItem(leaderboardKey, JSON.stringify(leaderboard));
-  
-  // Return rank position
   const rank = leaderboard.findIndex(e => e.timestamp === entry.timestamp) + 1;
   return { rank, totalEntries: leaderboard.length, leaderboard };
 }
-
-// Seasonal structure with theme rotation
 const SEASONS = {
   spring: {
     name: 'Spring Championship',
@@ -4337,11 +4034,7 @@ function submitSeasonalRun(score, driverName) {
   const season = getCurrentSeason();
   const year = new Date().getFullYear();
   const seasonKey = `season_${season}_${year}`;
-  
-  // Get current seasonal leaderboard
   let leaderboard = JSON.parse(localStorage.getItem(seasonKey) || '[]');
-  
-  // Add new entry
   const entry = {
     driverName,
     score,
@@ -4353,17 +4046,9 @@ function submitSeasonalRun(score, driverName) {
   };
   
   leaderboard.push(entry);
-  
-  // Sort by score (descending)
   leaderboard.sort((a, b) => b.score - a.score);
-  
-  // Keep only top 200 for seasonal
   leaderboard = leaderboard.slice(0, 200);
-  
-  // Save updated leaderboard
   localStorage.setItem(seasonKey, JSON.stringify(leaderboard));
-  
-  // Return rank position
   const rank = leaderboard.findIndex(e => e.timestamp === entry.timestamp) + 1;
   return { rank, totalEntries: leaderboard.length, leaderboard, season: SEASONS[season] };
 }
@@ -4375,11 +4060,7 @@ function getSeasonalTheme() {
 
 function applySeasonalModifiers(stage) {
   const season = getSeasonalTheme();
-  
-  // Apply weather bias
   const weatherBias = season.weatherBias[Math.floor(Math.random() * season.weatherBias.length)];
-  
-  // Apply context bias for special events
   const contextBias = season.contextBias[Math.floor(Math.random() * season.contextBias.length)];
   
   return {
@@ -4394,8 +4075,6 @@ function applySeasonalModifiers(stage) {
 function getSeasonalEndTimestamp() {
   const month = new Date().getMonth();
   const year = new Date().getFullYear();
-  
-  // Calculate end of current season
   let endMonth, endDay;
   
   if (month >= 2 && month <= 4) { // Spring
@@ -4407,7 +4086,6 @@ function getSeasonalEndTimestamp() {
   } else { // Winter
     endMonth = 1; endDay = 28; // February
     if (month === 0 || month === 1) {
-      // Still in winter, next year's February
       return new Date(year + 1, endMonth, endDay).getTime();
     }
   }
@@ -4441,16 +4119,12 @@ function showSeasonalInfo() {
   `;
   
   document.body.appendChild(info);
-  
-  // Remove after 10 seconds
   setTimeout(() => {
     if (info.parentNode) {
       info.parentNode.removeChild(info);
     }
   }, 10000);
 }
-
-// Lightweight replays and seed sharing
 function createReplayData(runData) {
   return {
     version: '1.0',
@@ -4465,34 +4139,24 @@ function createReplayData(runData) {
     seed: runData.seed || RALLY_STATE.competitiveSeed,
     difficulty: runData.difficulty || G.diff,
     notes: runData.notes || G.notes.map(n => ({ raw: n.raw, ans: n.ans })),
-    
-    // Performance data
     totalScore: runData.totalScore || RALLY_STATE.totalScore,
     accuracyScore: runData.accuracyScore || RALLY_STATE.accuracyScore,
     speedScore: runData.speedScore || RALLY_STATE.speedScore,
     consistencyScore: runData.consistencyScore || RALLY_STATE.consistencyScore,
     resilienceScore: runData.resilienceScore || RALLY_STATE.resilienceScore,
     precisionScore: runData.precisionScore || RALLY_STATE.precisionScore,
-    
-    // Detailed metrics
     reactionTimes: [...(runData.reactionTimes || RALLY_STATE.reactionTimes)],
     precisionGrades: [...(runData.precisionGrades || RALLY_STATE.precisionGrades || [])],
     sectorTimes: [...(runData.sectorTimes || RALLY_STATE.splitTimes)],
     recoverySpeeds: [...(runData.recoverySpeeds || RALLY_STATE.recoverySpeeds)],
-    
-    // Statistics
     perfectInputs: runData.perfectInputs || RALLY_STATE.perfectInputs,
     goodInputs: runData.goodInputs || RALLY_STATE.goodInputs,
     safeInputs: runData.safeInputs || RALLY_STATE.safeInputs,
     failInputs: runData.failInputs || RALLY_STATE.failInputs,
     earlyInputs: runData.earlyInputs || RALLY_STATE.earlyInputs,
     lateInputs: runData.lateInputs || RALLY_STATE.lateInputs,
-    
-    // Rank and progression
     rankTier: calculateRankTier(runData.totalScore || RALLY_STATE.totalScore),
     isNewPB: runData.isNewPB || false,
-    
-    // Context-specific data
     fatigueLevel: runData.fatigueLevel || RALLY_STATE.fatigueLevel,
     momentumHistory: runData.momentumHistory || [],
     streakHistory: runData.streakHistory || []
@@ -4500,7 +4164,6 @@ function createReplayData(runData) {
 }
 
 function generateShareableSeed(replayData) {
-  // Create a compact, shareable string
   const seedData = {
     s: replayData.seed, // seed
     st: replayData.stageName.substring(0, 10), // stage (truncated)
@@ -4509,20 +4172,15 @@ function generateShareableSeed(replayData) {
     diff: replayData.difficulty, // difficulty
     w: replayData.weather ? replayData.weather.charAt(0) : 'c' // weather
   };
-  
-  // Convert to base64 for compact sharing
   const jsonString = JSON.stringify(seedData);
   return btoa(jsonString).replace(/=/g, '').substring(0, 12); // 12 chars max
 }
 
 function parseShareableSeed(shareCode) {
   try {
-    // Pad base64 string and decode
     const padded = shareCode + '='.repeat((4 - shareCode.length % 4) % 4);
     const jsonString = atob(padded);
     const seedData = JSON.parse(jsonString);
-    
-    // Expand abbreviated values
     const contextMap = { 's': 'sprint', 't': 'technical', 'e': 'endurance', 'n': 'night', 'c': 'chaos' };
     const evolutionMap = { 'c': 'clean', 'p': 'compressed', 'h': 'high_density', 'a': 'ambiguous' };
     const weatherMap = { 'c': 'clear', 'r': 'rain', 'i': 'ice', 'f': 'fog', 'h': 'hot' };
@@ -4544,8 +4202,6 @@ function parseShareableSeed(shareCode) {
 function shareReplay(replayData) {
   const shareCode = generateShareableSeed(replayData);
   const shareText = `Rally Replay: ${replayData.driverName} - ${replayData.totalScore.toFixed(1)}pts\nCode: ${shareCode}\nStage: ${replayData.stageName}`;
-  
-  // Create share modal
   const modal = document.createElement('div');
   modal.style.cssText = `
     position: fixed;
@@ -4582,8 +4238,6 @@ function shareReplay(replayData) {
   
   modal.appendChild(content);
   document.body.appendChild(modal);
-  
-  // Copy functionality
   document.getElementById('copy-share-btn').onclick = () => {
     navigator.clipboard.writeText(shareCode).then(() => {
       const btn = document.getElementById('copy-share-btn');
@@ -4591,8 +4245,6 @@ function shareReplay(replayData) {
       setTimeout(() => btn.textContent = 'Copy Code', 2000);
     });
   };
-  
-  // Close functionality
   document.getElementById('close-share-btn').onclick = () => modal.remove();
 }
 
@@ -4602,15 +4254,11 @@ function loadSharedReplay(shareCode) {
     alert('Invalid share code!');
     return;
   }
-  
-  // Apply shared seed settings
   RALLY_STATE.competitiveSeed = seedData.seed;
   RALLY_STATE.currentContext = seedData.context;
   RALLY_STATE.currentEvolution = seedData.evolution;
   RALLY_STATE.weatherEffect = seedData.weather;
   G.diff = seedData.difficulty;
-  
-  // Find matching stage (use hint to narrow down)
   let selectedStage = null;
   Object.values(ERAS).forEach(era => {
     era.stages.forEach(stage => {
@@ -4621,31 +4269,20 @@ function loadSharedReplay(shareCode) {
   });
   
   if (!selectedStage) {
-    // Fallback to first stage
     selectedStage = ERAS.w80.stages[0];
   }
-  
-  // Set up stage
   G.currentStageName = selectedStage.name;
   G.notes = selectedStage.notes;
   G.era = selectedStage.era || 'w80';
   G.timeLimit = DIFFS[G.diff].s;
-  
-  // Mark as shared replay
   G.isSharedReplay = true;
   G.shareCode = shareCode;
-  
-  // Start the stage
   show('game');
   loadNote();
 }
-
-// Evolution tracking with long-term charts
 function generateEvolutionChart(profile) {
   const history = profile.evolutionHistory || [];
   if (history.length < 2) return null;
-  
-  // Prepare data for chart
   const chartData = {
     labels: history.map(entry => {
       const date = new Date(entry.date);
@@ -4668,8 +4305,6 @@ function showEvolutionChart(profile) {
     alert('Need more runs to show evolution chart!');
     return;
   }
-  
-  // Create chart modal
   const modal = document.createElement('div');
   modal.style.cssText = `
     position: fixed;
@@ -4693,22 +4328,16 @@ function showEvolutionChart(profile) {
     overflow-y: auto;
     padding: 2rem;
   `;
-  
-  // Simple ASCII-style chart (since we can't use external chart libraries)
   const maxScore = Math.max(...chartData.scores);
   const minScore = Math.min(...chartData.scores);
   const scoreRange = maxScore - minScore;
   
   let chartHTML = '<h3 style="font-family: \'Bebas Neue\', sans-serif; color: var(--gold); margin-bottom: 1rem;">Evolution Chart</h3>';
   chartHTML += '<div style="font-family: \'IBM Plex Mono\', monospace; font-size: 12px; margin-bottom: 2rem;">';
-  
-  // Create simple line chart visualization
   const chartHeight = 200;
   const chartWidth = 600;
   
   chartHTML += `<div style="border: 1px solid var(--brd2); padding: 10px; background: var(--bg);">`;
-  
-  // Draw chart points
   chartData.scores.forEach((score, index) => {
     const x = (index / (chartData.scores.length - 1)) * chartWidth;
     const y = chartHeight - ((score - minScore) / scoreRange) * chartHeight;
@@ -4727,8 +4356,6 @@ function showEvolutionChart(profile) {
   
   chartHTML += `<div style="position: relative; height: ${chartHeight}px; width: ${chartWidth}px;"></div>`;
   chartHTML += '</div>';
-  
-  // Add statistics
   const avgScore = chartData.scores.reduce((a, b) => a + b, 0) / chartData.scores.length;
   const improvement = chartData.scores[chartData.scores.length - 1] - chartData.scores[0];
   
@@ -4749,8 +4376,6 @@ function showEvolutionChart(profile) {
   content.innerHTML = chartHTML;
   modal.appendChild(content);
   document.body.appendChild(modal);
-  
-  // Close functionality
   document.getElementById('close-chart-btn').onclick = () => modal.remove();
 }
 
@@ -4766,8 +4391,6 @@ function getEvolutionInsights(profile) {
   
   const improvement = recentAvg - olderAvg;
   const trend = improvement > 2 ? 'improving' : improvement < -2 ? 'declining' : 'stable';
-  
-  // Find most successful context
   const contextPerformance = {};
   recentRuns.forEach(run => {
     if (!contextPerformance[run.context]) {
@@ -4803,22 +4426,14 @@ function getWeeklyLeaderboard() {
 
 function startWeeklyRally() {
   const weeklyStage = getWeeklyRallyStage();
-  
-  // Set up the stage with weekly context
   G.stageName = weeklyStage.name;
   G.notes = weeklyStage.notes;
   G.era = weeklyStage.era;
   G.diff = 2; // Hard difficulty for weekly runs
   G.timeLimit = DIFFS[G.diff].s;
-  
-  // Apply weekly context
   RALLY_STATE.currentContext = weeklyStage.weeklyContext;
   RALLY_STATE.contextModifiers = EXECUTION_CONTEXTS[weeklyStage.weeklyContext];
-  
-  // Mark as weekly run
   G.isWeeklyRun = true;
-  
-  // Start the stage
   show('game');
   loadNote();
 }
@@ -4826,19 +4441,13 @@ function startWeeklyRally() {
 function getDailyRallyStage() {
   const dailySeed = generateDailySeed();
   const allStages = [];
-  
-  // Collect all stages from all eras
   Object.values(ERAS).forEach(era => {
     era.stages.forEach(stage => {
       allStages.push({ ...stage, era: era.label });
     });
   });
-  
-  // Select stage based on daily seed
   const stageIndex = dailySeed % allStages.length;
   const selectedStage = allStages[stageIndex];
-  
-  // Add daily variations using seeded random
   const tempSeed = dailySeed + 1000;
   const weatherVariations = ['clear', 'rain', 'ice', 'fog'];
   const weatherIndex = Math.floor((tempSeed % 10000) / 2500);
@@ -4854,12 +4463,8 @@ function getDailyRallyStage() {
 function submitDailyRun(score, driverName) {
   const dailySeed = generateDailySeed();
   const leaderboardKey = `daily_leaderboard_${dailySeed}`;
-  
-  // Get current leaderboard and apply rank decay
   let leaderboard = JSON.parse(localStorage.getItem(leaderboardKey) || '[]');
   leaderboard = applyRankDecay(leaderboard, 'daily');
-  
-  // Add new entry
   const entry = {
     driverName,
     score,
@@ -4870,22 +4475,12 @@ function submitDailyRun(score, driverName) {
   };
   
   leaderboard.push(entry);
-  
-  // Sort by score (descending)
   leaderboard.sort((a, b) => b.score - a.score);
-  
-  // Keep only top 100
   leaderboard = leaderboard.slice(0, 100);
-  
-  // Save updated leaderboard
   localStorage.setItem(leaderboardKey, JSON.stringify(leaderboard));
-  
-  // Return rank position
   const rank = leaderboard.findIndex(e => e.timestamp === entry.timestamp) + 1;
   return { rank, totalEntries: leaderboard.length, leaderboard };
 }
-
-// Soft rank decay system
 function applyRankDecay(leaderboard, type) {
   const now = Date.now();
   const decayPeriods = {
@@ -4900,7 +4495,6 @@ function applyRankDecay(leaderboard, type) {
     const periodsInactive = Math.floor(timeSinceActivity / decayPeriod);
     
     if (periodsInactive > 0) {
-      // Apply exponential decay
       const decayMultiplier = Math.pow(0.95, periodsInactive);
       const decayedScore = entry.score * decayMultiplier;
       
@@ -4923,7 +4517,6 @@ function applyRankDecay(leaderboard, type) {
 function restoreScoreOnActivity(leaderboard, driverName, newScore) {
   return leaderboard.map(entry => {
     if (entry.driverName === driverName && entry.decayed) {
-      // Restore to max of original score or new score
       const restoredScore = Math.max(entry.originalScore, newScore);
       return {
         ...entry,
@@ -4947,8 +4540,6 @@ function getDailyLeaderboard() {
 function showDailyLeaderboard() {
   const leaderboard = getDailyLeaderboard();
   const dailyStage = getDailyRallyStage();
-  
-  // Create leaderboard modal
   const modal = document.createElement('div');
   modal.style.cssText = `
     position: fixed;
@@ -5037,31 +4628,19 @@ function getTimeUntilReset() {
 
 function startDailyRally() {
   const dailyStage = getDailyRallyStage();
-  
-  // Set up the stage
   G.currentStageName = dailyStage.name;
   G.notes = dailyStage.notes;
   G.era = dailyStage.era;
   G.diff = 1; // Normal difficulty for daily runs
   G.timeLimit = DIFFS[G.diff].s;
-  
-  // Apply daily weather and context
   RALLY_STATE.weatherEffect = dailyStage.dailyWeather;
   RALLY_STATE.currentContext = 'sprint'; // Daily runs use sprint context
   RALLY_STATE.contextModifiers = EXECUTION_CONTEXTS.sprint;
-  
-  // Mark as daily run
   G.isDailyRun = true;
-  
-  // Initialize ghosts for competitive run
   initializeGhosts();
-  
-  // Start the stage
   show('game');
   loadNote();
 }
-
-// Identity-based progression system
 function getPlayerProfile(driverName) {
   const profileKey = `profile_${driverName}`;
   const savedProfile = localStorage.getItem(profileKey);
@@ -5069,8 +4648,6 @@ function getPlayerProfile(driverName) {
   if (savedProfile) {
     return JSON.parse(savedProfile);
   }
-  
-  // Create new profile
   const newProfile = {
     driverName,
     createdDate: new Date().toISOString(),
@@ -5101,8 +4678,6 @@ function getPlayerProfile(driverName) {
 
 function updatePlayerProfile(runData) {
   const profile = getPlayerProfile(runData.driverName || G.driver || 'Anonymous');
-  
-  // Update basic stats
   profile.totalRuns++;
   profile.totalScore += runData.totalScore || 0;
   profile.averageScore = profile.totalScore / profile.totalRuns;
@@ -5110,21 +4685,14 @@ function updatePlayerProfile(runData) {
   if (runData.totalScore > profile.bestScore) {
     profile.bestScore = runData.totalScore;
   }
-  
-  // Update rank tier
   profile.rankTier = calculateRankTier(profile.averageScore);
-  
-  // Update skill metrics
   if (runData.skillMetrics) {
     Object.keys(runData.skillMetrics).forEach(skill => {
       if (profile.skillMetrics[skill] !== undefined) {
-        // Weighted average (new run has more impact)
         profile.skillMetrics[skill] = (profile.skillMetrics[skill] * 0.7) + (runData.skillMetrics[skill] * 0.3);
       }
     });
   }
-  
-  // Update evolution history
   profile.evolutionHistory.push({
     date: new Date().toISOString(),
     score: runData.totalScore,
@@ -5132,21 +4700,15 @@ function updatePlayerProfile(runData) {
     evolution: runData.evolution,
     rankTier: profile.rankTier.tier
   });
-  
-  // Keep only last 50 entries
   if (profile.evolutionHistory.length > 50) {
     profile.evolutionHistory = profile.evolutionHistory.slice(-50);
   }
-  
-  // Update personal bests per stage
   if (runData.stageName && runData.totalScore) {
     const pbKey = runData.stageName;
     if (!profile.personalBests[pbKey] || runData.totalScore > profile.personalBests[pbKey]) {
       profile.personalBests[pbKey] = runData.totalScore;
     }
   }
-  
-  // Update streaks
   if (runData.successful) {
     profile.currentStreak++;
     if (profile.currentStreak > profile.bestStreak) {
@@ -5155,13 +4717,9 @@ function updatePlayerProfile(runData) {
   } else {
     profile.currentStreak = 0;
   }
-  
-  // Update playtime
   if (runData.duration) {
     profile.playtime += runData.duration;
   }
-  
-  // Save updated profile
   const profileKey = `profile_${runData.driverName || G.driver || 'Anonymous'}`;
   localStorage.setItem(profileKey, JSON.stringify(profile));
   
@@ -5183,8 +4741,6 @@ function getSkillReadabilityReport(runData) {
     },
     improvementAreas: []
   };
-  
-  // Calculate time lost in each skill area
   const perfectScore = 100;
   const accuracyLoss = (perfectScore - (runData.accuracyScore || 0)) * 0.35;
   const speedLoss = (perfectScore - (runData.speedScore || 0)) * 0.25;
@@ -5197,8 +4753,6 @@ function getSkillReadabilityReport(runData) {
   report.timeLost.consistency = consistencyLoss;
   report.timeLost.resilience = resilienceLoss;
   report.timeLost.precision = precisionLoss;
-  
-  // Determine strengths and weaknesses
   const losses = [
     { skill: 'accuracy', loss: accuracyLoss },
     { skill: 'speed', loss: speedLoss },
@@ -5211,8 +4765,6 @@ function getSkillReadabilityReport(runData) {
   
   report.skillBreakdown.weakness = losses[0].skill;
   report.skillBreakdown.strength = losses[losses.length - 1].skill;
-  
-  // Generate recommendations
   if (report.skillBreakdown.weakness === 'speed') {
     report.recommendations.push('Focus on faster reaction times', 'Try Sprint context for speed training');
   }
@@ -5228,39 +4780,26 @@ function getSkillReadabilityReport(runData) {
   
   return report;
 }
-
-// 3-second retry rule optimization
 function optimizeRetryFlow() {
   const retryButton = document.querySelector('.mpbtn');
   if (retryButton && retryButton.textContent.includes('Quick Stage')) {
-    // Auto-focus retry button for quick restart
     retryButton.focus();
-    
-    // Show countdown for auto-retry option
     let countdown = 3;
     const countdownInterval = setInterval(() => {
       countdown--;
       if (countdown <= 0) {
         clearInterval(countdownInterval);
-        // Could auto-retry here if user enabled it
       }
     }, 1000);
   }
 }
-
-// Input handler for partial correctness highlighting (auto-submit removed)
 document.addEventListener('input', e => {
   if (e.target.id === 'tut-input') {
-    // Tutorial input handling
   } else if (e.target.id === 'g-input' && !G.stageEnded) {
     const typed = e.target.value.trim();
     const currentNote = G.notes[G.idx];
     if (!currentNote) return;
-    
-    // Update visual feedback in real-time only
     updatePartialCorrectness(typed, currentNote.ans);
-    
-    // Auto-submit removed - players must press Enter to submit
     
     RALLY_STATE.lastInputTime = Date.now();
   }
@@ -5269,8 +4808,6 @@ document.addEventListener('input', e => {
 function updatePartialCorrectness(typed, correct) {
   const input = document.getElementById('g-input');
   if (!input) return;
-  
-  // Calculate partial match percentage
   const typedWords = typed.toLowerCase().split(' ');
   const correctWords = correct.toLowerCase().split(' ');
   let matchedWords = 0;
@@ -5282,8 +4819,6 @@ function updatePartialCorrectness(typed, correct) {
   });
   
   const matchPercentage = matchedWords / Math.max(correctWords.length, 1);
-  
-  // Visual feedback - color gradient based on correctness
   if (matchPercentage >= 0.8) {
     input.style.borderColor = '#39ff14'; // Green - almost correct
     input.style.boxShadow = '0 0 8px rgba(57, 255, 20, 0.3)';
@@ -5305,73 +4840,44 @@ function autoSubmitAnswer(reactionTime) {
   clearInterval(G.timer);
   const typed = document.getElementById('g-input').value.trim();
   const currentNote = G.notes[G.idx];
-  
-  // Record reaction time for analytics
   RALLY_STATE.reactionTimes.push(reactionTime);
-  
-  // Calculate similarity and precision grade
   const baseScore = similarity(typed, currentNote.ans);
   const precisionGrade = calculatePrecisionGrade(reactionTime, G.timeLimit, baseScore);
   const timingTier = calculateTimingTier(reactionTime, G.timeLimit);
-  
-  // Apply execution context modifiers
   const context = EXECUTION_CONTEXTS[RALLY_STATE.currentContext];
   let modifiedScore = baseScore;
-  
-  // Apply momentum multiplier with context modifiers
   const momentumMultiplier = RALLY_STATE.multiplier * (1 + context.momentumGain * RALLY_STATE.streak * 0.1);
   const momentumScore = Math.min(1.0, modifiedScore * momentumMultiplier);
-  
-  // Apply precision grading
   const precisionScore = applyPrecisionGrade(precisionGrade, momentumScore);
-  
-  // Apply timing tier bonuses
   const tieredScore = applyTimingTier(timingTier, precisionScore);
   const finalScore = Math.min(1.0, tieredScore);
   const ok = finalScore >= (RALLY_STATE.forgivenessWindow * context.forgivenessWindow);
-  
-  // Store precision grade for analytics
   if (!RALLY_STATE.precisionGrades) RALLY_STATE.precisionGrades = [];
   RALLY_STATE.precisionGrades.push(precisionGrade);
-  
-  // Update split times and ghost progress
   updateSplitTimes();
   updateGhostProgress(G.idx);
-  
-  // Update rally state with context-specific behavior
   if (ok) {
     RALLY_STATE.streak++;
     RALLY_STATE.consecutiveWrong = 0; // Reset on correct answer
     RALLY_STATE.momentum = Math.min(2.0, RALLY_STATE.momentum + context.momentumGain);
     RALLY_STATE.multiplier = 1.0 + (RALLY_STATE.streak * 0.05);
     RALLY_STATE.forgivenessWindow = Math.min(0.8, 0.62 + (RALLY_STATE.streak * 0.02));
-    
-    // Show precision feedback
     if (precisionGrade === 'perfect' || precisionGrade === 'good') {
       showPrecisionBonus(precisionGrade);
     }
-    
-    // Smooth flow transition
     showFlowTransition(true);
   } else {
-    // Record recovery speed before disruption
     recordRecoverySpeed();
-    
-    // Disruption on mistake with context-specific loss
     RALLY_STATE.streak = 0;
     RALLY_STATE.momentum = Math.max(0.5, RALLY_STATE.momentum - context.momentumLoss);
     RALLY_STATE.multiplier = 1.0;
     
     handleMistakeDisruption();
   }
-  
-  // Update fatigue for endurance stages
   if (context.name === 'Endurance') {
     RALLY_STATE.fatigueLevel = Math.min(1.0, RALLY_STATE.fatigueLevel + 0.02);
     RALLY_STATE.fatigueMultiplier = 1.0 + (RALLY_STATE.fatigueLevel * context.fatigueMultiplier);
   }
-  
-  // Process the answer
   processAnswer(typed, currentNote, ok, finalScore, false);
 }
 
@@ -5434,17 +4940,13 @@ function showFlowTransition(isCorrect) {
   if (!gameBody) return;
   
   if (isCorrect) {
-    // Smooth flow - gentle green pulse
     gameBody.style.transition = 'all 0.3s ease';
     gameBody.style.backgroundColor = 'rgba(57, 255, 20, 0.05)';
     setTimeout(() => {
       gameBody.style.backgroundColor = 'var(--bg)';
     }, 300);
-    
-    // Play calm audio feedback if available
     playFlowSound('correct');
   } else {
-    // Disruption - screen shake and red flash
     gameBody.style.animation = 'screenShake 0.4s';
     gameBody.style.backgroundColor = 'rgba(232, 41, 28, 0.1)';
     
@@ -5452,39 +4954,26 @@ function showFlowTransition(isCorrect) {
       gameBody.style.animation = '';
       gameBody.style.backgroundColor = 'var(--bg)';
     }, 400);
-    
-    // Play disruption audio
     playFlowSound('mistake');
   }
 }
 
 function handleMistakeDisruption() {
-  // Reset momentum on mistake
   RALLY_STATE.streak = 0;
   RALLY_STATE.momentum = Math.max(0.5, RALLY_STATE.momentum - 0.2);
   RALLY_STATE.multiplier = 1.0;
   RALLY_STATE.forgivenessWindow = 0.62;
-  
-  // Increment consecutive wrong counter (crash requires 2 misreads)
   RALLY_STATE.consecutiveWrong++;
-  
-  // Start recovery phase
   if (!RALLY_STATE.inRecovery) {
     RALLY_STATE.inRecovery = true;
-    
-    // Clear existing recovery timer
     if (RALLY_STATE.recoveryTimer) {
       clearTimeout(RALLY_STATE.recoveryTimer);
     }
-    
-    // 0.4s recovery phase
     RALLY_STATE.recoveryTimer = setTimeout(() => {
       RALLY_STATE.inRecovery = false;
       showRecoveryBonus();
     }, 400);
   }
-  
-  // Add forced delay (200-500ms)
   const delay = 200 + Math.random() * 300;
   document.getElementById('g-input').disabled = true;
   setTimeout(() => {
@@ -5496,7 +4985,6 @@ function handleMistakeDisruption() {
 }
 
 function showRecoveryBonus() {
-  // Show stabilization bonus indicator
   const bonus = document.createElement('div');
   bonus.className = 'recovery-bonus';
   bonus.textContent = 'STABILIZATION BONUS +';
@@ -5521,21 +5009,14 @@ function showRecoveryBonus() {
 }
 
 function processAnswer(typed, note, ok, score, skipped) {
-  // Guard against double-processing the same note
   if (G.processingAnswer) return;
   G.processingAnswer = true;
-  
-  // Update UI
   document.getElementById('g-input').disabled = true;
   document.getElementById('g-sub').disabled = true;
   
   if (ok) G.correct++;
-  
-  // Update progress dot
   const dot = document.getElementById(`gd-${G.idx}`);
   if (dot) dot.className = 'gd ' + (ok ? 'ok' : 'bad');
-  
-  // Store result with competitive data
   G.results.push({
     raw: note.raw,
     ans: note.ans,
@@ -5552,12 +5033,8 @@ function processAnswer(typed, note, ok, score, skipped) {
   
   G.idx++;
   const isLastNote = G.idx >= G.notes.length;
-  
-  // Check for crash (zero randomness for competitive fairness)
   const crashChance = ok ? 0 : (0.3 / RALLY_STATE.momentum);
   const badCrash = !ok && !isLastNote && seededRandom() < crashChance;
-  
-  // call original directly to avoid wrapper loop
   if (typeof window.__origShowResult !== 'undefined') {
     window.__origShowResult(ok, note, score, skipped, false, false);
   } else {
@@ -5579,24 +5056,16 @@ function processAnswer(typed, note, ok, score, skipped) {
 }
 
 function playFlowSound(type) {
-  // Audio feedback system (can be enhanced with actual sounds)
   try {
     const audio = new Audio();
     if (type === 'correct') {
-      // Calm success sound
       audio.volume = 0.3;
-      // Would load actual sound file here
     } else if (type === 'mistake') {
-      // Disruption sound
       audio.volume = 0.5;
-      // Would load actual sound file here
     }
   } catch (e) {
-    // Fallback if audio fails
   }
 }
-
-// Add CSS animations for screen shake and flow effects
 const style = document.createElement('style');
 style.textContent = `
   @keyframes screenShake {
@@ -5617,18 +5086,6 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// ═══════════════════════════════════════════════════════════════
-// MENU — ROUTE TO TUTORIAL FIRST FOR NEW PLAYERS (#001)
-// ═══════════════════════════════════════════════════════════════
-
-// NOTE:
-// openSetup is intentionally not overridden here.
-// A previous override caused routing regressions due duplicate function declarations.
-
-// ═══════════════════════════════════════════════════════════════
-// MULTIPLAYER CLIENT (#028)
-// ═══════════════════════════════════════════════════════════════
-
 const Multiplayer = {
   socket: null,
   connected: false,
@@ -5638,8 +5095,6 @@ const Multiplayer = {
   isMultiplayerMode: false,
   raceInProgress: false,
   otherPlayers: new Map(),
-  
-  // Connect to multiplayer server
   connect(serverUrl = 'http://localhost:3000') {
     if (typeof io === 'undefined') {
       console.log('Socket.IO not available - multiplayer disabled');
@@ -5655,8 +5110,6 @@ const Multiplayer = {
       return false;
     }
   },
-  
-  // Setup Socket.IO event handlers
   setupEventHandlers() {
     this.socket.on('connect', () => {
       this.connected = true;
@@ -5670,8 +5123,6 @@ const Multiplayer = {
       this.isMultiplayerMode = false;
       console.log('Disconnected from multiplayer server');
     });
-    
-    // Lobby events
     this.socket.on('player-joined', (data) => {
       console.log('Player joined:', data.player);
       this.otherPlayers.set(data.player.id, data.player);
@@ -5700,8 +5151,6 @@ const Multiplayer = {
         this.currentLobby.settings = data.settings;
       }
     });
-    
-    // Race events
     this.socket.on('race-countdown', (data) => {
       this.showRaceCountdown(data.countdown);
     });
@@ -5731,8 +5180,6 @@ const Multiplayer = {
       this.showNotification(`${data.playerName} disconnected`);
     });
   },
-  
-  // Create a new lobby
   createLobby(settings = {}) {
     if (!this.connected) {
       this.showNotification('Not connected to server');
@@ -5747,7 +5194,6 @@ const Multiplayer = {
     }, (response) => {
       if (response.success) {
         this.currentLobby = response.lobby;
-        // Save to localStorage
         this.saveLobbyToStorage();
         this.showLobbyBar();
         this.showLobbyScreen();
@@ -5756,8 +5202,6 @@ const Multiplayer = {
       }
     });
   },
-  
-  // Join an existing lobby
   joinLobby(lobbyCode) {
     if (!this.connected) {
       this.showNotification('Not connected to server');
@@ -5775,7 +5219,6 @@ const Multiplayer = {
         this.otherPlayers = new Map(
           response.lobby.players.filter(p => p.id !== this.playerId).map(p => [p.id, p])
         );
-        // Save to localStorage
         this.saveLobbyToStorage();
         this.showLobbyBar();
         this.showLobbyScreen();
@@ -5784,8 +5227,6 @@ const Multiplayer = {
       }
     });
   },
-  
-  // Save lobby info to localStorage
   saveLobbyToStorage() {
     if (this.currentLobby) {
       const lobbyData = {
@@ -5797,8 +5238,6 @@ const Multiplayer = {
       localStorage.setItem('rpa_last_lobby', JSON.stringify(lobbyData));
     }
   },
-  
-  // Load saved lobby info
   loadSavedLobby() {
     try {
       const saved = localStorage.getItem('rpa_last_lobby');
@@ -5810,8 +5249,6 @@ const Multiplayer = {
     }
     return null;
   },
-  
-  // Show lobby info bar at top
   showLobbyBar() {
     if (this.currentLobby) {
       const bar = document.getElementById('lobby-info-bar');
@@ -5821,14 +5258,11 @@ const Multiplayer = {
         code.textContent = this.currentLobby.code;
         server.textContent = new URL(this.API_URL || window.location.origin).hostname;
         bar.style.display = 'flex';
-        // Adjust menu to account for lobby bar
         const menuWrap = document.getElementById('menu-wrap');
         if (menuWrap) menuWrap.style.marginTop = '40px';
       }
     }
   },
-  
-  // Hide lobby info bar
   hideLobbyBar() {
     const bar = document.getElementById('lobby-info-bar');
     if (bar) bar.style.display = 'none';
@@ -5836,8 +5270,6 @@ const Multiplayer = {
     if (menuWrap) menuWrap.style.marginTop = '0';
     localStorage.removeItem('rpa_last_lobby');
   },
-  
-  // Leave current lobby
   leaveLobby() {
     if (this.socket) {
       this.socket.emit('leave-lobby');
@@ -5848,15 +5280,11 @@ const Multiplayer = {
     this.hideLobbyBar();
     localStorage.removeItem('rpa_last_lobby');
   },
-  
-  // Set ready status
   setReady(ready) {
     if (this.socket) {
       this.socket.emit('set-ready', { ready });
     }
   },
-  
-  // Start race (host only)
   startRace() {
     if (this.socket) {
       this.socket.emit('start-race', (response) => {
@@ -5866,8 +5294,6 @@ const Multiplayer = {
       });
     }
   },
-  
-  // Submit note result during race
   submitNoteResult(noteIndex, correct, totalNotes) {
     if (this.socket && this.isMultiplayerMode) {
       this.socket.emit('submit-note-result', {
@@ -5877,8 +5303,6 @@ const Multiplayer = {
       });
     }
   },
-  
-  // Finish race
   finishRace(correctNotes, totalNotes, crashCount, totalTime, dnf = false) {
     if (this.socket && this.isMultiplayerMode) {
       this.socket.emit('finish-race', {
@@ -5891,17 +5315,12 @@ const Multiplayer = {
     }
     this.raceInProgress = false;
   },
-  
-  // Request rematch
   requestRematch() {
     if (this.socket) {
       this.socket.emit('request-rematch');
     }
   },
-  
-  // UI Functions
   showLobbyScreen() {
-    // Create lobby UI overlay
     let lobbyDiv = document.getElementById('mp-lobby-screen');
     if (!lobbyDiv) {
       lobbyDiv = document.createElement('div');
@@ -5960,7 +5379,6 @@ const Multiplayer = {
   },
   
   showRaceCountdown(countdown) {
-    // Show countdown overlay
     const overlay = document.createElement('div');
     overlay.id = 'mp-countdown';
     overlay.style.cssText = `
@@ -5974,8 +5392,6 @@ const Multiplayer = {
       <div id="mp-countdown-num" style="font-family:'Bebas Neue',sans-serif;font-size:120px;letter-spacing:8px;color:var(--gold);">${countdown}</div>
     `;
     document.body.appendChild(overlay);
-    
-    // Animate countdown
     let count = countdown;
     const interval = setInterval(() => {
       count--;
@@ -5991,20 +5407,12 @@ const Multiplayer = {
   startMultiplayerRace(data) {
     this.isMultiplayerMode = true;
     this.raceInProgress = true;
-    
-    // Use server-provided stage notes for synchronization
     if (data.stageNotes) {
       G.notes = data.stageNotes;
     }
-    
-    // Hide lobby and start game
     const lobbyScreen = document.getElementById('mp-lobby-screen');
     if (lobbyScreen) lobbyScreen.classList.remove('active');
-    
-    // Show game screen
     show('game');
-    
-    // Initialize game state
     G.idx = 0;
     G.correct = 0;
     G.skipped = 0;
@@ -6019,10 +5427,8 @@ const Multiplayer = {
   },
   
   updatePlayerProgress(data) {
-    // Update UI showing other players' progress
     const progressBar = document.getElementById('mp-progress');
     if (!progressBar) {
-      // Create progress bar if not exists
       const bar = document.createElement('div');
       bar.id = 'mp-progress';
       bar.style.cssText = `
@@ -6034,8 +5440,6 @@ const Multiplayer = {
       `;
       document.body.appendChild(bar);
     }
-    
-    // Update the specific player's progress
     this.otherPlayers.set(data.playerId, {
       ...this.otherPlayers.get(data.playerId),
       noteIndex: data.noteIndex,
@@ -6063,7 +5467,6 @@ const Multiplayer = {
   },
   
   showRaceResults(results) {
-    // Show multiplayer results overlay
     const overlay = document.createElement('div');
     overlay.id = 'mp-results';
     overlay.style.cssText = `
@@ -6125,11 +5528,6 @@ const Multiplayer = {
     setTimeout(() => notif.remove(), 3000);
   }
 };
-
-// Initialize multiplayer on load (but don't auto-connect)
-// Multiplayer.connect(); // Call this when user clicks "Multiplayer" button
-
-// Add multiplayer button to menu
 function addMultiplayerButton() {
   const menuNav = document.querySelector('.menu-nav');
   if (!menuNav || document.getElementById('mp-btn')) return;
@@ -6144,8 +5542,6 @@ function addMultiplayerButton() {
     }
     showMultiplayerMenu();
   };
-  
-  // Insert before the last button
   menuNav.insertBefore(btn, menuNav.lastElementChild);
 }
 
@@ -6160,46 +5556,27 @@ function showMultiplayerMenu() {
     Multiplayer.createLobby({ era });
   }
 }
-
-// Hook into endStage to report multiplayer results
 const _originalEndStage = endStage;
 endStage = function() {
-  // Call original function
   _originalEndStage();
-  
-  // Report multiplayer results if in multiplayer mode
   if (Multiplayer.isMultiplayerMode) {
     const total = G.notes.length;
     const timeMs = G.stageTime || Date.now() - RALLY_STATE.startTime;
     Multiplayer.finishRace(G.correct, total, G.crashCount, timeMs, G.dnf);
   }
 };
-
-// Hook into processAnswer to report progress
 const _originalProcessAnswer = processAnswer;
 processAnswer = function(typed, note, ok, score, skipped) {
-  // Call original function
   _originalProcessAnswer(typed, note, ok, score, skipped);
-  
-  // Report progress if in multiplayer mode
   if (Multiplayer.isMultiplayerMode && Multiplayer.raceInProgress) {
     Multiplayer.submitNoteResult(G.idx, G.correct, G.notes.length);
   }
 };
-
-// ═══════════════════════════════════════════════════════════════════════════
-// ACCOUNT SYSTEM & LEADERBOARD (#029)
-// ═══════════════════════════════════════════════════════════════════════════
-
-
-// Auto-detect server URL (works for localhost, LAN, or hosted)
 const getServerUrl = () => {
   const currentUrl = window.location.origin;
-  // If running on file:// protocol (local file), default to localhost:3000
   if (currentUrl.startsWith('file://')) {
     return 'http://localhost:3000';
   }
-  // Otherwise use the same host:port as the current page
   return currentUrl;
 };
 
@@ -6318,7 +5695,6 @@ const AccountSystem = {
       const data = await response.json();
       
       if (data.success) {
-        // Clear local storage and reset account
         localStorage.removeItem('rpa_token');
         this.token = null;
         this.account = null;
@@ -6339,8 +5715,6 @@ const AccountSystem = {
       return { error: 'Failed to load profile' };
     }
   },
-  
-  // Forum methods
   async getForumBoards() {
     try {
       const response = await fetch(`${this.API_URL}/api/forum/boards`);
@@ -6534,8 +5908,6 @@ const AccountSystem = {
   getLevel() {
     return this.account?.stats?.careerLevel || 1;
   },
-  
-  // SMTP Settings methods
   async saveSmtpSettings(settings) {
     try {
       const response = await fetch(`${this.API_URL}/api/account/smtp`, {
@@ -6548,7 +5920,6 @@ const AccountSystem = {
       });
       const data = await response.json();
       if (data.success) {
-        // Update local account
         if (this.account) {
           this.account.smtpSettings = {
             ...settings,
@@ -6585,8 +5956,6 @@ const AccountSystem = {
     }
   }
 };
-
-// Story Campaign System
 const StoryCampaign = {
   async loadProgress() {
     try {
@@ -6615,21 +5984,16 @@ const StoryCampaign = {
     }
   }
 };
-
-// Certification Exam Function
 function startCertificationExam() {
-  // Generate 32 mixed notes from all eras
   const examNotes = [];
   const eras = ['grpb', 'w90', 'w24'];
   
   eras.forEach(era => {
     const eraData = ERAS[era];
     if (eraData && eraData.stages) {
-      // Pick random stages from this era
       const stages = eraData.stages.slice().sort(() => Math.random() - 0.5).slice(0, 2);
       stages.forEach(stage => {
         if (stage.notes) {
-          // Pick 8-10 random notes from each stage
           const notes = stage.notes.slice().sort(() => Math.random() - 0.5).slice(0, 8);
           notes.forEach(note => {
             examNotes.push({
@@ -6642,11 +6006,7 @@ function startCertificationExam() {
       });
     }
   });
-  
-  // Shuffle all exam notes
   examNotes.sort(() => Math.random() - 0.5);
-  
-  // Set up exam mode
   G.notes = examNotes.slice(0, 32); // Ensure exactly 32 notes
   G.era = 'exam';
   G.driver = AccountSystem.getDisplayName();
@@ -6655,11 +6015,7 @@ function startCertificationExam() {
   G.timeLimit = DIFFS[1].s; // 14 seconds
   G.examMode = true;
   G.examStartTime = Date.now();
-  
-  // Hide training screen and show game
   show('game');
-  
-  // Initialize exam
   G.idx = 0;
   G.correct = 0;
   G.skipped = 0;
@@ -6670,8 +6026,6 @@ function startCertificationExam() {
   
   showNotification('Certification Exam Started! 32 notes, 85% required to pass.');
 }
-
-// Hook exam completion into endStage
 const _originalExamEndStage = endStage;
 endStage = function() {
   _originalExamEndStage();
@@ -6686,8 +6040,6 @@ endStage = function() {
     if (accuracy >= 90) certification = 'World';
     else if (accuracy >= 80) certification = 'National';
     else if (accuracy >= 70) certification = 'Junior';
-    
-    // Show exam results
     setTimeout(() => {
       const overlay = document.createElement('div');
       overlay.style.cssText = `
@@ -6723,8 +6075,6 @@ endStage = function() {
       overlay.id = 'exam-result';
       document.body.appendChild(overlay);
     }, 500);
-    
-    // If logged in, save exam results
     if (AccountSystem.isLoggedIn() && certification) {
       AccountSystem.saveSavefile({
         certification: certification,
@@ -6735,8 +6085,6 @@ endStage = function() {
     }
   }
 };
-
-// Add Account button to menu
 function addAccountButton() {
   const menuNav = document.querySelector('.menu-nav');
   if (!menuNav || document.getElementById('account-btn')) return;
@@ -6748,8 +6096,6 @@ function addAccountButton() {
     ? `👤 ${AccountSystem.getDisplayName()}`
     : 'Account 👤';
   btn.onclick = () => showAccountScreen();
-  
-  // Insert before the last button
   menuNav.insertBefore(btn, menuNav.lastElementChild);
 }
 
@@ -6887,13 +6233,9 @@ function showLoggedInScreen() {
   const stats = AccountSystem.account?.stats || {};
   const profile = AccountSystem.account?.profile || {};
   const displayStyle = profile.displayStyle || {};
-  
-  // Generate display name with custom styling using CSS classes
   const effects = displayStyle.effects || [];
   let displayNameClasses = [];
   let displayNameStyle = `font-family:'${displayStyle.fontFamily || 'Bebas Neue'}',sans-serif;font-size:28px;`;
-  
-  // Apply color (or rainbow overrides it)
   if (effects.includes('rainbow')) {
     displayNameClasses.push('username-rainbow');
   } else if (effects.includes('fire')) {
@@ -6901,8 +6243,6 @@ function showLoggedInScreen() {
   } else {
     displayNameStyle += `color:${displayStyle.color || 'var(--gold)'};`;
   }
-  
-  // Apply effect classes
   if (effects.includes('glow')) displayNameClasses.push('username-glow');
   if (effects.includes('glow-strong')) displayNameClasses.push('username-glow-strong');
   if (effects.includes('neon')) {
@@ -7051,10 +6391,6 @@ async function handleRegister() {
     errorDiv.style.display = 'block';
   }
 }
-
-// ═══════════════════════════════════════════════════════════════════════════
-// PROFILE CUSTOMIZATION UI
-// ═══════════════════════════════════════════════════════════════════════════
 
 function showProfileCustomization() {
   const profile = AccountSystem.account?.profile || {};
@@ -7231,8 +6567,6 @@ function showProfileCustomization() {
 async function saveProfileCustomization() {
   const errorDiv = document.getElementById('customize-error');
   const successDiv = document.getElementById('customize-success');
-  
-  // Collect effects
   const effects = [];
   if (document.getElementById('effect-glow').checked) effects.push('glow');
   if (document.getElementById('effect-glow-strong').checked) effects.push('glow-strong');
@@ -7264,14 +6598,10 @@ async function saveProfileCustomization() {
       badge: document.getElementById('custom-badge').value
     }
   };
-  
-  // Include profile picture if uploaded
   const profilePicData = document.getElementById('profile-picture-data').textContent;
   if (profilePicData) {
     updates.profilePicture = profilePicData;
   }
-  
-  // Include banner if uploaded
   const bannerData = document.getElementById('banner-data').textContent;
   if (bannerData) {
     updates.banner = bannerData;
@@ -7295,7 +6625,6 @@ async function saveProfileCustomization() {
 }
 
 function showMyProfileDetails() {
-  // Just refresh the profile screen
   document.getElementById('account-overlay')?.remove();
   showLoggedInScreen();
 }
@@ -7305,8 +6634,6 @@ async function showAccountSettings() {
   overlay.id = 'account-settings-overlay';
   overlay.className = 'screen active';
   overlay.style.cssText = 'z-index:10002;';
-  
-  // Load SMTP settings
   const smtpStatus = await AccountSystem.getSmtpSettings();
   const smtpConfigured = smtpStatus.configured;
   
@@ -7463,8 +6790,6 @@ async function testSmtpSettings() {
   
   errorDiv.style.display = 'none';
   successDiv.style.display = 'none';
-  
-  // First save the settings
   const host = document.getElementById('smtp-host').value.trim();
   const port = document.getElementById('smtp-port').value.trim();
   const user = document.getElementById('smtp-user').value.trim();
@@ -7488,8 +6813,6 @@ async function testSmtpSettings() {
     errorDiv.style.color = '#e8291c';
     return;
   }
-  
-  // Now test
   const testResult = await AccountSystem.testSmtpConnection();
   
   if (testResult.success) {
@@ -7571,8 +6894,6 @@ async function handleDeleteAccount() {
     errorDiv.style.display = 'block';
   }
 }
-
-// Profile Picture Upload Handlers
 function handleProfilePictureUpload(input) {
   const file = input.files[0];
   if (!file) return;
@@ -7586,8 +6907,6 @@ function handleProfilePictureUpload(input) {
   reader.onload = function(e) {
     const dataUrl = e.target.result;
     document.getElementById('profile-picture-data').textContent = dataUrl;
-    
-    // Update preview
     const preview = document.getElementById('avatar-preview');
     const placeholder = document.getElementById('avatar-preview-placeholder');
     if (preview) {
@@ -7629,8 +6948,6 @@ function handleProfilePictureDrop(event) {
   };
   reader.readAsDataURL(file);
 }
-
-// Banner Upload Handlers
 function handleBannerUpload(input) {
   const file = input.files[0];
   if (!file) return;
@@ -7644,8 +6961,6 @@ function handleBannerUpload(input) {
   reader.onload = function(e) {
     const dataUrl = e.target.result;
     document.getElementById('banner-data').textContent = dataUrl;
-    
-    // Update preview
     const preview = document.getElementById('banner-preview');
     const placeholder = document.getElementById('banner-preview-placeholder');
     if (preview) {
@@ -7687,10 +7002,6 @@ function handleBannerDrop(event) {
   };
   reader.readAsDataURL(file);
 }
-
-// ═══════════════════════════════════════════════════════════════════════════
-// FORUM UI (Reddit-style Message Board)
-// ═══════════════════════════════════════════════════════════════════════════
 
 async function showForumBoards() {
   const data = await AccountSystem.getForumBoards();
@@ -7868,7 +7179,6 @@ async function showForumThread(threadId) {
 
 function renderForumPosts(posts, depth = 0) {
   return posts.map(post => {
-    // Parse content for attachments
     let renderedContent = renderPostContent(post.content);
     
     return `
@@ -7902,16 +7212,10 @@ function renderForumPosts(posts, depth = 0) {
 
 function renderPostContent(content) {
   if (!content) return '';
-  
-  // Replace attachment tags with media elements
   let rendered = content
-    // Video attachments
     .replace(/\[VIDEO:([^\]]+)\]/g, '<div style="margin:0.5rem 0;"><video src="$1" controls style="max-width:100%;max-height:300px;border-radius:8px;"></video></div>')
-    // Audio attachments  
     .replace(/\[AUDIO:([^\]]+)\]/g, '<div style="margin:0.5rem 0;"><audio src="$1" controls style="width:100%;max-width:300px;"></audio></div>')
-    // Image attachments
     .replace(/\[IMAGE:([^\]]+)\]/g, '<div style="margin:0.5rem 0;"><img src="$1" style="max-width:100%;max-height:300px;border-radius:8px;cursor:pointer;" onclick="window.open(\'$1\',\'_blank\')"></div>')
-    // File attachments
     .replace(/\[FILE:([^:]+):([^\]]+)\]/g, '<div style="margin:0.5rem 0;"><a href="$1" target="_blank" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;background:var(--surf);border:1px solid var(--brd);border-radius:4px;color:var(--text);text-decoration:none;">📎 $2</a></div>');
   
   return rendered;
@@ -7981,8 +7285,6 @@ async function submitReply(threadId) {
     errorDiv.style.display = 'block';
     return;
   }
-  
-  // Build content with file attachment if present
   let fullContent = content;
   if (fileData) {
     try {
@@ -8017,8 +7319,6 @@ async function handleForumFileUpload(input, threadId) {
   
   const statusSpan = document.getElementById('forum-file-status');
   const previewDiv = document.getElementById('forum-file-preview');
-  
-  // Check file size (50MB limit)
   if (file.size > 50 * 1024 * 1024) {
     statusSpan.textContent = 'File too large (max 50MB)';
     statusSpan.style.color = '#e8291c';
@@ -8037,8 +7337,6 @@ async function handleForumFileUpload(input, threadId) {
     if (result.success) {
       statusSpan.textContent = `✓ ${file.name}`;
       statusSpan.style.color = '#39ff14';
-      
-      // Store file data for inclusion in post
       let fileDataDiv = document.getElementById('forum-file-data');
       if (!fileDataDiv) {
         fileDataDiv = document.createElement('div');
@@ -8047,8 +7345,6 @@ async function handleForumFileUpload(input, threadId) {
         document.body.appendChild(fileDataDiv);
       }
       fileDataDiv.textContent = JSON.stringify(result);
-      
-      // Show preview
       previewDiv.style.display = 'block';
       if (result.isImage) {
         previewDiv.innerHTML = `<img src="${result.url}" style="max-width:200px;max-height:150px;border-radius:8px;border:1px solid var(--brd);">`;
@@ -8087,22 +7383,16 @@ async function submitNestedReply(threadId, parentId) {
 async function voteOnPost(postId, voteType) {
   const result = await AccountSystem.voteOnPost(postId, voteType);
   if (result.success) {
-    // Refresh current view to show updated score
-    // This is a simplified approach
   }
 }
 
 async function voteOnThread(threadId, voteType) {
   await voteOnPost(threadId, voteType);
 }
-
-// Helper function to format display name with custom styles
 function getStyledDisplayName(username, displayName, style = {}) {
   const effects = style.effects || [];
   let nameClasses = [];
   let nameStyle = `font-family:'${style.fontFamily || 'Bebas Neue'}',sans-serif;`;
-  
-  // Apply color/effect classes
   if (effects.includes('rainbow')) {
     nameClasses.push('username-rainbow');
   } else if (effects.includes('fire')) {
@@ -8110,8 +7400,6 @@ function getStyledDisplayName(username, displayName, style = {}) {
   } else {
     nameStyle += `color:${style.color || 'var(--gold)'};`;
   }
-  
-  // Apply effect classes
   if (effects.includes('glow')) nameClasses.push('username-glow');
   if (effects.includes('glow-strong')) nameClasses.push('username-glow-strong');
   if (effects.includes('neon')) {
@@ -8140,8 +7428,6 @@ function formatTimeAgo(timestamp) {
   if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`;
   return `${Math.floor(seconds / 604800)}w ago`;
 }
-
-// View Other User's Profile
 async function showPublicProfile(username) {
   const data = await AccountSystem.getPublicProfile(username);
   if (data.error) return;
@@ -8149,8 +7435,6 @@ async function showPublicProfile(username) {
   const profile = data.profile;
   const stats = data.stats;
   const displayStyle = profile.displayStyle || {};
-  
-  // Generate styled display name using CSS classes
   const effects = displayStyle.effects || [];
   let displayNameClasses = [];
   let displayNameStyle = `font-family:'${displayStyle.fontFamily || 'Bebas Neue'}',sans-serif;font-size:24px;`;
@@ -8247,25 +7531,15 @@ async function showPublicProfile(username) {
   
   document.body.appendChild(overlay);
 }
-
-// Initialize account system on load
 async function initAccountSystem() {
   await AccountSystem.init();
   addAccountButton();
 }
-
-// ═══════════════════════════════════════════════════════════════════════════
-// INITIALIZATION
-// ═══════════════════════════════════════════════════════════════════════════
-
-// Add multiplayer button when page loads
 document.addEventListener('DOMContentLoaded', () => {
   addMultiplayerButton();
   initAccountSystem();
   checkForSavedLobby();
 });
-
-// Check for saved lobby and offer to rejoin
 function checkForSavedLobby() {
   const saved = Multiplayer.loadSavedLobby();
   if (saved) {
@@ -8286,15 +7560,9 @@ function checkForSavedLobby() {
     }
   }
 }
-
-// Global helper to hide lobby bar
 function hideLobbyInfo() {
   Multiplayer.hideLobbyBar();
 }
-
-// ═══════════════════════════════════════════════════════════════════════════
-// PACENOTE TEMPLATES & AI GENERATOR
-// ═══════════════════════════════════════════════════════════════════════════
 
 const PACENOTE_TEMPLATES = {
   finnish: {
@@ -8429,23 +7697,15 @@ function generatePacenotes() {
     const isLeft = Math.random() < 0.5;
     const turnPool = isLeft ? leftTurns : rightTurns;
     let turn = turnPool[Math.floor(Math.random() * turnPool.length)];
-    
-    // Add modifier based on difficulty
     if (Math.random() < 0.3) {
       const mod = mods[Math.floor(Math.random() * mods.length)];
       if (mod) turn = turn + ' ' + mod;
     }
-    
-    // Create note
     let raw = turn;
-    
-    // Add distance call sometimes
     if (Math.random() < 0.4 && i < count - 1) {
       const dist = distances[Math.floor(Math.random() * distances.length)];
       raw = raw + ' ' + dist;
     }
-    
-    // Add link word sometimes
     if (Math.random() < 0.25 && i < count - 1) {
       const nextTurn = (!isLeft ? leftTurns : rightTurns)[Math.floor(Math.random() * 3)];
       raw = raw + ' INTO ' + nextTurn.split(' ')[0];
@@ -8471,10 +7731,6 @@ function generatePacenotes() {
   renderEditorNotes();
   alert('Generated ' + count + ' pacenotes for ' + terrain + ' terrain!');
 }
-
-// ═══════════════════════════════════════════════════════════════════════════
-// GAMEPLAY RECORDING MODE
-// ═══════════════════════════════════════════════════════════════════════════
 
 const RecordingMode = {
   enabled: false,
@@ -8549,8 +7805,6 @@ const RecordingMode = {
     URL.revokeObjectURL(url);
   }
 };
-
-// Hook into game functions to record events
 const originalSubmitAnswer = submitAnswer;
 submitAnswer = function() {
   const result = originalSubmitAnswer.apply(this, arguments);
@@ -8577,14 +7831,8 @@ endStage = function() {
   return originalEndStage.apply(this, arguments);
 };
 
-// ═══════════════════════════════════════════════════════════════════════════
-// LAN PARTY HOSTING HELPERS
-// ═══════════════════════════════════════════════════════════════════════════
-
 const LanParty = {
-  // Quick host function with auto-detection
   quickHost: function() {
-    // Get local IP for LAN parties
     const rtc = new RTCPeerConnection({ iceServers: [] });
     rtc.createDataChannel('');
     rtc.createOffer().then(function(offer) {
@@ -8600,15 +7848,12 @@ const LanParty = {
         }
       }
     };
-    
-    // Fallback after 1 second
     setTimeout(function() {
       LanParty.showHostInfoAndCreateLobby(window.location.hostname);
     }, 1000);
   },
   
   showHostInfoAndCreateLobby: function(localIp) {
-    // Show host info and automatically create lobby
     const overlay = document.createElement('div');
     overlay.className = 'screen active';
     overlay.style.cssText = 'z-index:10000;background:rgba(10,10,12,0.98);';
@@ -8638,8 +7883,6 @@ const LanParty = {
       '</div>'
     ].join('');
     document.body.appendChild(overlay);
-    
-    // Automatically create the lobby
     setTimeout(function() {
       Multiplayer.createLobby();
     }, 500);
@@ -8682,8 +7925,6 @@ const LanParty = {
       alert('IP copied to clipboard: ' + ip + ':3000');
     });
   },
-  
-  // Quick join with saved server
   quickJoin: function() {
     const lastServer = localStorage.getItem('rpa_last_server');
     if (lastServer) {
@@ -8699,8 +7940,6 @@ const LanParty = {
     }
   }
 };
-
-// Load recording setting on startup
 document.addEventListener('DOMContentLoaded', function() {
   RecordingMode.loadSetting();
 });
