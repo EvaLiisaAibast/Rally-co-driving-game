@@ -16,8 +16,8 @@ img{display:block;max-width:100%}
 ::-webkit-scrollbar-track{background:var(--surf)}
 ::-webkit-scrollbar-thumb{background:var(--brd2)}
 
-#menu{background:var(--bg);align-items:stretch}
-.menu-wrap{display:grid;grid-template-columns:1fr 400px;min-height:100vh;flex:1;overflow-y:auto}
+#menu{background:var(--bg);align-items:stretch;display:flex;flex-direction:column;height:100vh;overflow-y:auto}
+.menu-wrap{display:grid;grid-template-columns:1fr 400px;flex:1;min-height:0}
 .menu-left{
   position:relative;overflow:hidden;
   background:transparent;
@@ -49,7 +49,7 @@ img{display:block;max-width:100%}
   color:var(--mp-red);margin-top:.6rem;text-transform:uppercase;
 }
 .menu-quote{font-size:13px;color:var(--text2);margin-top:.6rem;font-style:italic}
-.menu-right{background:#0e0e12;border-left:2px solid var(--brd2);display:flex;flex-direction:column}
+.menu-right{background:#0e0e12;border-left:2px solid var(--brd2);display:flex;flex-direction:column;overflow-y:auto;max-height:100vh}
 .menu-right-top{background:var(--mp-red);padding:.9rem 1.5rem;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:4px;color:#fff}
 .menu-nav{flex:1;padding:1.5rem;display:flex;flex-direction:column;gap:10px}
 .mnbtn{
@@ -710,20 +710,7 @@ body.pro-mode #g-stage::after {
     font-size: 18px;
   }
   
-  .menu-wrap {
-    min-height: 100vh;
-    overflow-y: auto;
-  }
-  
-  .screen {
-    overflow-y: auto;
-  }
-  
   .menu-left {
     padding: 1.5rem;
-  }
-  
-  .menu-right {
-    min-height: 100vh;
   }
 }
