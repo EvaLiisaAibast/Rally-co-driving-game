@@ -1,6 +1,12 @@
 const DIFFS=[{n:'Easy',s:18},{n:'Normal',s:14},{n:'Hard',s:11},{n:'Insane',s:9},{n:'Chaos',s:7}];
 const RIVALS=[{name:'S. Laurent',team:'Citroën'},{name:'C. MacRae',team:'Subaru'},{name:'M. Grönholm',team:'Peugeot'},{name:'K. Rovanperä',team:'Toyota'}];
 
+const cars=[
+  "audi-sport_quattro.png","lancia_037.png","pergeot_205_T16.png","ford_rs2000.png","MG_metro_6R4.png","renault_5_maxi.png",
+  "subaru_impreza_WRC97.png","Mitsubishi_Lancer_Evo_IV.png","toyota_corolla_WRC.png","ford_escort_WRC.png","seat_coroba_WRC.png","skoda_octavia_wrc.png",
+  "toyota_GR_Yaris_Rally1.png","hyundai_I20N_Rally_1.png","ford_puma_rally_1.png","citroen_c3_rally2.png","skoda_fabia_R5_rally_2.png","ww_polo_gti_r5.png"
+];
+
 const ERAS={
   grpb:{
     label:'Group B',badge:'eb-grpb',outlet:'Rallye Mondiale',commentator:'Jean-Pierre Mauger',
@@ -279,7 +285,7 @@ const ERAS={
       LONG:'long',INTO:'into',TIGHTENS:'tightens',OPENS:'opens',DONTCUT:"don't cut",
       JUNCTION:'junction',ICE:'ice',REGEN:'regen zone',SQUARE:'square',HYBRID:'hybrid boost',BUMPS:'compressions'},
     cars:[{n:'Toyota GR Yaris Rally1',d:'500hp · Hybrid',img:'toyota_GR_Yaris_Rally1.png'},{n:'Hyundai i20 N Rally1',d:'500hp · Hybrid',img:'hyundai_I20N_Rally_1.png'},{n:'Ford Puma Rally1',d:'500hp · Hybrid',img:'ford_puma_rally_1.png'},
-          {n:'Citroën C3 Rally2',d:'280hp · WRC2',img:'citröen_c3_rally2.png'},{n:'Skoda Fabia RS Rally2',d:'280hp · WRC2',img:'skoda_fabia_R5_rally_2.png'},{n:'VW Polo GTI R5',d:'270hp · R5',img:'ww_polo_gti_r5.png'}],
+          {n:'Citroën C3 Rally2',d:'280hp · WRC2',img:'citroen_c3_rally2.png'},{n:'Skoda Fabia RS Rally2',d:'280hp · WRC2',img:'skoda_fabia_R5_rally_2.png'},{n:'VW Polo GTI R5',d:'270hp · R5',img:'ww_polo_gti_r5.png'}],
     stages:[
       {name:'SS14 — Col de Turini',country:'Monte-Carlo',surf:'Tarmac / ice',weather:'Night · 1°C · ice',km:'18.7',
        cond:'Night stage. Spectator floodlights on corners. Temperature dropped since last car. Ice patches not on the map.',
@@ -7944,5 +7950,3 @@ const LanParty = {
 document.addEventListener('DOMContentLoaded', function() {
   RecordingMode.loadSetting();
 });
-
-///end
