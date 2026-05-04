@@ -1,44 +1,31 @@
-/* ═══════════════════════════════════════════════════════════════════════════
-   RALLY PACENOTE ACADEMY — ENHANCED MULTIPLAYER SERVER v2.0
-   Accounts • Leaderboards • Save System • Enhanced Multiplayer
-   ═══════════════════════════════════════════════════════════════════════════ */
-
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
+const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const { createClient } = require('redis');
 const { createAdapter } = require('@socket.io/redis-adapter');
 
-// SMTP Encryption key (for storing player email passwords securely)
 const SMTP_KEY = process.env.SMTP_KEY || crypto.randomBytes(32).toString('hex');
-
-// Redis configuration
 const REDIS_URL = process.env.REDIS_URL || 'redis://localhost:6379';
 let redisClient = null;
 let redisPubClient = null;
 let redisSubClient = null;
+const SALT_ROUNDS = 10;
 
-// Initialize Redis connection
 async function initRedis() {
   try {
-    // Main Redis client for data operations
     redisClient = createClient({ url: REDIS_URL });
     redisClient.on('error', (err) => console.error('Redis Client Error', err));
     await redisClient.connect();
-    
-    // Pub/Sub clients for Socket.io adapter
     redisPubClient = redisClient.duplicate();
     redisSubClient = redisClient.duplicate();
     await redisPubClient.connect();
     await redisSubClient.connect();
-    
-    // Set up Socket.io Redis adapter for multi-server broadcasting
     io.adapter(createAdapter(redisPubClient, redisSubClient));
-    
     console.log('✓ Redis connected');
     return true;
   } catch (err) {
@@ -57,14 +44,9 @@ const io = new Server(server, {
   }
 });
 
-// Middleware
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.static(path.join(__dirname)));
-
-// ═══════════════════════════════════════════════════════════════════════════
-// DATABASE SYSTEM (File-based JSON storage)
-// ═══════════════════════════════════════════════════════════════════════════
 
 const DATA_DIR = path.join(__dirname, 'data');
 const ACCOUNTS_FILE = path.join(DATA_DIR, 'accounts.json');
@@ -75,15 +57,10 @@ const FORUM_FILE = path.join(DATA_DIR, 'forum.json');
 const PASSWORD_RESETS_FILE = path.join(DATA_DIR, 'password_resets.json');
 const UPLOADS_DIR = path.join(__dirname, 'uploads');
 
-// Ensure data directories exist
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 if (!fs.existsSync(SAVEFILES_DIR)) fs.mkdirSync(SAVEFILES_DIR, { recursive: true });
 if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
-
-// Serve uploads directory
 app.use('/uploads', express.static(UPLOADS_DIR));
-
-// Load or initialize databases
 function loadJSON(file, defaultValue = {}) {
   try {
     if (fs.existsSync(file)) {
@@ -105,7 +82,6 @@ function saveJSON(file, data) {
   }
 }
 
-// Database state
 const DB = {
   accounts: loadJSON(ACCOUNTS_FILE, {}),
   leaderboard: loadJSON(LEADERBOARD_FILE, []),
@@ -114,7 +90,6 @@ const DB = {
   passwordResets: loadJSON(PASSWORD_RESETS_FILE, {})
 };
 
-// Auto-save every 30 seconds
 setInterval(() => {
   saveJSON(ACCOUNTS_FILE, DB.accounts);
   saveJSON(LEADERBOARD_FILE, DB.leaderboard);
@@ -123,20 +98,19 @@ setInterval(() => {
   saveJSON(PASSWORD_RESETS_FILE, DB.passwordResets);
 }, 30000);
 
-// ═══════════════════════════════════════════════════════════════════════════
-// ACCOUNT SYSTEM
-// ═══════════════════════════════════════════════════════════════════════════
+async function hashPassword(password) {
+  return await bcrypt.hash(password, SALT_ROUNDS);
+}
 
-function hashPassword(password) {
-  return crypto.createHash('sha256').update(password + 'rally-salt').digest('hex');
+async function verifyPassword(password, hash) {
+  return await bcrypt.compare(password, hash);
 }
 
 function generateToken() {
   return crypto.randomBytes(32).toString('hex');
 }
 
-function createAccount(email, username, password, displayName) {
-  // Check if email already exists
+async function createAccount(email, username, password, displayName) {
   for (const key in DB.accounts) {
     if (DB.accounts[key].email === email.toLowerCase()) {
       return { error: 'Email already registered' };
@@ -145,23 +119,23 @@ function createAccount(email, username, password, displayName) {
       return { error: 'Username already exists' };
     }
   }
-  
+
   if (!email.includes('@') || !email.includes('.')) {
     return { error: 'Invalid email address' };
   }
-  
+
   if (username.length < 3 || username.length > 20) {
     return { error: 'Username must be 3-20 characters' };
   }
-  
+
   if (password.length < 6) {
     return { error: 'Password must be at least 6 characters' };
   }
-  
+
   const account = {
     email: email.toLowerCase(),
     username,
-    passwordHash: hashPassword(password),
+    passwordHash: await hashPassword(password),
     displayName: displayName || username,
     createdAt: Date.now(),
     lastLogin: Date.now(),
@@ -201,7 +175,6 @@ function createAccount(email, username, password, displayName) {
       favoriteCar: '',
       favoriteStage: '',
       joinedAt: Date.now(),
-      // Customization
       displayStyle: {
         fontFamily: 'Bebas Neue',
         color: '#f5c518',
@@ -228,19 +201,15 @@ function createAccount(email, username, password, displayName) {
   
   DB.accounts[username] = account;
   saveJSON(ACCOUNTS_FILE, DB.accounts);
-  
-  // Create savefile
   createSavefile(username);
   
   return { success: true, account: sanitizeAccount(account), token: account.token };
 }
 
-function login(emailOrUsername, password) {
-  // Find account by email or username
+async function login(emailOrUsername, password) {
   let account = null;
-  
+
   if (emailOrUsername.includes('@')) {
-    // Login by email
     for (const key in DB.accounts) {
       if (DB.accounts[key].email === emailOrUsername.toLowerCase()) {
         account = DB.accounts[key];
@@ -248,15 +217,15 @@ function login(emailOrUsername, password) {
       }
     }
   } else {
-    // Login by username
     account = DB.accounts[emailOrUsername];
   }
-  
+
   if (!account) {
     return { error: 'Invalid email/username or password' };
   }
-  
-  if (account.passwordHash !== hashPassword(password)) {
+
+  const isValidPassword = await verifyPassword(password, account.passwordHash);
+  if (!isValidPassword) {
     return { error: 'Invalid email/username or password' };
   }
   
@@ -266,8 +235,6 @@ function login(emailOrUsername, password) {
   
   return { success: true, account: sanitizeAccount(account), token: account.token };
 }
-
-// SMTP Password Encryption
 function encryptSmtpPassword(password) {
   if (!password) return null;
   const iv = crypto.randomBytes(16);
@@ -291,8 +258,6 @@ function decryptSmtpPassword(encrypted) {
     return null;
   }
 }
-
-// Send email using player's SMTP settings
 async function sendPlayerEmail(account, subject, htmlContent) {
   if (!account.smtpSettings) {
     return { error: 'No SMTP configured. Please set up email in Account Settings.' };
@@ -327,8 +292,6 @@ async function sendPlayerEmail(account, subject, htmlContent) {
     return { error: 'Email failed: ' + error.message };
   }
 }
-
-// Password Recovery System
 async function requestPasswordReset(email) {
   let account = null;
   let username = null;
@@ -344,8 +307,6 @@ async function requestPasswordReset(email) {
   if (!account) {
     return { error: 'No account found with this email' };
   }
-  
-  // Check if player has SMTP configured
   if (!account.smtpSettings) {
     return { 
       error: 'Email not configured',
@@ -364,8 +325,6 @@ async function requestPasswordReset(email) {
   };
   
   saveJSON(PASSWORD_RESETS_FILE, DB.passwordResets);
-  
-  // Send email using player's SMTP
   const resetUrl = `http://localhost:3000/reset-password?token=${resetToken}`;
   const emailResult = await sendPlayerEmail(
     account,
@@ -395,31 +354,32 @@ async function requestPasswordReset(email) {
   return { success: true, message: 'Password reset link sent to your email' };
 }
 
-function resetPassword(resetToken, newPassword) {
+async function resetPassword(resetToken, newPassword) {
   const resetData = DB.passwordResets[resetToken];
-  
+
   if (!resetData) {
     return { error: 'Invalid or expired reset token' };
   }
-  
+
   if (resetData.used) {
     return { error: 'This reset link has already been used' };
   }
-  
+
   if (Date.now() > resetData.expiresAt) {
     return { error: 'Reset link has expired' };
   }
-  
+
   if (newPassword.length < 6) {
     return { error: 'Password must be at least 6 characters' };
   }
-  
+
   const account = DB.accounts[resetData.username];
+
   if (!account) {
     return { error: 'Account not found' };
   }
-  
-  account.passwordHash = hashPassword(newPassword);
+
+  account.passwordHash = await hashPassword(newPassword);
   resetData.used = true;
   
   saveJSON(ACCOUNTS_FILE, DB.accounts);
@@ -431,13 +391,9 @@ function resetPassword(resetToken, newPassword) {
 function updateProfile(username, updates) {
   const account = DB.accounts[username];
   if (!account) return { error: 'Account not found' };
-  
-  // Update display name
   if (updates.displayName && updates.displayName.length >= 2 && updates.displayName.length <= 30) {
     account.displayName = updates.displayName;
   }
-  
-  // Handle base64 profile picture upload
   if (updates.profilePicture && updates.profilePicture.startsWith('data:image')) {
     try {
       const base64Data = updates.profilePicture.replace(/^data:image\/\w+;base64,/, '');
@@ -446,8 +402,6 @@ function updateProfile(username, updates) {
       const filename = `avatar_${username}_${Date.now()}.${ext}`;
       const filepath = path.join(UPLOADS_DIR, filename);
       fs.writeFileSync(filepath, buffer);
-      
-      // Delete old avatar if exists
       if (account.profile?.avatarUrl) {
         const oldFile = path.join(__dirname, account.profile.avatarUrl);
         if (fs.existsSync(oldFile) && oldFile.includes('avatar_')) {
@@ -462,8 +416,6 @@ function updateProfile(username, updates) {
       console.error('Error saving profile picture:', e);
     }
   }
-  
-  // Handle base64 banner upload
   if (updates.banner && updates.banner.startsWith('data:image')) {
     try {
       const base64Data = updates.banner.replace(/^data:image\/\w+;base64,/, '');
@@ -472,8 +424,6 @@ function updateProfile(username, updates) {
       const filename = `banner_${username}_${Date.now()}.${ext}`;
       const filepath = path.join(UPLOADS_DIR, filename);
       fs.writeFileSync(filepath, buffer);
-      
-      // Delete old banner if exists
       if (account.profile?.bannerUrl) {
         const oldFile = path.join(__dirname, account.profile.bannerUrl);
         if (fs.existsSync(oldFile) && oldFile.includes('banner_')) {
@@ -488,19 +438,13 @@ function updateProfile(username, updates) {
       console.error('Error saving banner:', e);
     }
   }
-  
-  // Update profile fields
   if (updates.profile) {
     account.profile = { ...account.profile, ...updates.profile };
   }
-  
-  // Update display style
   if (updates.displayStyle) {
     if (!account.profile) account.profile = {};
     account.profile.displayStyle = { ...account.profile.displayStyle, ...updates.displayStyle };
   }
-  
-  // Update settings
   if (updates.settings) {
     account.settings = { ...account.settings, ...updates.settings };
   }
@@ -552,27 +496,18 @@ function updateStats(username, raceData) {
   
   stats.totalTime += raceData.time;
   stats.crashes += raceData.crashes || 0;
-  
-  // Experience and leveling
   const xpGain = Math.floor(raceData.accuracy * (raceData.position === 1 ? 2 : 1));
   stats.experience += xpGain;
-  
-  // Level up
   const xpNeeded = stats.careerLevel * 1000;
   if (stats.experience >= xpNeeded) {
     stats.careerLevel++;
     stats.experience -= xpNeeded;
   }
-  
-  // Update rank
   stats.rank = calculateRank(stats.careerLevel);
-  
-  // Era progression
   if (raceData.era && raceData.accuracy >= 70) {
     const era = stats.eraProgress[raceData.era];
     if (era) {
       era.completed++;
-      // Unlock next era
       if (era.completed >= 3 && raceData.era === 'grpb') {
         stats.eraProgress.w90.unlocked = true;
       }
@@ -594,10 +529,6 @@ function calculateRank(level) {
   if (level >= 10) return 'Advanced';
   return 'Novice';
 }
-
-// ═══════════════════════════════════════════════════════════════════════════
-// SAVEFILE SYSTEM
-// ═══════════════════════════════════════════════════════════════════════════
 
 function getSavefilePath(username) {
   return path.join(SAVEFILES_DIR, `${username}.json`);
@@ -650,10 +581,6 @@ function saveSavefile(username, data) {
   return true;
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-// LEADERBOARD SYSTEM
-// ═══════════════════════════════════════════════════════════════════════════
-
 function updateLeaderboard(username, stats) {
   const entry = {
     username,
@@ -668,12 +595,8 @@ function updateLeaderboard(username, stats) {
     perfectStages: stats.perfectStages,
     lastUpdated: Date.now()
   };
-  
-  // Remove old entry and add new
   DB.leaderboard = DB.leaderboard.filter(e => e.username !== username);
   DB.leaderboard.push(entry);
-  
-  // Sort by experience (level * 1000 + xp)
   DB.leaderboard.sort((a, b) => (b.level * 1000 + b.experience) - (a.level * 1000 + a.experience));
   
   saveJSON(LEADERBOARD_FILE, DB.leaderboard);
@@ -698,14 +621,8 @@ function getPlayerRank(username) {
   const index = DB.leaderboard.findIndex(e => e.username === username);
   return index >= 0 ? index + 1 : null;
 }
-
-// Game state management
 const lobbies = new Map();
 const players = new Map();
-
-// ═══════════════════════════════════════════════════════════════════════════
-// LOBBY MANAGEMENT
-// ═══════════════════════════════════════════════════════════════════════════
 
 function createLobby(hostId, hostName, settings = {}) {
   const lobbyCode = generateLobbyCode();
@@ -759,14 +676,10 @@ function leaveLobby(lobbyCode, playerId) {
   if (!lobby) return;
   
   lobby.players.delete(playerId);
-  
-  // If lobby is empty, delete it
   if (lobby.players.size === 0) {
     lobbies.delete(lobbyCode);
     return;
   }
-  
-  // If host left, assign new host
   if (lobby.hostId === playerId) {
     const newHost = lobby.players.values().next().value;
     if (newHost) {
@@ -777,23 +690,15 @@ function leaveLobby(lobbyCode, playerId) {
   return lobby;
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-// RACE MANAGEMENT
-// ═══════════════════════════════════════════════════════════════════════════
-
 function startRace(lobbyCode) {
   const lobby = lobbies.get(lobbyCode);
   if (!lobby) return { error: 'Lobby not found' };
-  
-  // Check all players are ready
   const notReady = Array.from(lobby.players.values()).filter(p => !p.ready);
   if (notReady.length > 0) {
     return { error: 'Not all players ready' };
   }
   
   lobby.state = 'countdown';
-  
-  // Generate synchronized stage notes for all players
   const stageNotes = generateStageNotes(lobby.settings);
   lobby.raceData.stageNotes = stageNotes;
   
@@ -801,15 +706,9 @@ function startRace(lobbyCode) {
 }
 
 function generateStageNotes(settings) {
-  // This generates a deterministic set of notes based on era/settings
-  // In production, this would use the same generation logic as the client
   const { era } = settings;
-  
-  // Generate 32 notes with era-appropriate characteristics
   const notes = [];
   const baseNotes = getBaseNotesForEra(era);
-  
-  // Shuffle and select notes
   const shuffled = [...baseNotes].sort(() => Math.random() - 0.5);
   for (let i = 0; i < 32; i++) {
     notes.push(shuffled[i % shuffled.length]);
@@ -819,7 +718,6 @@ function generateStageNotes(settings) {
 }
 
 function getBaseNotesForEra(era) {
-  // Era-specific note pools
   const pools = {
     grpb: [
       { raw: 'R3 EASY', ans: 'right three easy' },
@@ -856,12 +754,7 @@ function getBaseNotesForEra(era) {
   return pools[era] || pools.grpb;
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-// REDIS-BASED LOBBY & MATCHMAKING SYSTEM
-// ═══════════════════════════════════════════════════════════════════════════
-
 const RedisLobbyStore = {
-  // Store lobby in Redis (with 30 min TTL)
   async saveLobby(lobby) {
     if (!redisClient) return false;
     try {
@@ -873,8 +766,6 @@ const RedisLobbyStore = {
       return false;
     }
   },
-  
-  // Get lobby from Redis
   async getLobby(lobbyCode) {
     if (!redisClient) return null;
     try {
@@ -882,7 +773,6 @@ const RedisLobbyStore = {
       const data = await redisClient.get(key);
       if (data) {
         const lobby = JSON.parse(data);
-        // Convert plain object back to Map for players
         lobby.players = new Map(Object.entries(lobby.players));
         return lobby;
       }
@@ -892,8 +782,6 @@ const RedisLobbyStore = {
       return null;
     }
   },
-  
-  // Delete lobby from Redis
   async deleteLobby(lobbyCode) {
     if (!redisClient) return false;
     try {
@@ -903,8 +791,6 @@ const RedisLobbyStore = {
       return false;
     }
   },
-  
-  // Get all active lobbies
   async getAllLobbies() {
     if (!redisClient) return [];
     try {
@@ -924,10 +810,7 @@ const RedisLobbyStore = {
     }
   }
 };
-
-// Matchmaking Queue System
 const MatchmakingQueue = {
-  // Add player to matchmaking queue
   async addPlayer(playerData) {
     if (!redisClient) return { error: 'Redis not available' };
     try {
@@ -938,15 +821,12 @@ const MatchmakingQueue = {
         socketId: playerData.socketId
       };
       await redisClient.lPush(queueKey, JSON.stringify(playerEntry));
-      // Set TTL on queue to auto-cleanup old entries
       await redisClient.expire(queueKey, 300); // 5 min TTL
       return { success: true };
     } catch (e) {
       return { error: e.message };
     }
   },
-  
-  // Find match for a player
   async findMatch(era, playerSocketId) {
     if (!redisClient) return null;
     try {
@@ -954,15 +834,11 @@ const MatchmakingQueue = {
       const queueLength = await redisClient.lLen(queueKey);
       
       if (queueLength < 2) return null; // Need at least 2 players
-      
-      // Get all players in queue
       const entries = await redisClient.lRange(queueKey, 0, -1);
       
       for (const entry of entries) {
         const player = JSON.parse(entry);
-        // Skip self and find another player
         if (player.socketId !== playerSocketId) {
-          // Remove both from queue
           await redisClient.lRem(queueKey, 0, entry);
           return player;
         }
@@ -972,8 +848,6 @@ const MatchmakingQueue = {
       return null;
     }
   },
-  
-  // Remove player from queue
   async removePlayer(socketId, era) {
     if (!redisClient) return;
     try {
@@ -988,8 +862,6 @@ const MatchmakingQueue = {
       }
     } catch (e) {}
   },
-  
-  // Get queue stats
   async getStats() {
     if (!redisClient) return {};
     try {
@@ -1006,14 +878,8 @@ const MatchmakingQueue = {
   }
 };
 
-// ═══════════════════════════════════════════════════════════════════════════
-// SOCKET.IO HANDLERS
-// ═══════════════════════════════════════════════════════════════════════════
-
 io.on('connection', (socket) => {
   console.log(`Player connected: ${socket.id}`);
-  
-  // Store player info
   players.set(socket.id, {
     id: socket.id,
     name: null,
@@ -1021,16 +887,10 @@ io.on('connection', (socket) => {
     inMatchmaking: false
   });
   
-  // ═════════════════════════════════════════════════════════════════════════
-  // LOBBY MANAGEMENT
-  // ═════════════════════════════════════════════════════════════════════════
-  
   socket.on('create-lobby', (data, callback) => {
     const { playerName, settings } = data;
     const player = players.get(socket.id);
     player.name = playerName;
-    
-    // Leave current lobby if in one
     if (player.lobbyCode) {
       leaveLobby(player.lobbyCode, socket.id);
       socket.leave(player.lobbyCode);
@@ -1038,8 +898,6 @@ io.on('connection', (socket) => {
     
     const lobby = createLobby(socket.id, playerName, settings);
     player.lobbyCode = lobby.code;
-    
-    // Join the lobby
     joinLobby(lobby.code, socket.id, playerName);
     socket.join(lobby.code);
     
@@ -1051,8 +909,6 @@ io.on('connection', (socket) => {
     const { lobbyCode, playerName } = data;
     const player = players.get(socket.id);
     player.name = playerName;
-    
-    // Leave current lobby if in one
     if (player.lobbyCode) {
       leaveLobby(player.lobbyCode, socket.id);
       socket.leave(player.lobbyCode);
@@ -1069,8 +925,6 @@ io.on('connection', (socket) => {
     socket.join(lobbyCode.toUpperCase());
     
     const lobby = lobbies.get(lobbyCode.toUpperCase());
-    
-    // Notify other players
     socket.to(lobbyCode.toUpperCase()).emit('player-joined', {
       player: serializePlayer(result.lobby.players.get(socket.id))
     });
@@ -1123,10 +977,6 @@ io.on('connection', (socket) => {
     io.to(player.lobbyCode).emit('lobby-settings-updated', { settings: lobby.settings });
   });
   
-  // ═════════════════════════════════════════════════════════════════════════
-  // RACE MANAGEMENT
-  // ═════════════════════════════════════════════════════════════════════════
-  
   socket.on('start-race', (callback) => {
     const player = players.get(socket.id);
     if (!player || !player.lobbyCode) {
@@ -1145,14 +995,10 @@ io.on('connection', (socket) => {
       callback({ success: false, error: result.error });
       return;
     }
-    
-    // Start countdown
     io.to(player.lobbyCode).emit('race-countdown', { 
       countdown: 3,
       stageNotes: result.stageNotes 
     });
-    
-    // Actually start after countdown
     setTimeout(() => {
       lobby.state = 'racing';
       lobby.raceData.startTime = Date.now();
@@ -1171,8 +1017,6 @@ io.on('connection', (socket) => {
     
     const lobby = lobbies.get(player.lobbyCode);
     if (!lobby || lobby.state !== 'racing') return;
-    
-    // Broadcast progress to other players
     socket.to(player.lobbyCode).emit('player-progress', {
       playerId: socket.id,
       playerName: player.name,
@@ -1188,8 +1032,6 @@ io.on('connection', (socket) => {
     
     const lobby = lobbies.get(player.lobbyCode);
     if (!lobby) return;
-    
-    // Store result
     lobby.raceData.results.set(socket.id, {
       playerId: socket.id,
       playerName: player.name,
@@ -1200,19 +1042,13 @@ io.on('connection', (socket) => {
       totalTime: data.totalTime,
       dnf: data.dnf || false
     });
-    
-    // Notify all players
     io.to(player.lobbyCode).emit('player-finished', {
       playerId: socket.id,
       playerName: player.name,
       result: lobby.raceData.results.get(socket.id)
     });
-    
-    // Check if all players finished
     if (lobby.raceData.results.size >= lobby.players.size) {
       lobby.state = 'finished';
-      
-      // Calculate rankings
       const results = Array.from(lobby.raceData.results.values());
       results.sort((a, b) => {
         if (a.dnf && !b.dnf) return 1;
@@ -1231,26 +1067,18 @@ io.on('connection', (socket) => {
     
     const lobby = lobbies.get(player.lobbyCode);
     if (!lobby) return;
-    
-    // Reset lobby for rematch
     lobby.state = 'waiting';
     lobby.raceData = {
       startTime: null,
       stageNotes: null,
       results: new Map()
     };
-    
-    // Reset player ready states
     lobby.players.forEach(p => p.ready = false);
     
     io.to(player.lobbyCode).emit('rematch-available', { 
       lobby: serializeLobby(lobby) 
     });
   });
-  
-  // ═════════════════════════════════════════════════════════════════════════
-  // DISCONNECT HANDLING
-  // ═════════════════════════════════════════════════════════════════════════
   
   socket.on('disconnect', () => {
     console.log(`Player disconnected: ${socket.id}`);
@@ -1272,10 +1100,6 @@ io.on('connection', (socket) => {
     players.delete(socket.id);
   });
 });
-
-// ═══════════════════════════════════════════════════════════════════════════
-// SERIALIZATION HELPERS
-// ═══════════════════════════════════════════════════════════════════════════
 
 function serializeLobby(lobby) {
   return {
@@ -1299,20 +1123,15 @@ function serializePlayer(player) {
   };
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-// HTTP API ENDPOINTS
-// ═══════════════════════════════════════════════════════════════════════════
-
-// Account endpoints
-app.post('/api/register', (req, res) => {
+app.post('/api/register', async (req, res) => {
   const { email, username, password, displayName } = req.body;
-  const result = createAccount(email, username, password, displayName);
+  const result = await createAccount(email, username, password, displayName);
   res.json(result);
 });
 
-app.post('/api/login', (req, res) => {
+app.post('/api/login', async (req, res) => {
   const { emailOrUsername, password } = req.body;
-  const result = login(emailOrUsername, password);
+  const result = await login(emailOrUsername, password);
   res.json(result);
 });
 
@@ -1360,8 +1179,6 @@ app.get('/api/account/profile/:username', (req, res) => {
   
   res.json({ profile: sanitizePublicProfile(account) });
 });
-
-// SMTP Settings endpoints
 app.post('/api/account/smtp', (req, res) => {
   const token = req.headers.authorization;
   const account = authenticate(token);
@@ -1398,8 +1215,6 @@ app.get('/api/account/smtp', (req, res) => {
   if (!account.smtpSettings) {
     return res.json({ configured: false });
   }
-  
-  // Return settings without the encrypted password
   res.json({
     configured: true,
     host: account.smtpSettings.host,
@@ -1409,8 +1224,6 @@ app.get('/api/account/smtp', (req, res) => {
     updatedAt: account.smtpSettings.updatedAt
   });
 });
-
-// Test SMTP connection
 app.post('/api/account/smtp/test', async (req, res) => {
   const token = req.headers.authorization;
   const account = authenticate(token);
@@ -1430,8 +1243,6 @@ app.post('/api/account/smtp/test', async (req, res) => {
   
   res.json(result);
 });
-
-// Password recovery endpoints
 app.post('/api/auth/forgot-password', async (req, res) => {
   const { email } = req.body;
   const result = await requestPasswordReset(email);
@@ -1443,8 +1254,6 @@ app.post('/api/auth/reset-password', (req, res) => {
   const result = resetPassword(resetToken, newPassword);
   res.json(result);
 });
-
-// Delete account endpoint
 app.post('/api/account/delete', (req, res) => {
   const token = req.headers.authorization;
   const account = authenticate(token);
@@ -1453,23 +1262,15 @@ app.post('/api/account/delete', (req, res) => {
   }
   
   const { password } = req.body;
-  
-  // Verify password
   const passwordHash = crypto.createHash('sha256').update(password).digest('hex');
   if (passwordHash !== account.passwordHash) {
     return res.status(401).json({ error: 'Incorrect password' });
   }
-  
-  // Delete account and all associated data
   const username = account.username;
-  
-  // Delete savefile if exists
   const savefilePath = path.join(SAVEFILES_DIR, `${username}.json`);
   if (fs.existsSync(savefilePath)) {
     fs.unlinkSync(savefilePath);
   }
-  
-  // Delete uploaded files
   if (account.profile?.avatarUrl) {
     const avatarPath = path.join(__dirname, account.profile.avatarUrl);
     if (fs.existsSync(avatarPath)) fs.unlinkSync(avatarPath);
@@ -1478,15 +1279,11 @@ app.post('/api/account/delete', (req, res) => {
     const bannerPath = path.join(__dirname, account.profile.bannerUrl);
     if (fs.existsSync(bannerPath)) fs.unlinkSync(bannerPath);
   }
-  
-  // Remove from database
   delete DB.accounts[username];
   saveJSON(ACCOUNTS_FILE, DB.accounts);
   
   res.json({ success: true, message: 'Account deleted successfully' });
 });
-
-// Matchmaking Queue endpoints
 app.get('/api/matchmaking/stats', async (req, res) => {
   const stats = await MatchmakingQueue.getStats();
   res.json({ stats, redisConnected: !!redisClient });
@@ -1516,36 +1313,27 @@ app.post('/api/matchmaking/leave', async (req, res) => {
   await MatchmakingQueue.removePlayer(socketId, era);
   res.json({ success: true });
 });
-
-// Get all active lobbies (for server browser)
 app.get('/api/lobbies', async (req, res) => {
   if (redisClient) {
     const lobbies = await RedisLobbyStore.getAllLobbies();
     res.json({ lobbies, source: 'redis' });
   } else {
-    // Fallback to memory
     const lobbies = Array.from(lobbies.values());
     res.json({ lobbies, source: 'memory' });
   }
 });
-
-// Feedback endpoint - sends email to creator
 app.post('/api/feedback', async (req, res) => {
   const { name, email, message } = req.body;
   
   if (!message || message.length < 5) {
     return res.status(400).json({ error: 'Message too short' });
   }
-  
-  // Log feedback to file as backup
   const feedbackEntry = {
     timestamp: new Date().toISOString(),
     name: name || 'Anonymous',
     email: email || 'not provided',
     message: message.substring(0, 2000) // Limit length
   };
-  
-  // Save to feedback log file
   const feedbackLogPath = path.join(__dirname, 'data', 'feedback.json');
   try {
     let feedbacks = [];
@@ -1558,8 +1346,6 @@ app.post('/api/feedback', async (req, res) => {
   } catch (e) {
     console.error('Failed to save feedback log:', e);
   }
-  
-  // Try to send email if SMTP is configured
   const creatorEmail = process.env.CREATOR_EMAIL || 'aevaliisa@gmail.com';
   const smtpHost = process.env.SMTP_HOST;
   const smtpUser = process.env.SMTP_USER;
@@ -1603,7 +1389,6 @@ app.post('/api/feedback', async (req, res) => {
       console.log('✓ Feedback email sent to', creatorEmail);
     } catch (emailError) {
       console.error('Failed to send feedback email:', emailError.message);
-      // Still return success since we saved to file
     }
   } else {
     console.log('ℹ️ Feedback received (email not sent - SMTP not configured). Check data/feedback.json');
@@ -1611,8 +1396,6 @@ app.post('/api/feedback', async (req, res) => {
   
   res.json({ success: true, message: 'Feedback received. Thank you!' });
 });
-
-// Savefile endpoints
 app.get('/api/savefile', (req, res) => {
   const token = req.headers.authorization;
   const account = authenticate(token);
@@ -1640,8 +1423,6 @@ app.post('/api/savefile', (req, res) => {
     res.status(500).json({ error: 'Failed to save' });
   }
 });
-
-// Leaderboard endpoints
 app.get('/api/leaderboard', (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const perPage = parseInt(req.query.perPage) || 50;
@@ -1658,10 +1439,6 @@ app.get('/api/leaderboard/rank', (req, res) => {
   const rank = getPlayerRank(account.username);
   res.json({ rank, total: DB.leaderboard.length });
 });
-
-// ═══════════════════════════════════════════════════════════════════════════
-// FORUM SYSTEM (Reddit-style Message Board)
-// ═══════════════════════════════════════════════════════════════════════════
 
 function createForumBoard(name, description, category) {
   const board = {
@@ -1705,8 +1482,6 @@ function createForumThread(boardId, title, content, author) {
   
   DB.forum.threads.push(thread);
   board.threadCount++;
-  
-  // Update author stats
   const account = DB.accounts[author.username];
   if (account) {
     account.profile.stats.threadsCreated++;
@@ -1744,12 +1519,8 @@ function createForumPost(threadId, content, author, parentId = null) {
   DB.forum.posts.push(post);
   thread.replyCount++;
   thread.updatedAt = Date.now();
-  
-  // Update board post count
   const board = DB.forum.boards.find(b => b.id === thread.boardId);
   if (board) board.postCount++;
-  
-  // Update author stats
   const account = DB.accounts[author.username];
   if (account) {
     account.profile.stats.postsMade++;
@@ -1772,15 +1543,12 @@ function voteOnPost(postId, username, voteType) {
   if (!post.votes) post.votes = [];
   
   if (existingVoteIndex >= 0) {
-    // Change existing vote
     const oldVote = post.votes[existingVoteIndex];
     if (oldVote.type === voteType) {
-      // Remove vote (toggle off)
       post.votes.splice(existingVoteIndex, 1);
       if (voteType === 'up') post.upvotes--;
       else post.downvotes--;
     } else {
-      // Change vote
       oldVote.type = voteType;
       if (voteType === 'up') {
         post.upvotes++;
@@ -1791,15 +1559,12 @@ function voteOnPost(postId, username, voteType) {
       }
     }
   } else {
-    // New vote
     post.votes.push({ username, type: voteType, createdAt: Date.now() });
     if (voteType === 'up') post.upvotes++;
     else post.downvotes++;
   }
   
   post.voteScore = post.upvotes - post.downvotes;
-  
-  // Update author reputation
   const author = DB.accounts[post.author];
   if (author) {
     author.profile.stats.reputation += voteType === 'up' ? 1 : -1;
@@ -1832,8 +1597,6 @@ function getForumBoards() {
 function getBoardThreads(boardId, page = 1, sort = 'hot') {
   const perPage = 20;
   let threads = DB.forum.threads.filter(t => t.boardId === boardId);
-  
-  // Sort threads
   if (sort === 'hot') {
     threads.sort((a, b) => b.voteScore - a.voteScore || b.updatedAt - a.updatedAt);
   } else if (sort === 'new') {
@@ -1865,8 +1628,6 @@ function getThreadWithPosts(threadId) {
   const posts = DB.forum.posts
     .filter(p => p.threadId === threadId && !p.isDeleted)
     .sort((a, b) => a.createdAt - b.createdAt);
-  
-  // Organize into nested structure
   const postMap = new Map();
   const rootPosts = [];
   
@@ -1885,8 +1646,6 @@ function getThreadWithPosts(threadId) {
   
   return { thread, posts: rootPosts };
 }
-
-// Initialize default forum boards if none exist
 if (DB.forum.boards.length === 0) {
   createForumBoard('General Discussion', 'Talk about anything rally-related', 'general');
   createForumBoard('Strategy & Tips', 'Share and discuss co-driving strategies', 'strategy');
@@ -1896,8 +1655,6 @@ if (DB.forum.boards.length === 0) {
   createForumBoard('Bug Reports', 'Report issues and suggest features', 'feedback');
   saveJSON(FORUM_FILE, DB.forum);
 }
-
-// Forum API endpoints
 app.get('/api/forum/boards', (req, res) => {
   res.json({ boards: getForumBoards() });
 });
@@ -1983,8 +1740,6 @@ app.get('/api/forum/recent', (req, res) => {
   
   res.json({ threads: recentThreads });
 });
-
-// Forum file upload endpoint - handles large files (videos, audio, etc)
 app.post('/api/forum/upload', (req, res) => {
   const token = req.headers.authorization;
   const account = authenticate(token);
@@ -1997,25 +1752,16 @@ app.post('/api/forum/upload', (req, res) => {
   }
   
   try {
-    // Create uploads directory for forum files if needed
     const FORUM_UPLOADS_DIR = path.join(UPLOADS_DIR, 'forum');
     if (!fs.existsSync(FORUM_UPLOADS_DIR)) {
       fs.mkdirSync(FORUM_UPLOADS_DIR, { recursive: true });
     }
-    
-    // Extract base64 data
     const base64Data = data.replace(/^data:.*\/.*;base64,/, '');
     const buffer = Buffer.from(base64Data, 'base64');
-    
-    // Generate unique filename
     const ext = path.extname(filename) || '.bin';
     const uniqueFilename = `${account.username}_${Date.now()}_${Math.random().toString(36).substring(2, 8)}${ext}`;
     const filepath = path.join(FORUM_UPLOADS_DIR, uniqueFilename);
-    
-    // Save file
     fs.writeFileSync(filepath, buffer);
-    
-    // Determine file type
     const mimeType = data.match(/^data:(.*);base64,/)?.[1] || 'application/octet-stream';
     const isVideo = mimeType.startsWith('video/');
     const isAudio = mimeType.startsWith('audio/');
@@ -2038,10 +1784,6 @@ app.post('/api/forum/upload', (req, res) => {
     res.status(500).json({ error: 'Failed to upload file' });
   }
 });
-
-// ═══════════════════════════════════════════════════════════════════════════
-// STORY SYSTEM
-// ═══════════════════════════════════════════════════════════════════════════
 
 const STORY_CAMPAIGN = {
   chapters: [
@@ -2099,8 +1841,6 @@ const STORY_CAMPAIGN = {
     }
   ]
 };
-
-// Story endpoints
 app.get('/api/story/campaign', (req, res) => {
   res.json(STORY_CAMPAIGN);
 });
@@ -2135,8 +1875,6 @@ app.post('/api/story/complete', (req, res) => {
   }
   
   saveSavefile(account.username, savefile);
-  
-  // Update stats
   updateStats(account.username, {
     accuracy,
     time,
@@ -2147,13 +1885,7 @@ app.post('/api/story/complete', (req, res) => {
   res.json({ success: true, savefile });
 });
 
-// ═══════════════════════════════════════════════════════════════════════════
-// SERVER START
-// ═══════════════════════════════════════════════════════════════════════════
-
 const PORT = process.env.PORT || 3000;
-
-// Initialize Redis and then start server
 async function startServer() {
   await initRedis();
   
@@ -2173,21 +1905,14 @@ async function startServer() {
 }
 
 startServer();
-
-// Cleanup empty lobbies periodically (both memory and Redis)
 setInterval(async () => {
   const now = Date.now();
-  
-  // Clean up memory lobbies
   for (const [code, lobby] of lobbies) {
     if (lobby.players.size === 0 && now - lobby.createdAt > 300000) {
       lobbies.delete(code);
-      // Also delete from Redis if connected
       if (redisClient) {
         await RedisLobbyStore.deleteLobby(code);
       }
     }
   }
-  
-  // Clean up matchmaking queue (Redis handles TTL automatically)
 }, 60000);
