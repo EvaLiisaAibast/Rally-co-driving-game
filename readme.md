@@ -6,7 +6,7 @@ A high-intensity rally co-driver simulator where you read pacenotes under pressu
 
 Now with **multiplayer support** — host LAN parties or play online with friends.
 
----
+------
 
 ## SERVER INSTALLATION
 
