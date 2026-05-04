@@ -18,7 +18,6 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Anton&family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&display=swap"/>
 <link rel="stylesheet" href="styles.css"/>
 
-<!-- Profile Customization CSS -->
 <style>
 /* Glow Effects */
 .username-glow {
@@ -212,9 +211,8 @@
 </head>
 <body>
 
-<!-- MENU -->
 <div class="screen active" id="menu">
-<!-- Lobby Info Bar -->
+
 <div id="lobby-info-bar" style="position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(10,10,12,0.95);border-bottom:1px solid var(--brd2);padding:8px 16px;display:none;align-items:center;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:12px;">
   <div style="display:flex;align-items:center;gap:12px;">
     <span style="color:var(--gold);font-weight:600;">🎮 LOBBY: <span id="lobby-display-id">—</span></span>
@@ -266,7 +264,6 @@
 </div>
 </div>
 
-<!-- SETUP -->
 <div class="screen" id="setup">
 <div class="page-hdr">
   <button class="bk" onclick="showMenu()">← Menu</button>
@@ -291,7 +288,6 @@
 </div>
 </div>
 
-<!-- TUNING SCREEN -->
 <div class="screen" id="tuning">
 <div class="page-hdr" style="flex-wrap:wrap;gap:.5rem">
   <button class="bk" id="tun-back-btn" onclick="tunBack()">← Back</button>
@@ -335,7 +331,6 @@
 </div>
 </div>
 
-<!-- TRAINING -->
 <div class="screen" id="training">
 <div class="school-top">
   <div class="school-logo">RPA Academy</div>
@@ -367,7 +362,6 @@
 </div>
 </div>
 
-<!-- GAME -->
 <div class="screen" id="game">
 <div class="g-topbar">
   <div>
@@ -448,7 +442,7 @@
           <rect x="82" y="105" width="14" height="22" rx="4" fill="#252535" stroke="#404055" stroke-width="1" id="svg-wrr"/>
           <rect x="12" y="28" width="76" height="9" rx="3" fill="#1e1e28" stroke="#3a3a50" stroke-width="1" id="svg-front"/>
           <rect x="12" y="124" width="76" height="9" rx="3" fill="#1e1e28" stroke="#3a3a50" stroke-width="1" id="svg-rear"/>
-          <!-- damage hit overlays -->
+          
           <rect x="12" y="28" width="76" height="9" rx="3" fill="#e8291c" opacity="0" id="hit-front"/>
           <rect x="12" y="124" width="76" height="9" rx="3" fill="#e8291c" opacity="0" id="hit-rear"/>
           <rect x="4" y="42" width="14" height="22" rx="4" fill="#e8291c" opacity="0" id="hit-wfl"/>
@@ -479,7 +473,6 @@
 </div>
 </div>
 
-<!-- RESULT — MAX POWER STYLE -->
 <div class="screen" id="result">
 <div class="mp-mast">
   <div class="mp-mast-top">
@@ -511,7 +504,7 @@
       </div>
     </div>
     <div class="mp-article" id="r-article">—</div>
-<div id="pro-summary"><!-- populated by renderProSummary() in pro mode --></div>
+<div id="pro-summary"></div>
     <div class="mp-pull"><p id="r-quote">—</p><cite id="r-quote-attr">—</cite></div>
   </div>
   <div class="mp-side">
@@ -544,7 +537,6 @@
 </div>
 </div>
 
-<!-- CAREER -->
 <div class="screen" id="career">
 <div class="career-hdr">
   <div class="career-hdr-top">
@@ -583,8 +575,6 @@
 </div>
 </div>
 
-
-<!-- TUTORIAL OVERLAY -->
 <div id="tut-overlay" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.96);align-items:center;justify-content:center;flex-direction:column;padding:1.5rem">
   <div id="tut-box" style="max-width:560px;width:100%;background:#111116;border:1px solid #252530;overflow:hidden">
     <div id="tut-progress-bar" style="height:3px;background:#252530"><div id="tut-prog-fill" style="height:100%;background:#f5c518;transition:width .4s;width:0%"></div></div>
@@ -608,26 +598,19 @@
   </div>
 </div>
 
-<!-- CRASH FLASH OVERLAY -->
 <div id="crash-flash-overlay" style="display:none;position:fixed;inset:0;z-index:8000;pointer-events:none;background:rgba(232,41,28,.45)"></div>
 
-<!-- BIG CRASH MESSAGE -->
 <div id="crash-big-msg" style="display:none;position:fixed;inset:0;z-index:8001;pointer-events:none;align-items:center;justify-content:center;flex-direction:column;gap:.5rem">
   <div id="crash-big-title" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,8vw,90px);letter-spacing:4px;color:#e8291c;text-shadow:0 0 30px rgba(232,41,28,.8);line-height:1">HEAVY CONTACT</div>
   <div id="crash-big-sub" style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#ff9090;letter-spacing:.1em"></div>
 </div>
 
-<!-- CORRECT FLASH -->
 <div id="correct-flash" style="display:none;position:fixed;top:1.5rem;right:1.5rem;z-index:7000;pointer-events:none;padding:.5rem 1.1rem;background:rgba(57,255,20,.15);border:1px solid #39ff14;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:#39ff14"></div>
 
-<!-- SPLIT TIME TICKER -->
 <div id="split-ticker" style="display:none;position:fixed;top:1.5rem;left:50%;transform:translateX(-50%);z-index:7000;pointer-events:none;padding:.4rem 1rem;background:#000;border:1px solid #f5c518;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#f5c518"></div>
 <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
 <script src="rally.js"></script>
 
-
-
-<!-- TUNING GARAGE -->
 <div class="screen" id="tuning">
 <div class="tun-header">
   <div class="tun-hdr-top">
@@ -664,10 +647,10 @@
     <div class="tun-nav-section">Electronics</div>
     <button class="tun-nav-btn" onclick="showTunSection('electronics',this)"><span class="tnb-icon">💻</span><span class="tnb-text">Electronics<span class="tnb-sub">ABS, TC, maps, launch</span></span></button>
   </div>
-  <div class="tun-main" id="tun-main"><!-- filled by JS --></div>
+  <div class="tun-main" id="tun-main"></div>
   <div class="tun-stats">
     <h3>Performance</h3>
-    <div id="tun-gauges"><!-- filled by JS --></div>
+    <div id="tun-gauges"></div>
     <div style="margin-top:.5rem">
       <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.4rem">Setup summary</div>
       <div class="setup-summary" id="tun-summary">—</div>
@@ -682,7 +665,6 @@
 </div>
 </div>
 
-<!-- PACENOTE EDITOR SCREEN -->
 <div class="screen" id="editor">
   <div class="page-hdr">
     <button class="bk" onclick="showMenu()">← Menu</button>
@@ -705,7 +687,7 @@
       </div>
       <div id="editor-translation-preview" style="font-size:12px;color:var(--text2);font-family:'IBM Plex Mono',monospace;min-height:18px"></div>
       <div id="editor-note-list" style="display:flex;flex-direction:column;gap:4px">
-        <!-- populated by renderEditorNotes() -->
+        
       </div>
     </div>
     <div style="background:var(--surf);border-left:1px solid var(--brd2);padding:1.25rem;overflow-y:auto">
@@ -744,7 +726,6 @@
   </div>
 </div>
 
-<!-- ANALYTICS SCREEN (Pro Mode) -->
 <div class="screen" id="analytics">
   <div class="page-hdr">
     <button class="bk" onclick="showMenu()">← Menu</button>
@@ -756,37 +737,37 @@
     </div>
   </div>
   <div style="flex:1;overflow-y:auto;padding:1.5rem;display:flex;flex-direction:column;gap:1.25rem" id="analytics-body">
-    <!-- populated by renderAnalyticsDashboard() -->
+    
   </div>
 </div>
 
-<!-- TRAINING PROGRAMS SCREEN -->
 <div class="screen" id="programs">
   <div class="page-hdr">
     <button class="bk" onclick="showMenu()">← Menu</button>
     <div class="page-hdr-title">Training Programs</div>
   </div>
   <div style="flex:1;overflow-y:auto;padding:1.5rem;max-width:700px;margin:0 auto;width:100%" id="programs-body">
-    <!-- populated by renderTrainingPrograms() -->
+    
   </div>
 </div>
 
-<!-- ACCESSIBILITY SCREEN -->
 <div class="screen" id="accessibility">
   <div class="page-hdr">
     <button class="bk" onclick="showMenu()">← Menu</button>
     <div class="page-hdr-title">Accessibility & Settings</div>
   </div>
   <div style="flex:1;overflow-y:auto;padding:1.5rem;max-width:600px;margin:0 auto;width:100%" id="accessibility-body">
-    <!-- populated by renderAccessibilitySettings() -->
+    
   </div>
 </div>
 
-<!-- CRASH MODAL -->
 <div id="crash-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.96);align-items:center;justify-content:center;flex-direction:column;padding:2rem">
 <div style="background:#0e0e12;border:2px solid #e8291c;max-width:500px;width:100%;padding:0;overflow:hidden">
   <div style="background:#e8291c;padding:.6rem 1.25rem;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;color:#fff" id="crash-hdr-bar">INCIDENT</div>
   <div style="padding:1.5rem;display:flex;flex-direction:column;gap:1rem">
+    <div id="stick-anim-container" style="width:100%;height:120px;background:#0a0a0c;border:1px solid #252530;position:relative;overflow:hidden;margin-bottom:0.5rem">
+      <canvas id="stick-canvas" width="460" height="120" style="display:block"></canvas>
+    </div>
     <div style="display:flex;align-items:center;gap:1rem">
       <div style="font-size:48px;line-height:1" id="crash-emoji">💥</div>
       <div>
@@ -811,8 +792,6 @@
 </div>
 </div>
 
-<!-- PRO ANALYTICS OVERLAY — injected into game sidebar -->
-<!-- (element added dynamically by systems) -->
 <script src="rally_systems.js"></script>
 </body>
 </html>
