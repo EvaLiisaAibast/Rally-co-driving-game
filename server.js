@@ -19,18 +19,16 @@ const SALT_ROUNDS = 10;
 async function initRedis() {
   try {
     redisClient = createClient({ url: REDIS_URL });
-    redisClient.on('error', (err) => console.error('Redis Client Error', err));
-    await redisClient.connect();
-    redisPubClient = redisClient.duplicate();
-    redisSubClient = redisClient.duplicate();
-    await redisPubClient.connect();
-    await redisSubClient.connect();
-    io.adapter(createAdapter(redisPubClient, redisSubClient));
+    redisClient.on('error', () => {}); // silently ignore errors
+    await Promise.race([
+      redisClient.connect(),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 3000))
+    ]);
     console.log('✓ Redis connected');
     return true;
   } catch (err) {
-    console.warn('Redis connection failed:', err.message);
     console.log('Running without Redis (single server mode)');
+    redisClient = null;
     return false;
   }
 }
