@@ -441,6 +441,10 @@ const StoryUI = {
   },
   
   selectChoice(choice) {
+    // Store the completion callback locally
+    const completionCallback = this.onComplete;
+    console.log('selectChoice called, completionCallback:', completionCallback);
+    
     // Cancel any ongoing speech
     if (window.speechSynthesis) {
       window.speechSynthesis.cancel();
@@ -494,16 +498,27 @@ const StoryUI = {
       continueBtn.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        console.log('Consequence Continue clicked');
+        console.log('Consequence Continue clicked, calling completionCallback');
         // Cancel speech and complete
         if (window.speechSynthesis) window.speechSynthesis.cancel();
-        if (StoryUI.onComplete) StoryUI.onComplete();
+        if (completionCallback) {
+          completionCallback();
+        } else {
+          console.warn('No completionCallback available');
+          // Fallback: just hide the story screen
+          show('career');
+        }
       });
       choices.appendChild(continueBtn);
       
       this.updateStats();
     } else {
-      this.complete();
+      // No consequence text, complete immediately
+      if (completionCallback) {
+        completionCallback();
+      } else {
+        this.complete();
+      }
     }
   },
   
