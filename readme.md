@@ -96,7 +96,7 @@ Pacenotes look like this:
 You have seconds to process it.
 Then you say:
 
-> *“Left three, caution hairpin, into right four.”*
+> *"Left tight, caution hairpin, into right medium."*
 
 Get it right — the stage continues.
 Get it wrong — you might not.
