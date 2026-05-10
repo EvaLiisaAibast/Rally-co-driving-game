@@ -2091,13 +2091,34 @@ function pickDiff(i,el){
 }
 function openCareer(){
   if(!CAREER.started){
-    G.driver=prompt('Your driver name:','Mikko Lahti')||'Mikko Lahti';
-    G.codriver=prompt('Your co-driver name:','Janne Salo')||'Janne Salo';
+    // Check if story system is available and has a route selected
+    if(typeof StorySystem !== 'undefined' && !StorySystem.state.genderRoute){
+      showRouteSelection();
+      return;
+    }
+    // If story system has route, use story-based names
+    if(typeof StorySystem !== 'undefined' && StorySystem.state.genderRoute){
+      const isMale = StorySystem.state.genderRoute === 'male';
+      G.driver = isMale ? 'Mikko Lahti' : 'Sofia Andersson';
+      G.codriver = isMale ? 'Janne Salo' : 'Elena Voss';
+    } else {
+      // Fallback defaults
+      G.driver = 'Mikko Lahti';
+      G.codriver = 'Janne Salo';
+    }
     G.era='grpb';G.car=ERAS['grpb'].cars[0];G.diff=1;G.timeLimit=DIFFS[1].s;
     CAREER.driver=G.driver;CAREER.codriver=G.codriver;CAREER.car=G.car;
     CAREER.currentStage=0;CAREER.pts=0;CAREER.completed=[];
     CAREER.standings=RIVALS.map(r=>({...r,pts:Math.floor(Math.random()*12)+3}));
     CAREER.started=true;
+    
+    // Show pre-stage story for first stage
+    if(typeof showPreStageStory === 'function'){
+      showPreStageStory(0, () => {
+        buildCareerScreen();show('career');
+      });
+      return;
+    }
   }
   buildCareerScreen();show('career');
 }
@@ -2172,13 +2193,22 @@ function resetCareer(){
   CAREER.started=false;CAREER.completed=[];CAREER.pts=0;CAREER.currentStage=0;openCareer();
 }
 function beginStage(stageOverride){
-  G.driver=document.getElementById('inp-drv').value.trim()||'Driver';
-  G.codriver=document.getElementById('inp-cod').value.trim()||'Co-driver';
+  G.driver=document.getElementById('inp-drv')?.value.trim()||G.driver||'Driver';
+  G.codriver=document.getElementById('inp-cod')?.value.trim()||G.codriver||'Co-driver';
   if(!G.era){alert('Select an era first!');return;}
   if(!G.car)G.car=ERAS[G.era].cars[0];
   const era=ERAS[G.era];
   const stage=stageOverride||era.stages[Math.floor(Math.random()*era.stages.length)];
-  beginStageWithData(stage);
+  
+  // Check for pre-stage story in career mode
+  if(G.careerMode && typeof showPreStageStory === 'function' && StorySystem?.state?.genderRoute){
+    const stageIndex = CAREER.currentStage || 0;
+    showPreStageStory(stageIndex, () => {
+      beginStageWithData(stage);
+    });
+  } else {
+    beginStageWithData(stage);
+  }
 }
 function beginStageWithData(stage){
   clearInterval(G.timer);
@@ -2788,7 +2818,17 @@ function endStage(){
       <span class="bd-n">${r.raw}</span>
       <div class="bd-r ${r.ok?'ok':'bad'}"></div>
     </div>`).join('');
-  show('result');
+  
+  // Check for post-stage story in career mode
+  if(G.careerMode && typeof showPostStageStory === 'function' && StorySystem?.state?.genderRoute){
+    const stageIndex = (CAREER.currentStage || 1) - 1;
+    const stageResult = { pos, acc, won, dnf: G.dnf };
+    showPostStageStory(stageIndex, stageResult, () => {
+      show('result');
+    });
+  } else {
+    show('result');
+  }
   if(window.speechSynthesis){
     setTimeout(()=>{
       window.speechSynthesis.cancel();
