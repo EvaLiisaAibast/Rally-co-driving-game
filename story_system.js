@@ -335,11 +335,22 @@ const StoryUI = {
         window.speechSynthesis.speak(utt);
       }
       
-      // Typewriter effect - faster, with click-to-skip
+      // Typewriter effect with Continue button
       let charIndex = 0;
       text.textContent = '';
       text.style.opacity = '1';
       text.style.cursor = 'pointer';
+      
+      // Function to advance to next line
+      const advanceLine = () => {
+        text.onclick = null;
+        text.style.cursor = 'default';
+        // Remove continue button if exists
+        const existingBtn = document.getElementById('story-continue-btn');
+        if (existingBtn) existingBtn.remove();
+        dialogueIndex++;
+        showNextDialogue();
+      };
       
       let typeInterval = setInterval(() => {
         if (charIndex < line.text.length) {
@@ -347,18 +358,55 @@ const StoryUI = {
           charIndex++;
         } else {
           clearInterval(typeInterval);
-          text.style.cursor = 'default';
-          dialogueIndex++;
-          setTimeout(showNextDialogue, 800); // Shorter pause
+          // Show Continue button
+          const continueBtn = document.createElement('button');
+          continueBtn.id = 'story-continue-btn';
+          continueBtn.style.cssText = `
+            background: transparent;
+            border: 1px solid #606070;
+            color: #9090a8;
+            padding: 0.75rem 1.5rem;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 14px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            margin-top: 2rem;
+            text-transform: uppercase;
+          `;
+          continueBtn.textContent = '► Continue';
+          continueBtn.onmouseover = () => { continueBtn.style.borderColor = '#f5c518'; continueBtn.style.color = '#f5c518'; };
+          continueBtn.onmouseout = () => { continueBtn.style.borderColor = '#606070'; continueBtn.style.color = '#9090a8'; };
+          continueBtn.onclick = advanceLine;
+          choices.appendChild(continueBtn);
         }
-      }, 20); // Faster typing
+      }, 25);
       
-      // Click to skip typewriter and show full text
+      // Click text to skip typewriter and show Continue button
       text.onclick = () => {
         clearInterval(typeInterval);
         text.textContent = line.text;
-        text.style.cursor = 'default';
-        text.onclick = null;
+        // Show Continue button if not already shown
+        if (!document.getElementById('story-continue-btn')) {
+          const continueBtn = document.createElement('button');
+          continueBtn.id = 'story-continue-btn';
+          continueBtn.style.cssText = `
+            background: transparent;
+            border: 1px solid #606070;
+            color: #9090a8;
+            padding: 0.75rem 1.5rem;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 14px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            margin-top: 2rem;
+            text-transform: uppercase;
+          `;
+          continueBtn.textContent = '► Continue';
+          continueBtn.onmouseover = () => { continueBtn.style.borderColor = '#f5c518'; continueBtn.style.color = '#f5c518'; };
+          continueBtn.onmouseout = () => { continueBtn.style.borderColor = '#606070'; continueBtn.style.color = '#9090a8'; };
+          continueBtn.onclick = advanceLine;
+          choices.appendChild(continueBtn);
+        }
       };
     };
     
@@ -427,6 +475,7 @@ const StoryUI = {
       }
       
       const continueBtn = document.createElement('button');
+      continueBtn.id = 'story-consequence-continue';
       continueBtn.style.cssText = `
         background: #f5c518;
         border: none;
@@ -438,9 +487,16 @@ const StoryUI = {
         margin-top: 2rem;
         text-transform: uppercase;
         letter-spacing: 2px;
+        pointer-events: auto;
+        z-index: 1000;
       `;
       continueBtn.textContent = 'Continue';
-      continueBtn.onclick = () => this.complete();
+      continueBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Consequence Continue clicked');
+        StoryUI.complete();
+      });
       choices.appendChild(continueBtn);
       
       this.updateStats();
