@@ -260,6 +260,8 @@ const StoryUI = {
     this.onComplete = onComplete;
     
     const screen = document.getElementById('story-screen');
+    // Ensure screen is visible
+    screen.style.display = 'flex';
     const location = document.getElementById('story-location');
     const speaker = document.getElementById('story-speaker');
     const text = document.getElementById('story-text');
@@ -501,11 +503,19 @@ const StoryUI = {
         console.log('Consequence Continue clicked, calling completionCallback');
         // Cancel speech and complete
         if (window.speechSynthesis) window.speechSynthesis.cancel();
+        
+        // Explicitly hide story screen
+        const storyScreen = document.getElementById('story-screen');
+        if (storyScreen) {
+          storyScreen.classList.remove('active');
+          storyScreen.style.display = 'none';
+        }
+        
         if (completionCallback) {
           completionCallback();
         } else {
           console.warn('No completionCallback available');
-          // Fallback: just hide the story screen
+          // Fallback: just hide the story screen and show career
           show('career');
         }
       });
