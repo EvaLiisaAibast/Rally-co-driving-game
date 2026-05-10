@@ -335,21 +335,31 @@ const StoryUI = {
         window.speechSynthesis.speak(utt);
       }
       
-      // Typewriter effect
+      // Typewriter effect - faster, with click-to-skip
       let charIndex = 0;
       text.textContent = '';
       text.style.opacity = '1';
+      text.style.cursor = 'pointer';
       
-      const typeInterval = setInterval(() => {
+      let typeInterval = setInterval(() => {
         if (charIndex < line.text.length) {
           text.textContent += line.text[charIndex];
           charIndex++;
         } else {
           clearInterval(typeInterval);
+          text.style.cursor = 'default';
           dialogueIndex++;
-          setTimeout(showNextDialogue, 1500); // Slightly longer pause for TTS to finish
+          setTimeout(showNextDialogue, 800); // Shorter pause
         }
-      }, 35); // Slightly slower typing to match speech
+      }, 20); // Faster typing
+      
+      // Click to skip typewriter and show full text
+      text.onclick = () => {
+        clearInterval(typeInterval);
+        text.textContent = line.text;
+        text.style.cursor = 'default';
+        text.onclick = null;
+      };
     };
     
     show('story-screen');
