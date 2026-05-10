@@ -654,7 +654,9 @@ function showPostStageStory(stageIndex, stageResult, onComplete) {
   }
 }
 
-// Initialize on load
-document.addEventListener('DOMContentLoaded', () => {
+// Initialize immediately when script loads (DOM may already be ready)
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => StorySystem.init());
+} else {
   StorySystem.init();
-});
+}
