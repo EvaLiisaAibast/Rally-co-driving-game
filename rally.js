@@ -2455,10 +2455,71 @@ function applyStyleToNote(rawNote, style) {
   return transformed;
 }
 
+// Severity number/word -> canonical description
+// This means players can type "left tight", "left 3", or "left three" — all match
+function normaliseAnswer(s){
+  s=s.toLowerCase().replace(/[^a-z0-9 ]/g,'').trim();
+
+  // digit+direction combos (e.g. "left 3" -> "left tight")
+  s=s.replace(/\bleft 1\b/g,'left hairpin');
+  s=s.replace(/\bright 1\b/g,'right hairpin');
+  s=s.replace(/\bleft 2\b/g,'left very tight');
+  s=s.replace(/\bright 2\b/g,'right very tight');
+  s=s.replace(/\bleft 3\b/g,'left tight');
+  s=s.replace(/\bright 3\b/g,'right tight');
+  s=s.replace(/\bleft 4\b/g,'left medium');
+  s=s.replace(/\bright 4\b/g,'right medium');
+  s=s.replace(/\bleft 5\b/g,'left open');
+  s=s.replace(/\bright 5\b/g,'right open');
+  s=s.replace(/\bleft 6\b/g,'left fast sweep');
+  s=s.replace(/\bright 6\b/g,'right fast sweep');
+
+  // bare number words -> descriptions
+  s=s.replace(/\bone\b/g,'hairpin');
+  s=s.replace(/\btwo\b/g,'very tight');
+  s=s.replace(/\bthree\b/g,'tight');
+  s=s.replace(/\bfour\b/g,'medium');
+  s=s.replace(/\bfive\b/g,'open');
+  s=s.replace(/\bsix\b/g,'fast sweep');
+
+  // bare digits -> descriptions (standalone, not part of distances like "100")
+  // only single digits get replaced
+  s=s.replace(/\b1\b/g,'hairpin');
+  s=s.replace(/\b2\b/g,'very tight');
+  s=s.replace(/\b3\b/g,'tight');
+  s=s.replace(/\b4\b/g,'medium');
+  s=s.replace(/\b5\b/g,'open');
+  s=s.replace(/\b6\b/g,'fast sweep');
+
+  // "flat out" == "flat" (R6 can be described as either "fast sweep" or "flat")
+  s=s.replace(/\bflat out\b/g,'flat');
+  // also accept "flat" as equivalent to "fast sweep" for R6
+  // we do this by normalising "fast sweep" to "flat" too so both sides match
+  // Actually: keep both — similarity word-overlap handles it
+
+  // crest variants
+  s=s.replace(/\bover crest\b/g,'crest');
+
+  // don't cut variants
+  s=s.replace(/\bdon'?t\s*cut\b/g,'dontcut');
+  s=s.replace(/\bdontcut\b/g,'dontcut');
+
+  // "maximum caution" == "max caution"
+  s=s.replace(/\bmaximum caution\b/g,'max caution');
+
+  // tidy extra spaces
+  s=s.replace(/\s+/g,' ').trim();
+  return s;
+}
+
 function similarity(a,b){
-  a=a.toLowerCase().replace(/[^a-z0-9 ]/g,'').trim();
-  b=b.toLowerCase().replace(/[^a-z0-9 ]/g,'').trim();
+  a=normaliseAnswer(a);
+  b=normaliseAnswer(b);
   if(a===b)return 1;
+  // Special case: "flat" and "fast sweep" for R6 — treat as equivalent
+  const aFlat = a.replace(/\bfast sweep\b/g,'flat');
+  const bFlat = b.replace(/\bfast sweep\b/g,'flat');
+  if(aFlat===bFlat)return 1;
   const wa=new Set(a.split(/\s+/));const wb=new Set(b.split(/\s+/));
   let hit=0;wb.forEach(w=>{if(wa.has(w))hit++;});
   return hit/Math.max(wa.size,wb.size);
@@ -2564,7 +2625,7 @@ function speakNote(){
   const raw=document.getElementById('g-note').textContent;
   const parts=raw.split(/\s+/).map(t=>{
     if(t in era.vocab)return era.vocab[t];
-    if(t.match(/^[LR][1-6]$/))return(t[0]==='L'?'left':'right')+' '+t[1];
+    if(t.match(/^[LR][1-6]$/)){ const sevMap={'1':'hairpin','2':'very tight','3':'tight','4':'medium','5':'open','6':'fast sweep'}; return (t[0]==='L'?'left':'right')+' '+sevMap[t[1]]; }
     if(t.match(/^\d+$/))return t+' metres';
     return t.toLowerCase();
   });
@@ -2946,7 +3007,7 @@ function hearQuiz(){
   const era=Object.values(ERAS).find(e=>e.label===quizCurrent.era)||Object.values(ERAS)[0];
   const parts=quizCurrent.raw.split(/\s+/).map(t=>{
     if(t in era.vocab)return era.vocab[t];
-    if(t.match(/^[LR][1-6]$/))return(t[0]==='L'?'left':'right')+' '+t[1];
+    if(t.match(/^[LR][1-6]$/)){ const sevMap={'1':'hairpin','2':'very tight','3':'tight','4':'medium','5':'open','6':'fast sweep'}; return (t[0]==='L'?'left':'right')+' '+sevMap[t[1]]; }
     if(t.match(/^\d+$/))return t+' metres';
     return t.toLowerCase();
   });
@@ -2987,24 +3048,24 @@ const TUTORIAL_STEPS = [
   {
     title: "Corner direction and severity",
     body: "Every note starts with a direction (L or R) and a severity number (1–6). <strong>1 is the tightest hairpin. 6 is a fast sweep.</strong> Think of it as how open the corner is.",
-    highlight: "L = Left   R = Right\n1 = Hairpin   6 = Fast sweep\n\nSo: L3 = Medium-speed left corner",
+    highlight: "L = Left   R = Right\n1 = Hairpin   6 = Fast sweep\n\nSo: L3 = Tight left corner",
     note: "L3",
     needsInput: true,
     prompt: "Type the translation:",
-    hint: "Hint: direction + severity number in words",
-    accept: ["left 3","left three","left 3rd","l3"],
+    hint: "Hint: direction + severity description",
+    accept: ["left 3","left three","left tight","l3"],
     successMsg: "CLEAN CALL — Driver trust +",
     nextLabel: "Next →"
   },
   {
     title: "Linking corners",
     body: "Corners can be chained. INTO means the second corner follows immediately — no gap. The driver needs both calls to plan their line.",
-    highlight: "L3 INTO R4\n= Left three, directly into right four\n\nNo time between them. Call it smooth.",
+    highlight: "L3 INTO R4\n= Left tight, directly into right medium\n\nNo time between them. Call it smooth.",
     note: "L3 INTO R4",
     needsInput: true,
     prompt: "Translate the full sequence:",
     hint: "Hint: say both corners in order",
-    accept: ["left 3 into right 4","left three into right four","left 3 right 4","l3 into r4","left three right four"],
+    accept: ["left 3 into right 4","left three into right four","left tight into right medium","left 3 right 4","l3 into r4"],
     successMsg: "GOOD FLOW — Both corners read",
     nextLabel: "Next →"
   },
@@ -3016,7 +3077,7 @@ const TUTORIAL_STEPS = [
     needsInput: true,
     prompt: "Translate this — don't miss the caution:",
     hint: "Hint: right, severity, then say the caution level",
-    accept: ["right 2 maximum caution","right two maximum caution","right 2 max caution","r2 maximum caution","right 2!! ","right two max"],
+    accept: ["right 2 maximum caution","right two maximum caution","right very tight max caution","right 2 max caution","r2 maximum caution","right 2!! ","right two max"],
     successMsg: "HAZARD NOTED — Driver survives",
     nextLabel: "Next →"
   },
@@ -3029,8 +3090,8 @@ const TUTORIAL_STEPS = [
     timedStep: true,
     timeLimit: 8,
     prompt: "Translate fast:",
-    hint: "left four, 100 metres to right three",
-    accept: ["left 4 100 right 3","left four 100 right three","left 4 100 metres right 3","l4 100 r3","left 4 right 3"],
+    hint: "left medium, 100 metres to right tight",
+    accept: ["left 4 100 right 3","left four 100 right three","left medium 100 right tight","left 4 100 metres right 3","l4 100 r3","left medium 100 metres right tight"],
     successMsg: "CLEAN — Under pressure",
     nextLabel: "Final step →"
   },
