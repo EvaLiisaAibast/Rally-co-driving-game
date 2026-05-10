@@ -2090,12 +2090,13 @@ function pickDiff(i,el){
   document.querySelectorAll('.diff-btn').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');
 }
 function openCareer(){
+  // Always check if story route needs to be selected first
+  if(typeof StorySystem !== 'undefined' && !StorySystem.state.genderRoute){
+    showRouteSelection();
+    return;
+  }
+  
   if(!CAREER.started){
-    // Check if story system is available and has a route selected
-    if(typeof StorySystem !== 'undefined' && !StorySystem.state.genderRoute){
-      showRouteSelection();
-      return;
-    }
     // If story system has route, use story-based names
     if(typeof StorySystem !== 'undefined' && StorySystem.state.genderRoute){
       const isMale = StorySystem.state.genderRoute === 'male';
