@@ -1119,20 +1119,20 @@ const EXTENDED_TUTORIAL_STEPS = [
     id: 'corner_l3', phase: 'corners',
     title: "Try it: L3",
     body: "Direction + severity. That's a medium-speed left corner. Type the translation below.",
-    highlight: "L = Left\n3 = Medium-tight\nSo: L3 = ?",
+    highlight: "L = Left\n3 = Tight\nSo: L3 = ?",
     note: "L3",
     needsInput: true, prompt: "Translate:", hint: "left tight",
-    accept: ["left 3","left three","left tight","l3"],
+    accept: ["left tight","l3"],
     successMsg: "✓ CORRECT — Clean read", nextLabel: "Next →"
   },
   {
     id: 'corner_r5', phase: 'corners',
     title: "Now try a fast one: R5",
     body: "A right 5 is quite fast — light braking or maybe no braking at all.",
-    highlight: "R = Right\n5 = Open, quite fast",
+    highlight: "R = Right\n5 = Open",
     note: "R5",
     needsInput: true, prompt: "Translate:", hint: "right open",
-    accept: ["right 5","right five","right open","r5"],
+    accept: ["right open","r5"],
     successMsg: "✓ GOOD — Open corner read", nextLabel: "Next →"
   },
 
@@ -1151,7 +1151,7 @@ const EXTENDED_TUTORIAL_STEPS = [
     highlight: "R3! = Right tight — caution\nSay: 'right tight caution'",
     note: "R3!",
     needsInput: true, prompt: "Translate:", hint: "right tight caution",
-    accept: ["right 3 caution","right three caution","right tight caution","right 3!","r3 caution"],
+    accept: ["right tight caution","right 3!","r3"],
     successMsg: "✓ HAZARD NOTED", nextLabel: "Next →"
   },
   {
@@ -1161,7 +1161,7 @@ const EXTENDED_TUTORIAL_STEPS = [
     highlight: "!! = MAXIMUM caution\nNot just 'caution' — the driver needs to know this is extreme.",
     note: "L2!!",
     needsInput: true, prompt: "Translate:", hint: "left very tight maximum caution",
-    accept: ["left 2 maximum caution","left two maximum caution","left very tight max caution","left 2 max caution","left two max caution"],
+    accept: ["left very tight maximum caution","left very tight max caution","l2!!"],
     successMsg: "✓ MAX CAUTION CALLED — Driver lives", nextLabel: "Next →"
   },
 
@@ -1173,7 +1173,7 @@ const EXTENDED_TUTORIAL_STEPS = [
     highlight: "DONTCUT = Stay on the outside line\nUsed when: rock on inside, drop-off, drainage channel",
     note: "R4 DONTCUT",
     needsInput: true, prompt: "Translate:", hint: "right medium don't cut",
-    accept: ["right 4 don't cut","right four don't cut","right medium don't cut","right 4 dontcut","right four dontcut","right medium dontcut","right 4 dont cut","right four dont cut"],
+    accept: ["right medium don't cut","right medium dontcut","r4 dontcut"],
     successMsg: "✓ Inside hazard called", nextLabel: "Next →"
   },
   {
@@ -1183,7 +1183,7 @@ const EXTENDED_TUTORIAL_STEPS = [
     highlight: "GRAVEL = Loose gravel on road\nCommon on tarmac/gravel transitions\nCan cause sudden oversteer on corner exit",
     note: "R3 GRAVEL INTO L4",
     needsInput: true, prompt: "Translate:", hint: "right tight gravel patch into left medium",
-    accept: ["right 3 gravel into left 4","right three gravel into left four","right tight gravel into left medium","right 3 gravel patch into left 4","right three gravel patch into left four","right tight gravel patch into left medium"],
+    accept: ["right tight gravel into left medium","right tight gravel patch into left medium"],
     successMsg: "✓ Surface hazard noted", nextLabel: "Next →"
   },
   {
@@ -1193,7 +1193,7 @@ const EXTENDED_TUTORIAL_STEPS = [
     highlight: "ICE = Ice patch on road\nOften used with distance: 'L3 ICE 50'\nNight stages on Monte Carlo: most dangerous note type",
     note: "L3 ICE 50",
     needsInput: true, prompt: "Translate:", hint: "left tight ice 50 metres",
-    accept: ["left 3 ice 50","left three ice 50","left tight ice 50","left 3 ice 50 metres","left three ice 50 metres","left tight ice 50 metres"],
+    accept: ["left tight ice 50","left tight ice 50 metres"],
     successMsg: "✓ Ice called — Monte Carlo mode", nextLabel: "Next →"
   },
 
@@ -1208,11 +1208,11 @@ const EXTENDED_TUTORIAL_STEPS = [
   {
     id: 'distance_example', phase: 'distances',
     title: "Distance: L4 100 R3",
-    body: "Left four, then 100 metres to a right three. The driver takes the left, then has 100m to set up for the right.",
+    body: "Left medium, then 100 metres to a right tight. The driver takes the left, then has 100m to set up for the right.",
     highlight: "L4 = Left medium\n100 = 100 metres\nR3 = Right tight\n\nSay all three parts.",
     note: "L4 100 R3",
     needsInput: true, prompt: "Translate all three:", hint: "left medium 100 metres right tight",
-    accept: ["left 4 100 right 3","left four 100 right three","left medium 100 right tight","left 4 100 metres right 3","left four 100 metres right three","left medium 100 metres right tight"],
+    accept: ["left medium 100 right tight","left medium 100 metres right tight"],
     successMsg: "✓ Full sequence called", nextLabel: "Next →"
   },
   {
@@ -1222,7 +1222,7 @@ const EXTENDED_TUTORIAL_STEPS = [
     highlight: "L3 INTO R4\n= Left tight, directly into right medium\n\nINTO = no gap between corners\nBoth must be called together",
     note: "L3 INTO R4",
     needsInput: true, prompt: "Translate the linked sequence:", hint: "left tight into right medium",
-    accept: ["left 3 into right 4","left three into right four","left tight into right medium","left 3 right 4 into","l3 into r4"],
+    accept: ["left tight into right medium","l3 into r4"],
     successMsg: "✓ GOOD FLOW — Both corners read", nextLabel: "Next →"
   },
 
@@ -1234,18 +1234,18 @@ const EXTENDED_TUTORIAL_STEPS = [
     highlight: "CREST = Corner over a blind rise\nSay: 'over crest'\nDriver is committed before seeing the apex — notes are everything",
     note: "CREST R4",
     needsInput: true, prompt: "Translate:", hint: "over crest right medium",
-    accept: ["over crest right 4","over crest right four","over crest right medium","crest right 4","crest right four","crest right medium"],
+    accept: ["over crest right medium","crest right medium"],
     successMsg: "✓ Crest called — driver can commit", nextLabel: "Next →"
   },
   {
     id: 'jump', phase: 'advanced',
     title: "JUMP — airborne",
     body: "On Finnish stages especially, JUMP means the car goes airborne. The driver needs to know what corner follows the landing. You call the jump, then the landing corner.",
-    highlight: "JUMP = Car leaves ground\nMust always say what comes after\nExample: 'jump into right three'\nFinland: 30–40m jumps at 180 km/h",
+    highlight: "JUMP = Car leaves ground\nMust always say what comes after\nExample: 'jump into right tight'\nFinland: 30–40m jumps at 180 km/h",
     note: "JUMP R3 LONG",
     needsInput: true, prompt: "Translate:", hint: "jump into right tight long",
-    accept: ["jump right 3 long","jump right three long","jump right tight long","jump into right 3 long","jump into right three long","jump into right tight long"],
-    successMsg: "✓ Jump called — landing right three", nextLabel: "Next →"
+    accept: ["jump right tight long","jump into right tight long"],
+    successMsg: "✓ Jump called — landing right tight", nextLabel: "Next →"
   },
 
   // ── FULL COMPLEX NOTE ──
@@ -1256,7 +1256,7 @@ const EXTENDED_TUTORIAL_STEPS = [
     highlight: "Strategy:\n1. Read the whole note first\n2. Count the corners\n3. Spot any ! or hazard words\n4. Type direction + severity for each part",
     note: "L3 !2 INTO R4 DONTCUT",
     needsInput: true, prompt: "Translate the full note:", hint: "left tight caution hairpin into right medium don't cut",
-    accept: ["left 3 caution 2 into right 4","left three caution hairpin into right four don't cut","left tight caution hairpin into right medium don't cut","left 3 caution into right 4 dont cut","left 3 caution 2 right 4 dont cut","left three caution two into right four dontcut"],
+    accept: ["left tight caution hairpin into right medium don't cut","left tight caution hairpin into right medium dontcut"],
     successMsg: "✓ PERFECT — Full note read", nextLabel: "Almost done →"
   },
 
@@ -1269,7 +1269,7 @@ const EXTENDED_TUTORIAL_STEPS = [
     note: "R5 CREST L3!",
     needsInput: true, timedStep: true, timeLimit: 8,
     prompt: "Translate fast:", hint: "right open over crest left tight caution",
-    accept: ["right 5 crest left 3 caution","right five crest left three caution","right open crest left tight caution","right 5 over crest left 3 caution","right five over crest left three caution","right open over crest left tight caution"],
+    accept: ["right open crest left tight caution","right open over crest left tight caution"],
     successMsg: "✓ RAPID READ — Under pressure", nextLabel: "Final step →"
   },
 
