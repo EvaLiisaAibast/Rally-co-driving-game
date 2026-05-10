@@ -1,6 +1,15 @@
 // Story System - RPG/Visual Novel mechanics for Rally Pacenote Academy
 // Handles narrative scenes, dialogue choices, and relationship tracking
 
+// Debug: Check if StoryData is available
+if (typeof StoryData === 'undefined') {
+  console.error('StoryData is not loaded! Make sure story_data.js is loaded before story_system.js');
+  // Create empty placeholder to prevent errors
+  window.StoryData = { male: {}, female: {} };
+} else {
+  console.log('StoryData loaded successfully');
+}
+
 const StorySystem = {
   // Game state for story progression
   state: {
