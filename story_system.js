@@ -495,7 +495,9 @@ const StoryUI = {
         e.preventDefault();
         e.stopPropagation();
         console.log('Consequence Continue clicked');
-        StoryUI.complete();
+        // Cancel speech and complete
+        if (window.speechSynthesis) window.speechSynthesis.cancel();
+        if (StoryUI.onComplete) StoryUI.onComplete();
       });
       choices.appendChild(continueBtn);
       
