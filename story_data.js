@@ -312,7 +312,7 @@ Grit isn't optional. It's survival.`,
             ],
             choices: [
               { 
-                text: '"I didn't come here to be a novelty. I came here to win."',
+                text: '"I didn\'t come here to be a novelty. I came here to win."',
                 consequence: { 
                   text: 'Manager: (raises eyebrow)\nBold. The driver likes bold. Don\'t let him down—or me.\n\nYou feel the weight settle. This is your door. Walk through it.',
                   stats: { grit: 20, reputation: 10, driverTrust: 5 }
