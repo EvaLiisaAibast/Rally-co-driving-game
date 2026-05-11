@@ -3114,7 +3114,8 @@ const TULIP_SEV_ANGLE = {1:162, 2:132, 3:102, 4:72, 5:44, 6:20};
 const TULIP_ALL_MODS = [
   'CREST','JUMP','LONG','TIGHTENS','OPENS','FLAT','DONTCUT','BANG','MAYBE',
   'OVER','STOP','SQUARE','JUNCTION','HAIRPIN','NARROW','ICE','WATER','MUD',
-  'ROUGH','BRIDGE','WALL','SPLIT','INTO','NOTE','CARE','REGEN','HYBRID','BUMPS'
+  'ROUGH','BRIDGE','WALL','SPLIT','INTO','NOTE','CARE','REGEN','HYBRID','BUMPS',
+  'EASY','BUMP'
 ];
 
 function tulipPolar(cx,cy,deg,len){
@@ -3126,30 +3127,66 @@ function tulipPt(a){ return `${a[0].toFixed(1)},${a[1].toFixed(1)}`; }
 function parseNotesForTulip(str){
   const tokens=str.trim().toUpperCase().split(/\s+/);
   const notes=[]; let i=0;
+  
   while(i<tokens.length){
     const t=tokens[i];
+    
+    // Handle corner direction + severity (L1-L6, R1-R6)
     if(/^[LR][1-6]$/.test(t)){
       const n={dir:t[0],sev:parseInt(t[1]),special:null,mods:[]};
       i++;
-      while(i<tokens.length && TULIP_ALL_MODS.includes(tokens[i])) n.mods.push(tokens[i++]);
+      
+      // Collect modifiers after the corner
+      while(i<tokens.length && (TULIP_ALL_MODS.includes(tokens[i]) || tokens[i]==='EASY' || tokens[i]==='BUMP')){
+        n.mods.push(tokens[i++]);
+      }
       notes.push(n);
-    } else if(t==='SQUARE'){
+    }
+    // Handle SQUARE corner
+    else if(t==='SQUARE'){
       const n={dir:'R',sev:1,special:'square',mods:[]};
       i++;
-      while(i<tokens.length && TULIP_ALL_MODS.includes(tokens[i])) n.mods.push(tokens[i++]);
+      // Check for direction after SQUARE
+      if(i<tokens.length && (tokens[i]==='R'||tokens[i]==='L')){
+        n.dir=tokens[i++];
+      }
+      // Collect modifiers
+      while(i<tokens.length && (TULIP_ALL_MODS.includes(tokens[i]) || tokens[i]==='EASY' || tokens[i]==='BUMP')){
+        n.mods.push(tokens[i++]);
+      }
       notes.push(n);
-    } else if(t==='HAIRPIN'){
+    }
+    // Handle HAIRPIN
+    else if(t==='HAIRPIN'){
       const dir=(tokens[i+1]==='R'||tokens[i+1]==='L') ? tokens[++i] : 'R';
       const n={dir,sev:1,special:'hairpin',mods:[]};
       i++;
-      while(i<tokens.length && TULIP_ALL_MODS.includes(tokens[i])) n.mods.push(tokens[i++]);
+      while(i<tokens.length && (TULIP_ALL_MODS.includes(tokens[i]) || tokens[i]==='EASY' || tokens[i]==='BUMP')){
+        n.mods.push(tokens[i++]);
+      }
       notes.push(n);
-    } else if(TULIP_ALL_MODS.includes(t)||t==='R'||t==='L'){
+    }
+    // Handle FLAT as standalone (treat as modifier for next corner or as R6)
+    else if(t==='FLAT'){
+      // FLAT usually means "flat out" - treat as R6 FLAT modifier
+      const n={dir:'R',sev:6,special:null,mods:['FLAT']};
       i++;
-    } else {
-      return {error:`unknown token: "${t}"`};
+      notes.push(n);
+    }
+    // Handle INTO as separator - skip it
+    else if(t==='INTO'){
+      i++;
+    }
+    // Skip distance numbers (50, 100, 150, 200, 300, etc.)
+    else if(/^\d+$/.test(t)){
+      i++;
+    }
+    // Skip other unknown tokens
+    else {
+      i++;
     }
   }
+  
   if(!notes.length) return {error:'no valid notes found'};
   return {notes};
 }
