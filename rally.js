@@ -2225,8 +2225,26 @@ function beginStageWithData(stage){
   document.getElementById('g-corr').textContent='0';
   const av=era.commentator.split(' ').map(w=>w[0]).join('');
   document.getElementById('g-comm-av').textContent=av;
-  document.getElementById('g-vocab').innerHTML=Object.entries(era.vocab).slice(0,8).map(([k,v])=>`
+  // Extend vocab with number meanings in career mode
+  const vocabEntries = Object.entries(era.vocab);
+  const numberMeanings = {
+    '1': 'Hairpin (tightest)',
+    '2': 'Very tight',
+    '3': 'Tight',
+    '4': 'Medium',
+    '5': 'Fast',
+    '6': 'Fast sweep (openest)'
+  };
+  
+  let vocabHtml = vocabEntries.slice(0,8).map(([k,v])=>`
     <div class="hrow"><span class="hkey">${k}</span><span class="hval">${v}</span></div>`).join('');
+  
+  // Add number meanings in all modes (not just career)
+  vocabHtml += '<div style="border-top:1px solid #252530;margin-top:.5rem;padding-top:.5rem;font-size:10px;color:#5a5a70;font-family:\'IBM Plex Mono\',monospace;text-transform:uppercase;letter-spacing:.1em">Severity Numbers</div>';
+  vocabHtml += Object.entries(numberMeanings).map(([k,v])=>`
+    <div class="hrow"><span class="hkey">${k}</span><span class="hval">${v}</span></div>`).join('');
+  
+  document.getElementById('g-vocab').innerHTML = vocabHtml;
   document.getElementById('g-dots').innerHTML=G.notes.map((_,i)=>`<div class="gd" id="gd-${i}"></div>`).join('');
   show('game');
   if(ATMO[G.era]&&ATMO[G.era].opening){
@@ -2268,10 +2286,14 @@ function loadNote(){
     setTimeout(() => {
       noteElement.textContent = transformedNote;
       noteElement.style.opacity = '1';
+      // Render tulip diagram for this note
+      renderTulipForNote(transformedNote);
     }, 150);
   } else {
     noteElement.textContent = transformedNote;
     noteElement.style.opacity = '1';
+    // Render tulip diagram for this note
+    renderTulipForNote(transformedNote);
   }
   if(n.narr) {
     setTimeout(() => {
@@ -3079,6 +3101,250 @@ document.addEventListener('keydown',e=>{
 });
 window.speechSynthesis&&window.speechSynthesis.getVoices();
 
+/* ═══════════════════════════════════════════════════════
+   TULIP GENERATOR — Rally Pacenote Academy
+   Procedural SVG tulip diagram generator for game display
+   ═══════════════════════════════════════════════════════ */
+
+const TULIP_W=72, TULIP_H=92, TULIP_CX=36, TULIP_CY=55, TULIP_CR=8.5;
+const TULIP_ENTRY_LEN=22, TULIP_EXIT_LEN=26;
+
+const TULIP_SEV_ANGLE = {1:162, 2:132, 3:102, 4:72, 5:44, 6:20};
+
+const TULIP_ALL_MODS = [
+  'CREST','JUMP','LONG','TIGHTENS','OPENS','FLAT','DONTCUT','BANG','MAYBE',
+  'OVER','STOP','SQUARE','JUNCTION','HAIRPIN','NARROW','ICE','WATER','MUD',
+  'ROUGH','BRIDGE','WALL','SPLIT','INTO','NOTE','CARE','REGEN','HYBRID','BUMPS'
+];
+
+function tulipPolar(cx,cy,deg,len){
+  const r=(deg-90)*Math.PI/180;
+  return [cx+Math.cos(r)*len, cy+Math.sin(r)*len];
+}
+function tulipPt(a){ return `${a[0].toFixed(1)},${a[1].toFixed(1)}`; }
+
+function parseNotesForTulip(str){
+  const tokens=str.trim().toUpperCase().split(/\s+/);
+  const notes=[]; let i=0;
+  while(i<tokens.length){
+    const t=tokens[i];
+    if(/^[LR][1-6]$/.test(t)){
+      const n={dir:t[0],sev:parseInt(t[1]),special:null,mods:[]};
+      i++;
+      while(i<tokens.length && TULIP_ALL_MODS.includes(tokens[i])) n.mods.push(tokens[i++]);
+      notes.push(n);
+    } else if(t==='SQUARE'){
+      const n={dir:'R',sev:1,special:'square',mods:[]};
+      i++;
+      while(i<tokens.length && TULIP_ALL_MODS.includes(tokens[i])) n.mods.push(tokens[i++]);
+      notes.push(n);
+    } else if(t==='HAIRPIN'){
+      const dir=(tokens[i+1]==='R'||tokens[i+1]==='L') ? tokens[++i] : 'R';
+      const n={dir,sev:1,special:'hairpin',mods:[]};
+      i++;
+      while(i<tokens.length && TULIP_ALL_MODS.includes(tokens[i])) n.mods.push(tokens[i++]);
+      notes.push(n);
+    } else if(TULIP_ALL_MODS.includes(t)||t==='R'||t==='L'){
+      i++;
+    } else {
+      return {error:`unknown token: "${t}"`};
+    }
+  }
+  if(!notes.length) return {error:'no valid notes found'};
+  return {notes};
+}
+
+function drawTulipSVG(note){
+  const {dir,sev,special,mods}=note;
+
+  const hasMod=m=>mods.includes(m);
+  const isStop    = hasMod('STOP');
+  const isJunct   = hasMod('JUNCTION');
+  const isCrest   = hasMod('CREST')||hasMod('OVER');
+  const isJump    = hasMod('JUMP')||hasMod('MAYBE');
+  const isLong    = hasMod('LONG');
+  const isTight   = hasMod('TIGHTENS');
+  const isOpens   = hasMod('OPENS');
+  const isFlat    = hasMod('FLAT');
+  const isDontcut = hasMod('DONTCUT');
+  const isIce     = hasMod('ICE');
+  const isWater   = hasMod('WATER');
+  const isMud     = hasMod('MUD');
+  const isRough   = hasMod('ROUGH')||hasMod('BUMPS');
+  const isNarrow  = hasMod('NARROW');
+  const isBridge  = hasMod('BRIDGE');
+  const isWall    = hasMod('WALL');
+  const isBang    = hasMod('BANG');
+  const isCare    = hasMod('CARE')||hasMod('NOTE');
+  const isSquare  = special==='square';
+  const isHairpin = special==='hairpin';
+
+  const baseAngle = isSquare ? 90 : TULIP_SEV_ANGLE[sev]||100;
+  const exitAngle = dir==='L' ? -baseAngle : baseAngle;
+
+  const COL = {
+    main:  '#d4ddd8',
+    dim:   '#4a5c52',
+    gold:  '#f5c518',
+    red:   '#e8291c',
+    blue:  '#00e5ff',
+    green: '#39ff14',
+  };
+
+  const sw = 1.7;
+  let g = `<svg width="${TULIP_W}" height="${TULIP_H}" viewBox="0 0 ${TULIP_W} ${TULIP_H}" xmlns="http://www.w3.org/2000/svg" style="display:block">`;
+
+  if(isNarrow||isBridge){
+    const gateY1 = TULIP_CY + TULIP_ENTRY_LEN - 2;
+    const gateY2 = TULIP_CY + TULIP_ENTRY_LEN + 6;
+    const gateX  = 5;
+    const gCol   = isBridge ? COL.gold : COL.dim;
+    g += `<line x1="${TULIP_CX-gateX}" y1="${gateY1}" x2="${TULIP_CX-gateX}" y2="${gateY2}" stroke="${gCol}" stroke-width="1.5" stroke-linecap="round"/>`;
+    g += `<line x1="${TULIP_CX+gateX}" y1="${gateY1}" x2="${TULIP_CX+gateX}" y2="${gateY2}" stroke="${gCol}" stroke-width="1.5" stroke-linecap="round"/>`;
+    if(isBridge){
+      g += `<line x1="${TULIP_CX-gateX}" y1="${gateY1}" x2="${TULIP_CX+gateX}" y2="${gateY1}" stroke="${gCol}" stroke-width="1" stroke-linecap="round"/>`;
+      g += `<line x1="${TULIP_CX-gateX}" y1="${gateY2}" x2="${TULIP_CX+gateX}" y2="${gateY2}" stroke="${gCol}" stroke-width="1" stroke-linecap="round"/>`;
+    }
+  }
+
+  if(isWall){
+    const wallSide = dir==='R' ? 1 : -1;
+    for(let wi=0;wi<3;wi++){
+      const wfrac = 0.3 + wi*0.22;
+      const [wx,wy] = tulipPolar(TULIP_CX,TULIP_CY,exitAngle,TULIP_EXIT_LEN*wfrac);
+      const perpA   = exitAngle + 90*wallSide;
+      const [px,py] = tulipPolar(wx,wy,perpA,6);
+      g += `<line x1="${wx.toFixed(1)}" y1="${wy.toFixed(1)}" x2="${px.toFixed(1)}" y2="${py.toFixed(1)}" stroke="${COL.red}" stroke-width="1.2" stroke-linecap="round"/>`;
+    }
+    const [ws,ws2] = [tulipPolar(TULIP_CX,TULIP_CY,exitAngle,TULIP_EXIT_LEN*0.25), tulipPolar(TULIP_CX,TULIP_CY,exitAngle,TULIP_EXIT_LEN*0.75)];
+    const perpA2   = exitAngle + 90*wallSide;
+    const [wp1]    = [tulipPolar(ws[0],ws[1],perpA2,7)];
+    const [wp2]    = [tulipPolar(ws2[0],ws2[1],perpA2,7)];
+    g += `<line x1="${wp1[0].toFixed(1)}" y1="${wp1[1].toFixed(1)}" x2="${wp2[0].toFixed(1)}" y2="${wp2[1].toFixed(1)}" stroke="${COL.red}" stroke-width="1" stroke-dasharray="2,2" stroke-linecap="round"/>`;
+  }
+
+  const entryStroke = isIce ? COL.blue : COL.main;
+  const entryDash   = isIce ? '4,2.5' : null;
+  g += `<line x1="${TULIP_CX}" y1="${TULIP_CY+TULIP_ENTRY_LEN}" x2="${TULIP_CX}" y2="${TULIP_CY+TULIP_CR}"
+    stroke="${entryStroke}" stroke-width="${sw}" stroke-linecap="round"
+    ${entryDash?`stroke-dasharray="${entryDash}"`:''}/>`;
+
+  const circStroke = isStop ? COL.red : isBang ? COL.red : isCare ? COL.gold : isJunct ? COL.blue : COL.main;
+  const circFill   = isStop ? 'rgba(232,41,28,0.12)' : isJunct ? 'rgba(0,229,255,0.08)' : 'none';
+  const circW      = (isStop||isBang) ? 2.2 : sw;
+  g += `<circle cx="${TULIP_CX}" cy="${TULIP_CY}" r="${TULIP_CR}" fill="${circFill}" stroke="${circStroke}" stroke-width="${circW}"/>`;
+
+  if(isJunct){
+    g += `<line x1="${TULIP_CX-TULIP_CR-6}" y1="${TULIP_CY}" x2="${TULIP_CX-TULIP_CR}" y2="${TULIP_CY}" stroke="${COL.blue}" stroke-width="1.3" stroke-linecap="round"/>`;
+    g += `<line x1="${TULIP_CX+TULIP_CR}" y1="${TULIP_CY}" x2="${TULIP_CX+TULIP_CR+6}" y2="${TULIP_CY}" stroke="${COL.blue}" stroke-width="1.3" stroke-linecap="round"/>`;
+  }
+
+  const exitEnd = tulipPolar(TULIP_CX,TULIP_CY,exitAngle,TULIP_EXIT_LEN);
+  if(isStop){
+    g += `<line x1="${TULIP_CX-7}" y1="${TULIP_CY-TULIP_CR-7}" x2="${TULIP_CX+7}" y2="${TULIP_CY-TULIP_CR-7}" stroke="${COL.red}" stroke-width="2.2" stroke-linecap="round"/>`;
+  } else {
+    if(isLong){
+      const dashS = tulipPolar(TULIP_CX,TULIP_CY,exitAngle,TULIP_EXIT_LEN+3);
+      const dashE = tulipPolar(TULIP_CX,TULIP_CY,exitAngle,TULIP_EXIT_LEN+13);
+      g += `<line x1="${tulipPt(dashS)}" x2="${tulipPt(dashE)}" stroke="${COL.dim}" stroke-width="1" stroke-dasharray="3,2.5" stroke-linecap="round" y1="0" y2="0"/>`;
+    }
+    const exitCol  = isIce ? COL.blue : COL.main;
+    const exitDash = isIce ? '4,2.5' : null;
+    g += `<line x1="${TULIP_CX}" y1="${TULIP_CY-TULIP_CR}" x2="${tulipPt(exitEnd)}" stroke="${exitCol}" stroke-width="${sw}" stroke-linecap="round" ${exitDash?`stroke-dasharray="${exitDash}"`:''}/>`;
+    const arrowSz  = 4.5;
+    const arrowB   = tulipPolar(TULIP_CX,TULIP_CY,exitAngle,TULIP_EXIT_LEN-arrowSz*1.4);
+    const ap1      = tulipPolar(arrowB[0],arrowB[1],exitAngle+90,arrowSz);
+    const ap2      = tulipPolar(arrowB[0],arrowB[1],exitAngle-90,arrowSz);
+    g += `<polygon points="${tulipPt(exitEnd)} ${tulipPt(ap1)} ${tulipPt(ap2)}" fill="${exitCol}"/>`;
+  }
+
+  if(isDontcut){
+    const [dx,dy] = tulipPolar(TULIP_CX,TULIP_CY,exitAngle,TULIP_EXIT_LEN*0.7);
+    const os = dir==='R' ? -7 : 7;
+    g += `<line x1="${(dx+os-3).toFixed(1)}" y1="${(dy-3).toFixed(1)}" x2="${(dx+os+3).toFixed(1)}" y2="${(dy+3).toFixed(1)}" stroke="${COL.red}" stroke-width="1.6" stroke-linecap="round"/>`;
+    g += `<line x1="${(dx+os+3).toFixed(1)}" y1="${(dy-3).toFixed(1)}" x2="${(dx+os-3).toFixed(1)}" y2="${(dy+3).toFixed(1)}" stroke="${COL.red}" stroke-width="1.6" stroke-linecap="round"/>`;
+  }
+
+  if(isTight||isOpens){
+    const side  = isTight ? (dir==='R'?1:-1) : (dir==='R'?-1:1);
+    const bx    = TULIP_CX + side*(TULIP_CR+10);
+    const by    = TULIP_CY;
+    const blen  = 7;
+    const coff  = side*4;
+    const arr   = isTight ? -1 : 1;
+    g += `<path d="M${bx},${by+blen} C${bx+coff},${by} ${bx+coff},${by} ${bx},${by-blen}"
+      fill="none" stroke="${COL.dim}" stroke-width="1.3" stroke-linecap="round"/>`;
+    g += `<polygon points="${bx},${by-blen} ${bx+arr*side*3},${by-blen-4} ${bx-arr*side*3},${by-blen-4}" fill="${COL.dim}"/>`;
+  }
+
+  if(isCrest||isJump){
+    const bH = isJump?6.5:4.5, bW=isJump?9:6;
+    const by  = TULIP_CY-TULIP_CR-9;
+    g += `<path d="M${TULIP_CX-bW},${by} Q${TULIP_CX},${by-bH} ${TULIP_CX+bW},${by}" fill="none" stroke="${COL.main}" stroke-width="1.4" stroke-linecap="round"/>`;
+    if(isJump){
+      g += `<path d="M${TULIP_CX-bW+2},${by-2} Q${TULIP_CX},${by-bH-4} ${TULIP_CX+bW-2},${by-2}" fill="none" stroke="${COL.dim}" stroke-width="1" stroke-linecap="round"/>`;
+    }
+  }
+
+  if(isFlat){
+    g += `<line x1="${TULIP_CX-9}" y1="${TULIP_CY+TULIP_CR+7}" x2="${TULIP_CX+9}" y2="${TULIP_CY+TULIP_CR+7}" stroke="${COL.dim}" stroke-width="1" stroke-linecap="round"/>`;
+    g += `<line x1="${TULIP_CX-9}" y1="${TULIP_CY+TULIP_CR+10}" x2="${TULIP_CX+9}" y2="${TULIP_CY+TULIP_CR+10}" stroke="${COL.dim}" stroke-width="1" stroke-linecap="round"/>`;
+  }
+
+  if(isWater){
+    for(let wi=0;wi<3;wi++){
+      const wx=TULIP_CX-6+wi*6, wy=TULIP_H-7;
+      g += `<path d="M${wx},${wy} Q${wx+1.5},${wy-2.5} ${wx+3},${wy}" fill="none" stroke="${COL.blue}" stroke-width="1.1" stroke-linecap="round"/>`;
+    }
+  }
+  if(isMud){
+    g += `<circle cx="${TULIP_CX-6}" cy="${TULIP_H-7}" r="2.5" fill="${COL.dim}"/>`;
+    g += `<circle cx="${TULIP_CX+1}" cy="${TULIP_H-6}" r="2" fill="#4a5c52"/>`;
+    g += `<circle cx="${TULIP_CX+6}" cy="${TULIP_H-7}" r="2" fill="${COL.dim}"/>`;
+  }
+  if(isRough){
+    for(let ri=0;ri<5;ri++){
+      const rx=TULIP_CX-8+ri*4, ry=TULIP_H-6;
+      g += `<line x1="${rx}" y1="${ry}" x2="${rx+1}" y2="${ry-3}" stroke="${COL.dim}" stroke-width="1" stroke-linecap="round"/>`;
+    }
+  }
+
+  if(isHairpin){
+    g += `<circle cx="${TULIP_CX}" cy="${TULIP_CY}" r="3" fill="${COL.main}"/>`;
+  }
+
+  if(isSquare){
+    g += `<rect x="${TULIP_CX-3}" y="${TULIP_CY-3}" width="6" height="6" fill="none" stroke="${COL.gold}" stroke-width="1.2" rx="1"/>`;
+  }
+
+  if(isBang||isCare){
+    const bc = isBang ? COL.red : COL.gold;
+    const bt = isBang ? '!' : '?';
+    g += `<circle cx="${TULIP_W-9}" cy="9" r="6" fill="${bc}" opacity="0.15"/>`;
+    g += `<text x="${TULIP_W-9}" y="13" font-size="9" fill="${bc}" font-weight="bold" text-anchor="middle" font-family="monospace">${bt}</text>`;
+  }
+
+  g += `</svg>`;
+  return g;
+}
+
+function renderTulipForNote(noteString){
+  const tulipEl = document.getElementById('g-tulip');
+  if(!tulipEl) return;
+  
+  const result = parseNotesForTulip(noteString);
+  if(result.error){
+    tulipEl.innerHTML = '';
+    return;
+  }
+  
+  tulipEl.innerHTML = result.notes.map(note => 
+    `<div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
+      ${drawTulipSVG(note)}
+    </div>`
+  ).join('');
+}
+
 const TUTORIAL_STEPS = [
   {
     title: "Read the pacenotes. Keep the driver alive.",
@@ -3095,6 +3361,7 @@ const TUTORIAL_STEPS = [
     prompt: "Type the translation:",
     hint: "Hint: direction + severity description",
     accept: ["left tight","l3"],
+    answer: "left tight",
     successMsg: "CLEAN CALL — Driver trust +",
     nextLabel: "Next →"
   },
@@ -3107,6 +3374,7 @@ const TUTORIAL_STEPS = [
     prompt: "Translate the full sequence:",
     hint: "Hint: say both corners in order",
     accept: ["left tight into right medium","l3 into r4"],
+    answer: "left tight into right medium",
     successMsg: "GOOD FLOW — Both corners read",
     nextLabel: "Next →"
   },
@@ -3119,6 +3387,7 @@ const TUTORIAL_STEPS = [
     prompt: "Translate this — don't miss the caution:",
     hint: "Hint: right, severity, then say the caution level",
     accept: ["right very tight maximum caution","right very tight max caution","r2!!"],
+    answer: "right very tight maximum caution",
     successMsg: "HAZARD NOTED — Driver survives",
     nextLabel: "Next →"
   },
@@ -3133,6 +3402,7 @@ const TUTORIAL_STEPS = [
     prompt: "Translate fast:",
     hint: "left medium, 100 metres to right tight",
     accept: ["left medium 100 right tight","left medium 100 metres right tight"],
+    answer: "left medium 100 right tight",
     successMsg: "CLEAN — Under pressure",
     nextLabel: "Final step →"
   },
@@ -3193,18 +3463,24 @@ function renderTutStep() {
     inputWrap.style.display = 'block';
     inputEl.value = '';
     inputEl.disabled = false;
-    hintEl.textContent = step.prompt || 'Type your translation';
+    
+    // Always show answer below prompt if available
+    const answerText = step.answer ? `\nAnswer: ${step.answer}` : '';
+    hintEl.innerHTML = `${step.prompt || 'Type your translation'}<span style="color:#39ff14">${answerText}</span>`;
+    
     feedbackEl.textContent = '';
     feedbackEl.style.color = '';
     document.getElementById('tut-next').style.display = 'none';
+    document.getElementById('tut-reveal-answer').style.display = 'none';
     setTimeout(() => inputEl.focus(), 80);
     if (step.timedStep) {
       let remaining = step.timeLimit;
-      hintEl.textContent = `${remaining}s remaining`;
+      hintEl.innerHTML = `${remaining}s remaining<span style="color:#39ff14">${answerText}</span>`;
+      hintEl.style.color = '#5a5a70';
       tutTimerRunning = true;
       tutTimer = setInterval(() => {
         remaining--;
-        hintEl.textContent = `${remaining}s remaining`;
+        hintEl.innerHTML = `${remaining}s remaining<span style="color:#39ff14">${answerText}</span>`;
         hintEl.style.color = remaining <= 3 ? '#e8291c' : '#5a5a70';
         if (remaining <= 0) {
           clearInterval(tutTimer);
@@ -3271,6 +3547,18 @@ function tutNext() {
     return;
   }
   renderTutStep();
+}
+
+function revealTutAnswer() {
+  const step = TUTORIAL_STEPS[tutStep];
+  if (step && step.answer) {
+    const inputEl = document.getElementById('tut-input');
+    const feedbackEl = document.getElementById('tut-feedback-line');
+    inputEl.value = step.answer;
+    feedbackEl.textContent = 'Answer revealed';
+    feedbackEl.style.color = '#39ff14';
+    document.getElementById('tut-reveal-answer').style.display = 'none';
+  }
 }
 
 const CRASH_MESSAGES = {
