@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Tulip Generator — Rally Pacenote Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:       #0a0f0d;
+    --surface:  #111714;
+    --surface2: #171e1a;
+    --border:   rgba(255,255,255,0.07);
+    --border2:  rgba(255,255,255,0.13);
+    --gold:     #f5c518;
+    --green:    #39ff14;
+    --red:      #e8291c;
+    --blue:     #00e5ff;
+    --muted:    #6b7c72;
+    --text:     #d4ddd8;
+    --text2:    #8a9e93;
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body:    'DM Sans', sans-serif;
+    --font-mono:    'DM Mono', monospace;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    padding: 2rem 1.5rem 4rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  header {
+    margin-bottom: 2.5rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1.25rem;
+  }
+
+  header h1 {
+    font-family: var(--font-display);
+    font-size: 2.8rem;
+    letter-spacing: 0.08em;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  header p {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 0.4rem;
+    letter-spacing: 0.05em;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+  }
+
+  .input-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 1rem;
+    align-items: stretch;
+  }
+
+  .note-input {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    padding: 0.65rem 1rem;
+    border-radius: 4px;
+    outline: none;
+    letter-spacing: 0.04em;
+    transition: border-color 0.15s;
+  }
+  .note-input:focus { border-color: var(--gold); }
+  .note-input::placeholder { color: var(--muted); }
+
+  .btn {
+    background: var(--gold);
+    color: #000;
+    border: none;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    padding: 0 1.4rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .btn:hover { opacity: 0.85; }
+
+  .chips {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+
+  .chip {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    padding: 3px 10px;
+    border: 1px solid var(--border2);
+    border-radius: 99px;
+    cursor: pointer;
+    color: var(--muted);
+    background: transparent;
+    transition: all 0.12s;
+    letter-spacing: 0.03em;
+  }
+  .chip:hover { border-color: var(--gold); color: var(--gold); }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .tulip-row {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    min-height: 100px;
+    padding: 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+  }
+
+  .tulip-note {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .tulip-label {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--muted);
+    text-align: center;
+    max-width: 72px;
+    line-height: 1.3;
+    word-break: break-all;
+  }
+
+  .error {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--red);
+    padding: 0.5rem 0;
+  }
+
+  .legend {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 6px;
+    margin-top: 0.5rem;
+  }
+
+  .leg-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 5px 8px;
+  }
+
+  .leg-sym {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--gold);
+    min-width: 20px;
+    text-align: center;
+  }
+
+  .leg-txt {
+    font-size: 0.72rem;
+    color: var(--text2);
+    font-family: var(--font-mono);
+  }
+
+  .ref-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 4px;
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .ref-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 4px 6px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.12s;
+  }
+  .ref-item:hover { border-color: var(--gold); }
+  .ref-key {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+  }
+  .ref-val {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Tulip Generator</h1>
+  <p>Rally Pacenote Academy — procedural note visualiser</p>
+</header>
+
+<div class="input-row">
+  <input class="note-input" id="noteInput"
+    placeholder="R3 CREST L2 LONG R1 HAIRPIN R STOP L4 TIGHTENS DONTCUT"
+    value="R3 CREST L2 LONG R1 HAIRPIN R STOP L4 TIGHTENS DONTCUT R5 FLAT L2 JUNCTION ICE NARROW R3 BRIDGE WALL L1 SQUARE BANG MUD"/>
+</div>
+
+<div class="input-row" style="margin-top:-4px">
+  <button class="btn" onclick="render()">DRAW</button>
+</div>
+
+<div class="chips" id="examples"></div>
+
+<div id="error" class="error"></div>
+<div class="section-label">tulip sequence</div>
+<div class="tulip-row" id="output"></div>
+
+<div class="section-label">severity reference — click to insert</div>
+<div class="ref-grid" id="sevRef"></div>
+
+<div class="section-label">modifier reference — click to insert</div>
+<div class="ref-grid" id="modRef"></div>
+
+<div class="section-label">symbol legend</div>
+<div class="legend" id="legend"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   TULIP GENERATOR — Rally Pacenote Academy
+   Procedural SVG tulip diagram generator
+   Parses note strings → draws tulip roadbook symbols
+   All modifiers from rally.js supported
+   ═══════════════════════════════════════════════════════ */
+
+const W=72, H=92, CX=36, CY=55, CR=8.5;
+const ENTRY_LEN=22, EXIT_LEN=26;
+
+const SEV_ANGLE = {1:162, 2:132, 3:102, 4:72, 5:44, 6:20};
+
+const ALL_MODS = [
+  'CREST','JUMP','LONG','TIGHTENS','OPENS','FLAT','DONTCUT','BANG','MAYBE',
+  'OVER','STOP','SQUARE','JUNCTION','HAIRPIN','NARROW','ICE','WATER','MUD',
+  'ROUGH','BRIDGE','WALL','SPLIT','INTO','NOTE','CARE','REGEN','HYBRID','BUMPS'
+];
+
+const EXAMPLES = [
+  { label:'stage run',    val:'R3 L2 CREST R1 L4 LONG R5 JUMP L3 TIGHTENS' },
+  { label:'finland',      val:'R5 FLAT L4 CREST JUMP R2 TIGHTENS DONTCUT L6 OPENS R3 LONG' },
+  { label:'monte carlo',  val:'L3 ICE CREST R2 NARROW L1 HAIRPIN R STOP R4 LONG OPENS ICE' },
+  { label:'safari',       val:'R3 NARROW BRIDGE L2 SQUARE MUD R4 LONG L1 WALL R5 WATER ROUGH' },
+  { label:'hazard row',   val:'L2 JUNCTION STOP R1 HAIRPIN R L3 DONTCUT BANG R4 WALL NARROW' },
+  { label:'single',       val:'R3 CREST TIGHTENS' },
+];
+
+const SEV_LABELS = {
+  1:'hairpin', 2:'very tight', 3:'tight', 4:'medium', 5:'open', 6:'very open'
+};
+
+const MOD_LABELS = {
+  CREST:'over crest', JUMP:'jump', LONG:'long', TIGHTENS:'tightens',
+  OPENS:'opens', FLAT:'flat out', DONTCUT:"don't cut", BANG:'danger!',
+  MAYBE:'maybe jump', OVER:'over crest', STOP:'full stop',
+  SQUARE:'90° corner', JUNCTION:'junction', HAIRPIN:'hairpin',
+  NARROW:'narrows', ICE:'ice', WATER:'water splash', MUD:'mud',
+  ROUGH:'rough / bumpy', BRIDGE:'bridge', WALL:'wall / rock face',
+  CARE:'caution', NOTE:'note', REGEN:'regen zone', HYBRID:'hybrid boost',
+  BUMPS:'compressions'
+};
+
+const LEGEND_ITEMS = [
+  { sym:'∧',    txt:'crest' },
+  { sym:'∧∧',   txt:'jump / maybe' },
+  { sym:'···',  txt:'long' },
+  { sym:'↺',    txt:'tightens' },
+  { sym:'↻',    txt:'opens' },
+  { sym:'══',   txt:'flat out' },
+  { sym:'✕',    txt:"don't cut" },
+  { sym:'⊕',    txt:'junction' },
+  { sym:'■',    txt:'stop' },
+  { sym:'❄',    txt:'ice (dashed)' },
+  { sym:'≈',    txt:'water / rough' },
+  { sym:'●',    txt:'mud' },
+  { sym:'||',   txt:'narrows / bridge' },
+  { sym:'▐',    txt:'wall / rock face' },
+  { sym:'!',    txt:'bang / danger' },
+  { sym:'?',    txt:'care / note' },
+];
+
+/* ── geometry helpers ── */
+function polar(cx,cy,deg,len){
+  const r=(deg-90)*Math.PI/180;
+  return [cx+Math.cos(r)*len, cy+Math.sin(r)*len];
+}
+function pt(a){ return `${a[0].toFixed(1)},${a[1].toFixed(1)}`; }
+
+/* ── parser ── */
+function parseNotes(str){
+  const tokens=str.trim().toUpperCase().split(/\s+/);
+  const notes=[]; let i=0;
+  while(i<tokens.length){
+    const t=tokens[i];
+    if(/^[LR][1-6]$/.test(t)){
+      const n={dir:t[0],sev:parseInt(t[1]),special:null,mods:[]};
+      i++;
+      while(i<tokens.length && ALL_MODS.includes(tokens[i])) n.mods.push(tokens[i++]);
+      notes.push(n);
+    } else if(t==='SQUARE'){
+      const n={dir:'R',sev:1,special:'square',mods:[]};
+      i++;
+      while(i<tokens.length && ALL_MODS.includes(tokens[i])) n.mods.push(tokens[i++]);
+      notes.push(n);
+    } else if(t==='HAIRPIN'){
+      const dir=(tokens[i+1]==='R'||tokens[i+1]==='L') ? tokens[++i] : 'R';
+      const n={dir,sev:1,special:'hairpin',mods:[]};
+      i++;
+      while(i<tokens.length && ALL_MODS.includes(tokens[i])) n.mods.push(tokens[i++]);
+      notes.push(n);
+    } else if(ALL_MODS.includes(t)||t==='R'||t==='L'){
+      i++;
+    } else {
+      return {error:`unknown token: "${t}"`};
+    }
+  }
+  if(!notes.length) return {error:'no valid notes found'};
+  return {notes};
+}
+
+/* ── SVG drawing ── */
+function drawTulip(note){
+  const {dir,sev,special,mods}=note;
+
+  const hasMod=m=>mods.includes(m);
+  const isStop    = hasMod('STOP');
+  const isJunct   = hasMod('JUNCTION');
+  const isCrest   = hasMod('CREST')||hasMod('OVER');
+  const isJump    = hasMod('JUMP')||hasMod('MAYBE');
+  const isLong    = hasMod('LONG');
+  const isTight   = hasMod('TIGHTENS');
+  const isOpens   = hasMod('OPENS');
+  const isFlat    = hasMod('FLAT');
+  const isDontcut = hasMod('DONTCUT');
+  const isIce     = hasMod('ICE');
+  const isWater   = hasMod('WATER');
+  const isMud     = hasMod('MUD');
+  const isRough   = hasMod('ROUGH')||hasMod('BUMPS');
+  const isNarrow  = hasMod('NARROW');
+  const isBridge  = hasMod('BRIDGE');
+  const isWall    = hasMod('WALL');
+  const isBang    = hasMod('BANG');
+  const isCare    = hasMod('CARE')||hasMod('NOTE');
+  const isSquare  = special==='square';
+  const isHairpin = special==='hairpin';
+
+  const baseAngle = isSquare ? 90 : SEV_ANGLE[sev]||100;
+  const exitAngle = dir==='L' ? -baseAngle : baseAngle;
+
+  /* colours */
+  const COL = {
+    main:  '#d4ddd8',
+    dim:   '#4a5c52',
+    gold:  '#f5c518',
+    red:   '#e8291c',
+    blue:  '#00e5ff',
+    green: '#39ff14',
+  };
+
+  const sw = 1.7;
+  let g = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="display:block">`;
+
+  /* ── NARROW / BRIDGE gates on entry ── */
+  if(isNarrow||isBridge){
+    const gateY1 = CY + ENTRY_LEN - 2;
+    const gateY2 = CY + ENTRY_LEN + 6;
+    const gateX  = 5;
+    const gCol   = isBridge ? COL.gold : COL.dim;
+    g += `<line x1="${CX-gateX}" y1="${gateY1}" x2="${CX-gateX}" y2="${gateY2}" stroke="${gCol}" stroke-width="1.5" stroke-linecap="round"/>`;
+    g += `<line x1="${CX+gateX}" y1="${gateY1}" x2="${CX+gateX}" y2="${gateY2}" stroke="${gCol}" stroke-width="1.5" stroke-linecap="round"/>`;
+    if(isBridge){
+      g += `<line x1="${CX-gateX}" y1="${gateY1}" x2="${CX+gateX}" y2="${gateY1}" stroke="${gCol}" stroke-width="1" stroke-linecap="round"/>`;
+      g += `<line x1="${CX-gateX}" y1="${gateY2}" x2="${CX+gateX}" y2="${gateY2}" stroke="${gCol}" stroke-width="1" stroke-linecap="round"/>`;
+    }
+  }
+
+  /* ── WALL markers beside exit line ── */
+  if(isWall){
+    const wallSide = dir==='R' ? 1 : -1;
+    for(let wi=0;wi<3;wi++){
+      const wfrac = 0.3 + wi*0.22;
+      const [wx,wy] = polar(CX,CY,exitAngle,EXIT_LEN*wfrac);
+      const perpA   = exitAngle + 90*wallSide;
+      const [px,py] = polar(wx,wy,perpA,6);
+      g += `<line x1="${wx.toFixed(1)}" y1="${wy.toFixed(1)}" x2="${px.toFixed(1)}" y2="${py.toFixed(1)}" stroke="${COL.red}" stroke-width="1.2" stroke-linecap="round"/>`;
+    }
+    /* short wall line */
+    const [ws,ws2] = [polar(CX,CY,exitAngle,EXIT_LEN*0.25), polar(CX,CY,exitAngle,EXIT_LEN*0.75)];
+    const perpA2   = exitAngle + 90*wallSide;
+    const [wp1]    = [polar(ws[0],ws[1],perpA2,7)];
+    const [wp2]    = [polar(ws2[0],ws2[1],perpA2,7)];
+    g += `<line x1="${wp1[0].toFixed(1)}" y1="${wp1[1].toFixed(1)}" x2="${wp2[0].toFixed(1)}" y2="${wp2[1].toFixed(1)}" stroke="${COL.red}" stroke-width="1" stroke-dasharray="2,2" stroke-linecap="round"/>`;
+  }
+
+  /* ── ENTRY LINE ── */
+  const entryStroke = isIce ? COL.blue : COL.main;
+  const entryDash   = isIce ? '4,2.5' : null;
+  g += `<line x1="${CX}" y1="${CY+ENTRY_LEN}" x2="${CX}" y2="${CY+CR}"
+    stroke="${entryStroke}" stroke-width="${sw}" stroke-linecap="round"
+    ${entryDash?`stroke-dasharray="${entryDash}"`:''}/>`;
+
+  /* ── CIRCLE ── */
+  const circStroke = isStop ? COL.red : isBang ? COL.red : isCare ? COL.gold : isJunct ? COL.blue : COL.main;
+  const circFill   = isStop ? 'rgba(232,41,28,0.12)' : isJunct ? 'rgba(0,229,255,0.08)' : 'none';
+  const circW      = (isStop||isBang) ? 2.2 : sw;
+  g += `<circle cx="${CX}" cy="${CY}" r="${CR}" fill="${circFill}" stroke="${circStroke}" stroke-width="${circW}"/>`;
+
+  /* ── JUNCTION cross-roads ── */
+  if(isJunct){
+    g += `<line x1="${CX-CR-6}" y1="${CY}" x2="${CX-CR}" y2="${CY}" stroke="${COL.blue}" stroke-width="1.3" stroke-linecap="round"/>`;
+    g += `<line x1="${CX+CR}" y1="${CY}" x2="${CX+CR+6}" y2="${CY}" stroke="${COL.blue}" stroke-width="1.3" stroke-linecap="round"/>`;
+  }
+
+  /* ── EXIT LINE or STOP bar ── */
+  const exitEnd = polar(CX,CY,exitAngle,EXIT_LEN);
+  if(isStop){
+    g += `<line x1="${CX-7}" y1="${CY-CR-7}" x2="${CX+7}" y2="${CY-CR-7}" stroke="${COL.red}" stroke-width="2.2" stroke-linecap="round"/>`;
+  } else {
+    if(isLong){
+      const dashS = polar(CX,CY,exitAngle,EXIT_LEN+3);
+      const dashE = polar(CX,CY,exitAngle,EXIT_LEN+13);
+      g += `<line x1="${pt(dashS)}" x2="${pt(dashE)}" stroke="${COL.dim}" stroke-width="1" stroke-dasharray="3,2.5" stroke-linecap="round" y1="0" y2="0"/>`;
+    }
+    const exitCol  = isIce ? COL.blue : COL.main;
+    const exitDash = isIce ? '4,2.5' : null;
+    g += `<line x1="${CX}" y1="${CY-CR}" x2="${pt(exitEnd)}" stroke="${exitCol}" stroke-width="${sw}" stroke-linecap="round" ${exitDash?`stroke-dasharray="${exitDash}"`:''}/>`;
+
+    /* arrowhead */
+    const arrowSz  = 4.5;
+    const arrowB   = polar(CX,CY,exitAngle,EXIT_LEN-arrowSz*1.4);
+    const ap1      = polar(arrowB[0],arrowB[1],exitAngle+90,arrowSz);
+    const ap2      = polar(arrowB[0],arrowB[1],exitAngle-90,arrowSz);
+    g += `<polygon points="${pt(exitEnd)} ${pt(ap1)} ${pt(ap2)}" fill="${exitCol}"/>`;
+  }
+
+  /* ── DONTCUT marker ── */
+  if(isDontcut){
+    const [dx,dy] = polar(CX,CY,exitAngle,EXIT_LEN*0.7);
+    const os = dir==='R' ? -7 : 7;
+    g += `<line x1="${(dx+os-3).toFixed(1)}" y1="${(dy-3).toFixed(1)}" x2="${(dx+os+3).toFixed(1)}" y2="${(dy+3).toFixed(1)}" stroke="${COL.red}" stroke-width="1.6" stroke-linecap="round"/>`;
+    g += `<line x1="${(dx+os+3).toFixed(1)}" y1="${(dy-3).toFixed(1)}" x2="${(dx+os-3).toFixed(1)}" y2="${(dy+3).toFixed(1)}" stroke="${COL.red}" stroke-width="1.6" stroke-linecap="round"/>`;
+  }
+
+  /* ── TIGHTENS / OPENS bracket ── */
+  if(isTight||isOpens){
+    const side  = isTight ? (dir==='R'?1:-1) : (dir==='R'?-1:1);
+    const bx    = CX + side*(CR+10);
+    const by    = CY;
+    const blen  = 7;
+    const coff  = side*4;
+    const arr   = isTight ? -1 : 1;
+    g += `<path d="M${bx},${by+blen} C${bx+coff},${by} ${bx+coff},${by} ${bx},${by-blen}"
+      fill="none" stroke="${COL.dim}" stroke-width="1.3" stroke-linecap="round"/>`;
+    g += `<polygon points="${bx},${by-blen} ${bx+arr*side*3},${by-blen-4} ${bx-arr*side*3},${by-blen-4}" fill="${COL.dim}"/>`;
+  }
+
+  /* ── CREST / JUMP bumps ── */
+  if(isCrest||isJump){
+    const bH = isJump?6.5:4.5, bW=isJump?9:6;
+    const by  = CY-CR-9;
+    g += `<path d="M${CX-bW},${by} Q${CX},${by-bH} ${CX+bW},${by}" fill="none" stroke="${COL.main}" stroke-width="1.4" stroke-linecap="round"/>`;
+    if(isJump){
+      g += `<path d="M${CX-bW+2},${by-2} Q${CX},${by-bH-4} ${CX+bW-2},${by-2}" fill="none" stroke="${COL.dim}" stroke-width="1" stroke-linecap="round"/>`;
+    }
+  }
+
+  /* ── FLAT double line ── */
+  if(isFlat){
+    g += `<line x1="${CX-9}" y1="${CY+CR+7}" x2="${CX+9}" y2="${CY+CR+7}" stroke="${COL.dim}" stroke-width="1" stroke-linecap="round"/>`;
+    g += `<line x1="${CX-9}" y1="${CY+CR+10}" x2="${CX+9}" y2="${CY+CR+10}" stroke="${COL.dim}" stroke-width="1" stroke-linecap="round"/>`;
+  }
+
+  /* ── surface markers ── */
+  if(isWater){
+    for(let wi=0;wi<3;wi++){
+      const wx=CX-6+wi*6, wy=H-7;
+      g += `<path d="M${wx},${wy} Q${wx+1.5},${wy-2.5} ${wx+3},${wy}" fill="none" stroke="${COL.blue}" stroke-width="1.1" stroke-linecap="round"/>`;
+    }
+  }
+  if(isMud){
+    g += `<circle cx="${CX-6}" cy="${H-7}" r="2.5" fill="${COL.dim}"/>`;
+    g += `<circle cx="${CX+1}" cy="${H-6}" r="2" fill="#4a5c52"/>`;
+    g += `<circle cx="${CX+6}" cy="${H-7}" r="2" fill="${COL.dim}"/>`;
+  }
+  if(isRough){
+    for(let ri=0;ri<5;ri++){
+      const rx=CX-8+ri*4, ry=H-6;
+      g += `<line x1="${rx}" y1="${ry}" x2="${rx+1}" y2="${ry-3}" stroke="${COL.dim}" stroke-width="1" stroke-linecap="round"/>`;
+    }
+  }
+
+  /* ── hairpin dot ── */
+  if(isHairpin){
+    g += `<circle cx="${CX}" cy="${CY}" r="3" fill="${COL.main}"/>`;
+  }
+
+  /* ── SQUARE indicator ── */
+  if(isSquare){
+    g += `<rect x="${CX-3}" y="${CY-3}" width="6" height="6" fill="none" stroke="${COL.gold}" stroke-width="1.2" rx="1"/>`;
+  }
+
+  /* ── BANG / CARE corner badges ── */
+  if(isBang||isCare){
+    const bc = isBang ? COL.red : COL.gold;
+    const bt = isBang ? '!' : '?';
+    g += `<circle cx="${W-9}" cy="9" r="6" fill="${bc}" opacity="0.15"/>`;
+    g += `<text x="${W-9}" y="13" font-size="9" fill="${bc}" font-weight="bold" text-anchor="middle" font-family="DM Mono,monospace">${bt}</text>`;
+  }
+
+  g += `</svg>`;
+  return g;
+}
+
+/* ── label ── */
+function shortLabel(note){
+  const base = note.special==='square' ? 'SQ'
+             : note.special==='hairpin' ? `HP·${note.dir}` 
+             : `${note.dir}${note.sev}`;
+  const abbr = {
+    CREST:'crest',JUMP:'jump',LONG:'long',TIGHTENS:'↺',OPENS:'↻',
+    FLAT:'flat',DONTCUT:'no cut',JUNCTION:'jct',STOP:'STOP',ICE:'ice',
+    WATER:'water',MUD:'mud',ROUGH:'rough',NARROW:'narr',BRIDGE:'brdg',
+    WALL:'wall',CARE:'care',NOTE:'note',BANG:'!',MAYBE:'maybe',
+    REGEN:'regen',HYBRID:'hybrid',BUMPS:'bumps'
+  };
+  const ms = note.mods.slice(0,2).map(m=>abbr[m]||m.toLowerCase()).join(' ');
+  return base + (ms?' '+ms:'');
+}
+
+/* ── render ── */
+function render(){
+  const val  = document.getElementById('noteInput').value;
+  const errEl= document.getElementById('error');
+  const out  = document.getElementById('output');
+  errEl.textContent=''; out.innerHTML='';
+
+  const result = parseNotes(val);
+  if(result.error){ errEl.textContent=result.error; return; }
+
+  result.notes.forEach(note=>{
+    const div=document.createElement('div');
+    div.className='tulip-note';
+    div.innerHTML=drawTulip(note)+`<div class="tulip-label">${shortLabel(note)}</div>`;
+    out.appendChild(div);
+  });
+}
+
+function loadExample(str){
+  document.getElementById('noteInput').value=str;
+  render();
+}
+
+function insertToken(tok){
+  const el=document.getElementById('noteInput');
+  const v=el.value.trim();
+  el.value=v ? v+' '+tok : tok;
+  el.focus();
+  render();
+}
+
+/* ── build UI references ── */
+function buildUI(){
+  const chips=document.getElementById('examples');
+  EXAMPLES.forEach(e=>{
+    const c=document.createElement('span');
+    c.className='chip';
+    c.textContent=e.label;
+    c.onclick=()=>loadExample(e.val);
+    chips.appendChild(c);
+  });
+
+  const sevRef=document.getElementById('sevRef');
+  ['L','R'].forEach(d=>{
+    [1,2,3,4,5,6].forEach(s=>{
+      const el=document.createElement('div');
+      el.className='ref-item';
+      el.innerHTML=`<div class="ref-key">${d}${s}</div><div class="ref-val">${SEV_LABELS[s]}</div>`;
+      el.onclick=()=>insertToken(`${d}${s}`);
+      sevRef.appendChild(el);
+    });
+  });
+
+  const modRef=document.getElementById('modRef');
+  Object.entries(MOD_LABELS).forEach(([k,v])=>{
+    const el=document.createElement('div');
+    el.className='ref-item';
+    el.innerHTML=`<div class="ref-key" style="font-size:0.75rem">${k}</div><div class="ref-val">${v}</div>`;
+    el.onclick=()=>insertToken(k);
+    modRef.appendChild(el);
+  });
+
+  const leg=document.getElementById('legend');
+  LEGEND_ITEMS.forEach(l=>{
+    const el=document.createElement('div');
+    el.className='leg-item';
+    el.innerHTML=`<span class="leg-sym">${l.sym}</span><span class="leg-txt">${l.txt}</span>`;
+    leg.appendChild(el);
+  });
+}
+
+buildUI();
+render();
+
+document.getElementById('noteInput').addEventListener('keydown',e=>{
+  if(e.key==='Enter') render();
+});
+</script>
+</body>
+</html>
