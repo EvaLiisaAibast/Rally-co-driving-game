@@ -24,32 +24,32 @@ Keep the rhythm. Don't let him off the hook.`,
             location: 'SERVICE PARK · THE TRAILER · 22:00',
             background: 'service_park',
             dialogue: [
-              { speaker: 'narrator', text: 'Mikko is leaning against the fender of the car. He\'s holding a flask. The air smells like cheap brandy and expensive racing fuel. He isn\'t taping his wrists; he\'s staring at a dent he made in testing.' },
-              { speaker: 'mikko', text: 'The car... it\'s pushing wide. Or maybe the world is just moving too fast today. You ready to tell me where to go, or are you just here for the ride?', emotion: 'slurred' }
+              { speaker: 'narrator', text: 'Mikko is leaning against the fender of the car. He\'s holding a flask. The air smells like cheap brandy and expensive racing fuel. He isn\'t taping his wrists; he\'s staring at a dent he made in testing. The dent is shaped like a memory he\'s trying to forget.' },
+              { speaker: 'mikko', text: 'The car... it\'s pushing wide. Or maybe the world is just moving too fast today. Every time you call a note perfectly, it costs me something. Trust is expensive. You ready to pay that price, or are you just here for the ride?', emotion: 'slurred' }
             ],
             choices: [
               { 
-                text: '"You\'re drunk. Give me the flask."',
+                text: '"I\'m not here to judge. I\'m here to keep you alive."',
                 consequence: { 
-                  text: 'Mikko: (laughs harshly, hands it over)\nIt\'s just... taking the edge off. This car is a monster. I needed to be a monster to match it.\n\nYou:\nI need a driver, not a monster. Go get coffee. We start in four hours.',
-                  stats: { driverTrust: 10, teamRespect: 5, mentalStress: -5 },
+                  text: 'Mikko: (studies you, then hands over the flask)\nAlive. That\'s the word, isn\'t it. Not fast. Not winning. Alive.\n\nHe walks toward the coffee machine without looking back. Some men drink to forget. He drinks to remember what surviving feels like.',
+                  stats: { driverTrust: 15, teamRespect: 5, mentalStress: -5 },
                   flags: { driverSober: true },
                   driverState: { drunk: false }
                 }
               },
               { 
-                text: '"I\'m ready. Are you?"',
+                text: '"If trust is expensive, then let\'s make it worth it."',
                 consequence: { 
-                  text: 'Mikko:\nGood. Because I can\'t see the apexes, but I can hear your voice. Don\'t let it shake.',
-                  stats: { driverTrust: 5, mentalStress: 5 },
+                  text: 'Mikko:\nWorth it. That\'s a calculation. I like calculations.\n\nHe takes a drink, then another. The flask is half-empty before he speaks again.\n\nMikko: The last co-driver who talked like that? He\'s still alive. But the car he was in isn\'t. There\'s a lesson there somewhere.',
+                  stats: { driverTrust: 5, mentalStress: 10 },
                   driverState: { drunk: true }
                 }
               },
               { 
-                text: '"If you bin it, I\'m taking the steering wheel."',
+                text: '"The price of trust is what you pay it. Not what it costs you."',
                 consequence: { 
-                  text: 'Mikko: (narrows eyes, then grins)\nYou\'ve got teeth. I like that. But you\'ll need more than teeth to keep us on the road.',
-                  stats: { driverTrust: -5, reputation: 10, mentalStress: 10 },
+                  text: 'Mikko: (laughs, genuinely surprised)\nNow that... that\'s something different.\n\nHe sets the flask down on the fender. Doesn\'t drink. Doesn\'t hand it over. Just leaves it there between you like a question neither of you has to answer yet.',
+                  stats: { driverTrust: 10, reputation: 5, mentalStress: 5 },
                   flags: { usedToughLove: true },
                   driverState: { drunk: true, motivated: true }
                 }
@@ -64,34 +64,33 @@ Keep the rhythm. Don't let him off the hook.`,
             location: 'BEHIND THE SERVICE TENT',
             background: 'tent',
             dialogue: [
-              { speaker: 'narrator', text: 'She corners you behind the service tent. She looks like she hasn\'t slept.' },
-              { speaker: 'girlfriend', text: 'He\'s shaking. Did you see his hands? He\'s drinking because he\'s scared of the Group B transition.' },
-              { speaker: 'you', text: 'Everyone is scared of these cars. That\'s why we have notes.' },
-              { speaker: 'girlfriend', text: 'If you let him go out there like that—if you don\'t call a \'Slower\' when he\'s overdriving—I\'ll hold you responsible. Not the team. You.', emotion: 'hostile' }
+              { speaker: 'narrator', text: 'She corners you behind the service tent. She looks like she hasn\'t slept. Not because she\'s angry—because she\'s been making the same calculation for three years and getting the same result.' },
+              { speaker: 'girlfriend', text: 'He\'s shaking. Did you see his hands? He\'s drinking because the last time he drove sober, the car came back but he didn\'t. Not entirely. I\'m not threatening you. I\'m telling you what I\'ve already paid.' },
+              { speaker: 'you', text: 'What do you want me to do?' },
+              { speaker: 'girlfriend', text: 'I don\'t want anything. That\'s not how this works. I made a calculation once, accepted the cost, and now I live with it. You\'re making a calculation too. I\'m just telling you: the price you pay isn\'t always the one you see on the receipt.' }
             ],
             choices: [
               { 
-                text: '"I\'m his co-driver, not his mother."',
+                text: '"I\'ll keep him alive. That\'s the only calculation that matters."',
                 consequence: { 
-                  text: 'Girlfriend: (low voice)\nThen be a good one. Because if he doesn\'t come back, I\'m coming for you.',
-                  stats: { driverTrust: -5, reputation: -5, mentalStress: 15 },
-                  flags: { sawGirlfriendConfrontation: true },
-                  relationships: { girlfriendHostile: true }
-                }
-              },
-              { 
-                text: '"I\'ll keep him on the road. That\'s my job."',
-                consequence: { 
-                  text: 'Girlfriend: (studies you)\nSee that you do. Because the last co-driver who let him down... he\'s selling tyres in Helsinki now.',
-                  stats: { driverTrust: 5, teamRespect: 5, mentalStress: 5 },
+                  text: 'Girlfriend: (nods, not in agreement but in recognition)\nAlive. Yes. That\'s the word the last one used too.\n\nShe turns to leave, then stops.\n\nGirlfriend: He told me once that the notes are the only thing that\'s real in the car. Everything else—fear, doubt, the past—disappears when you call the right note at the right time. I hope you\'re right. For his sake. And for yours.',
+                  stats: { driverTrust: 10, teamRespect: 5, mentalStress: 5 },
                   flags: { sawGirlfriendConfrontation: true, defendedDriver: true }
                 }
               },
               { 
-                text: '"Maybe you should be the one talking to him."',
+                text: '"What was the last co-driver\'s mistake?"',
                 consequence: { 
-                  text: 'Girlfriend: (bitter laugh)\nI tried. He said \'rally is my church and the co-driver is my priest.\' That\'s you, priest. Give him communion or last rites. Your choice.',
-                  stats: { reputation: -10, mentalStress: 10 },
+                  text: 'Girlfriend: (looks at you like you\'ve asked the only question that matters)\nHis mistake? He thought the calculation was about the car. About the notes. About being right.\n\nShe steps closer, her voice dropping.\n\nGirlfriend: The calculation isn\'t about being right. It\'s about what you\'re willing to be wrong about. The last co-driver wouldn\'t be wrong about anything. So Mikko had to be wrong about everything.\n\nShe walks away. The calculation continues.',
+                  stats: { driverTrust: 15, reputation: 5, mentalStress: 10 },
+                  flags: { sawGirlfriendConfrontation: true }
+                }
+              },
+              { 
+                text: '"You\'re not asking me to save him. You\'re asking me to save yourself."',
+                consequence: { 
+                  text: 'Girlfriend: (doesn\'t flinch)\nMaybe. Or maybe I\'m asking you to understand that saving him and saving yourself aren\'t different calculations. They\'re the same one, just written differently.\n\nShe studies you for a long moment, then nods.\n\nGirlfriend: You\'re the first one who didn\'t promise. That\'s something. Maybe the only thing that matters.',
+                  stats: { driverTrust: 5, reputation: 10, mentalStress: -5 },
                   flags: { sawGirlfriendConfrontation: true }
                 }
               }
@@ -105,30 +104,40 @@ Keep the rhythm. Don't let him off the hook.`,
             location: 'SERVICE BAY',
             background: 'garage',
             dialogue: [
-              { speaker: 'jorge', text: 'The suspension is fine. The driver is the one with the misfire.' },
+              { speaker: 'narrator', text: 'Jorge doesn\'t look up from the suspension arm he\'s adjusting. He\'s been here since before Group B was called Group B, before the cars were monsters, before the drivers were ghosts.' },
+              { speaker: 'jorge', text: 'The suspension is fine. The driver is the one with the misfire.\n\nHe tightens a bolt with the precision of someone who\'s learned that loose bolts kill people.\n\nJorge: Machines don\'t lie. They don\'t hide. They don\'t drink because they\'re scared of a corner they haven\'t reached yet. That\'s why I prefer them.' },
               { speaker: 'you', text: 'Can you fix him?' },
-              { speaker: 'jorge', text: 'I\'m a mechanic, not a priest. Give him some oxygen and tell him if he vomits in my cockpit, he\'s cleaning it with his racing suit.', emotion: 'gruff' }
+              { speaker: 'jorge', text: 'I\'m a mechanic, not a priest. And even if I were a priest, I couldn\'t fix something that doesn\'t want to be fixed.\n\nHe finally looks at you. His eyes are tired, not angry.' }
             ],
             choices: [
               { 
-                text: '"I\'ll talk to him."',
+                text: '"Machines don\'t have a choice. He does."',
                 consequence: { 
-                  text: 'Jorge: (grunts)\nTalk fast. Stage starts in twenty. And co-driver? Watch the \'Slower\' calls. He\'s carrying too much fear into the corners.',
-                  stats: { driverTrust: 10, teamRespect: 5, mentalStress: -10 },
-                  driverState: { drunk: false, shaken: true }
+                  text: 'Jorge: (stops working, considers this)\nChoice. Yes. That\'s the word.\n\nHe goes back to the bolt, but slower now.\n\nJorge: The Group B car before this one? The driver made a choice too. He chose to push when he should have lifted. I found pieces of him in three different ravines.\n\nHe tightens the bolt with a final turn.\n\nJorge: Watch the Slower calls. When he doesn\'t listen, that\'s when the choice has already been made.',
+                  stats: { driverTrust: 10, teamRespect: 15, mentalStress: -10 },
+                  driverState: { drunk: false, shaken: true },
+                  relationships: { mechanicBond: 1 }
                 }
               },
               { 
-                text: '"Not my problem."',
+                text: '"You\'ve seen this before. What did the last co-driver do wrong?"',
                 consequence: { 
-                  text: 'Jorge: (eyes narrow)\nEverything in that car is your problem. That\'s why they pay you the big money. (muttering) Amateur.',
-                  stats: { teamRespect: -15, reputation: -10 },
-                  relationships: { mechanicBond: -1 }
+                  text: 'Jorge: (sets down his wrench)\nWrong.\n\nHe wipes his hands on a rag, slowly, deliberately.\n\nJorge: The last co-driver didn\'t do anything wrong. He called perfect notes. He kept the car on the road. He did everything you\'re supposed to do.\n\nHe pauses, looking at the empty seat in the cockpit.\n\nJorge: That was his mistake. Doing everything you\'re supposed to do isn\'t the same as doing what needs to be done.\n\nHe picks up the wrench again.\n\nJorge: Stage starts in twenty. Don\'t make his mistake.',
+                  stats: { driverTrust: 5, teamRespect: 10, mentalStress: 5 },
+                  relationships: { mechanicBond: 1 }
+                }
+              },
+              { 
+                text: '"Then let him make his choice. I\'ll just call the notes."',
+                consequence: { 
+                  text: 'Jorge: (nods, not in agreement but in respect)\nFair enough.\n\nHe finishes the bolt and moves to the next one.\n\nJorge: Just so you know—this car, this suspension, this setup? I built it for a driver who trusts his notes.\n\nHe doesn\'t look up.\n\nJorge: If he doesn\'t trust them, the suspension won\'t matter anyway. But if he does... this car will carry him through things it shouldn\'t survive. That\'s my choice. I made it before I ever met him.',
+                  stats: { teamRespect: 5, reputation: 5 },
+                  driverState: { drunk: true, motivated: true }
                 }
               }
             ]
           }
-        }
+        },
       ],
       
       postStage: [
@@ -139,27 +148,35 @@ Keep the rhythm. Don't let him off the hook.`,
             location: 'SERVICE PARK',
             background: 'service_park',
             dialogue: [
-              { speaker: 'narrator', text: 'After a messy stage where Mikko clipped a wall.' },
-              { speaker: 'girlfriend', text: 'He said you were late on the hairpins. He said the intercom was fuzzy, but I think you were just hesitant.', emotion: 'accusing' },
+              { speaker: 'narrator', text: 'After a messy stage where Mikko clipped a wall. The damage is cosmetic but the silence between them isn\'t.' },
+              { speaker: 'girlfriend', text: 'He said you were late on the hairpins. He said the intercom was fuzzy.\n\nShe doesn\'t look angry. She looks like someone who\'s seen this pattern before and knows how it ends.' },
               { speaker: 'you', text: 'The notes were right. He was carrying too much speed for the entry.' },
-              { speaker: 'girlfriend', text: 'See? He\'s already making excuses. He\'s going to get you killed because he can\'t keep up with your feet.', emotion: 'angry' },
+              { speaker: 'girlfriend', text: 'I\'m not saying you\'re wrong. I\'m saying that being right doesn\'t change the wall.\n\nShe glances at Mikko, then back to you.\n\nGirlfriend: He\'s not making excuses. He\'s making a calculation. Every time he enters a corner too fast, he\'s calculating whether the car will hold or whether he\'ll have to save it. Right now, he\'s calculating that the notes are the problem because that\'s easier than admitting the fear is.' },
               { speaker: 'mikko', text: 'Enough, Elena.', emotion: 'tired' },
-              { speaker: 'girlfriend', text: 'No. It\'s not enough. If there\'s a scratch on him after the Power Stage, I\'ll make sure no team in this paddock touches your contract again.' }
+              { speaker: 'girlfriend', text: 'I\'m not attacking him. I\'m telling you what the calculation looks like from outside.\n\nShe turns to Mikko, her voice dropping.\n\nGirlfriend: You want to be the driver who trusts his notes. But you can\'t trust what you don\'t believe in. And right now, you don\'t believe in the notes. You don\'t believe in him. And you don\'t believe in yourself.' }
             ],
             choices: [
               { 
-                text: '"The notes were early. He was late."',
+                text: '"The notes were early. I called them right. He\'s the one who has to trust them."',
                 consequence: { 
-                  text: 'Mikko looks at you. There\'s something in his eyes—shame, or maybe respect.\n\nMikko: She\'s wrong. You were early. I was... I was thinking about the last corner. Not the next one. Won\'t happen again.',
+                  text: 'Mikko looks at you. There\'s something in his eyes—not shame, not respect, but recognition.\n\nMikko: She\'s wrong about one thing. I do believe in the notes.\n\nHe walks toward the car, runs his hand along the damaged fender.\n\nMikko: I believe in them too much. That\'s the problem. When you believe in something that much, you stop questioning whether you\'re hearing it right.\n\nHe doesn\'t look back.\n\nMikko: You were early. I was late. But the difference between us? I knew I was late. I just didn\'t care.',
                   stats: { driverTrust: 15, reputation: 5 },
                   flags: { defendedDriver: true }
                 }
               },
               { 
+                text: '"You\'re both right. The notes don\'t matter if the driver won\'t listen."',
+                consequence: { 
+                  text: 'Elena studies you, surprised.\n\nGirlfriend: That\'s the first time someone\'s admitted that without choosing sides.\n\nShe looks at Mikko, then at the car.\n\nGirlfriend: The wall doesn\'t care who\'s right. The car doesn\'t either.\n\nShe walks away, leaving the two of you with the damage and the silence.\n\nMikko: (quietly) She\'s smarter than I give her credit for. But she\'s wrong about one thing.\n\nHe looks at you.\n\nMikko: I do listen. I just... I listen to the wrong things sometimes.',
+                  stats: { driverTrust: 10, teamRespect: 5, mentalStress: -5 },
+                  flags: { blamedForCrash: false }
+                }
+              },
+              { 
                 text: '(Stay silent)',
                 consequence: { 
-                  text: 'The silence hangs heavy. Mikko looks away. Elena smiles—a cold, victory smile.\n\nGirlfriend: Even he knows I\'m right.',
-                  stats: { driverTrust: -10, reputation: -10, mentalStress: 20 },
+                  text: 'The silence hangs heavy. Mikko looks away. Elena doesn\'t smile—she just looks tired.\n\nGirlfriend: I\'ve seen this before. The silence, the wall, the pattern.\n\nShe turns to leave, then stops.\n\nGirlfriend: You know what the last co-driver did? He tried to fix everything. He tried to fix the car, the notes, Mikko, himself.\n\nShe doesn\'t look back.\n\nGirlfriend: Some things can\'t be fixed. They can only be survived.\n\nThe damage remains. The calculation continues.',
+                  stats: { driverTrust: -5, reputation: -5, mentalStress: 15 },
                   flags: { blamedForCrash: true }
                 }
               }
@@ -173,29 +190,36 @@ Keep the rhythm. Don't let him off the hook.`,
             location: 'COFFEE MACHINE',
             background: 'service_park',
             dialogue: [
-              { speaker: 'laurent', text: 'You\'re the one sitting next to the Finn who drinks his nerves away?' },
+              { speaker: 'narrator', text: 'Laurent doesn\'t look like a rival. He looks like someone who\'s been watching the same pattern repeat for ten years and is tired of pretending not to see it.' },
+              { speaker: 'laurent', text: 'You\'re the one sitting next to Mikko.\n\nHe doesn\'t say it with malice. He says it like it\'s a fact he\'s checking.' },
               { speaker: 'you', text: 'I\'m the one keeping him ahead of you.' },
-              { speaker: 'laurent', text: 'For now. But a man like that... he\'ll eventually stop listening to the notes and start listening to the ghosts.' },
-              { speaker: 'you', text: 'Then I\'ll just have to shout louder.' }
+              { speaker: 'laurent', text: 'Ahead. Yes. That\'s the word.\n\nHe takes a sip of coffee, then sets the cup down.\n\nLaurent: I\'ve been ahead of Mikko before. He\'s been ahead of me. Neither of us stays there.\n\nHe looks at you, really looks at you.\n\nLaurent: You think you\'re keeping him ahead. That\'s a generous way to put it. But I\'ve watched him for a long time. He doesn\'t stay ahead because of the notes. He stays ahead in spite of them.\n\nHe pauses, letting that sink in.\n\nLaurent: The question isn\'t whether he\'ll stop listening to the notes. The question is whether you\'ll stop noticing when he does.' }
             ],
             choices: [
               { 
-                text: '"Or I\'ll let the times do the talking."',
+                text: '"Then why do you care?"',
                 consequence: { 
-                  text: 'Laurent raises his cup in mock salute.\n\nLaurent: Times don\'t lie. But drivers do. Remember that, co-driver.',
+                  text: 'Laurent: (genuinely surprised)\nWhy?\n\nHe thinks about this, like it\'s a question he hasn\'t been asked before.\n\nLaurent: Because I lost a teammate once. Not to a wall. Not to another driver. To the silence between the notes.\n\nHe picks up his cup.\n\nLaurent: When you stop hearing what\'s not being said, that\'s when the road ends. Not for the car. For you.',
                   stats: { reputation: 10, mentalStress: 5 }
                 }
               },
               { 
-                text: '"Ghosts don\'t win championships."',
+                text: '"I notice everything. Including that you\'re not actually racing him."',
                 consequence: { 
-                  text: 'Laurent\'s smile fades slightly.\n\nLaurent: No. But they end careers. His. Maybe yours too.',
-                  stats: { reputation: 5, driverTrust: 5 }
+                  text: 'Laurent: (smiles, not in mockery but in respect)\nSharp.\n\nHe finishes his coffee.\n\nLaurent: You\'re right. I\'m not racing him. I\'m racing the version of myself that thought winning was about being faster than the person next to me.\n\nHe throws the cup in the trash.\n\nLaurent: Mikko? He\'s racing something else entirely. And you... you\'re either helping him win or you\'re helping him lose. The difference is smaller than you think.',
+                  stats: { reputation: 15, driverTrust: 5 }
+                }
+              },
+              { 
+                text: '"What happened to the last co-driver who noticed too much?"',
+                consequence: { 
+                  text: 'Laurent: (doesn\'t flinch)\nHe\'s in Paris now. Sells insurance.\n\nHe says it\'s easier. When someone crashes on the track, it\'s physics. When they crash in life, it\'s... complicated.\n\nHe walks away, then stops.\n\nLaurent: But here\'s the thing—he\'s happy. The happiest former co-driver I know.\n\nHe doesn\'t look back.\n\nLaurent: Think about why that might be.',
+                  stats: { reputation: 5, mentalStress: 10 }
                 }
               }
             ]
           }
-        }
+        },
       ]
     },
     
@@ -247,34 +271,34 @@ Keep the rhythm. Don't let him off the hook.`,
             location: 'THE FINAL SERVICE · 03:00',
             background: 'dark_garage',
             dialogue: [
-              { speaker: 'narrator', text: 'Mikko is sitting in the dark. No flask this time. Just a glass of water and a thousand-yard stare. The Girlfriend is standing over him, whispering. She stops when you approach.' },
-              { speaker: 'girlfriend', text: 'Tell him. Tell him the stage is too dangerous. Tell him we should retire with the points we have.' },
+              { speaker: 'narrator', text: 'Mikko is sitting in the dark. No flask this time. Just a glass of water and a thousand-yard stare. The Girlfriend is standing over him, not whispering—just being there. She stops when you approach, not because you interrupted, but because she\'s been waiting for you.' },
+              { speaker: 'girlfriend', text: 'I\'ve been making the same calculation for three years. Every stage, every corner, every note.\n\nShe doesn\'t look at Mikko. She looks at you.\n\nGirlfriend: The calculation says retire with the points we have.\n\nShe pauses.\n\nGirlfriend: But I\'ve been wrong before. The calculation changes when the variables change.\n\nShe glances at Mikko, then back to you.\n\nGirlfriend: You\'ve changed the variables. I don\'t know how. I don\'t know if it\'s enough. But the calculation isn\'t what it was yesterday.' },
               { speaker: 'mikko', text: 'What do the notes say?', emotion: 'focused' },
               { speaker: 'you', text: 'The notes say there\'s a championship at the end of the next thirty kilometres.' },
-              { speaker: 'girlfriend', text: 'You\'re a sociopath. You\'d rather win a trophy than save your friend.', emotion: 'furious' }
+              { speaker: 'mikko', text: 'That\'s not what the notes say.\n\nHe stands up, picks up his helmet.\n\nMikko: The notes say there\'s a corner. Then another. Then another.\n\nHe looks at you.\n\nMikko: Everything else—that\'s what we\'re saying. The notes don\'t say anything about championships or legacy or whether we should retire.\n\nHe puts on his helmet.\n\nMikko: They just say what\'s coming. The rest... the rest is up to us.' }
             ],
             choices: [
               { 
-                text: '"I\'m saving his legacy."',
+                text: '"Then let\'s go find out what\'s coming."',
                 consequence: { 
-                  text: 'Mikko: (stands up, steadies himself)\nShe\'s right. You are a sociopath.\n(He grabs his helmet)\nThat\'s why we\'re going to win.',
-                  stats: { driverTrust: 20, reputation: 15, legacy: 25, mentalStress: 20 },
+                  text: 'Mikko: (nods)\nExactly.\n\nHe walks toward the car. Elena doesn\'t stop him. She doesn\'t say anything. She just watches.\n\nGirlfriend: (to you, quietly)\nThe calculation still says retire.\n\nShe looks at Mikko\'s back.\n\nGirlfriend: But sometimes you calculate wrong on purpose because the right answer is the one you can\'t live with.\n\nShe walks away. The road is calling. The calculation continues.',
+                  stats: { driverTrust: 20, reputation: 15, legacy: 25, mentalStress: -5 },
                   flags: { finalStageMotivated: true }
                 }
               },
               { 
-                text: '"He\'s a driver. Let him drive."',
+                text: '"The notes say what\'s coming. We\'re what decides whether we survive it."',
                 consequence: { 
-                  text: 'Mikko: (meets your eyes)\nDamn right. I didn\'t come this far to hide from the dark.\n\nGirlfriend: (turns away)\nThen both of you can burn together.',
+                  text: 'Mikko: (stops at the car door, turns)\nSurvive it.\n\nHe considers this word like it\'s new.\n\nMikko: You know what the last co-driver said? Before the crash? He said we\'re going to survive this.\n\nHe opens the door.\n\nMikko: We didn\'t.\n\nHe gets in.\n\nMikko: But that doesn\'t mean we shouldn\'t try.\n\nElena stands in the doorway, watching.\n\nGirlfriend: The calculation says we\'re not going to survive this either.\n\nShe doesn\'t move.\n\nGirlfriend: But I\'m tired of being right about the wrong things.',
                   stats: { driverTrust: 15, reputation: 10, legacy: 20 },
                   driverState: { motivated: true }
                 }
               },
               { 
-                text: '"The road is calling. We\'re going."',
+                text: '"Some roads don\'t have an end you can see. We drive them anyway."',
                 consequence: { 
-                  text: 'Mikko: (half-smile)\nThe road is calling. I like that. Sounds like something I\'d say.\n\nHe rises. No more words needed.',
-                  stats: { driverTrust: 10, reputation: 20, legacy: 15, mentalStress: -10 },
+                  text: 'Mikko: (laughs, softly)\nThat\'s... that\'s good.\n\nHe looks at Elena.\n\nMikko: Did you hear that?\n\nElena: (doesn\'t smile, but her eyes soften)\nI heard it.\n\nMikko: That\'s why she\'s in the car.\n\nHe points at you.\n\nMikko: She gets it.\n\nHe gets in. The engine starts.\n\nElena: (to you)\nThe calculation says this is the end.\n\nShe pauses.\n\nGirlfriend: But maybe the calculation is wrong.\n\nShe walks away. The road is calling. Nobody knows where it ends.',
+                  stats: { driverTrust: 10, reputation: 20, legacy: 30, mentalStress: -15 },
                   driverState: { motivated: true, shaken: false }
                 }
               }
