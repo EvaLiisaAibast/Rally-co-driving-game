@@ -3115,7 +3115,7 @@ const TULIP_ALL_MODS = [
   'CREST','JUMP','LONG','TIGHTENS','OPENS','FLAT','DONTCUT','BANG','MAYBE',
   'OVER','STOP','SQUARE','JUNCTION','HAIRPIN','NARROW','ICE','WATER','MUD',
   'ROUGH','BRIDGE','WALL','SPLIT','INTO','NOTE','CARE','REGEN','HYBRID','BUMPS',
-  'EASY','BUMP'
+  'EASY','BUMP','FESHFESH','SAND','RUTS','WET','GRAVEL','SPLASH'
 ];
 
 function tulipPolar(cx,cy,deg,len){
@@ -3205,7 +3205,7 @@ function drawTulipSVG(note){
   const isFlat    = hasMod('FLAT');
   const isDontcut = hasMod('DONTCUT');
   const isIce     = hasMod('ICE');
-  const isWater   = hasMod('WATER');
+  const isWater   = hasMod('WATER')||hasMod('SPLASH');
   const isMud     = hasMod('MUD');
   const isRough   = hasMod('ROUGH')||hasMod('BUMPS');
   const isNarrow  = hasMod('NARROW');
@@ -3215,6 +3215,13 @@ function drawTulipSVG(note){
   const isCare    = hasMod('CARE')||hasMod('NOTE');
   const isSquare  = special==='square';
   const isHairpin = special==='hairpin';
+  const isRegen   = hasMod('REGEN');
+  const isHybrid  = hasMod('HYBRID');
+  const isFeshfesh= hasMod('FESHFESH');
+  const isSand    = hasMod('SAND');
+  const isRuts    = hasMod('RUTS');
+  const isWet     = hasMod('WET');
+  const isGravel  = hasMod('GRAVEL');
 
   const baseAngle = isSquare ? 90 : TULIP_SEV_ANGLE[sev]||100;
   const exitAngle = dir==='L' ? -baseAngle : baseAngle;
@@ -3346,6 +3353,50 @@ function drawTulipSVG(note){
     }
   }
 
+  if(isRegen){
+    g += `<circle cx="${TULIP_CX}" cy="${TULIP_H-7}" r="4" fill="none" stroke="${COL.green}" stroke-width="1.5" stroke-dasharray="2,2"/>`;
+    g += `<line x1="${TULIP_CX-3}" y1="${TULIP_H-7}" x2="${TULIP_CX+3}" y2="${TULIP_H-7}" stroke="${COL.green}" stroke-width="1.5"/>`;
+  }
+
+  if(isHybrid){
+    g += `<polygon points="${TULIP_CX},${TULIP_H-10} ${TULIP_CX-4},${TULIP_H-4} ${TULIP_CX+4},${TULIP_H-4}" fill="none" stroke="${COL.gold}" stroke-width="1.5"/>`;
+    g += `<line x1="${TULIP_CX}" y1="${TULIP_H-10}" x2="${TULIP_CX}" y2="${TULIP_H-4}" stroke="${COL.gold}" stroke-width="1.5"/>`;
+  }
+
+  if(isFeshfesh){
+    for(let fi=0;fi<6;fi++){
+      const fx=TULIP_CX-9+fi*3.5, fy=TULIP_H-6;
+      g += `<circle cx="${fx}" cy="${fy}" r="1.5" fill="${COL.dim}" opacity="0.7"/>`;
+    }
+  }
+
+  if(isSand){
+    for(let si=0;si<4;si++){
+      const sx=TULIP_CX-7+si*5, sy=TULIP_H-5;
+      g += `<circle cx="${sx}" cy="${sy}" r="2" fill="#d4a574"/>`;
+    }
+  }
+
+  if(isRuts){
+    for(let ri=0;ri<3;ri++){
+      const rx=TULIP_CX-5+ri*5, ry=TULIP_H-6;
+      g += `<ellipse cx="${rx}" cy="${ry}" rx="2" ry="1" fill="none" stroke="#8b7355" stroke-width="1.2"/>`;
+    }
+  }
+
+  if(isWet){
+    g += `<line x1="${TULIP_CX-8}" y1="${TULIP_H-5}" x2="${TULIP_CX+8}" y2="${TULIP_H-5}" stroke="${COL.blue}" stroke-width="1.5" stroke-linecap="round"/>`;
+    g += `<line x1="${TULIP_CX-6}" y1="${TULIP_H-3}" x2="${TULIP_CX+6}" y2="${TULIP_H-3}" stroke="${COL.blue}" stroke-width="1" stroke-linecap="round"/>`;
+  }
+
+  if(isGravel){
+    for(let gi=0;gi<5;gi++){
+      const gx=TULIP_CX-8+gi*4, gy=TULIP_H-6;
+      const size = 1 + Math.random() * 1.5;
+      g += `<circle cx="${gx}" cy="${gy}" r="${size}" fill="#a67c52"/>`;
+    }
+  }
+
   if(isHairpin){
     g += `<circle cx="${TULIP_CX}" cy="${TULIP_CY}" r="3" fill="${COL.main}"/>`;
   }
@@ -3371,6 +3422,12 @@ function renderTulipForNote(noteString){
   
   const result = parseNotesForTulip(noteString);
   if(result.error){
+    console.log('Tulip parser error:', result.error);
+    tulipEl.innerHTML = '';
+    return;
+  }
+  
+  if(!result.notes || result.notes.length === 0){
     tulipEl.innerHTML = '';
     return;
   }
