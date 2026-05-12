@@ -2090,38 +2090,27 @@ function pickDiff(i,el){
   document.querySelectorAll('.diff-btn').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');
 }
 function openCareer(){
-  // Always check if story route needs to be selected first
-  if(typeof StorySystem !== 'undefined' && !StorySystem.state.genderRoute){
-    showRouteSelection();
-    return;
-  }
-  
   if(!CAREER.started){
-    // If story system has route, use story-based names
-    if(typeof StorySystem !== 'undefined' && StorySystem.state.genderRoute){
-      const isMale = StorySystem.state.genderRoute === 'male';
-      G.driver = isMale ? 'Mikko Lahti' : 'Sofia Andersson';
-      G.codriver = isMale ? 'Janne Salo' : 'Elena Voss';
-    } else {
-      // Fallback defaults
-      G.driver = 'Mikko Lahti';
-      G.codriver = 'Janne Salo';
+    if(typeof StorySystem !== 'undefined' && !StorySystem.state.genderRoute){
+      showRouteSelection();
+      return;
     }
-    G.era='grpb';G.car=ERAS['grpb'].cars[0];G.diff=1;G.timeLimit=DIFFS[1].s;
-    CAREER.driver=G.driver;CAREER.codriver=G.codriver;CAREER.car=G.car;
-    CAREER.currentStage=0;CAREER.pts=0;CAREER.completed=[];
+    const isMale = StorySystem?.state?.genderRoute === 'male';
+    G.driver = isMale ? 'Mikko Lahti' : 'Sofia Andersson';
+    G.codriver = isMale ? 'Janne Salo' : 'Elena Voss';
+    G.era='grpb'; G.car=ERAS['grpb'].cars[0]; G.diff=1; G.timeLimit=DIFFS[1].s;
+    CAREER.driver=G.driver; CAREER.codriver=G.codriver; CAREER.car=G.car;
+    CAREER.currentStage=0; CAREER.pts=0; CAREER.completed=[];
     CAREER.standings=RIVALS.map(r=>({...r,pts:Math.floor(Math.random()*12)+3}));
     CAREER.started=true;
-    
-    // Show pre-stage story for first stage
     if(typeof showPreStageStory === 'function'){
       showPreStageStory(0, () => {
-        buildCareerScreen();show('career');
+        buildCareerScreen(); show('career');
       });
       return;
     }
   }
-  buildCareerScreen();show('career');
+  buildCareerScreen(); show('career');
 }
 function buildCareerScreen(){
   document.getElementById('c-driver-name').textContent=CAREER.driver;
