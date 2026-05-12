@@ -670,33 +670,7 @@ function selectRoute(route) {
   
   StoryUI.showScene(introScene, () => {
     // Start career after intro
-    startCareerAfterStory();
-  });
-}
-
-function startCareerAfterStory() {
-  // Set default names based on route
-  const isMale = StorySystem.state.genderRoute === 'male';
-  G.driver = isMale ? 'Mikko Lahti' : 'Sofia Andersson';
-  G.codriver = isMale ? 'You (Janne)' : 'You (Elena)';
-  G.era = 'grpb';
-  G.car = ERAS['grpb'].cars[0];
-  G.diff = 1;
-  G.timeLimit = DIFFS[1].s;
-  
-  CAREER.driver = G.driver;
-  CAREER.codriver = G.codriver;
-  CAREER.car = G.car;
-  CAREER.currentStage = 0;
-  CAREER.pts = 0;
-  CAREER.completed = [];
-  CAREER.standings = RIVALS.map(r => ({...r, pts: Math.floor(Math.random() * 12) + 3}));
-  CAREER.started = true;
-  
-  // Show first pre-stage story
-  showPreStageStory(0, () => {
-    buildCareerScreen();
-    show('career');
+    openCareer();
   });
 }
 
