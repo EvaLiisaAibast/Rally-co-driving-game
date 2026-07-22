@@ -5,6 +5,13 @@
   --mp-red:#e8000a;--mp-yellow:#ffe500;--mp-orange:#ff6600;
   --text:#f0f0f0;--text2:#9090a8;--text3:#50506a;
 }
+.light-theme{
+  --bg:#f5f5f7;--surf:#ffffff;--surf2:#e8e8ed;--surf3:#d8d8e0;
+  --brd:#c0c0c8;--brd2:#a0a0a8;
+  --gold:#d4a017;--red:#c41e12;--cyan:#0088aa;--green:#2d8f0f;
+  --mp-red:#b80008;--mp-yellow:#d4b400;--mp-orange:#cc5200;
+  --text:#1a1a1a;--text2:#505058;--text3:#808088;
+}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
 button{cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
