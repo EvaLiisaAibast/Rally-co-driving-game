@@ -1968,6 +1968,16 @@ function renderAccessibilitySettings() {
       </div>
 
       <div style="background:var(--surf);border:1px solid var(--brd2);padding:.85rem 1rem">
+        <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:.25rem">Input Mode</div>
+        <div style="font-size:12px;color:var(--text2);margin-bottom:.5rem">Choose how to submit your pacenote translations</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="audio-style-btn ${typeof INPUT_MODE!=='undefined'&&INPUT_MODE.type==='type'?'on':''}" onclick="if(typeof INPUT_MODE!=='undefined'){INPUT_MODE.type='type';INPUT_MODE.toggle();renderAccessibilitySettings();}">⌨️ Type</button>
+          <button class="audio-style-btn ${typeof INPUT_MODE!=='undefined'&&INPUT_MODE.type==='speak'?'on':''}" onclick="if(typeof INPUT_MODE!=='undefined'){INPUT_MODE.type='speak';INPUT_MODE.toggle();renderAccessibilitySettings();}">🎤 Speak</button>
+        </div>
+        <div style="font-size:11px;color:var(--text3);margin-top:.5rem">Speak mode uses voice recognition (Chrome/Edge only)</div>
+      </div>
+
+      <div style="background:var(--surf);border:1px solid var(--brd2);padding:.85rem 1rem">
         <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:.25rem">Adaptive Difficulty</div>
         <div style="font-size:12px;color:var(--text2);margin-bottom:.5rem">Timer automatically adjusts based on your performance</div>
         <button onclick="AdaptiveDifficulty.enabled=!AdaptiveDifficulty.enabled;renderAccessibilitySettings()" style="
