@@ -1057,7 +1057,9 @@ const Accessibility = {
     highContrast: false,
     largeText: false,
     reducedMotion: false,
-    keyboardMode: false      // show keyboard shortcuts prominently
+    keyboardMode: false,     // show keyboard shortcuts prominently
+    timerColor: '#39ff14',   // custom timer color
+    theme: 'dark'            // 'dark' or 'light'
   },
 
   load() {
@@ -1080,6 +1082,7 @@ const Accessibility = {
     b.classList.toggle('a11y-large-text', this.prefs.largeText);
     b.classList.toggle('a11y-reduced-motion', this.prefs.reducedMotion);
     b.classList.toggle('a11y-keyboard-mode', this.prefs.keyboardMode);
+    b.classList.toggle('light-theme', this.prefs.theme === 'light');
   },
 
   getTimeBonus() {
@@ -1949,6 +1952,24 @@ function renderAccessibilitySettings() {
             ${Accessibility.prefs[key] ? 'ON' : 'OFF'}
           </button>
         </div>`).join('')}
+
+      <div style="background:var(--surf);border:1px solid var(--brd2);padding:.85rem 1rem">
+        <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:.5rem">Timer Color</div>
+        <div style="font-size:12px;color:var(--text2);margin-bottom:.5rem">Customize the timer arc color</div>
+        <div style="display:flex;gap:0.5rem;align-items:center;">
+          <input type="color" id="timer-color-picker" value="${Accessibility.prefs.timerColor}" onchange="Accessibility.set('timerColor', this.value);renderAccessibilitySettings();" style="width:50px;height:30px;border:none;cursor:pointer;">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text2);">${Accessibility.prefs.timerColor}</span>
+        </div>
+      </div>
+
+      <div style="background:var(--surf);border:1px solid var(--brd2);padding:.85rem 1rem">
+        <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:.5rem">Theme</div>
+        <div style="font-size:12px;color:var(--text2);margin-bottom:.5rem">Choose dark or light theme</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="audio-style-btn ${Accessibility.prefs.theme==='dark'?'on':''}" onclick="Accessibility.set('theme','dark');renderAccessibilitySettings()">🌙 Dark</button>
+          <button class="audio-style-btn ${Accessibility.prefs.theme==='light'?'on':''}" onclick="Accessibility.set('theme','light');renderAccessibilitySettings()">☀️ Light</button>
+        </div>
+      </div>
 
       <div style="background:var(--surf);border:1px solid var(--brd2);padding:.85rem 1rem">
         <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:.5rem">Co-driver Style</div>
