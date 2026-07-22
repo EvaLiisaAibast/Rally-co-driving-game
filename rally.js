@@ -2559,7 +2559,8 @@ function updateUrgencyState() {
 function updateTimer(){
   const frac=G.remaining/G.timeLimit;
   document.getElementById('t-arc').setAttribute('stroke-dashoffset',226.2*(1-frac));
-  document.getElementById('t-arc').setAttribute('stroke',G.remaining<=3?'#e8291c':G.remaining<=5?'#f5c518':'#39ff14');
+  const customColor = (typeof Accessibility !== 'undefined') ? Accessibility.prefs.timerColor : '#39ff14';
+  document.getElementById('t-arc').setAttribute('stroke',G.remaining<=3?'#e8291c':G.remaining<=5?'#f5c518':customColor);
   document.getElementById('g-timer').textContent=G.remaining;
 }
 function applyStyleToNote(rawNote, style) {
@@ -8114,7 +8115,519 @@ document.addEventListener('DOMContentLoaded', () => {
   checkForSavedLobby();
   VoiceInput.init();
   INPUT_MODE.load();
+  initKeyboardShortcuts();
+  Statistics.load();
+  Achievements.load();
 });
+
+const KeyboardShortcuts = {
+  enabled: true,
+  
+  init() {
+    document.addEventListener('keydown', (e) => {
+      if (!this.enabled) return;
+      
+      // Ignore if typing in input field
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+        if (e.key === 'Escape') {
+          e.target.blur();
+        }
+        return;
+      }
+      
+      switch(e.key.toLowerCase()) {
+        case 's':
+          e.preventDefault();
+          this.skipNote();
+          break;
+        case 'r':
+          e.preventDefault();
+          this.replayAudio();
+          break;
+        case 'p':
+          e.preventDefault();
+          this.togglePause();
+          break;
+        case 'h':
+          e.preventDefault();
+          this.showHelp();
+          break;
+      }
+    });
+  },
+  
+  skipNote() {
+    if (G.stageEnded || !G.notes[G.idx]) return;
+    const input = document.getElementById('g-input');
+    if (input) {
+      input.value = '';
+      submitAnswer();
+    }
+  },
+  
+  replayAudio() {
+    if (typeof CoDriverAudio !== 'undefined' && CoDriverAudio.speak) {
+      const currentNote = G.notes[G.idx];
+      if (currentNote && currentNote.narr) {
+        CoDriverAudio.speak(currentNote.narr);
+      }
+    }
+  },
+  
+  togglePause() {
+    if (G.timer) {
+      clearInterval(G.timer);
+      G.timer = null;
+    } else if (!G.stageEnded) {
+      G.timer = setInterval(() => {
+        G.remaining--;
+        updateTimer();
+        if (G.remaining <= 0) {
+          clearInterval(G.timer);
+          timeUp();
+        }
+      }, 1000);
+    }
+  },
+  
+  showHelp() {
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+      position:fixed;top:0;left:0;right:0;bottom:0;
+      background:rgba(0,0,0,0.9);z-index:10000;
+      display:flex;justify-content:center;align-items:center;
+    `;
+    overlay.innerHTML = `
+      <div style="background:var(--surf);border:1px solid var(--brd);padding:2rem;max-width:400px;">
+        <h2 style="font-family:'Bebas Neue',sans-serif;color:var(--gold);margin-bottom:1rem;">Keyboard Shortcuts</h2>
+        <div style="display:flex;flex-direction:column;gap:0.5rem;font-family:'IBM Plex Mono',monospace;font-size:13px;">
+          <div><strong>S</strong> — Skip note</div>
+          <div><strong>R</strong> — Replay audio</div>
+          <div><strong>P</strong> — Pause/Resume timer</div>
+          <div><strong>H</strong> — Show this help</div>
+          <div><strong>ESC</strong> — Blur input</div>
+        </div>
+        <button onclick="this.parentElement.parentElement.remove()" style="margin-top:1.5rem;padding:0.75rem 1.5rem;background:var(--gold);color:#000;border:none;cursor:pointer;font-weight:600;">Close</button>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) overlay.remove();
+    });
+  }
+};
+
+function initKeyboardShortcuts() {
+  KeyboardShortcuts.init();
+}
+
+const StageFavorites = {
+  STORAGE_KEY: 'rpa_stage_favorites',
+  
+  get() {
+    try {
+      const saved = localStorage.getItem(this.STORAGE_KEY);
+      return saved ? JSON.parse(saved) : [];
+    } catch(e) { return []; }
+  },
+  
+  add(stageName, era) {
+    const favorites = this.get();
+    const exists = favorites.find(f => f.name === stageName && f.era === era);
+    if (!exists) {
+      favorites.push({ name: stageName, era, added: Date.now() });
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(favorites));
+    }
+    return favorites;
+  },
+  
+  remove(stageName, era) {
+    const favorites = this.get().filter(f => !(f.name === stageName && f.era === era));
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(favorites));
+    return favorites;
+  },
+  
+  isFavorite(stageName, era) {
+    return this.get().some(f => f.name === stageName && f.era === era);
+  }
+};
+
+const Statistics = {
+  STORAGE_KEY: 'rpa_statistics',
+  
+  data: {
+    totalNotes: 0,
+    correctNotes: 0,
+    skippedNotes: 0,
+    timeoutNotes: 0,
+    noteTypeAccuracy: {},
+    averageReactionTime: 0,
+    totalPlaytime: 0,
+    stagesCompleted: 0
+  },
+  
+  load() {
+    try {
+      const saved = localStorage.getItem(this.STORAGE_KEY);
+      if (saved) {
+        this.data = { ...this.data, ...JSON.parse(saved) };
+      }
+    } catch(e) {}
+  },
+  
+  save() {
+    try {
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.data));
+    } catch(e) {}
+  },
+  
+  recordNote(note, result, reactionTime) {
+    this.data.totalNotes++;
+    
+    // Extract note type (first word or number)
+    const noteType = this.extractNoteType(note.raw);
+    if (!this.data.noteTypeAccuracy[noteType]) {
+      this.data.noteTypeAccuracy[noteType] = { total: 0, correct: 0 };
+    }
+    this.data.noteTypeAccuracy[noteType].total++;
+    
+    if (result.ok) {
+      this.data.correctNotes++;
+      this.data.noteTypeAccuracy[noteType].correct++;
+    } else if (result.skipped) {
+      this.data.skippedNotes++;
+    } else if (result.timeout) {
+      this.data.timeoutNotes++;
+    }
+    
+    // Update average reaction time
+    if (reactionTime > 0) {
+      const currentAvg = this.data.averageReactionTime;
+      const total = this.data.totalNotes;
+      this.data.averageReactionTime = ((currentAvg * (total - 1)) + reactionTime) / total;
+    }
+    
+    this.save();
+  },
+  
+  recordStage(duration) {
+    this.data.stagesCompleted++;
+    this.data.totalPlaytime += duration;
+    this.save();
+  },
+  
+  extractNoteType(noteRaw) {
+    // Extract the first word or number as the note type
+    const match = noteRaw.match(/^([A-Z]+\d*|\d+)/);
+    return match ? match[1] : 'other';
+  },
+  
+  getAccuracyByType() {
+    const result = {};
+    Object.entries(this.data.noteTypeAccuracy).forEach(([type, stats]) => {
+      result[type] = {
+        accuracy: stats.total > 0 ? (stats.correct / stats.total * 100).toFixed(1) : 0,
+        total: stats.total,
+        correct: stats.correct
+      };
+    });
+    return result;
+  },
+  
+  showDashboard() {
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+      position:fixed;top:0;left:0;right:0;bottom:0;
+      background:rgba(0,0,0,0.95);z-index:10000;
+      display:flex;justify-content:center;align-items:center;
+      overflow:auto;padding:2rem;
+    `;
+    
+    const accuracyByType = this.getAccuracyByType();
+    const overallAccuracy = this.data.totalNotes > 0 
+      ? (this.data.correctNotes / this.data.totalNotes * 100).toFixed(1) 
+      : 0;
+    
+    overlay.innerHTML = `
+      <div style="background:var(--surf);border:1px solid var(--brd);padding:2rem;max-width:600px;width:100%;max-height:90vh;overflow:auto;">
+        <h2 style="font-family:'Bebas Neue',sans-serif;color:var(--gold);margin-bottom:1.5rem;">Statistics Dashboard</h2>
+        
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:2rem;">
+          <div style="background:var(--surf2);padding:1rem;border:1px solid var(--brd2);">
+            <div style="font-size:11px;color:var(--text3);text-transform:uppercase;">Overall Accuracy</div>
+            <div style="font-size:32px;font-family:'Bebas Neue',sans-serif;color:${overallAccuracy >= 80 ? '#39ff14' : overallAccuracy >= 60 ? '#f5c518' : '#e8291c'};">${overallAccuracy}%</div>
+          </div>
+          <div style="background:var(--surf2);padding:1rem;border:1px solid var(--brd2);">
+            <div style="font-size:11px;color:var(--text3);text-transform:uppercase;">Total Notes</div>
+            <div style="font-size:32px;font-family:'Bebas Neue',sans-serif;color:var(--text);">${this.data.totalNotes}</div>
+          </div>
+          <div style="background:var(--surf2);padding:1rem;border:1px solid var(--brd2);">
+            <div style="font-size:11px;color:var(--text3);text-transform:uppercase;">Stages Completed</div>
+            <div style="font-size:32px;font-family:'Bebas Neue',sans-serif;color:var(--text);">${this.data.stagesCompleted}</div>
+          </div>
+          <div style="background:var(--surf2);padding:1rem;border:1px solid var(--brd2);">
+            <div style="font-size:11px;color:var(--text3);text-transform:uppercase;">Avg Reaction Time</div>
+            <div style="font-size:32px;font-family:'Bebas Neue',sans-serif;color:var(--text);">${this.data.averageReactionTime.toFixed(2)}s</div>
+          </div>
+        </div>
+        
+        <h3 style="font-family:'Bebas Neue',sans-serif;color:var(--text);margin-bottom:1rem;">Accuracy by Note Type</h3>
+        <div style="display:flex;flex-direction:column;gap:0.5rem;margin-bottom:2rem;">
+          ${Object.entries(accuracyByType)
+            .sort((a, b) => b[1].total - a[1].total)
+            .map(([type, stats]) => `
+            <div style="display:flex;align-items:center;gap:1rem;background:var(--surf2);padding:0.75rem;border:1px solid var(--brd2);">
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:var(--text);min-width:60px;">${type}</div>
+              <div style="flex:1;height:8px;background:var(--brd);border-radius:4px;overflow:hidden;">
+                <div style="width:${stats.accuracy}%;height:100%;background:${stats.accuracy >= 80 ? '#39ff14' : stats.accuracy >= 60 ? '#f5c518' : '#e8291c'};"></div>
+              </div>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text2);min-width:80px;text-align:right;">${stats.accuracy}% (${stats.correct}/${stats.total})</div>
+            </div>
+          `).join('')}
+        </div>
+        
+        <div style="display:flex;gap:0.5rem;margin-bottom:1rem;">
+          <button onclick="ExportResults.exportCSV()" style="flex:1;padding:0.75rem;background:var(--surf2);border:1px solid var(--brd2);color:var(--text);cursor:pointer;font-weight:600;">Export CSV</button>
+          <button onclick="ExportResults.exportJSON()" style="flex:1;padding:0.75rem;background:var(--surf2);border:1px solid var(--brd2);color:var(--text);cursor:pointer;font-weight:600;">Export JSON</button>
+        </div>
+        
+        <button onclick="this.parentElement.parentElement.remove()" style="width:100%;padding:0.75rem;background:var(--gold);color:#000;border:none;cursor:pointer;font-weight:600;">Close</button>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) overlay.remove();
+    });
+  }
+};
+
+const ExportResults = {
+  exportCSV() {
+    const data = Statistics.data;
+    const accuracyByType = Statistics.getAccuracyByType();
+    
+    let csv = 'Metric,Value\n';
+    csv += `Overall Accuracy,${(data.correctNotes / data.totalNotes * 100).toFixed(1)}%\n`;
+    csv += `Total Notes,${data.totalNotes}\n`;
+    csv += `Correct Notes,${data.correctNotes}\n`;
+    csv += `Skipped Notes,${data.skippedNotes}\n`;
+    csv += `Timeout Notes,${data.timeoutNotes}\n`;
+    csv += `Stages Completed,${data.stagesCompleted}\n`;
+    csv += `Average Reaction Time,${data.averageReactionTime.toFixed(2)}s\n`;
+    csv += `Total Playtime,${Math.round(data.totalPlaytime)}s\n\n`;
+    
+    csv += 'Note Type,Accuracy,Total,Correct\n';
+    Object.entries(accuracyByType).forEach(([type, stats]) => {
+      csv += `${type},${stats.accuracy}%,${stats.total},${stats.correct}\n`;
+    });
+    
+    this.downloadFile(csv, 'rally_statistics.csv', 'text/csv');
+  },
+  
+  exportJSON() {
+    const data = {
+      statistics: Statistics.data,
+      accuracyByType: Statistics.getAccuracyByType(),
+      exportDate: new Date().toISOString(),
+      gameVersion: '2.0'
+    };
+    
+    this.downloadFile(JSON.stringify(data, null, 2), 'rally_statistics.json', 'application/json');
+  },
+  
+  exportStageResults(results) {
+    if (!results || results.length === 0) return;
+    
+    let csv = 'Index,Raw Note,Answer,Typed,Correct,Score,Timeout\n';
+    results.forEach((r, i) => {
+      csv += `${i},"${r.raw}","${r.ans}","${r.typed}",${r.ok},${(r.score * 100).toFixed(1)},${r.timeout}\n`;
+    });
+    
+    this.downloadFile(csv, 'rally_stage_results.csv', 'text/csv');
+  },
+  
+  downloadFile(content, filename, mimeType) {
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+};
+
+const Achievements = {
+  STORAGE_KEY: 'rpa_achievements',
+  
+  definitions: {
+    first_note: { id: 'first_note', name: 'First Steps', desc: 'Complete your first note', icon: '🎯' },
+    streak_5: { id: 'streak_5', name: 'Hot Streak', desc: 'Get 5 correct notes in a row', icon: '🔥' },
+    streak_10: { id: 'streak_10', name: 'On Fire', desc: 'Get 10 correct notes in a row', icon: '💥' },
+    streak_20: { id: 'streak_20', name: 'Unstoppable', desc: 'Get 20 correct notes in a row', icon: '⚡' },
+    perfect_stage: { id: 'perfect_stage', name: 'Perfectionist', desc: 'Complete a stage with 100% accuracy', icon: '💎' },
+    stage_10: { id: 'stage_10', name: 'Getting Started', desc: 'Complete 10 stages', icon: '🏁' },
+    stage_50: { id: 'stage_50', name: 'Veteran', desc: 'Complete 50 stages', icon: '🎖️' },
+    stage_100: { id: 'stage_100', name: 'Legend', desc: 'Complete 100 stages', icon: '🏆' },
+    speed_demon: { id: 'speed_demon', name: 'Speed Demon', desc: 'Average reaction time under 1 second', icon: '⏱️' },
+    notes_100: { id: 'notes_100', name: 'Century', desc: 'Complete 100 notes total', icon: '💯' },
+    notes_1000: { id: 'notes_1000', name: 'Thousand Club', desc: 'Complete 1000 notes total', icon: '🎊' },
+    no_skips: { id: 'no_skips', name: 'No Skipping', desc: 'Complete a stage without skipping any notes', icon: '🚫' },
+    night_owl: { id: 'night_owl', name: 'Night Owl', desc: 'Play between 10 PM and 6 AM', icon: '🦉' },
+    early_bird: { id: 'early_bird', name: 'Early Bird', desc: 'Play between 6 AM and 10 AM', icon: '🐦' },
+    explorer: { id: 'explorer', name: 'Explorer', desc: 'Try all 3 eras', icon: '🗺️' }
+  },
+  
+  unlocked: [],
+  
+  load() {
+    try {
+      const saved = localStorage.getItem(this.STORAGE_KEY);
+      if (saved) {
+        this.unlocked = JSON.parse(saved);
+      }
+    } catch(e) {}
+  },
+  
+  save() {
+    try {
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.unlocked));
+    } catch(e) {}
+  },
+  
+  unlock(achievementId) {
+    if (!this.unlocked.includes(achievementId)) {
+      this.unlocked.push(achievementId);
+      this.save();
+      this.showNotification(this.definitions[achievementId]);
+    }
+  },
+  
+  checkStreak(streak) {
+    if (streak >= 5) this.unlock('streak_5');
+    if (streak >= 10) this.unlock('streak_10');
+    if (streak >= 20) this.unlock('streak_20');
+  },
+  
+  checkStageCompletion(results, era) {
+    const total = results.length;
+    const correct = results.filter(r => r.ok).length;
+    const skipped = results.filter(r => r.skipped).length;
+    
+    if (total > 0 && correct === total) {
+      this.unlock('perfect_stage');
+    }
+    if (total > 0 && skipped === 0) {
+      this.unlock('no_skips');
+    }
+    
+    const stats = Statistics.data;
+    if (stats.stagesCompleted >= 10) this.unlock('stage_10');
+    if (stats.stagesCompleted >= 50) this.unlock('stage_50');
+    if (stats.stagesCompleted >= 100) this.unlock('stage_100');
+    if (stats.totalNotes >= 100) this.unlock('notes_100');
+    if (stats.totalNotes >= 1000) this.unlock('notes_1000');
+    if (stats.averageReactionTime > 0 && stats.averageReactionTime < 1) this.unlock('speed_demon');
+    
+    const hour = new Date().getHours();
+    if (hour >= 22 || hour < 6) this.unlock('night_owl');
+    if (hour >= 6 && hour < 10) this.unlock('early_bird');
+  },
+  
+  checkFirstNote() {
+    this.unlock('first_note');
+  },
+  
+  checkEras(playedEras) {
+    if (playedEras.size >= 3) this.unlock('explorer');
+  },
+  
+  showNotification(achievement) {
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+      position:fixed;top:20px;right:20px;z-index:10000;
+      background:var(--surf2);border:1px solid var(--gold);
+      padding:1rem 1.5rem;border-radius:8px;
+      display:flex;align-items:center;gap:1rem;
+      animation:slideIn 0.5s ease,slideOut 0.5s ease 4.5s forwards;
+      box-shadow:0 4px 20px rgba(0,0,0,0.5);
+    `;
+    notification.innerHTML = `
+      <span style="font-size:32px;">${achievement.icon}</span>
+      <div>
+        <div style="font-weight:600;color:var(--gold);font-size:14px;">Achievement Unlocked!</div>
+        <div style="color:var(--text);font-size:13px;">${achievement.name}</div>
+      </div>
+    `;
+    document.body.appendChild(notification);
+    
+    if (!document.getElementById('achievement-styles')) {
+      const style = document.createElement('style');
+      style.id = 'achievement-styles';
+      style.textContent = `
+        @keyframes slideIn {
+          from { transform: translateX(100%); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+          from { transform: translateX(0); opacity: 1; }
+          to { transform: translateX(100%); opacity: 0; }
+        }
+      `;
+      document.head.appendChild(style);
+    }
+    
+    setTimeout(() => notification.remove(), 5000);
+  },
+  
+  showCollection() {
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+      position:fixed;top:0;left:0;right:0;bottom:0;
+      background:rgba(0,0,0,0.95);z-index:10000;
+      display:flex;justify-content:center;align-items:center;
+      overflow:auto;padding:2rem;
+    `;
+    
+    const total = Object.keys(this.definitions).length;
+    const unlocked = this.unlocked.length;
+    const percentage = ((unlocked / total) * 100).toFixed(0);
+    
+    overlay.innerHTML = `
+      <div style="background:var(--surf);border:1px solid var(--brd);padding:2rem;max-width:700px;width:100%;max-height:90vh;overflow:auto;">
+        <h2 style="font-family:'Bebas Neue',sans-serif;color:var(--gold);margin-bottom:0.5rem;">Achievements</h2>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;">
+          <div style="font-size:14px;color:var(--text2);">${unlocked}/${total} Unlocked (${percentage}%)</div>
+          <div style="width:200px;height:8px;background:var(--brd);border-radius:4px;overflow:hidden;">
+            <div style="width:${percentage}%;height:100%;background:var(--gold);"></div>
+          </div>
+        </div>
+        
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;">
+          ${Object.values(this.definitions).map(ach => {
+            const isUnlocked = this.unlocked.includes(ach.id);
+            return `
+              <div style="background:${isUnlocked ? 'var(--surf2)' : 'rgba(255,255,255,0.05)'};border:1px solid ${isUnlocked ? 'var(--brd2)' : 'var(--brd)'};padding:1rem;border-radius:8px;opacity:${isUnlocked ? 1 : 0.5};">
+                <div style="font-size:32px;margin-bottom:0.5rem;filter:${isUnlocked ? 'none' : 'grayscale(100%)'};">${ach.icon}</div>
+                <div style="font-weight:600;color:${isUnlocked ? 'var(--text)' : 'var(--text3)'};font-size:13px;margin-bottom:0.25rem;">${ach.name}</div>
+                <div style="font-size:11px;color:var(--text2);">${ach.desc}</div>
+                ${isUnlocked ? '<div style="font-size:10px;color:var(--green);margin-top:0.5rem;">✓ Unlocked</div>' : '<div style="font-size:10px;color:var(--text3);margin-top:0.5rem;">🔒 Locked</div>'}
+              </div>
+            `;
+          }).join('')}
+        </div>
+        
+        <button onclick="this.parentElement.parentElement.remove()" style="width:100%;margin-top:2rem;padding:0.75rem;background:var(--gold);color:#000;border:none;cursor:pointer;font-weight:600;">Close</button>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) overlay.remove();
+    });
+  }
+};
 function checkForSavedLobby() {
   const saved = Multiplayer.loadSavedLobby();
   if (saved) {
