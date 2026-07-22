@@ -1690,6 +1690,93 @@ let G={era:null,driver:'Driver',codriver:'Co-driver',car:null,diff:0,timeLimit:1
   damage:{engine:100,susp:100,tyres:100,body:100},
   crashed:false,dnf:false,totalTimeLost:0,crashCount:0,
   atmosIdx:0,crowdIdx:0,splitIdx:0};
+
+const INPUT_MODE = {
+  type: 'type',
+  
+  toggle() {
+    this.type = this.type === 'type' ? 'speak' : 'type';
+    try { localStorage.setItem('rpa_input_mode', this.type); } catch(e){}
+  },
+  
+  load() {
+    try { this.type = localStorage.getItem('rpa_input_mode') || 'type'; } catch(e){}
+  }
+};
+
+function renderInputModeToggle() {
+  // This function is called when the accessibility settings are re-rendered
+  // The actual rendering is handled in renderAccessibilitySettings()
+}
+
+const VoiceInput = {
+  recognition: null,
+  isListening: false,
+  
+  init() {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      console.log('Speech recognition not supported in this browser');
+      return;
+    }
+    
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    this.recognition = new SpeechRecognition();
+    this.recognition.continuous = false;
+    this.recognition.interimResults = false;
+    this.recognition.lang = 'en-US';
+    
+    this.recognition.onresult = (event) => {
+      const spoken = event.results[0][0].transcript;
+      this.submit(spoken);
+    };
+    
+    this.recognition.onerror = (event) => {
+      console.log('Speech recognition error:', event.error);
+      this.stop();
+    };
+    
+    this.recognition.onend = () => {
+      this.isListening = false;
+    };
+  },
+  
+  start() {
+    if (this.recognition && !this.isListening) {
+      try {
+        this.isListening = true;
+        this.recognition.start();
+      } catch(e) {
+        console.log('Speech start error:', e);
+        this.isListening = false;
+      }
+    }
+  },
+  
+  stop() {
+    if (this.recognition && this.isListening) {
+      try {
+        this.isListening = false;
+        this.recognition.stop();
+      } catch(e) {
+        console.log('Speech stop error:', e);
+      }
+    }
+  },
+  
+  submit(text) {
+    const currentNote = G.notes[G.idx];
+    if (!currentNote || G.stageEnded) return;
+    
+    const typed = text.trim();
+    if (!typed) return;
+    
+    document.getElementById('g-input').value = typed;
+    
+    const ok = checkAnswer(typed, currentNote);
+    const finalScore = calculateScore(ok);
+    processAnswer(typed, currentNote, ok, finalScore, false);
+  }
+};
 function initDamage(){
   G.damage={engine:100,susp:100,tyres:100,body:100};
   G.totalTimeLost=0;G.crashCount=0;G.crashed=false;G.dnf=false;
@@ -2335,7 +2422,11 @@ function loadNote(){
   clearInterval(G.timer);
   G.timer=setInterval(()=>{G.remaining--;updateTimer();if(G.remaining<=0){clearInterval(G.timer);timeUp();}},1000);
   
-  setTimeout(()=>document.getElementById('g-input').focus(),50);
+  if (INPUT_MODE.type === 'speak') {
+    VoiceInput.start();
+  } else {
+    setTimeout(()=>document.getElementById('g-input').focus(),50);
+  }
   if(G.idx>0&&G.idx%3===0)setTimeout(injectAtmosphere,800);
   const input = document.getElementById('g-input');
   input.style.borderColor = 'var(--brd2)';
@@ -2568,6 +2659,7 @@ function similarity(a,b){
 }
 function submitAnswer(){
   clearInterval(G.timer);
+  VoiceInput.stop();
   if(G.idx>=G.notes.length||G.stageEnded)return;
   const typed=document.getElementById('g-input').value.trim();
   if(!typed)return;
@@ -2614,6 +2706,7 @@ function skipNote(){
 }
 function timeUp(){
   clearInterval(G.timer);
+  VoiceInput.stop();
   if(G.idx>=G.notes.length||G.stageEnded)return; // guard against out-of-bounds
   document.getElementById('g-input').disabled=true;document.getElementById('g-sub').disabled=true;
   const n=G.notes[G.idx];
@@ -8019,6 +8112,8 @@ document.addEventListener('DOMContentLoaded', () => {
   addMultiplayerButton();
   initAccountSystem();
   checkForSavedLobby();
+  VoiceInput.init();
+  INPUT_MODE.load();
 });
 function checkForSavedLobby() {
   const saved = Multiplayer.loadSavedLobby();
