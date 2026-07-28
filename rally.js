@@ -15,8 +15,20 @@ const ERAS={
     vocab:{L:'left',R:'right','!':'caution','!!':'max caution',FLAT:'flat out',CREST:'over crest',
       JUNCTION:'junction',DONTCUT:"don't cut",NARROW:'narrows',JUMP:'jump',LONG:'long',
       INTO:'into',TIGHT:'tightens',STOP:'full stop',HAIRPIN:'hairpin',ICE:'ice',BUMP:'bumps',SQUARE:'square corner'},
-    cars:[{n:'Audi Sport Quattro',d:'720hp · turbo · 4WD',img:'audi-sport_quattro.png'},{n:'Lancia 037',d:'320hp · RWD',img:'lancia_037.png'},{n:'Peugeot 205 T16',d:'480hp · 4WD',img:'pergeot_205_T16.png'},
-          {n:'Ford RS200',d:'450hp · 4WD',img:'ford_rs2000.png'},{n:'MG Metro 6R4',d:'380hp · V6',img:'MG_metro_6R4.png'},{n:'Renault 5 Maxi',d:'350hp · FWD',img:'renault_5_maxi.png'}],
+    cars:[
+      {n:'Audi Sport Quattro',d:'720hp · turbo · 4WD',img:'audi-sport_quattro.png',
+       stats:{acceleration:95,weight:70,handling:60,stability:50,turboLag:80,expert:60}},
+      {n:'Lancia 037',d:'320hp · RWD',img:'lancia_037.png',
+       stats:{acceleration:60,weight:90,handling:40,stability:30,turboLag:0,expert:95}},
+      {n:'Peugeot 205 T16',d:'480hp · 4WD',img:'pergeot_205_T16.png',
+       stats:{acceleration:85,weight:75,handling:70,stability:65,turboLag:60,expert:70}},
+      {n:'Ford RS200',d:'450hp · 4WD',img:'ford_rs2000.png',
+       stats:{acceleration:80,weight:80,handling:65,stability:60,turboLag:50,expert:75}},
+      {n:'MG Metro 6R4',d:'380hp · V6',img:'MG_metro_6R4.png',
+       stats:{acceleration:70,weight:85,handling:60,stability:70,turboLag:0,expert:65}},
+      {n:'Renault 5 Maxi',d:'350hp · FWD',img:'renault_5_maxi.png',
+       stats:{acceleration:65,weight:90,handling:50,stability:55,turboLag:0,expert:70}}
+    ],
     stages:[
       {name:'SS7 — Manta Road',country:'Portugal',surf:'Rough gravel',weather:'Overcast · 14°C',km:'22.4',
        cond:'Very rough. Rocks on inside of corners. Crowd three-deep on hairpins. One wrong line ends your stage.',
@@ -174,8 +186,20 @@ const ERAS={
     vocab:{L:'left',R:'right','!':'caution','!!':'max caution',FLAT:'flat out',CREST:'over crest',
       JUMP:'jump',LONG:'long',INTO:'into',TIGHTENS:'tightens',OPENS:'opens',DONTCUT:"don't cut",
       BRIDGE:'bridge',GRAVEL:'gravel patch',SQUARE:'square',MAYBE:'maybe',MUD:'mud'},
-    cars:[{n:'Subaru Impreza WRC97',d:'300hp · STi · 4WD',img:'subaru_impreza_WRC97.png'},{n:'Mitsubishi Lancer Evo IV',d:'280hp · Ralliart',img:'Mitsubishi_Lancer_Evo_IV.png'},{n:'Toyota Corolla WRC',d:'300hp · Castrol',img:'toyota_corolla_WRC.png'},
-          {n:'Ford Escort WRC',d:'300hp · M-Sport',img:'ford_escort_WRC.png'},{n:'Seat Cordoba WRC',d:'280hp · Kit car',img:'seat_coroba_WRC.png'},{n:'Skoda Octavia WRC',d:'270hp · Works',img:'skoda_octavia_wrc.png'}],
+    cars:[
+      {n:'Subaru Impreza WRC97',d:'300hp · STi · 4WD',img:'subaru_impreza_WRC97.png',
+       stats:{acceleration:75,weight:80,handling:80,stability:75,turboLag:40,expert:50}},
+      {n:'Mitsubishi Lancer Evo IV',d:'280hp · Ralliart',img:'Mitsubishi_Lancer_Evo_IV.png',
+       stats:{acceleration:72,weight:82,handling:78,stability:78,turboLag:45,expert:55}},
+      {n:'Toyota Corolla WRC',d:'300hp · Castrol',img:'toyota_corolla_WRC.png',
+       stats:{acceleration:74,weight:81,handling:76,stability:76,turboLag:42,expert:52}},
+      {n:'Ford Escort WRC',d:'300hp · M-Sport',img:'ford_escort_WRC.png',
+       stats:{acceleration:73,weight:83,handling:77,stability:74,turboLag:48,expert:58}},
+      {n:'Seat Cordoba WRC',d:'280hp · Kit car',img:'seat_coroba_WRC.png',
+       stats:{acceleration:68,weight:85,handling:72,stability:70,turboLag:50,expert:60}},
+      {n:'Skoda Octavia WRC',d:'270hp · Works',img:'skoda_octavia_wrc.png',
+       stats:{acceleration:65,weight:86,handling:70,stability:72,turboLag:52,expert:62}}
+    ],
     stages:[
       {name:'SS12 — Ouninpohja',country:'Finland',surf:'Fast gravel',weather:'Sunny · 22°C · dusty',km:'33.6',
        cond:'Fastest stage in the championship. Crests hide corners. Jumps reach 40m. Huge crowds everywhere. Notes must be perfect.',
@@ -284,8 +308,20 @@ const ERAS={
     vocab:{L:'left',R:'right','!':'caution','!!':'max caution',FLAT:'flat out',CREST:'over crest',
       LONG:'long',INTO:'into',TIGHTENS:'tightens',OPENS:'opens',DONTCUT:"don't cut",
       JUNCTION:'junction',ICE:'ice',REGEN:'regen zone',SQUARE:'square',HYBRID:'hybrid boost',BUMPS:'compressions'},
-    cars:[{n:'Toyota GR Yaris Rally1',d:'500hp · Hybrid',img:'toyota_GR_Yaris_Rally1.png'},{n:'Hyundai i20 N Rally1',d:'500hp · Hybrid',img:'hyundai_I20N_Rally_1.png'},{n:'Ford Puma Rally1',d:'500hp · Hybrid',img:'ford_puma_rally_1.png'},
-          {n:'Citroën C3 Rally2',d:'280hp · WRC2',img:'citroen_c3_rally2.png'},{n:'Skoda Fabia RS Rally2',d:'280hp · WRC2',img:'skoda_fabia_R5_rally_2.png'},{n:'VW Polo GTI R5',d:'270hp · R5',img:'ww_polo_gti_r5.png'}],
+    cars:[
+      {n:'Toyota GR Yaris Rally1',d:'500hp · Hybrid',img:'toyota_GR_Yaris_Rally1.png',
+       stats:{acceleration:90,weight:75,handling:85,stability:80,turboLag:20,expert:55}},
+      {n:'Hyundai i20 N Rally1',d:'500hp · Hybrid',img:'hyundai_I20N_Rally_1.png',
+       stats:{acceleration:88,weight:76,handling:84,stability:78,turboLag:22,expert:58}},
+      {n:'Ford Puma Rally1',d:'500hp · Hybrid',img:'ford_puma_rally_1.png',
+       stats:{acceleration:87,weight:77,handling:83,stability:79,turboLag:24,expert:60}},
+      {n:'Citroën C3 Rally2',d:'280hp · WRC2',img:'citroen_c3_rally2.png',
+       stats:{acceleration:70,weight:82,handling:75,stability:72,turboLag:30,expert:45}},
+      {n:'Skoda Fabia RS Rally2',d:'280hp · WRC2',img:'skoda_fabia_R5_rally_2.png',
+       stats:{acceleration:72,weight:80,handling:78,stability:74,turboLag:28,expert:42}},
+      {n:'VW Polo GTI R5',d:'270hp · R5',img:'ww_polo_gti_r5.png',
+       stats:{acceleration:68,weight:84,handling:76,stability:73,turboLag:32,expert:48}}
+    ],
     stages:[
       {name:'SS14 — Col de Turini',country:'Monte-Carlo',surf:'Tarmac / ice',weather:'Night · 1°C · ice',km:'18.7',
        cond:'Night stage. Spectator floodlights on corners. Temperature dropped since last car. Ice patches not on the map.',
@@ -1312,6 +1348,7 @@ function buildParamRow(p){
 
 function onTuneChange(id, val){
   TUNE[id] = val;
+  Achievements.checkTuningChanges();
   const el = document.getElementById('tv-'+id);
   if(el){
     const display = typeof val === 'number' && !Number.isInteger(val) ? val.toFixed(2) : val;
@@ -1416,6 +1453,50 @@ function applyTuning(){
     damageMod: 1.0 - (s.reli - 50) * 0.01,
     timeMod: 1.0 - (s.power - 50) * 0.003 - (s.grip - 50) * 0.002,
   };
+  
+  // Add tuning consequences
+  G.tuningConsequences = [];
+  
+  // Check ARB stiffness
+  if (TUNE.arb_f > 120) {
+    G.tuningConsequences.push({type: 'warning', msg: 'Front ARB too stiff — wheel lift on bumps'});
+  }
+  if (TUNE.arb_r > 110) {
+    G.tuningConsequences.push({type: 'warning', msg: 'Rear ARB too stiff — rear instability'});
+  }
+  
+  // Check damping
+  if (TUNE.lsd_reb_f > 1100 || TUNE.lsd_reb_r > 1100) {
+    G.tuningConsequences.push({type: 'danger', msg: 'Excessive rebound — unstable crest landings'});
+  }
+  if (TUNE.lsd_bump_f < 300 || TUNE.lsd_bump_r < 300) {
+    G.tuningConsequences.push({type: 'warning', msg: 'Bump too soft — bottoming on compressions'});
+  }
+  
+  // Check turbo settings
+  if (TUNE.boost_bar > 2.5) {
+    G.tuningConsequences.push({type: 'danger', msg: 'Aggressive boost — increased failure risk'});
+  }
+  if (TUNE.wastegate_psi > 25) {
+    G.tuningConsequences.push({type: 'danger', msg: 'High wastegate pressure — engine stress'});
+  }
+  
+  // Check brake bias
+  if (TUNE.brake_bias > 75) {
+    G.tuningConsequences.push({type: 'warning', msg: 'Rear brake bias — rear oversteer risk'});
+  }
+  if (TUNE.brake_bias < 50) {
+    G.tuningConsequences.push({type: 'warning', msg: 'Front brake bias — front lockup risk'});
+  }
+  
+  // Check tire pressures
+  if (TUNE.pres_fl > 35 || TUNE.pres_fr > 35 || TUNE.pres_rl > 35 || TUNE.pres_rr > 35) {
+    G.tuningConsequences.push({type: 'warning', msg: 'High tire pressure — reduced grip'});
+  }
+  if (TUNE.pres_fl < 25 || TUNE.pres_fr < 25 || TUNE.pres_rl < 25 || TUNE.pres_rr < 25) {
+    G.tuningConsequences.push({type: 'warning', msg: 'Low tire pressure — tire damage risk'});
+  }
+  
   if(window._careerStageData){
     const stageData = window._careerStageData;
     window._careerStageData = null;
@@ -1704,9 +1785,157 @@ const INPUT_MODE = {
   }
 };
 
+const Achievements = {
+  achievements: [
+    {id: 'first_pace_note', name: '🏁 First Pace Note', desc: 'Complete your first stage', unlocked: false},
+    {id: 'voice_only', name: '🎤 No Looking Down', desc: 'Finish a stage in voice-only mode', unlocked: false},
+    {id: 'group_b_survivor', name: '💀 Group B Survivor', desc: 'Finish a Group B stage without crashing', unlocked: false},
+    {id: 'engineer_brain', name: '🔧 Engineer Brain', desc: 'Change 25 tuning parameters', unlocked: false},
+    {id: 'walter_apprentice', name: '👑 Walter\'s Apprentice', desc: 'Get perfect pacenote accuracy', unlocked: false},
+    {id: 'clean_sweep', name: '✨ Clean Sweep', desc: 'Complete a stage with 100% accuracy', unlocked: false},
+    {id: 'speed_demon', name: '⚡ Speed Demon', desc: 'Complete a stage on Insane difficulty', unlocked: false},
+    {id: 'era_master', name: '🏆 Era Master', desc: 'Complete stages in all three eras', unlocked: false}
+  ],
+  tuningChanges: 0,
+  erasCompleted: new Set(),
+  
+  load() {
+    try {
+      const saved = localStorage.getItem('rpa_achievements');
+      if (saved) {
+        const data = JSON.parse(saved);
+        this.achievements.forEach(a => {
+          const savedAchievement = data.find(s => s.id === a.id);
+          if (savedAchievement) a.unlocked = savedAchievement.unlocked;
+        });
+        this.tuningChanges = data.tuningChanges || 0;
+        this.erasCompleted = new Set(data.erasCompleted || []);
+      }
+    } catch(e) {}
+  },
+  
+  save() {
+    try {
+      const data = {
+        achievements: this.achievements.map(a => ({id: a.id, unlocked: a.unlocked})),
+        tuningChanges: this.tuningChanges,
+        erasCompleted: Array.from(this.erasCompleted)
+      };
+      localStorage.setItem('rpa_achievements', JSON.stringify(data));
+    } catch(e) {}
+  },
+  
+  unlock(id) {
+    const achievement = this.achievements.find(a => a.id === id);
+    if (achievement && !achievement.unlocked) {
+      achievement.unlocked = true;
+      this.save();
+      this.showNotification(achievement);
+    }
+  },
+  
+  showNotification(achievement) {
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, #1a1400, #0a0a0c);
+      border: 2px solid #f5c518;
+      padding: 15px 20px;
+      border-radius: 8px;
+      z-index: 10000;
+      animation: slideIn 0.5s ease;
+      font-family: 'IBM Plex Sans', sans-serif;
+    `;
+    notification.innerHTML = `
+      <div style="font-size: 24px; margin-bottom: 5px;">🏆 Achievement Unlocked!</div>
+      <div style="font-weight: 600; color: #f5c518; font-size: 16px;">${achievement.name}</div>
+      <div style="font-size: 12px; color: #9090a8; margin-top: 5px;">${achievement.desc}</div>
+    `;
+    document.body.appendChild(notification);
+    setTimeout(() => {
+      notification.style.animation = 'slideOut 0.5s ease';
+      setTimeout(() => notification.remove(), 500);
+    }, 3000);
+  },
+  
+  checkFirstStage() {
+    this.unlock('first_pace_note');
+  },
+  
+  checkVoiceOnly() {
+    if (INPUT_MODE.type === 'speak' && !MODE.isPro) {
+      this.unlock('voice_only');
+    }
+  },
+  
+  checkGroupBSurvivor() {
+    if (G.era === 'grpb' && G.crashCount === 0 && !G.dnf) {
+      this.unlock('group_b_survivor');
+    }
+  },
+  
+  checkTuningChanges() {
+    this.tuningChanges++;
+    if (this.tuningChanges >= 25) {
+      this.unlock('engineer_brain');
+    }
+    this.save();
+  },
+  
+  checkPerfectAccuracy() {
+    const accuracy = G.correct / G.notes.length;
+    if (accuracy >= 1.0) {
+      this.unlock('walter_apprentice');
+      this.unlock('clean_sweep');
+    }
+  },
+  
+  checkSpeedDemon() {
+    if (G.diff >= 3) {
+      this.unlock('speed_demon');
+    }
+  },
+  
+  checkEraMaster() {
+    this.erasCompleted.add(G.era);
+    if (this.erasCompleted.size >= 3) {
+      this.unlock('era_master');
+    }
+    this.save();
+  }
+};
+
 function renderInputModeToggle() {
   // This function is called when the accessibility settings are re-rendered
   // The actual rendering is handled in renderAccessibilitySettings()
+}
+
+function updateInputModeUI() {
+  const toggleBtn = document.getElementById('input-mode-toggle');
+  const inputEl = document.getElementById('g-input');
+  const micIndicator = document.getElementById('mic-indicator');
+  
+  if (!toggleBtn) return;
+  
+  // Allow toggling between voice and typing in both modes
+  if (INPUT_MODE.type === 'speak') {
+    toggleBtn.textContent = '🎤 Voice';
+    toggleBtn.style.background = '#39ff14';
+    toggleBtn.style.color = '#0a0a0c';
+    inputEl.style.display = 'none';
+    if (micIndicator) micIndicator.style.display = 'flex';
+    VoiceInput.start();
+  } else {
+    toggleBtn.textContent = '⌨️ Type';
+    toggleBtn.style.background = '';
+    toggleBtn.style.color = '';
+    inputEl.style.display = 'block';
+    if (micIndicator) micIndicator.style.display = 'none';
+    VoiceInput.stop();
+    setTimeout(() => inputEl.focus(), 50);
+  }
 }
 
 const VoiceInput = {
@@ -1737,6 +1966,10 @@ const VoiceInput = {
     
     this.recognition.onend = () => {
       this.isListening = false;
+      // Auto-restart voice recognition in Game Mode for continuous listening
+      if (!MODE.isPro && !G.stageEnded) {
+        setTimeout(() => this.start(), 100);
+      }
     };
   },
   
@@ -1807,9 +2040,11 @@ function updateDamageHUD(){
 }
 function applyDamage(dmgSpec){
   const dmgModifier = (G.tuneEffects && G.tuneEffects.damageMod) ? G.tuneEffects.damageMod : 1.0;
+  const carStats = G.car?.stats || {};
+  const reliabilityBonus = carStats.stability ? (carStats.stability / 100) : 1.0;
   const hits={};
   Object.entries(dmgSpec).forEach(([part,[min,max]])=>{
-    const amount=(min+Math.random()*(max-min))*dmgModifier;
+    const amount=(min+Math.random()*(max-min))*dmgModifier*reliabilityBonus;
     G.damage[part]=Math.max(0,G.damage[part]-amount);
     hits[part]=Math.round(amount);
   });
@@ -1834,6 +2069,10 @@ function updateCarSVG(hits){
 }
 function rollCrash(noteRaw, isTimeout, isBadNote){
   const crashModifier = (G.tuneEffects && G.tuneEffects.crashMod) ? G.tuneEffects.crashMod : 1.0;
+  const carStats = G.car?.stats || {};
+  const handlingBonus = carStats.handling ? (carStats.handling / 100) : 1.0;
+  const stabilityBonus = carStats.stability ? (carStats.stability / 100) : 1.0;
+  
   if (RALLY_STATE.consecutiveWrong < 2) {
     return false; // Not enough consecutive wrongs - no crash
   }
@@ -1856,7 +2095,7 @@ function rollCrash(noteRaw, isTimeout, isBadNote){
   if(avgDmg<60)prob+=0.08;
   if(avgDmg<30)prob+=0.15;
   if(G.diff>=3)prob*=1.3;
-  prob=Math.min(prob*crashModifier,0.85);
+  prob=Math.min(prob*crashModifier*handlingBonus*stabilityBonus,0.85);
   return Math.random()<prob;
 }
 function triggerCrash(noteRaw){
@@ -2419,6 +2658,19 @@ function loadNote(){
   updateUrgencyState();
   G.remaining = calculateDynamicTimeLimit();
   updateTimer();
+  updateInputModeUI();
+  
+  // Display tuning warnings if any
+  if (G.tuningConsequences && G.tuningConsequences.length > 0) {
+    const warningEl = document.getElementById('tuning-warnings');
+    if (warningEl) {
+      warningEl.style.display = 'block';
+      warningEl.innerHTML = G.tuningConsequences.map(c => 
+        `<div style="color:${c.type === 'danger' ? '#e8291c' : '#f5c518'}">⚠️ ${c.msg}</div>`
+      ).join('');
+    }
+  }
+  
   clearInterval(G.timer);
   G.timer=setInterval(()=>{G.remaining--;updateTimer();if(G.remaining<=0){clearInterval(G.timer);timeUp();}},1000);
   
@@ -2557,11 +2809,11 @@ function updateUrgencyState() {
   }
 }
 function updateTimer(){
+  document.getElementById('g-timer').textContent=G.remaining;
   const frac=G.remaining/G.timeLimit;
   document.getElementById('t-arc').setAttribute('stroke-dashoffset',226.2*(1-frac));
   const customColor = (typeof Accessibility !== 'undefined') ? Accessibility.prefs.timerColor : '#39ff14';
   document.getElementById('t-arc').setAttribute('stroke',G.remaining<=3?'#e8291c':G.remaining<=5?'#f5c518':customColor);
-  document.getElementById('g-timer').textContent=G.remaining;
 }
 function applyStyleToNote(rawNote, style) {
   if (!rawNote) return rawNote;
@@ -2802,6 +3054,15 @@ function endStage(){
   const timeStr=G.dnf?'DNF':`${m}:${s}`;
   const stageName=G.currentStageName;
   const won=acc>=50;
+  
+  // Check achievements
+  Achievements.checkFirstStage();
+  Achievements.checkVoiceOnly();
+  Achievements.checkGroupBSurvivor();
+  Achievements.checkPerfectAccuracy();
+  Achievements.checkSpeedDemon();
+  Achievements.checkEraMaster();
+  
   if(G.careerMode){
     const cal=CAREER_CAL[G.careerIdx];
     const pts=posN<cal.pts.length?cal.pts[posN]:0;
@@ -8458,176 +8719,6 @@ const ExportResults = {
     URL.revokeObjectURL(url);
   }
 };
-
-const Achievements = {
-  STORAGE_KEY: 'rpa_achievements',
-  
-  definitions: {
-    first_note: { id: 'first_note', name: 'First Steps', desc: 'Complete your first note', icon: '🎯' },
-    streak_5: { id: 'streak_5', name: 'Hot Streak', desc: 'Get 5 correct notes in a row', icon: '🔥' },
-    streak_10: { id: 'streak_10', name: 'On Fire', desc: 'Get 10 correct notes in a row', icon: '💥' },
-    streak_20: { id: 'streak_20', name: 'Unstoppable', desc: 'Get 20 correct notes in a row', icon: '⚡' },
-    perfect_stage: { id: 'perfect_stage', name: 'Perfectionist', desc: 'Complete a stage with 100% accuracy', icon: '💎' },
-    stage_10: { id: 'stage_10', name: 'Getting Started', desc: 'Complete 10 stages', icon: '🏁' },
-    stage_50: { id: 'stage_50', name: 'Veteran', desc: 'Complete 50 stages', icon: '🎖️' },
-    stage_100: { id: 'stage_100', name: 'Legend', desc: 'Complete 100 stages', icon: '🏆' },
-    speed_demon: { id: 'speed_demon', name: 'Speed Demon', desc: 'Average reaction time under 1 second', icon: '⏱️' },
-    notes_100: { id: 'notes_100', name: 'Century', desc: 'Complete 100 notes total', icon: '💯' },
-    notes_1000: { id: 'notes_1000', name: 'Thousand Club', desc: 'Complete 1000 notes total', icon: '🎊' },
-    no_skips: { id: 'no_skips', name: 'No Skipping', desc: 'Complete a stage without skipping any notes', icon: '🚫' },
-    night_owl: { id: 'night_owl', name: 'Night Owl', desc: 'Play between 10 PM and 6 AM', icon: '🦉' },
-    early_bird: { id: 'early_bird', name: 'Early Bird', desc: 'Play between 6 AM and 10 AM', icon: '🐦' },
-    explorer: { id: 'explorer', name: 'Explorer', desc: 'Try all 3 eras', icon: '🗺️' }
-  },
-  
-  unlocked: [],
-  
-  load() {
-    try {
-      const saved = localStorage.getItem(this.STORAGE_KEY);
-      if (saved) {
-        this.unlocked = JSON.parse(saved);
-      }
-    } catch(e) {}
-  },
-  
-  save() {
-    try {
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.unlocked));
-    } catch(e) {}
-  },
-  
-  unlock(achievementId) {
-    if (!this.unlocked.includes(achievementId)) {
-      this.unlocked.push(achievementId);
-      this.save();
-      this.showNotification(this.definitions[achievementId]);
-    }
-  },
-  
-  checkStreak(streak) {
-    if (streak >= 5) this.unlock('streak_5');
-    if (streak >= 10) this.unlock('streak_10');
-    if (streak >= 20) this.unlock('streak_20');
-  },
-  
-  checkStageCompletion(results, era) {
-    const total = results.length;
-    const correct = results.filter(r => r.ok).length;
-    const skipped = results.filter(r => r.skipped).length;
-    
-    if (total > 0 && correct === total) {
-      this.unlock('perfect_stage');
-    }
-    if (total > 0 && skipped === 0) {
-      this.unlock('no_skips');
-    }
-    
-    const stats = Statistics.data;
-    if (stats.stagesCompleted >= 10) this.unlock('stage_10');
-    if (stats.stagesCompleted >= 50) this.unlock('stage_50');
-    if (stats.stagesCompleted >= 100) this.unlock('stage_100');
-    if (stats.totalNotes >= 100) this.unlock('notes_100');
-    if (stats.totalNotes >= 1000) this.unlock('notes_1000');
-    if (stats.averageReactionTime > 0 && stats.averageReactionTime < 1) this.unlock('speed_demon');
-    
-    const hour = new Date().getHours();
-    if (hour >= 22 || hour < 6) this.unlock('night_owl');
-    if (hour >= 6 && hour < 10) this.unlock('early_bird');
-  },
-  
-  checkFirstNote() {
-    this.unlock('first_note');
-  },
-  
-  checkEras(playedEras) {
-    if (playedEras.size >= 3) this.unlock('explorer');
-  },
-  
-  showNotification(achievement) {
-    const notification = document.createElement('div');
-    notification.style.cssText = `
-      position:fixed;top:20px;right:20px;z-index:10000;
-      background:var(--surf2);border:1px solid var(--gold);
-      padding:1rem 1.5rem;border-radius:8px;
-      display:flex;align-items:center;gap:1rem;
-      animation:slideIn 0.5s ease,slideOut 0.5s ease 4.5s forwards;
-      box-shadow:0 4px 20px rgba(0,0,0,0.5);
-    `;
-    notification.innerHTML = `
-      <span style="font-size:32px;">${achievement.icon}</span>
-      <div>
-        <div style="font-weight:600;color:var(--gold);font-size:14px;">Achievement Unlocked!</div>
-        <div style="color:var(--text);font-size:13px;">${achievement.name}</div>
-      </div>
-    `;
-    document.body.appendChild(notification);
-    
-    if (!document.getElementById('achievement-styles')) {
-      const style = document.createElement('style');
-      style.id = 'achievement-styles';
-      style.textContent = `
-        @keyframes slideIn {
-          from { transform: translateX(100%); opacity: 0; }
-          to { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes slideOut {
-          from { transform: translateX(0); opacity: 1; }
-          to { transform: translateX(100%); opacity: 0; }
-        }
-      `;
-      document.head.appendChild(style);
-    }
-    
-    setTimeout(() => notification.remove(), 5000);
-  },
-  
-  showCollection() {
-    const overlay = document.createElement('div');
-    overlay.style.cssText = `
-      position:fixed;top:0;left:0;right:0;bottom:0;
-      background:rgba(0,0,0,0.95);z-index:10000;
-      display:flex;justify-content:center;align-items:center;
-      overflow:auto;padding:2rem;
-    `;
-    
-    const total = Object.keys(this.definitions).length;
-    const unlocked = this.unlocked.length;
-    const percentage = ((unlocked / total) * 100).toFixed(0);
-    
-    overlay.innerHTML = `
-      <div style="background:var(--surf);border:1px solid var(--brd);padding:2rem;max-width:700px;width:100%;max-height:90vh;overflow:auto;">
-        <h2 style="font-family:'Bebas Neue',sans-serif;color:var(--gold);margin-bottom:0.5rem;">Achievements</h2>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;">
-          <div style="font-size:14px;color:var(--text2);">${unlocked}/${total} Unlocked (${percentage}%)</div>
-          <div style="width:200px;height:8px;background:var(--brd);border-radius:4px;overflow:hidden;">
-            <div style="width:${percentage}%;height:100%;background:var(--gold);"></div>
-          </div>
-        </div>
-        
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;">
-          ${Object.values(this.definitions).map(ach => {
-            const isUnlocked = this.unlocked.includes(ach.id);
-            return `
-              <div style="background:${isUnlocked ? 'var(--surf2)' : 'rgba(255,255,255,0.05)'};border:1px solid ${isUnlocked ? 'var(--brd2)' : 'var(--brd)'};padding:1rem;border-radius:8px;opacity:${isUnlocked ? 1 : 0.5};">
-                <div style="font-size:32px;margin-bottom:0.5rem;filter:${isUnlocked ? 'none' : 'grayscale(100%)'};">${ach.icon}</div>
-                <div style="font-weight:600;color:${isUnlocked ? 'var(--text)' : 'var(--text3)'};font-size:13px;margin-bottom:0.25rem;">${ach.name}</div>
-                <div style="font-size:11px;color:var(--text2);">${ach.desc}</div>
-                ${isUnlocked ? '<div style="font-size:10px;color:var(--green);margin-top:0.5rem;">✓ Unlocked</div>' : '<div style="font-size:10px;color:var(--text3);margin-top:0.5rem;">🔒 Locked</div>'}
-              </div>
-            `;
-          }).join('')}
-        </div>
-        
-        <button onclick="this.parentElement.parentElement.remove()" style="width:100%;margin-top:2rem;padding:0.75rem;background:var(--gold);color:#000;border:none;cursor:pointer;font-weight:600;">Close</button>
-      </div>
-    `;
-    document.body.appendChild(overlay);
-    overlay.addEventListener('click', (e) => {
-      if (e.target === overlay) overlay.remove();
-    });
-  }
-};
 function checkForSavedLobby() {
   const saved = Multiplayer.loadSavedLobby();
   if (saved) {
@@ -9030,4 +9121,5 @@ const LanParty = {
 };
 document.addEventListener('DOMContentLoaded', function() {
   RecordingMode.loadSetting();
+  Achievements.load();
 });
