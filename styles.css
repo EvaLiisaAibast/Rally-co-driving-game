@@ -1,3 +1,10 @@
+@font-face {
+    font-family: 'Xenogears';
+    src: url('xenogears.regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 :root{
   --bg:#0a0a0c;--surf:#111116;--surf2:#17171e;--surf3:#1e1e28;
   --brd:#252530;--brd2:#35354a;
@@ -23,6 +30,21 @@ img{display:block;max-width:100%}
 ::-webkit-scrollbar-track{background:var(--surf)}
 ::-webkit-scrollbar-thumb{background:var(--brd2)}
 
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.1); }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(400px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOut {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(400px); opacity: 0; }
+}
+
 #menu{background:var(--bg);align-items:stretch;display:flex;flex-direction:column;height:100vh;overflow-y:auto}
 .menu-wrap{display:grid;grid-template-columns:1fr 400px;flex:1;min-height:0}
 .menu-left{
@@ -44,7 +66,7 @@ img{display:block;max-width:100%}
 .menu-stripe{position:absolute;top:0;bottom:0;right:0;width:5px;background:linear-gradient(180deg,var(--mp-yellow),var(--mp-red),var(--mp-orange))}
 .menu-content{position:relative;z-index:2}
 .menu-title{
-  font-family:'Bebas Neue','Anton',sans-serif;
+  font-family:'Xenogears','Bebas Neue','Anton',sans-serif;
   font-size:clamp(56px,8vw,108px);
   line-height:.85;letter-spacing:4px;
   color:var(--mp-yellow);
