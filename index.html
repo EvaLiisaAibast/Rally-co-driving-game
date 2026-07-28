@@ -16,6 +16,10 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Anton&family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&display=swap"/>
 <link rel="stylesheet" href="styles.css"/>
 
+<audio id="bg-music" autoplay loop>
+  <source src="Blind Crest.mp3" type="audio/mpeg">
+</audio>
+
 <style>
 /* Glow Effects */
 .username-glow {
@@ -227,7 +231,7 @@
     <div class="menu-overlay"></div>
     <div class="menu-stripe"></div>
     <div class="menu-content">
-      <div class="menu-title">RALLY<br>PACE<br>NOTES</div>
+      <div class="menu-title">BLIND<br>CREST</div>
       <div class="menu-sub">Co-Driver Academy &amp; Career Mode</div>
       <div class="menu-quote">"The notes are the truth. Trust them completely."</div>
     </div>
@@ -238,7 +242,7 @@
   <button id="mode-toggle-btn" title="Toggle Game/Training mode">🎮 Game Mode</button>
 </div>
 <div style="padding:.6rem 1.5rem;background:#0a0a0c;border-bottom:1px solid #252530;font-size:12px;color:#5a5a70;font-family:'IBM Plex Mono',monospace;line-height:1.5;display:flex;justify-content:space-between;align-items:center;">
-  <div>Read the pacenotes. Keep the driver alive.<br>
+  <div>Read the notes. Keep the driver alive.<br>
   <span style="color:#f5c518">Training Mode</span> = lessons & telemetry. <span style="color:#39ff14">Game Mode</span> = full rally simulation.</div>
   <div style="display:flex;gap:8px;">
     <button id="recording-toggle-btn" class="gbtn" onclick="RecordingMode.toggle()" style="font-size:11px;padding:4px 10px;">⚪ Recording OFF</button>
@@ -253,7 +257,7 @@
       <button class="mnbtn" onclick="openTuningStandalone()">Tuning Garage <span>→</span></button>
       <button class="mnbtn" id="menu-analytics-btn" onclick="openAnalytics()" style="display:none">Analytics Dashboard <span>→</span></button>
       <button class="mnbtn" id="menu-programs-btn" onclick="openPrograms()" style="display:none">Training Programs <span>→</span></button>
-      <button class="mnbtn" onclick="openEditor()">Pacenote Editor <span>→</span></button>
+      <button class="mnbtn" onclick="openEditor()">Note Editor <span>→</span></button>
       <button class="mnbtn" onclick="openAccessibility()">Settings <span>→</span></button>
     </div>
     <div class="menu-bar">BLIND CREST — Stage Report Edition</div>
@@ -341,7 +345,7 @@
   </div>
   <button class="bk" style="border-color:#555;color:#888;margin-left:auto" onclick="showMenu()">← Menu</button>
 </div>
-<div class="school-title"><h1>Pacenote Academy</h1><span>Learn to read the road before the stage goes live</span></div>
+<div class="school-title"><h1>BLIND CREST Academy</h1><span>Learn to read the road before the stage goes live</span></div>
 <div class="school-body">
   <div class="school-sidebar">
     <div id="lesson-list"></div>
@@ -391,9 +395,16 @@
       </div>
     </div>
     <div class="narr-strip" id="g-narr"><div class="narr-txt" id="g-narr-txt"></div></div>
+    <div id="tuning-warnings" style="display:none;background:#1a1400;border:1px solid #f5c518;padding:0.5rem;margin-bottom:0.5rem;font-size:11px;font-family:'IBM Plex Mono',monospace;"></div>
     <div class="inp-block">
-      <div class="inp-lbl">Translate the pacenote — type what it means <span style="color:var(--text3);font-size:10px">(Enter to submit)</span></div>
-      <input class="big-in" id="g-input" type="text" placeholder="e.g. left medium — 150 metres — right tight" autocomplete="off"/>
+      <div class="inp-lbl">Translate the note — type what it means <span style="color:var(--text3);font-size:10px">(Enter to submit)</span></div>
+      <div style="display:flex;gap:8px;margin-bottom:8px;">
+        <input class="big-in" id="g-input" type="text" placeholder="e.g. left medium — 150 metres — right tight" autocomplete="off" style="flex:1"/>
+        <button class="gbtn" id="input-mode-toggle" onclick="INPUT_MODE.toggle();updateInputModeUI()" style="padding:0 12px;min-width:80px;">⌨️ Type</button>
+        <div id="mic-indicator" style="display:none;align-items:center;justify-content:center;width:32px;height:32px;background:#39ff14;border-radius:50%;animation:pulse 1s infinite;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#0a0a0c" stroke-width="2" style="width:16px;height:16px;"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </div>
+      </div>
       <div class="btn-row">
         <button class="gbtn" onclick="skipNote()">Skip</button>
         <button class="gbtn pri" id="g-sub" onclick="submitAnswer()">Submit (Enter)</button>
@@ -579,7 +590,7 @@
     <div id="tut-progress-bar" style="height:3px;background:#252530"><div id="tut-prog-fill" style="height:100%;background:#f5c518;transition:width .4s;width:0%"></div></div>
     <div style="padding:1.5rem">
       <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;color:#5a5a70;text-transform:uppercase;margin-bottom:.5rem" id="tut-step-label">Tutorial · Step 1 of 6</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;color:#f5c518;margin-bottom:.75rem" id="tut-title">Read the pacenotes. Keep the driver alive.</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;color:#f5c518;margin-bottom:.75rem" id="tut-title">Read the notes. Keep the driver alive.</div>
       <div style="font-size:14px;line-height:1.7;color:#9090a8;margin-bottom:1.25rem" id="tut-body"></div>
       <div id="tut-note-display" style="display:none;background:#17171e;border:1px solid #252530;padding:.85rem 1.1rem;font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600;color:#f5c518;letter-spacing:.06em;margin-bottom:1rem"></div>
       <div id="tut-input-wrap" style="display:none;margin-bottom:1rem">
@@ -608,9 +619,10 @@
 
 <div id="split-ticker" style="display:none;position:fixed;top:1.5rem;left:50%;transform:translateX(-50%);z-index:7000;pointer-events:none;padding:.4rem 1rem;background:#000;border:1px solid #f5c518;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#f5c518"></div>
 <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
-<script src="rally.js"></script>
-<script src="story_data.js"></script>
-<script src="story_system.js"></script>
+<script src="rally_systems.js?v=6"></script>
+<script src="rally.js?v=6"></script>
+<script src="story_data.js?v=6"></script>
+<script src="story_system.js?v=6"></script>
 
 <div class="screen" id="tuning">
 <div class="tun-header">
@@ -669,7 +681,7 @@
 <div class="screen" id="editor">
   <div class="page-hdr">
     <button class="bk" onclick="showMenu()">← Menu</button>
-    <div class="page-hdr-title">Pacenote Editor</div>
+    <div class="page-hdr-title">Note Editor</div>
     <div style="margin-left:auto;display:flex;gap:8px">
       <button class="gbtn sec2" onclick="previewCustomStage()">Preview Stage</button>
       <button class="gbtn sec2" onclick="ExportSystem.exportStage()">Export</button>
@@ -714,7 +726,7 @@
           <option value="expert">Expert</option>
         </select>
         <input id="ai-note-count" type="number" value="20" min="5" max="100" style="background:var(--surf2);border:1px solid var(--brd2);color:var(--text);padding:6px;font-size:12px;" placeholder="Note count"/>
-        <button class="gbtn pri" onclick="generatePacenotes()" style="font-size:12px;">Generate Stage</button>
+        <button class="gbtn pri" onclick="generateNotes()" style="font-size:12px;">Generate Stage</button>
       </div>
       <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:var(--text2);margin:.75rem 0 .4rem;padding-bottom:.4rem;border-bottom:1px solid var(--brd)">Notation Format</div>
       <div id="editor-format-btns" style="display:flex;flex-direction:column;gap:6px;margin-bottom:1rem"></div>
@@ -793,7 +805,6 @@
 </div>
 </div>
 
-<script src="rally_systems.js"></script>
 </body>
 </html>
 
