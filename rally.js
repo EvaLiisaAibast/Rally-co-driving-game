@@ -2374,7 +2374,7 @@ let lessonsCompleted=new Set();
 let currentLesson='intro';
 let quizBank=[],quizIdx=0,quizCurrent=null,quizStartTime=null,quizTelemetry=[];
 function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
-function showMenu(){if(G.timer)clearInterval(G.timer);show('menu');}
+function showMenu(){if(G.timer)clearInterval(G.timer);show('menu');const bgMusic=document.getElementById('bg-music');if(bgMusic){bgMusic.play().catch(()=>{});}}
 function openSetup(){
   G.careerMode=false;
   buildSetup();show('setup');
@@ -8379,6 +8379,18 @@ document.addEventListener('DOMContentLoaded', () => {
   initKeyboardShortcuts();
   Statistics.load();
   Achievements.load();
+  
+  // Play music on first user interaction (browsers block autoplay)
+  const bgMusic=document.getElementById('bg-music');
+  let musicStarted=false;
+  const startMusic=()=>{
+    if(!musicStarted&&bgMusic){
+      bgMusic.play().catch(()=>{});
+      musicStarted=true;
+    }
+  };
+  document.addEventListener('click',startMusic,{once:true});
+  document.addEventListener('keydown',startMusic,{once:true});
 });
 
 const KeyboardShortcuts = {
