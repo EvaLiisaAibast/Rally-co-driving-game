@@ -7,6 +7,189 @@ const cars=[
   "toyota_GR_Yaris_Rally1.png","hyundai_I20N_Rally_1.png","ford_puma_rally_1.png","citroen_c3_rally2.png","skoda_fabia_R5_rally_2.png","ww_polo_gti_r5.png"
 ];
 
+const CAR_DETAILS = {
+  'mg-metro-6r4': {
+    name: 'MG Metro 6R4',
+    era: 'Group B',
+    image: 'MG_metro_6R4.png',
+    engine: '3.0L V6 Naturally Aspirated',
+    power: '410 hp',
+    drive: '4WD',
+    years: '1985–1987',
+    story: 'The MG Metro 6R4 was developed by Austin Rover for Group B rallying. Its distinctive mid-mounted V6 engine made it a unique competitor. Despite its short competitive life due to Group B\'s cancellation, it remains an iconic example of 1980s rally engineering and continues to be celebrated in historic rallying.'
+  },
+  'audi-sport-quattro': {
+    name: 'Audi Sport Quattro',
+    era: 'Group B',
+    image: 'audi-sport_quattro.png',
+    engine: '2.1L Turbocharged I5',
+    power: '450 hp',
+    drive: '4WD',
+    years: '1981–1986',
+    story: 'The Audi Sport Quattro revolutionized rallying by introducing quattro all-wheel drive to the sport. Its dominance forced other manufacturers to adopt AWD systems. With drivers like Walter Röhrl and Michèle Mouton, Audi became the first manufacturer to win championships with both male and female drivers.'
+  },
+  'lancia-037': {
+    name: 'Lancia 037',
+    era: 'Group B',
+    image: 'lancia_037.png',
+    engine: '2.0L Supercharged I4',
+    power: '325 hp',
+    drive: 'RWD',
+    years: '1982–1986',
+    story: 'The Lancia 037 was the last rear-wheel-drive car to win the WRC manufacturers\' championship, achieving this feat in 1983. Its supercharged engine and lightweight design made it incredibly agile. It remains one of the most beautiful and celebrated Group B cars.'
+  },
+  'peugeot-205-t16': {
+    name: 'Peugeot 205 T16',
+    era: 'Group B',
+    image: 'pergeot_205_T16.png',
+    engine: '1.8L Turbocharged I4',
+    power: '450 hp',
+    drive: '4WD',
+    years: '1984–1986',
+    story: 'The Peugeot 205 T16 dominated the final years of Group B, winning back-to-back championships in 1985 and 1986. With legendary drivers like Ari Vatanen and Timo Salonen, it showcased the pinnacle of Group B performance before the class was banned.'
+  },
+  'mitsubishi-lancer-evo-iv': {
+    name: 'Mitsubishi Lancer Evo IV',
+    era: 'WRC (1997–2001)',
+    image: 'Mitsubishi_Lancer_Evo_IV.png',
+    engine: '2.0L Turbocharged I4',
+    power: '280 hp',
+    drive: '4WD',
+    years: '1996–1998',
+    story: 'The Mitsubishi Lancer Evolution IV was part of the legendary Evolution series that dominated WRC in the late 1990s. With its advanced AYC (Active Yaw Control) system and turbocharged engine, it became a favorite among rally enthusiasts and Tommi Mäkinen won three consecutive championships with Evos.'
+  },
+  'ford-escort-wrc': {
+    name: 'Ford Escort WRC',
+    era: 'WRC (1997–2001)',
+    image: 'ford_escort_WRC.png',
+    engine: '2.0L Turbocharged I4',
+    power: '300 hp',
+    drive: '4WD',
+    years: '1997–1999',
+    story: 'The Ford Escort WRC represented Ford\'s return to top-level rallying in the late 1990s. With drivers like Carlos Sainz and Colin McRae, it achieved notable victories including the 1999 Safari Rally. It was known for its durability and competitive pace on gravel events.'
+  },
+  'seat-cordoba-wrc': {
+    name: 'SEAT Córdoba WRC',
+    era: 'WRC (1997–2001)',
+    image: 'seat_coroba_WRC.png',
+    engine: '2.0L Turbocharged I4',
+    power: '280 hp',
+    drive: '4WD',
+    years: '1998–2000',
+    story: 'The SEAT Córdoba WRC was SEAT\'s first World Rally Car, marking the Spanish manufacturer\'s entry into top-level rallying. While it struggled against more established teams, it achieved a memorable victory at the 1999 Rally New Zealand with Didier Auriol at the wheel.'
+  },
+  'skoda-octavia-wrc': {
+    name: 'Škoda Octavia WRC',
+    era: 'WRC (1997–2001)',
+    image: 'skoda_octavia_wrc.png',
+    engine: '2.0L Turbocharged I4',
+    power: '270 hp',
+    drive: '4WD',
+    years: '1999–2003',
+    story: 'The Škoda Octavia WRC was Škoda\'s first World Rally Car, representing the Czech manufacturer\'s ambitious entry into WRC. Though initially uncompetitive, it laid the groundwork for Škoda\'s future success with the Fabia WRC and later Fabia R5.'
+  },
+  'subaru-impreza-wrc97': {
+    name: 'Subaru Impreza WRC97',
+    era: 'WRC (1997–2001)',
+    image: 'subaru_impreza_WRC97.png',
+    engine: '2.0L Turbocharged Boxer I4',
+    power: '300 hp',
+    drive: '4WD',
+    years: '1997–1999',
+    story: 'The Subaru Impreza WRC97 was the first World Rally Car specification Impreza, succeeding the legendary Group A Impreza. With its distinctive boxer engine and symmetrical AWD, it continued Subaru\'s winning legacy with drivers like Colin McRae and Richard Burns.'
+  },
+  'citroen-c3-rally2': {
+    name: 'Citroën C3 Rally2',
+    era: 'Rally2 / R5',
+    image: 'citroen_c3_rally2.png',
+    engine: '1.6L Turbocharged I4',
+    power: '280 hp',
+    drive: '4WD',
+    years: '2019–Present',
+    story: 'The Citroën C3 Rally2 represents Citroën\'s entry into the Rally2 category, designed to compete in WRC2 and national championships. It combines modern rally technology with Citroën\'s expertise in small car design, offering competitive performance at a more accessible cost level.'
+  },
+  'skoda-fabia-r5-rally2': {
+    name: 'Škoda Fabia R5 Rally2',
+    era: 'Rally2 / R5',
+    image: 'skoda_fabia_R5_rally_2.png',
+    engine: '1.6L Turbocharged I4',
+    power: '280 hp',
+    drive: '4WD',
+    years: '2015–Present',
+    story: 'The Škoda Fabia R5 (now Rally2) has been one of the most successful cars in its category, winning multiple championships worldwide. Known for its reliability and excellent handling, it has become the benchmark for Rally2 competition with drivers like Kalle Rovanperä winning titles.'
+  },
+  'vw-polo-gti-r5': {
+    name: 'VW Polo GTI R5',
+    era: 'Rally2 / R5',
+    image: 'ww_polo_gti_r5.png',
+    engine: '1.6L Turbocharged I4',
+    power: '270 hp',
+    drive: '4WD',
+    years: '2018–Present',
+    story: 'The Volkswagen Polo GTI R5 was developed to compete in the Rally2 category following VW\'s withdrawal from WRC. It brings VW\'s engineering excellence to the customer rally market, offering competitive performance and has achieved success in national and international championships.'
+  },
+  'ford-puma-rally1': {
+    name: 'Ford Puma Rally1',
+    era: 'Modern Rally1',
+    image: 'ford_puma_rally_1.png',
+    engine: '1.6L Turbocharged Hybrid I4',
+    power: '500 hp',
+    drive: '4WD',
+    years: '2022–Present',
+    story: 'The Ford Puma Rally1 represents Ford\'s return to top-level WRC competition in the hybrid Rally1 era. With its hybrid powertrain and advanced aerodynamics, it competes against Toyota and Hyundai at the pinnacle of modern rallying, carrying on Ford\'s rich rally heritage.'
+  },
+  'hyundai-i20n-rally1': {
+    name: 'Hyundai i20N Rally1',
+    era: 'Modern Rally1',
+    image: 'hyundai_I20N_Rally_1.png',
+    engine: '1.6L Turbocharged Hybrid I4',
+    power: '500 hp',
+    drive: '4WD',
+    years: '2022–Present',
+    story: 'The Hyundai i20N Rally1 is Hyundai\'s current WRC contender in the hybrid Rally1 era. With drivers like Thierry Neuville and Ott Tänak, it has challenged for championships, showcasing Hyundai\'s commitment to top-level rally competition and continuous development.'
+  },
+  'toyota-gr-yaris-rally1': {
+    name: 'Toyota GR Yaris Rally1',
+    era: 'Modern Rally1',
+    image: 'toyota_GR_Yaris_Rally1.png',
+    engine: '1.6L Turbocharged Hybrid I4',
+    power: '500 hp',
+    drive: '4WD',
+    years: '2022–Present',
+    story: 'The Toyota GR Yaris Rally1 has been dominant in the hybrid Rally1 era, winning multiple manufacturers\' and drivers\' championships. With its innovative hybrid system and exceptional drivers like Kalle Rovanperä and Sébastien Ogier, it represents the pinnacle of modern rally engineering.'
+  },
+  'toyota-corolla-wrc': {
+    name: 'Toyota Corolla WRC',
+    era: 'Modern Rally1',
+    image: 'toyota_corolla_WRC.png',
+    engine: '1.6L Turbocharged Hybrid I4',
+    power: '500 hp',
+    drive: '4WD',
+    years: '2017–2021',
+    story: 'The Toyota Corolla WRC marked Toyota\'s return to WRC after a 17-year absence. It achieved immediate success, winning the manufacturers\' championship in 2018 and multiple drivers\' titles with Ott Tänak. It paved the way for Toyota\'s continued success in the Rally1 era.'
+  },
+  'ford-rs2000': {
+    name: 'Ford RS2000',
+    era: 'Classic Rally Cars',
+    image: 'ford_rs2000.png',
+    engine: '2.0L Naturally Aspirated I4',
+    power: '110 hp',
+    drive: 'RWD',
+    years: '1970–1979',
+    story: 'The Ford RS2000 was a rear-wheel drive rally car that competed in the 1970s before the Group B era. While less powerful than later rally cars, it was known for its balanced handling and became a favorite in national rallying. It represents the foundation of Ford\'s rally heritage.'
+  },
+  'renault-5-maxi': {
+    name: 'Renault 5 Maxi',
+    era: 'Classic Rally Cars',
+    image: 'renault_5_maxi.png',
+    engine: '1.4L Turbocharged I4',
+    power: '350 hp',
+    drive: 'FWD',
+    years: '1984–1986',
+    story: 'The Renault 5 Maxi was a Group B homologation special that competed against more powerful AWD rivals. Despite being front-wheel drive, its lightweight design and turbocharged engine made it surprisingly competitive on tarmac events, showcasing the potential of FWD in rallying.'
+  }
+};
+
 const ERAS={
   grpb:{
     label:'Group B',badge:'eb-grpb',outlet:'Rallye Mondiale',commentator:'Jean-Pierre Mauger',
@@ -2403,13 +2586,60 @@ function buildCarGrid(){
   document.getElementById('car-grid').innerHTML=ERAS[G.era].cars.map((c,i)=>`
     <div class="car-btn${G.car&&G.car.n===c.n?' sel':''}" onclick="pickCar(${i},this)">
       <div class="car-img-wrap"><img src="${c.img}" alt="${c.n}" class="car-img" loading="lazy"></div>
-      <div class="car-cn">${c.n}</div><div class="car-cd">${c.d}</div>
+      <div class="car-info">
+        <div class="car-cn">${c.n}</div>
+        <div class="car-cd">${c.d}</div>
+        <button class="car-detail-btn" onclick="event.stopPropagation();showCarDetail('${c.n}')" style="margin-top:0.5rem;padding:0.4rem 0.8rem;background:var(--red);border:none;color:#fff;font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer;border-radius:4px;transition:all .2s">View Details</button>
+      </div>
     </div>`).join('');
   if(!G.car)G.car=ERAS[G.era].cars[0];
 }
 function pickCar(i,el){
   G.car=ERAS[G.era].cars[i];
   document.querySelectorAll('.car-btn').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');
+}
+
+function showCarDetail(carName){
+  const carMap = {
+    'Audi Sport Quattro': 'audi-sport-quattro',
+    'Lancia 037': 'lancia-037',
+    'Peugeot 205 T16': 'peugeot-205-t16',
+    'Ford RS200': 'ford-rs2000',
+    'MG Metro 6R4': 'mg-metro-6r4',
+    'Renault 5 Maxi': 'renault-5-maxi',
+    'Mitsubishi Lancer Evo IV': 'mitsubishi-lancer-evo-iv',
+    'Ford Escort WRC': 'ford-escort-wrc',
+    'SEAT Córdoba WRC': 'seat-cordoba-wrc',
+    'Škoda Octavia WRC': 'skoda-octavia-wrc',
+    'Subaru Impreza WRC97': 'subaru-impreza-wrc97',
+    'Citroën C3 Rally2': 'citroen-c3-rally2',
+    'Škoda Fabia R5 Rally2': 'skoda-fabia-r5-rally2',
+    'VW Polo GTI R5': 'vw-polo-gti-r5',
+    'Ford Puma Rally1': 'ford-puma-rally1',
+    'Hyundai i20N Rally1': 'hyundai-i20n-rally1',
+    'Toyota GR Yaris Rally1': 'toyota-gr-yaris-rally1',
+    'Toyota Corolla WRC': 'toyota-corolla-wrc'
+  };
+  
+  const carId = carMap[carName];
+  const carData = CAR_DETAILS[carId];
+  
+  if(carData){
+    document.getElementById('modal-car-name').textContent = carData.name;
+    document.getElementById('modal-car-era').textContent = carData.era;
+    document.getElementById('modal-car-image').src = carData.image;
+    document.getElementById('modal-car-image').alt = carData.name;
+    document.getElementById('modal-car-engine').textContent = carData.engine;
+    document.getElementById('modal-car-power').textContent = carData.power;
+    document.getElementById('modal-car-drive').textContent = carData.drive;
+    document.getElementById('modal-car-years').textContent = carData.years;
+    document.getElementById('modal-car-story').textContent = carData.story;
+    document.getElementById('car-detail-modal').style.display = 'flex';
+  }
+}
+
+function closeCarDetail(){
+  document.getElementById('car-detail-modal').style.display = 'none';
 }
 function pickDiff(i,el){
   G.diff=i;G.timeLimit=DIFFS[i].s;
