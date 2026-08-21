@@ -10,7 +10,7 @@
     width: 100%;
   }
 </style>
-<title>BLIND CREST</title>
+<title>TAKE ME TO THE HAIRPIN</title>
 <link rel="icon" href="data:,"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Anton&family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&display=swap"/>
@@ -231,7 +231,7 @@
     <div class="menu-overlay"></div>
     <div class="menu-stripe"></div>
     <div class="menu-content">
-      <div class="menu-title">BLIND<br>CREST</div>
+      <div class="menu-title">TAKE ME TO<br>THE HAIRPIN</div>
       <div class="menu-sub">Co-Driver Academy &amp; Career Mode</div>
       <div class="menu-quote">"The notes are the truth. Trust them completely."</div>
     </div>
@@ -244,23 +244,30 @@
 <div style="padding:.6rem 1.5rem;background:#0a0a0c;border-bottom:1px solid #252530;font-size:12px;color:#5a5a70;font-family:'IBM Plex Mono',monospace;line-height:1.5;display:flex;justify-content:space-between;align-items:center;">
   <div>Read the notes. Keep the driver alive.<br>
   <span style="color:#f5c518">Training Mode</span> = lessons & telemetry. <span style="color:#39ff14">Game Mode</span> = full rally simulation.</div>
-  <div style="display:flex;gap:8px;">
+  <div style="display:flex;gap:8px;align-items:center;">
+    <div style="display:flex;align-items:center;gap:8px;padding:4px 8px;background:var(--surf);border:1px solid var(--brd2);border-radius:4px;">
+      <span style="font-size:10px;color:var(--text2)">🎵</span>
+      <input type="range" id="music-volume-slider" min="0" max="1" step="0.05" value="0.5" style="width:60px;height:4px;cursor:pointer" onchange="updateMusicVolume(this.value)">
+      <span style="font-size:10px;color:var(--text2)">🎤</span>
+      <input type="range" id="voice-volume-slider" min="0" max="1" step="0.05" value="1.0" style="width:60px;height:4px;cursor:pointer" onchange="updateVoiceVolume(this.value)">
+    </div>
     <button id="recording-toggle-btn" class="gbtn" onclick="RecordingMode.toggle()" style="font-size:11px;padding:4px 10px;">⚪ Recording OFF</button>
     <button class="gbtn" onclick="LanParty.quickHost()" style="font-size:11px;padding:4px 10px;background:#39ff14;color:#0a0a0c;border-color:#39ff14;">🎮 Host LAN</button>
   </div>
 </div>
     <div class="menu-nav">
-      <button class="mnbtn pri" onclick="openCareer()">Career Mode <span>→</span></button>
-      <button class="mnbtn" onclick="openSetup()">Quick Stage <span>→</span></button>
+      <button class="mnbtn pri" onclick="openSetup()" style="background:var(--green);color:#0a0a0c;border-color:var(--green)">⚡ Quick Stage <span style="font-size:14px">★</span></button>
+      <button class="mnbtn" onclick="openCareer()">Career Mode <span>→</span></button>
       <button class="mnbtn" onclick="openTraining()">Training School <span>→</span></button>
       <button class="mnbtn" onclick="openTutorial()" style="border-color:var(--gold);color:var(--gold)">Interactive Tutorial <span style="font-size:14px">★</span></button>
       <button class="mnbtn" onclick="openTuningStandalone()">Tuning Garage <span>→</span></button>
       <button class="mnbtn" id="menu-analytics-btn" onclick="openAnalytics()" style="display:none">Analytics Dashboard <span>→</span></button>
       <button class="mnbtn" id="menu-programs-btn" onclick="openPrograms()" style="display:none">Training Programs <span>→</span></button>
       <button class="mnbtn" onclick="openEditor()">Note Editor <span>→</span></button>
+      <button class="mnbtn" onclick="openAchievements()">Achievements <span>→</span></button>
       <button class="mnbtn" onclick="openAccessibility()">Settings <span>→</span></button>
     </div>
-    <div class="menu-bar">BLIND CREST — Stage Report Edition</div>
+    <div class="menu-bar">TAKE ME TO THE HAIRPIN — Stage Report Edition</div>
     <div class="menu-foot">Group B · WRC 90s · Modern WRC<br>v2.0 — Three eras, one career</div>
   </div>
 </div>
@@ -286,7 +293,7 @@
 <div class="start-bar">
   <button class="gbtn" onclick="showMenu()">← Menu</button>
   <button class="gbtn sec2" onclick="openTuningFromSetup()">Tuning Garage</button>
-  <button class="gbtn pri" onclick="beginStage(null)">Start Stage</button>
+  <button class="gbtn pri" onclick="startStageFromSetup()">Start Stage</button>
 </div>
 </div>
 
@@ -345,7 +352,7 @@
   </div>
   <button class="bk" style="border-color:#555;color:#888;margin-left:auto" onclick="showMenu()">← Menu</button>
 </div>
-<div class="school-title"><h1>BLIND CREST Academy</h1><span>Learn to read the road before the stage goes live</span></div>
+<div class="school-title"><h1>TAKE ME TO THE HAIRPIN Academy</h1><span>Learn to read the road before the stage goes live</span></div>
 <div class="school-body">
   <div class="school-sidebar">
     <div id="lesson-list"></div>
@@ -370,9 +377,17 @@
     <div class="g-stage" id="g-stage">—</div>
     <div class="g-meta" id="g-meta">—</div>
   </div>
-  <div class="g-scores">
-    <div><div class="g-sv" id="g-corr">0</div><div class="g-sl">Correct</div></div>
-    <div><div class="g-sv" id="g-of">/ 8</div><div class="g-sl">Notes</div></div>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <div style="display:flex;align-items:center;gap:6px;padding:4px 8px;background:var(--surf);border:1px solid var(--brd2);border-radius:4px;">
+      <span style="font-size:9px;color:var(--text2)">🎵</span>
+      <input type="range" id="game-music-volume-slider" min="0" max="1" step="0.05" value="0.5" style="width:40px;height:3px;cursor:pointer" onchange="updateMusicVolume(this.value)">
+      <span style="font-size:9px;color:var(--text2)">🎤</span>
+      <input type="range" id="game-voice-volume-slider" min="0" max="1" step="0.05" value="1.0" style="width:40px;height:3px;cursor:pointer" onchange="updateVoiceVolume(this.value)">
+    </div>
+    <div class="g-scores">
+      <div><div class="g-sv" id="g-corr">0</div><div class="g-sl">Correct</div></div>
+      <div><div class="g-sv" id="g-of">/ 8</div><div class="g-sl">Notes</div></div>
+    </div>
   </div>
 </div>
 <div class="g-prog-bar"><div class="g-prog-fill" id="g-prog" style="width:0%"></div></div>
@@ -552,6 +567,7 @@
   <div class="career-hdr-top">
     <h1>Career Mode</h1>
     <div style="display:flex;gap:8px">
+      <button class="gbtn" onclick="openTeamManagement()" style="font-size:12px;padding:5px 12px">🔧 Team &amp; Garage</button>
       <button class="gbtn" onclick="resetCareer()" style="font-size:12px;padding:5px 12px">Reset</button>
       <button class="gbtn" onclick="showMenu()">← Menu</button>
     </div>
@@ -659,6 +675,23 @@
       </div>
     </div>
   </div>
+</div>
+
+<div class="screen" id="achievements">
+<div class="page-hdr">
+  <button class="bk" onclick="showMenu()">← Menu</button>
+  <div class="page-hdr-title">Achievements</div>
+</div>
+<div class="achievements-body">
+  <div class="achievements-header">
+    <h2>Your Trophy Cabinet</h2>
+    <p style="color:var(--text3);font-size:13px;margin-top:0.5rem">Unlock milestones by mastering the co-driver role</p>
+  </div>
+  <div class="achievements-grid" id="achievements-grid"></div>
+</div>
+<div class="start-bar">
+  <button class="gbtn" onclick="showMenu()">← Menu</button>
+</div>
 </div>
 
 <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
@@ -850,6 +883,3 @@
 
 </body>
 </html>
-
-
-
