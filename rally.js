@@ -681,6 +681,188 @@ const ATMO = {
     ]
   }
 };
+// ── TEAM MANAGEMENT / TIRES ─────────────────────────────────────────
+// Career-mode economy layer. Budget is earned from stage results (see
+// endStage) and spent on staff (one-time hire cost) and tires (per-stage
+// cost). Staff perks feed into the *existing* crash-probability and
+// timing systems (rollCrash's crashModifier, calculateDynamicTimeLimit)
+// rather than introducing a second parallel difficulty system. Two staff
+// hires are wired into StorySystem's existing flags/relationships
+// (mechanicBond, saraImpressed) so hiring them can unlock story content --
+// the road/scoring data itself never changes, only what dialogue becomes
+// available, matching how the rest of the story system already works.
+const STAFF_ROSTER = [
+  {
+    id: 'jorge', name: 'Jorge', role: 'Head Mechanic', cost: 800,
+    perk: 'Reduces crash risk after mistakes (better car prep).',
+    crashModDelta: -0.15,
+    storyHook: () => {
+      StorySystem.state.flags.hiredJorge = true;
+      StorySystem.state.relationships.mechanicBond = Math.max(StorySystem.state.relationships.mechanicBond || 0, 3);
+      StorySystem.save();
+    }
+  },
+  {
+    id: 'sara', name: 'Sara', role: 'Race Engineer', cost: 900,
+    perk: 'Sharper car setup — small time bonus on every stage.',
+    timeBonusDelta: 0.6,
+    storyHook: () => {
+      StorySystem.state.flags.hiredSara = true;
+      StorySystem.state.relationships.saraImpressed = true;
+      StorySystem.save();
+    }
+  },
+  {
+    id: 'physio', name: 'Dr. Okafor', role: 'Team Physio', cost: 500,
+    perk: 'Keeps mental stress from spiking as hard after a bad stage.',
+    crashModDelta: -0.05
+  },
+  {
+    id: 'analyst', name: 'Petra', role: 'Data Analyst', cost: 650,
+    perk: 'Better recce notes — extra half-second to process each call.',
+    timeBonusDelta: 0.5
+  }
+];
+
+const TIRE_COMPOUNDS = {
+  medium: { name: 'Medium', cost: 0, crashModDelta: 0, note: 'Balanced. Safe default for any conditions.' },
+  soft:   { name: 'Soft',   cost: 150, crashModDelta: -0.08, wetPenalty: 0.15, note: 'Best grip in the dry. Dangerous in rain.' },
+  hard:   { name: 'Hard',   cost: 100, crashModDelta: 0.05, note: 'Durable, less grip. Rarely the wrong choice, never the best one.' },
+  wet:    { name: 'Wet',    cost: 150, crashModDelta: 0.1, dryPenalty: 0.1, wetBonus: -0.2, note: 'Essential in rain. Costs you in the dry.' }
+};
+
+const TeamManagement = {
+  state: { budget: 2000, hiredStaff: [], tireCompound: 'medium' },
+
+  init() {
+    try {
+      const saved = localStorage.getItem('rpa_team_state');
+      if (saved) this.state = JSON.parse(saved);
+    } catch(e) {}
+  },
+  save() {
+    try { localStorage.setItem('rpa_team_state', JSON.stringify(this.state)); } catch(e) {}
+  },
+  isHired(staffId) {
+    return this.state.hiredStaff.includes(staffId);
+  },
+  hire(staffId) {
+    const staff = STAFF_ROSTER.find(s => s.id === staffId);
+    if (!staff || this.isHired(staffId) || this.state.budget < staff.cost) return false;
+    this.state.budget -= staff.cost;
+    this.state.hiredStaff.push(staffId);
+    if (staff.storyHook) staff.storyHook();
+    this.save();
+    return true;
+  },
+  setTire(compoundId) {
+    const compound = TIRE_COMPOUNDS[compoundId];
+    if (!compound) return false;
+    if (this.state.budget < compound.cost) return false;
+    this.state.budget -= compound.cost;
+    this.state.tireCompound = compoundId;
+    this.save();
+    return true;
+  },
+  awardPrizeMoney(pts) {
+    const prize = pts * 20; // simple, transparent conversion -- no hidden multipliers
+    this.state.budget += prize;
+    this.save();
+    return prize;
+  },
+  // Aggregate multiplier fed into rollCrash's existing crashModifier chain.
+  getCrashModifier() {
+    let mod = 1.0;
+    this.state.hiredStaff.forEach(id => {
+      const staff = STAFF_ROSTER.find(s => s.id === id);
+      if (staff && staff.crashModDelta) mod += staff.crashModDelta;
+    });
+    const tire = TIRE_COMPOUNDS[this.state.tireCompound];
+    if (tire) {
+      mod += tire.crashModDelta || 0;
+      const weather = (typeof RALLY_STATE !== 'undefined') ? RALLY_STATE.weatherEffect : null;
+      if (weather === 'rain' || weather === 'ice') mod += tire.wetPenalty || (tire.wetBonus || 0);
+      else if (weather === 'clear') mod += tire.dryPenalty || 0;
+    }
+    return Math.max(0.3, mod);
+  },
+  // Additive seconds fed into calculateDynamicTimeLimit.
+  getTimeBonus() {
+    let bonus = 0;
+    this.state.hiredStaff.forEach(id => {
+      const staff = STAFF_ROSTER.find(s => s.id === id);
+      if (staff && staff.timeBonusDelta) bonus += staff.timeBonusDelta;
+    });
+    return bonus;
+  }
+};
+TeamManagement.init();
+
+function openTeamManagement(){
+  let modal = document.getElementById('team-mgmt-modal');
+  if(!modal){
+    modal = document.createElement('div');
+    modal.id = 'team-mgmt-modal';
+    modal.style.cssText = 'position:fixed;inset:0;z-index:10001;background:rgba(0,0,0,.88);display:flex;align-items:center;justify-content:center;padding:1.5rem;overflow-y:auto;';
+    document.body.appendChild(modal);
+  }
+  renderTeamManagement();
+  modal.style.display = 'flex';
+}
+function closeTeamManagement(){
+  const modal = document.getElementById('team-mgmt-modal');
+  if (modal) modal.style.display = 'none';
+}
+function renderTeamManagement(){
+  const modal = document.getElementById('team-mgmt-modal');
+  if (!modal) return;
+  const t = TeamManagement.state;
+
+  const staffHtml = STAFF_ROSTER.map(s => {
+    const hired = TeamManagement.isHired(s.id);
+    const canAfford = t.budget >= s.cost;
+    return `
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.9rem;background:#17171e;border:1px solid #252530;margin-bottom:8px;">
+        <div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;color:#fff;letter-spacing:1px;">${s.name} <span style="color:#9090a8;font-size:12px;font-family:'IBM Plex Mono',monospace;">— ${s.role}</span></div>
+          <div style="font-size:12px;color:#9090a8;margin-top:2px;">${s.perk}</div>
+        </div>
+        <button ${hired || !canAfford ? 'disabled' : ''} onclick="TeamManagement.hire('${s.id}');renderTeamManagement();"
+          style="flex-shrink:0;padding:.6rem 1rem;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;border:1px solid ${hired?'#39ff14':'#35354a'};background:${hired?'transparent':'#f5c518'};color:${hired?'#39ff14':'#000'};cursor:${hired||!canAfford?'default':'pointer'};opacity:${!hired&&!canAfford?'0.5':'1'};">
+          ${hired ? '✓ Hired' : '$' + s.cost}
+        </button>
+      </div>`;
+  }).join('');
+
+  const tireHtml = Object.entries(TIRE_COMPOUNDS).map(([id, tire]) => {
+    const active = t.tireCompound === id;
+    const canAfford = t.budget >= tire.cost;
+    return `
+      <button ${active || !canAfford ? 'disabled' : ''} onclick="TeamManagement.setTire('${id}');renderTeamManagement();"
+        style="text-align:left;padding:.8rem;background:${active?'#252530':'#17171e'};border:1px solid ${active?'#f5c518':'#252530'};color:#fff;cursor:${active||!canAfford?'default':'pointer'};opacity:${!active&&!canAfford?'0.5':'1'};">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1px;">${tire.name}${active?' — Active':''} ${tire.cost?'· $'+tire.cost:'· Free'}</div>
+        <div style="font-size:11px;color:#9090a8;margin-top:2px;">${tire.note}</div>
+      </button>`;
+  }).join('');
+
+  modal.innerHTML = `
+    <div style="max-width:560px;width:100%;background:#111116;border:1px solid #35354a;padding:2rem;max-height:90vh;overflow-y:auto;">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.3rem;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;color:#fff;">Team &amp; Garage</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:16px;color:#f5c518;">$${t.budget}</div>
+      </div>
+      <div style="font-size:12px;color:#9090a8;margin-bottom:1.5rem;">Budget comes from stage results. Staff are one-time hires; tires are chosen per stage and matter most against current weather.</div>
+
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:#606070;text-transform:uppercase;margin-bottom:.6rem;">Staff</div>
+      ${staffHtml}
+
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:#606070;text-transform:uppercase;margin:1.2rem 0 .6rem;">Tire compound — next stage</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1.5rem;">${tireHtml}</div>
+
+      <button onclick="closeTeamManagement()" style="width:100%;padding:.9rem;background:#f5c518;border:none;color:#000;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;text-transform:uppercase;">Close</button>
+    </div>`;
+}
+
 const CRASH_TYPES = [
   {id:'off_road', title:'OFF THE ROAD!', emoji:'🚗💨',
    descs:["The front pushed wide — not enough braking for the corner.",
@@ -1684,6 +1866,9 @@ function applyTuning(){
     const stageData = window._careerStageData;
     window._careerStageData = null;
     beginStageWithData(stageData);
+  } else if(tunReturnScreen === 'setup' && G.era && G.car){
+    // Coming from setup screen - go straight to gameplay
+    beginStage(null);
   } else {
     show(tunReturnScreen||'setup');
   }
@@ -1781,12 +1966,12 @@ function rollCrashTuned(noteRaw, isTimeout, isBadNote){
 }
 
 const CAREER_CAL=[
-  {era:'grpb',sIdx:0,rally:'Rally de Portugal',pts:[25,18,15,12,10,8,6,4,2,1]},
-  {era:'w90',sIdx:0,rally:'Rally Finland',pts:[25,18,15,12,10,8,6,4,2,1]},
-  {era:'w24',sIdx:0,rally:'Rallye Monte-Carlo',pts:[25,18,15,12,10,8,6,4,2,1]},
-  {era:'grpb',sIdx:1,rally:'Monte Carlo Classic',pts:[25,18,15,12,10,8,6,4,2,1]},
-  {era:'w90',sIdx:1,rally:'Rally Great Britain',pts:[25,18,15,12,10,8,6,4,2,1]},
-  {era:'w24',sIdx:1,rally:'Rally Finland Modern',pts:[25,18,15,12,10,8,6,4,2,1]},
+  {era:'grpb',sIdx:0,rally:'Rally de Portugal',pts:[25,18,15,12,10,8,6,4,2,1],driverProfile:'default'},
+  {era:'w90',sIdx:0,rally:'Rally Finland',pts:[25,18,15,12,10,8,6,4,2,1],driverProfile:'mikko'},
+  {era:'w24',sIdx:0,rally:'Rallye Monte-Carlo',pts:[25,18,15,12,10,8,6,4,2,1],driverProfile:'mikko'},
+  {era:'grpb',sIdx:1,rally:'Monte Carlo Classic',pts:[25,18,15,12,10,8,6,4,2,1],driverProfile:'reko'},
+  {era:'w90',sIdx:1,rally:'Rally Great Britain',pts:[25,18,15,12,10,8,6,4,2,1],driverProfile:'reko'},
+  {era:'w24',sIdx:1,rally:'Rally Finland Modern',pts:[25,18,15,12,10,8,6,4,2,1],driverProfile:'elin'},
 ];
 
 const LESSONS=[
@@ -1977,7 +2162,8 @@ const Achievements = {
     {id: 'walter_apprentice', name: '👑 Walter\'s Apprentice', desc: 'Get perfect pacenote accuracy', unlocked: false},
     {id: 'clean_sweep', name: '✨ Clean Sweep', desc: 'Complete a stage with 100% accuracy', unlocked: false},
     {id: 'speed_demon', name: '⚡ Speed Demon', desc: 'Complete a stage on Insane difficulty', unlocked: false},
-    {id: 'era_master', name: '🏆 Era Master', desc: 'Complete stages in all three eras', unlocked: false}
+    {id: 'era_master', name: '🏆 Era Master', desc: 'Complete stages in all three eras', unlocked: false},
+    {id: 'occupational_hazard', name: '🍫 Occupational Hazard', desc: 'Get hit in the head by an emergency granola bar', unlocked: false}
   ],
   tuningChanges: 0,
   erasCompleted: new Set(),
@@ -2008,33 +2194,37 @@ const Achievements = {
     } catch(e) {}
   },
   
-  unlock(id) {
+  unlock(id, customCredit = null) {
     const achievement = this.achievements.find(a => a.id === id);
     if (achievement && !achievement.unlocked) {
       achievement.unlocked = true;
       this.save();
-      this.showNotification(achievement);
+      this.showNotification(achievement, customCredit);
     }
   },
   
-  showNotification(achievement) {
+  showNotification(achievement, customCredit = null) {
     const notification = document.createElement('div');
     notification.style.cssText = `
       position: fixed;
       top: 20px;
-      right: 20px;
-      background: linear-gradient(135deg, #1a1400, #0a0a0c);
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #1a1a1a 0%, #252530 100%);
       border: 2px solid #f5c518;
-      padding: 15px 20px;
-      border-radius: 8px;
+      border-radius: 12px;
+      padding: 20px 30px;
       z-index: 10000;
-      animation: slideIn 0.5s ease;
+      box-shadow: 0 8px 32px rgba(245, 197, 24, 0.3);
+      animation: slideDown 0.5s ease-out;
       font-family: 'IBM Plex Sans', sans-serif;
+      text-align: center;
     `;
     notification.innerHTML = `
       <div style="font-size: 24px; margin-bottom: 5px;">🏆 Achievement Unlocked!</div>
       <div style="font-weight: 600; color: #f5c518; font-size: 16px;">${achievement.name}</div>
       <div style="font-size: 12px; color: #9090a8; margin-top: 5px;">${achievement.desc}</div>
+      ${customCredit ? `<div style="font-size: 9px; color: #5a5a70; margin-top: 8px; font-style: italic;">${customCredit}</div>` : ''}
     `;
     document.body.appendChild(notification);
     setTimeout(() => {
@@ -2124,10 +2314,13 @@ function updateInputModeUI() {
 const VoiceInput = {
   recognition: null,
   isListening: false,
+  consecutiveErrors: 0,
+  maxConsecutiveErrors: 3, // after this many failures in a row, stop auto-retrying and tell the player
   
   init() {
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
       console.log('Speech recognition not supported in this browser');
+      this.notify('Voice input isn\'t supported in this browser — try Chrome or Edge, or switch to Type mode.', true);
       return;
     }
     
@@ -2135,30 +2328,85 @@ const VoiceInput = {
     this.recognition = new SpeechRecognition();
     this.recognition.continuous = false;
     this.recognition.interimResults = false;
+    this.recognition.maxAlternatives = 3; // consider a few guesses, not just the top one
     this.recognition.lang = 'en-US';
     
     this.recognition.onresult = (event) => {
-      const spoken = event.results[0][0].transcript;
-      this.submit(spoken);
+      this.consecutiveErrors = 0; // a successful result clears any failure streak
+      const alternatives = [];
+      for (let i = 0; i < event.results[0].length; i++) {
+        alternatives.push(event.results[0][i].transcript);
+      }
+      this.submit(this.pickBestAlternative(alternatives));
     };
     
     this.recognition.onerror = (event) => {
       console.log('Speech recognition error:', event.error);
-      this.stop();
+      this.isListening = false;
+      
+      // 'no-speech' just means the player hasn't started talking yet (or paused) --
+      // that's normal during co-driving and shouldn't count as a real failure.
+      if (event.error === 'no-speech' || event.error === 'aborted') {
+        return; // onend will fire next and handle the restart
+      }
+      
+      this.consecutiveErrors++;
+      
+      if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+        // Mic permission denied -- retrying will only throw the same error
+        // forever. Stop entirely and tell the player what to actually do.
+        this.consecutiveErrors = this.maxConsecutiveErrors;
+        this.notify('Microphone access is blocked. Allow it in your browser\'s address-bar permissions, then click the mic to retry.', true);
+        return;
+      }
+      
+      if (this.consecutiveErrors >= this.maxConsecutiveErrors) {
+        this.notify('Voice recognition keeps failing (' + event.error + '). Click the mic to try again, or switch to Type mode.', true);
+      }
     };
     
     this.recognition.onend = () => {
       this.isListening = false;
-      // Auto-restart voice recognition in Game Mode for continuous listening
-      if (!MODE.isPro && !G.stageEnded) {
+      // Auto-restart for continuous listening, but only if: we're not in
+      // Pro mode (which is push-to-talk), the stage hasn't ended, and we
+      // haven't just hit a wall of repeated failures -- otherwise this is
+      // the loop that used to hammer a denied mic permission indefinitely.
+      if (!MODE.isPro && !G.stageEnded && this.consecutiveErrors < this.maxConsecutiveErrors) {
         setTimeout(() => this.start(), 100);
       }
     };
   },
   
+  // Score each candidate transcript against the expected answer and submit
+  // whichever is closest, instead of blindly trusting the engine's single
+  // top guess. Falls back to the top guess if none score meaningfully.
+  pickBestAlternative(alternatives) {
+    const currentNote = G.notes && G.notes[G.idx];
+    if (!currentNote || alternatives.length <= 1) return alternatives[0] || '';
+    let best = alternatives[0];
+    let bestScore = -1;
+    alternatives.forEach(alt => {
+      const score = similarity(alt, currentNote.ans, { voiceTolerant: true });
+      if (score > bestScore) { bestScore = score; best = alt; }
+    });
+    return best;
+  },
+  
+  notify(message, isError) {
+    const indicator = document.getElementById('mic-indicator');
+    if (indicator) {
+      const label = indicator.querySelector('.mic-label') || indicator;
+      if (label.dataset) label.dataset.origText = label.dataset.origText || label.textContent;
+      label.textContent = message;
+      label.style.color = isError ? '#e8291c' : '';
+    }
+    console.log('[VoiceInput]', message);
+  },
+  
   start() {
     if (this.recognition && !this.isListening) {
       try {
+        this.consecutiveErrors = 0; // manual/explicit start always gets a fresh chance
         this.isListening = true;
         this.recognition.start();
       } catch(e) {
@@ -2188,9 +2436,12 @@ const VoiceInput = {
     
     document.getElementById('g-input').value = typed;
     
-    const ok = checkAnswer(typed, currentNote);
-    const finalScore = calculateScore(ok);
-    processAnswer(typed, currentNote, ok, finalScore, false);
+    // Route through the game's one real scoring pipeline (submitAnswer),
+    // same as typed input. This used to call checkAnswer()/calculateScore(),
+    // which are not defined anywhere in the project -- every voice
+    // submission was throwing and silently doing nothing.
+    RALLY_STATE.inputSource = 'voice';
+    submitAnswer();
   }
 };
 function initDamage(){
@@ -2251,7 +2502,9 @@ function updateCarSVG(hits){
   });
 }
 function rollCrash(noteRaw, isTimeout, isBadNote){
-  const crashModifier = (G.tuneEffects && G.tuneEffects.crashMod) ? G.tuneEffects.crashMod : 1.0;
+  const tuneCrashMod = (G.tuneEffects && G.tuneEffects.crashMod) ? G.tuneEffects.crashMod : 1.0;
+  const teamCrashMod = (G.careerMode && typeof TeamManagement !== 'undefined') ? TeamManagement.getCrashModifier() : 1.0;
+  const crashModifier = tuneCrashMod * teamCrashMod;
   const carStats = G.car?.stats || {};
   const handlingBonus = carStats.handling ? (carStats.handling / 100) : 1.0;
   const stabilityBonus = carStats.stability ? (carStats.stability / 100) : 1.0;
@@ -2557,7 +2810,102 @@ let lessonsCompleted=new Set();
 let currentLesson='intro';
 let quizBank=[],quizIdx=0,quizCurrent=null,quizStartTime=null,quizTelemetry=[];
 function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
-function showMenu(){if(G.timer)clearInterval(G.timer);show('menu');const bgMusic=document.getElementById('bg-music');if(bgMusic){bgMusic.play().catch(()=>{});}}
+function showMenu(){if(G.timer)clearInterval(G.timer);show('menu');const bgMusic=document.getElementById('bg-music');if(bgMusic){bgMusic.play().catch(()=>{});}if(typeof DriverProfileSystem!=='undefined')DriverProfileSystem.reset();}
+function quickPlay(){
+  G.careerMode=false;
+  G.era='grpb';
+  G.driver='Driver';
+  G.codriver='Co-driver';
+  G.car=ERAS['grpb'].cars[0];
+  G.diff=1;
+  G.timeLimit=DIFFS[1].s;
+  beginStage(null);
+}
+function updateMusicVolume(value){
+  const vol = parseFloat(value);
+  const bgMusic = document.getElementById('bg-music');
+  if(bgMusic) bgMusic.volume = vol;
+  if(typeof Accessibility !== 'undefined') Accessibility.set('musicVolume', vol);
+  document.getElementById('music-volume-slider').value = vol;
+  const gameSlider = document.getElementById('game-music-volume-slider');
+  if(gameSlider) gameSlider.value = vol;
+}
+function updateVoiceVolume(value){
+  const vol = parseFloat(value);
+  if(typeof CoDriverAudio !== 'undefined') CoDriverAudio.setVoiceVolume(vol);
+  if(typeof Accessibility !== 'undefined') Accessibility.set('voiceVolume', vol);
+  document.getElementById('voice-volume-slider').value = vol;
+  const gameSlider = document.getElementById('game-voice-volume-slider');
+  if(gameSlider) gameSlider.value = vol;
+}
+function triggerGranolaBarEvent(){
+  // Play bonk sound
+  if(window.speechSynthesis){
+    window.speechSynthesis.cancel();
+    const bonk = new SpeechSynthesisUtterance('bonk');
+    bonk.rate = 0.5;
+    bonk.pitch = 0.3;
+    bonk.volume = 0.8;
+    window.speechSynthesis.speak(bonk);
+  }
+
+  // Show subtitle overlay
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.85);
+    border: 2px solid #e8291c;
+    border-radius: 8px;
+    padding: 30px 40px;
+    z-index: 20000;
+    text-align: center;
+    animation: popIn 0.3s ease-out;
+    font-family: 'IBM Plex Sans', sans-serif;
+  `;
+  overlay.innerHTML = `
+    <div style="font-size: 48px; margin-bottom: 15px;">🍫</div>
+    <div style="font-size: 18px; color: #f5c518; font-weight: 600; margin-bottom: 10px;">*BONK*</div>
+    <div style="font-size: 14px; color: #ffffff; margin-bottom: 20px;">"Eat something before you start calling notes."</div>
+    <div style="font-size: 9px; color: #5a5a70; font-style: italic;">Thanks to Reddit user ElmoLibre for the snack bag idea.</div>
+  `;
+  document.body.appendChild(overlay);
+
+  // Remove overlay after 3 seconds
+  setTimeout(() => {
+    overlay.style.animation = 'popOut 0.3s ease-out';
+    setTimeout(() => overlay.remove(), 300);
+  }, 3000);
+
+  // Unlock achievement
+  if(typeof Achievements !== 'undefined'){
+    Achievements.unlock('occupational_hazard', 'Thanks to Reddit user ElmoLibre for the snack bag idea.');
+  }
+}
+function openAchievements(){
+  renderAchievements();
+  show('achievements');
+}
+function renderAchievements(){
+  const grid = document.getElementById('achievements-grid');
+  if(!grid) return;
+
+  if(typeof Achievements === 'undefined'){
+    grid.innerHTML = '<div style="color:var(--text3);text-align:center;padding:2rem">Achievements system not loaded</div>';
+    return;
+  }
+
+  grid.innerHTML = Achievements.achievements.map(a => `
+    <div class="achievement-card ${a.unlocked ? 'unlocked' : ''}">
+      <div class="achievement-status">${a.unlocked ? 'UNLOCKED' : 'LOCKED'}</div>
+      <div class="achievement-icon">${a.name.split(' ')[0]}</div>
+      <div class="achievement-name">${a.name}</div>
+      <div class="achievement-desc">${a.desc}</div>
+    </div>
+  `).join('');
+}
 function openSetup(){
   G.careerMode=false;
   buildSetup();show('setup');
@@ -2713,10 +3061,40 @@ function buildCareerScreen(){
       <div class="trophy-lbl">${t.n}</div>
     </div>`).join('');
 }
+function showDriverProfileBriefing(profile){
+  let modal = document.getElementById('driver-briefing-modal');
+  if(!modal){
+    modal = document.createElement('div');
+    modal.id = 'driver-briefing-modal';
+    modal.style.cssText = 'position:fixed;inset:0;z-index:10001;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;padding:1.5rem;';
+    document.body.appendChild(modal);
+  }
+  modal.innerHTML = `
+    <div style="max-width:480px;width:100%;background:#111116;border:1px solid #35354a;padding:2rem;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:#f5c518;text-transform:uppercase;margin-bottom:.5rem;">New driver assignment</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:#fff;margin-bottom:1rem;">${profile.name}</div>
+      <div style="font-size:14px;line-height:1.6;color:#c0c0d0;margin-bottom:1.5rem;">${profile.quirk}</div>
+      <button onclick="document.getElementById('driver-briefing-modal').remove()" style="width:100%;padding:.9rem;background:#f5c518;border:none;color:#000;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;text-transform:uppercase;">Got it</button>
+    </div>`;
+  modal.style.display = 'flex';
+}
 function startCareerStage(i){
   G.careerMode=true;G.careerIdx=i;
   const c=CAREER_CAL[i];G.era=c.era;G.diff=1;G.timeLimit=DIFFS[1].s;
   G.car=CAREER.car||ERAS[c.era].cars[0];G.driver=CAREER.driver;G.codriver=CAREER.codriver;
+
+  // Driver-specific pacenote profile: each career round can be contracted
+  // to a driver with their own notation preference (see DRIVER_PROFILES
+  // in rally_systems.js). Switch the active format, and if it's different
+  // from whichever driver the player just worked with, show a short
+  // briefing so they aren't blindsided mid-stage.
+  const profileId = c.driverProfile || 'default';
+  const previousProfile = DriverProfileSystem.activeProfile;
+  const profile = DriverProfileSystem.setProfile(profileId);
+  if (profileId !== previousProfile) {
+    showDriverProfileBriefing(profile);
+  }
+
   if(confirm('Open Tuning Garage before this stage?\n\nOK = Open Tuning | Cancel = Start immediately')){
     activeTuneSection=TUNE_SECTIONS[0];
     if(!TUNE||Object.keys(TUNE).length===0) TUNE=defaultTune();
@@ -2745,7 +3123,7 @@ function beginStage(stageOverride){
   if(!G.car)G.car=ERAS[G.era].cars[0];
   const era=ERAS[G.era];
   const stage=stageOverride||era.stages[Math.floor(Math.random()*era.stages.length)];
-  
+
   // Check for pre-stage story in career mode
   if(G.careerMode && typeof showPreStageStory === 'function' && StorySystem?.state?.genderRoute){
     const stageIndex = CAREER.currentStage || 0;
@@ -2756,20 +3134,36 @@ function beginStage(stageOverride){
     beginStageWithData(stage);
   }
 }
+
+function startStageFromSetup(){
+  // Get driver/co-driver names from setup screen inputs
+  G.driver=document.getElementById('inp-drv')?.value.trim()||'Driver';
+  G.codriver=document.getElementById('inp-cod')?.value.trim()||'Co-driver';
+  if(!G.era){alert('Select an era first!');return;}
+  if(!G.car){alert('Select a car first!');return;}
+  const era=ERAS[G.era];
+  const stage=era.stages[Math.floor(Math.random()*era.stages.length)];
+  beginStageWithData(stage);
+}
 function beginStageWithData(stage){
   clearInterval(G.timer);
-  const era=ERAS[G.era];
-  G.notes=[...stage.notes].sort(()=>Math.random()-.5);
   G.idx=0;G.correct=0;G.skipped=0;G.results=[];G.currentStageName=stage.name;G.stageEnded=false;
-  initDamage();
+  G.crashed=false;G.dnf=false;G.totalTimeLost=0;G.crashCount=0;
+  G.notes=stage.notes.map(n=>({...n,ans:(typeof PacenoteSystem !== 'undefined') ? PacenoteSystem.translate(n.raw) : n.ans}));
+  G.timeLimit=G.timeLimit||DIFFS[G.diff].s;
+  const era=ERAS[G.era];
   document.getElementById('g-stage').textContent=stage.name;
-  document.getElementById('g-meta').textContent=`${stage.surf} · ${stage.km}km · ${stage.weather}`;
-  document.getElementById('g-colbl').textContent=`${G.codriver} calls`;
-  document.getElementById('g-cond').textContent=stage.cond;
-  document.getElementById('g-of').textContent=`/ ${G.notes.length}`;
+  document.getElementById('g-meta').textContent=`${era.label} · ${era.surf} · ${era.weather}`;
   document.getElementById('g-corr').textContent='0';
   const av=era.commentator.split(' ').map(w=>w[0]).join('');
   document.getElementById('g-comm-av').textContent=av;
+
+  // Check for granola bar Easter egg (1-3% chance)
+  if(Math.random() < 0.02) {
+    G.granolaBarPending = true;
+  } else {
+    G.granolaBarPending = false;
+  }
   // Extend vocab with number meanings in career mode
   const vocabEntries = Object.entries(era.vocab);
   const numberMeanings = {
@@ -2808,11 +3202,12 @@ function beginStageWithData(stage){
 }
 function loadNote(){
   G.processingAnswer = false;
-  
+
   if(G.idx>=G.notes.length){endStage();return;}
   const n=G.notes[G.idx];
   const style = typeof CoDriverAudio !== 'undefined' ? CoDriverAudio.getVoiceCharacter() : 'measured';
-  const transformedNote = applyStyleToNote(n.raw, style);
+  const driverFormattedRaw = (G.careerMode && typeof PacenoteSystem !== 'undefined') ? PacenoteSystem.applyFormatToRaw(n.raw) : n.raw;
+  const transformedNote = applyStyleToNote(driverFormattedRaw, style);
   if(G.idx === 0) {
     RALLY_STATE.startTime = Date.now();
     RALLY_STATE.lastInputTime = Date.now();
@@ -2822,12 +3217,18 @@ function loadNote(){
     initializeCompetitiveSeed(G.currentStageName || 'Unknown', G.driver || 'Driver');
     loadPersonalBest();
   }
+  // Re-enable input and submit button
+  document.getElementById('g-input').disabled=false;
+  document.getElementById('g-sub').disabled=false;
+  document.getElementById('g-input').value='';
+  document.getElementById('g-input').focus();
+
   const noteElement = document.getElementById('g-note');
   const narrElement = document.getElementById('g-narr');
   if(G.idx > 0) {
     noteElement.style.opacity = '0';
     noteElement.style.transition = 'opacity 0.3s ease';
-    
+
     setTimeout(() => {
       noteElement.textContent = transformedNote;
       noteElement.style.opacity = '1';
@@ -2889,6 +3290,12 @@ function loadNote(){
   G.remaining = calculateDynamicTimeLimit();
   updateTimer();
   updateInputModeUI();
+
+  // Trigger granola bar Easter egg if pending and at middle of stage
+  if(G.granolaBarPending && G.idx === Math.floor(G.notes.length / 2)) {
+    G.granolaBarPending = false;
+    setTimeout(() => triggerGranolaBarEvent(), 1500);
+  }
   
   // Display tuning warnings if any
   if (G.tuningConsequences && G.tuningConsequences.length > 0) {
@@ -2915,6 +3322,28 @@ function loadNote(){
   input.style.boxShadow = 'none';
 }
 
+// How much there is to process in a note: more linked corners, caution
+// marks, and modifiers all mean more to read and say before calling it.
+// This is what the fixed-metronome timing was missing -- a one-word 'L3'
+// and a five-part 'L3 !2 INTO R4 DONTCUT' were getting the same time
+// budget. Returns roughly "how many spoken chunks", used as a multiplier
+// on the base per-difficulty time rather than a replacement for it, so
+// weather/streak/rhythm-shift adjustments still apply on top.
+function calculateNoteComplexity(raw) {
+  if (!raw) return 1;
+  const tokens = raw.trim().toUpperCase().split(/\s+/);
+  let complexity = 0;
+  tokens.forEach(tok => {
+    if (tok === 'INTO') complexity += 1.2;           // a second corner to call
+    else if (tok.includes('!!')) complexity += 1.2;  // max caution needs emphasis
+    else if (tok.includes('!')) complexity += 0.7;   // caution mark
+    else if (/^\d+$/.test(tok)) complexity += 0.3;   // distance number
+    else if (/^[LR][1-6]$/.test(tok)) complexity += 1; // a corner call
+    else complexity += 0.5;                          // any other modifier word
+  });
+  return Math.max(1, complexity);
+}
+
 function updateDynamicDifficulty() {
   const baseTime = DIFFS[G.diff].s;
   const streakBonus = Math.min(RALLY_STATE.streak * 0.5, 3); // Max 3 seconds bonus
@@ -2930,6 +3359,18 @@ function updateDynamicDifficulty() {
 
 function calculateDynamicTimeLimit() {
   let timeLimit = G.timeLimit;
+
+  // Scale by how much is actually in this note. A bare 'L3' (complexity ~1)
+  // keeps the base time; a long linked note with cautions gets more room,
+  // a trivially short one gets slightly less -- so the pacing follows the
+  // note itself rather than ticking at a fixed interval regardless of content.
+  const currentNoteForTiming = G.notes && G.notes[G.idx];
+  if (currentNoteForTiming) {
+    const complexity = calculateNoteComplexity(currentNoteForTiming.raw);
+    const complexityFactor = Math.max(0.75, Math.min(1.6, 0.7 + complexity * 0.3));
+    timeLimit *= complexityFactor;
+  }
+
   if(RALLY_STATE.weatherEffect === 'rain') {
     timeLimit += 2; // Slower transitions
   } else if(RALLY_STATE.weatherEffect === 'ice') {
@@ -2941,6 +3382,10 @@ function calculateDynamicTimeLimit() {
     timeLimit -= 1; // Less time under pressure
   } else if(RALLY_STATE.urgencyLevel === 'calm' && RALLY_STATE.streak >= 3) {
     timeLimit += 1; // More time when flowing well
+  }
+
+  if (G.careerMode && typeof TeamManagement !== 'undefined') {
+    timeLimit += TeamManagement.getTimeBonus();
   }
   
   return Math.max(4, Math.min(15, timeLimit)); // Clamp between 4-15 seconds
@@ -3128,7 +3573,16 @@ function normaliseAnswer(s){
   return s;
 }
 
-function similarity(a,b){
+// Known speech-recognition confusion pairs: words that sound alike enough
+// over a real microphone that the Web Speech API (or a noisy connection)
+// regularly transcribes one as the other. This does NOT change what the
+// words mean in the game's notation -- 'tight' still means severity 3,
+// 'right' still means the right-hand direction -- it just stops a likely
+// mis-transcription from tanking an otherwise-correct voice call. Typed
+// answers are never given this leniency.
+const VOICE_CONFUSABLE_WORDS = { tight: 'right', right: 'tight' };
+
+function similarity(a, b, opts = {}) {
   a=normaliseAnswer(a);
   b=normaliseAnswer(b);
   if(a===b)return 1;
@@ -3137,7 +3591,17 @@ function similarity(a,b){
   const bFlat = b.replace(/\bfast sweep\b/g,'flat');
   if(aFlat===bFlat)return 1;
   const wa=new Set(a.split(/\s+/));const wb=new Set(b.split(/\s+/));
-  let hit=0;wb.forEach(w=>{if(wa.has(w))hit++;});
+  let hit=0;
+  wb.forEach(w=>{
+    if(wa.has(w)) {
+      hit++;
+    } else if (opts.voiceTolerant && VOICE_CONFUSABLE_WORDS[w] && wa.has(VOICE_CONFUSABLE_WORDS[w])) {
+      // Likely speech-recognition mishearing rather than a genuine wrong
+      // call -- partial credit, not a full match, so an actual mistake
+      // still scores worse than a plausible mishearing.
+      hit += 0.6;
+    }
+  });
   return hit/Math.max(wa.size,wb.size);
 }
 function submitAnswer(){
@@ -3149,7 +3613,9 @@ function submitAnswer(){
   
   const currentNote = G.notes[G.idx];
   const reactionTime = Date.now() - RALLY_STATE.lastInputTime;
-  const baseScore = similarity(typed, currentNote.ans);
+  const isVoice = RALLY_STATE.inputSource === 'voice';
+  RALLY_STATE.inputSource = null; // consume the flag so it never leaks onto the next submission
+  const baseScore = similarity(typed, currentNote.ans, { voiceTolerant: isVoice });
   const finalScore = Math.min(1.0, baseScore * RALLY_STATE.multiplier);
   const ok = finalScore >= RALLY_STATE.forgivenessWindow;
   RALLY_STATE.reactionTimes.push(reactionTime);
@@ -3297,6 +3763,7 @@ function endStage(){
     const cal=CAREER_CAL[G.careerIdx];
     const pts=posN<cal.pts.length?cal.pts[posN]:0;
     CAREER.pts+=pts;
+    if (typeof TeamManagement !== 'undefined') TeamManagement.awardPrizeMoney(pts);
     CAREER.completed[G.careerIdx]={pos,acc,pts,time:timeStr};
     CAREER.currentStage=Math.min(G.careerIdx+1,CAREER_CAL.length);
     CAREER.standings.forEach(r=>{const ri=Math.floor(Math.random()*cal.pts.length);r.pts+=cal.pts[ri]||0;});
@@ -4603,6 +5070,7 @@ const RALLY_STATE = {
   splitTimes: [],
   currentContext: 'sprint',
   contextModifiers: {},
+  inputSource: null, // 'voice' when the current submission came from VoiceInput; used only to gate right/tight scoring tolerance
   currentEvolution: 'clean',
   evolutionLevel: 1,
   codriverPersonality: 'professional',
@@ -8661,11 +9129,7 @@ const KeyboardShortcuts = {
   
   skipNote() {
     if (G.stageEnded || !G.notes[G.idx]) return;
-    const input = document.getElementById('g-input');
-    if (input) {
-      input.value = '';
-      submitAnswer();
-    }
+    skipNote();
   },
   
   replayAudio() {
@@ -8990,87 +9454,101 @@ const PACENOTE_TEMPLATES = {
     name: 'Finnish Forest',
     country: 'Finland',
     notes: [
-      { raw: 'L3', ans: 'Left tight' },
-      { raw: 'R4 INTO L3', ans: 'Right four into left tight' },
-      { raw: 'L5 100', ans: 'Left five one hundred' },
-      { raw: 'R2!', ans: 'Right two hairpin' },
-      { raw: 'L4 JUMP', ans: 'Left medium jump' },
-      { raw: 'R3 INTO L3', ans: 'Right three into left tight' },
-      { raw: 'CREST 80', ans: 'Crest eighty' },
-      { raw: 'L2! INTO R3', ans: 'Left two hairpin into right tight' },
-      { raw: 'L4 50 R4', ans: 'Left four fifty right medium' },
-      { raw: 'L6 INTO R5', ans: 'Left six into right open' },
-      { raw: 'R2! DITCH', ans: 'Right two hairpin ditch outside' },
-      { raw: 'L3 100', ans: 'Left three one hundred' },
-      { raw: 'R4 CREST', ans: 'Right four crest' },
-      { raw: 'L3 INTO R2!', ans: 'Left three into right very tight hairpin' },
-      { raw: 'L5 80', ans: 'Left five eighty' }
+      { raw: 'L3' },
+      { raw: 'R4 INTO L3' },
+      { raw: 'L5 100' },
+      { raw: 'R1!' },
+      { raw: 'L4 JUMP' },
+      { raw: 'R3 INTO L3' },
+      { raw: 'CREST 80' },
+      { raw: 'L2! INTO R3' },
+      { raw: 'L4 50 R4' },
+      { raw: 'L6 INTO R5' },
+      { raw: 'R1! DITCH' },
+      { raw: 'L3 100' },
+      { raw: 'R4 CREST' },
+      { raw: 'L3 INTO R1' },
+      { raw: 'L5 80' }
     ]
   },
   monte: {
     name: 'Monte Carlo Tarmac',
     country: 'Monaco',
     notes: [
-      { raw: 'L4', ans: 'Left four' },
-      { raw: 'R3 INTO L3', ans: 'Right three into left tight' },
-      { raw: 'HAIRPIN R', ans: 'Hairpin right' },
-      { raw: 'L3 50', ans: 'Left three fifty' },
-      { raw: 'R2! INTO L2!', ans: 'Right two hairpin into left very tight hairpin' },
-      { raw: 'L4 ICY', ans: 'Left four icy' },
-      { raw: 'R3 NARROWS', ans: 'Right three narrows' },
-      { raw: 'L2! 30', ans: 'Left two hairpin thirty' },
-      { raw: 'R4 INTO L3', ans: 'Right four into left tight' },
-      { raw: 'L3 TARMAC', ans: 'Left three tarmac' },
-      { raw: 'R2! WALL', ans: 'Right two hairpin wall outside' },
-      { raw: 'L4 100', ans: 'Left four one hundred' },
-      { raw: 'R3 INTO L2!', ans: 'Right three into left very tight hairpin' },
-      { raw: 'L5 80', ans: 'Left five eighty' },
-      { raw: 'R4 BRAKE', ans: 'Right four brake' }
+      { raw: 'L4' },
+      { raw: 'R3 INTO L3' },
+      { raw: 'HAIRPIN R' },
+      { raw: 'L3 50' },
+      { raw: 'R2! INTO L2!' },
+      { raw: 'L4 ICY' },
+      { raw: 'R3 NARROW' },
+      { raw: 'L1 30' },
+      { raw: 'R4 INTO L3' },
+      { raw: 'L3 TARMAC' },
+      { raw: 'R1 WALL' },
+      { raw: 'L4 100' },
+      { raw: 'R3 INTO L1' },
+      { raw: 'L5 80' },
+      { raw: 'R4 BRAKE' }
     ]
   },
   safari: {
     name: 'Safari Rough',
     country: 'Kenya',
     notes: [
-      { raw: 'L4', ans: 'Left four' },
-      { raw: 'R3 ROUGH', ans: 'Right three rough' },
-      { raw: 'L5 200', ans: 'Left five two hundred' },
-      { raw: 'R3 DUST', ans: 'Right three dust' },
-      { raw: 'L4 INTO R3', ans: 'Left four into right tight' },
-      { raw: 'R4 BUMP', ans: 'Right four bump' },
-      { raw: 'L3 SAND', ans: 'Left three sand' },
-      { raw: 'R4 150', ans: 'Right four one fifty' },
-      { raw: 'L3 INTO R2!', ans: 'Left three into right very tight hairpin' },
-      { raw: 'L4 ROCKS', ans: 'Left four rocks' },
-      { raw: 'R3 DEEP', ans: 'Right three deep ruts' },
-      { raw: 'L5 100', ans: 'Left five one hundred' },
-      { raw: 'R4 WASHBOARD', ans: 'Right four washboard' },
-      { raw: 'L3 CARE', ans: 'Left three care' },
-      { raw: 'R4 INTO L4', ans: 'Right four into left medium' }
+      { raw: 'L4' },
+      { raw: 'R3 ROUGH' },
+      { raw: 'L5 200' },
+      { raw: 'R3 DUST' },
+      { raw: 'L4 INTO R3' },
+      { raw: 'R4 BUMP' },
+      { raw: 'L3 SAND' },
+      { raw: 'R4 150' },
+      { raw: 'L3 INTO R1' },
+      { raw: 'L4 ROCKS' },
+      { raw: 'R3 DEEP' },
+      { raw: 'L5 100' },
+      { raw: 'R4 WASHBOARD' },
+      { raw: 'L3 CARE' },
+      { raw: 'R4 INTO L4' }
     ]
   },
   snow: {
     name: 'Snow/Ice',
     country: 'Sweden',
     notes: [
-      { raw: 'L4', ans: 'Left four' },
-      { raw: 'R3 ICY', ans: 'Right three icy' },
-      { raw: 'L5 100', ans: 'Left five one hundred' },
-      { raw: 'R2! SNOW', ans: 'Right two hairpin snow' },
-      { raw: 'L3 INTO R3', ans: 'Left three into right tight' },
-      { raw: 'R4 SLUSH', ans: 'Right four slush' },
-      { raw: 'L3 TREE', ans: 'Left three tree inside' },
-      { raw: 'R4 80', ans: 'Right four eighty' },
-      { raw: 'L2! INTO R3', ans: 'Left two hairpin into right tight' },
-      { raw: 'L4 FROZEN', ans: 'Left four frozen' },
-      { raw: 'R3 DITCH', ans: 'Right three ditch' },
-      { raw: 'L5 150', ans: 'Left five one fifty' },
-      { raw: 'R4 SNOWBANK', ans: 'Right four snowbank' },
-      { raw: 'L3 CARE', ans: 'Left three care' },
-      { raw: 'R4 INTO L3', ans: 'Right four into left tight' }
+      { raw: 'L4' },
+      { raw: 'R3 ICY' },
+      { raw: 'L5 100' },
+      { raw: 'R1 SNOW' },
+      { raw: 'L3 INTO R3' },
+      { raw: 'R4 SLUSH' },
+      { raw: 'L3 TREE' },
+      { raw: 'R4 80' },
+      { raw: 'L2! INTO R3' },
+      { raw: 'L4 FROZEN' },
+      { raw: 'R3 DITCH' },
+      { raw: 'L5 150' },
+      { raw: 'R4 SNOWBANK' },
+      { raw: 'L3 CARE' },
+      { raw: 'R4 INTO L3' }
     ]
   }
 };
+
+// Answers are generated from the single canonical translator (PacenoteSystem.translate),
+// never hand-written, so this data can't silently drift out of sync with the tutorial,
+// scoring, and career notes the way it did before (raw '!' was being hand-translated here
+// as "hairpin" instead of "caution" — a genuine contradiction with the rest of the game).
+// See PacenoteSystem.FORMATS.wrc_standard for the definition: '!' = caution, '1' = hairpin.
+function capitalizeAns(s) {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+Object.values(PACENOTE_TEMPLATES).forEach(function(template) {
+  template.notes.forEach(function(n) {
+    n.ans = capitalizeAns(PacenoteSystem.translate(n.raw));
+  });
+});
 
 function loadTemplate(templateId) {
   const template = PACENOTE_TEMPLATES[templateId];
