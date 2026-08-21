@@ -166,7 +166,6 @@ const StoryUI = {
     screen.style.cssText = `
       background: #000;
       color: #fff;
-      display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
@@ -260,8 +259,6 @@ const StoryUI = {
     this.onComplete = onComplete;
     
     const screen = document.getElementById('story-screen');
-    // Ensure screen is visible
-    screen.style.display = 'flex';
     const location = document.getElementById('story-location');
     const speaker = document.getElementById('story-speaker');
     const text = document.getElementById('story-text');
@@ -443,10 +440,6 @@ const StoryUI = {
   },
   
   selectChoice(choice) {
-    // Store the completion callback locally
-    const completionCallback = this.onComplete;
-    console.log('selectChoice called, completionCallback:', completionCallback);
-    
     // Cancel any ongoing speech
     if (window.speechSynthesis) {
       window.speechSynthesis.cancel();
@@ -500,35 +493,14 @@ const StoryUI = {
       continueBtn.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        console.log('Consequence Continue clicked, calling completionCallback');
-        // Cancel speech and complete
-        if (window.speechSynthesis) window.speechSynthesis.cancel();
-        
-        // Explicitly hide story screen
-        const storyScreen = document.getElementById('story-screen');
-        if (storyScreen) {
-          storyScreen.classList.remove('active');
-          storyScreen.style.display = 'none';
-        }
-        
-        if (completionCallback) {
-          completionCallback();
-        } else {
-          console.warn('No completionCallback available');
-          // Fallback: just hide the story screen and show career
-          show('career');
-        }
+        this.complete();
       });
       choices.appendChild(continueBtn);
       
       this.updateStats();
     } else {
       // No consequence text, complete immediately
-      if (completionCallback) {
-        completionCallback();
-      } else {
-        this.complete();
-      }
+      this.complete();
     }
   },
   
@@ -545,16 +517,29 @@ const StoryUI = {
     if (window.speechSynthesis) {
       window.speechSynthesis.cancel();
     }
-    if (this.onComplete) {
-      this.onComplete();
+    
+    // Always close the overlay, however we got here (skip, choice with
+    // consequence text, choice without). This used to only happen in one
+    // of the three completion paths, which is why the screen -- and every
+    // control underneath it -- could get stuck.
+    const storyScreen = document.getElementById('story-screen');
+    if (storyScreen) {
+      storyScreen.classList.remove('active');
+      storyScreen.style.removeProperty('display');
+    }
+    
+    // Guard against double-firing if complete() is somehow reached twice
+    // (e.g. a stray click after Skip already ran).
+    const callback = this.onComplete;
+    this.onComplete = null;
+    this.currentScene = null;
+    
+    if (callback) {
+      callback();
     }
   },
   
   skip() {
-    // Cancel any ongoing speech
-    if (window.speechSynthesis) {
-      window.speechSynthesis.cancel();
-    }
     this.complete();
   }
 };
@@ -569,7 +554,6 @@ function showRouteSelection() {
     selectScreen.className = 'screen';
     selectScreen.style.cssText = `
       background: linear-gradient(135deg, #0a0a0c 0%, #1a1a2e 100%);
-      display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
@@ -729,6 +713,20 @@ function showPostStageStory(stageIndex, stageResult, onComplete) {
     onComplete();
   }
 }
+
+// Keyboard shortcut: 'S' skips the current story scene, matching the
+// on-screen Skip Story button. Only acts while the story screen is
+// actually showing, so it never interferes with the in-stage 'S' =
+// skip-note shortcut used during a rally stage.
+document.addEventListener('keydown', (e) => {
+  if (e.key.toLowerCase() !== 's') return;
+  const storyScreen = document.getElementById('story-screen');
+  if (!storyScreen || !storyScreen.classList.contains('active')) return;
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  e.preventDefault();
+  e.stopPropagation();
+  StoryUI.skip();
+});
 
 // Initialize immediately when script loads (DOM may already be ready)
 if (document.readyState === 'loading') {
