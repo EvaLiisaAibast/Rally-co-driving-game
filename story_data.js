@@ -138,6 +138,31 @@ Keep the rhythm. Don't let him off the hook.`,
             ]
           }
         },
+        {
+          id: 'jorge_hired_bonus',
+          condition: (ctx) => ctx.stage === 4 && StorySystem.state.flags.hiredJorge && !StorySystem.state.flags.sawJorgeHiredScene,
+          scene: {
+            location: 'SERVICE BAY · EARLY MORNING',
+            background: 'garage',
+            dialogue: [
+              { speaker: 'narrator', text: 'Jorge is already there when you arrive, coffee in one hand, torque wrench in the other. The car looks better than it has all season.' },
+              { speaker: 'jorge', text: 'Putting me on the payroll properly instead of just nodding at me in the paddock. That\'s new.' },
+              { speaker: 'you', text: 'You keep him alive. Seemed like a good investment.' },
+              { speaker: 'jorge', text: 'It is one. I\'ve been rebuilding this suspension in my own time for three seasons for free. Now I get to do it right — proper parts, proper hours.\n\nHe pats the roll cage like it\'s a horse.\n\nJorge: Whatever happens out there today, it won\'t be because this car let you down.' }
+            ],
+            choices: [
+              {
+                text: '"That\'s all I needed to hear."',
+                consequence: {
+                  text: 'Jorge nods once, satisfied, and goes back to work. The car starts on the first turn of the key — it hasn\'t done that all season.',
+                  stats: { driverTrust: 5, mentalStress: -5 },
+                  flags: { sawJorgeHiredScene: true },
+                  relationships: { mechanicBond: 4 }
+                }
+              }
+            ]
+          }
+        },
       ],
       
       postStage: [
@@ -252,6 +277,30 @@ Keep the rhythm. Don't let him off the hook.`,
                 consequence: { 
                   text: 'Sara: (laughs)\nYou sound like the old Group B engineers. They\'d say: \'Build the car, let the driver adapt.\' Different world now.',
                   stats: { reputation: 10, teamRespect: 5 }
+                }
+              }
+            ]
+          }
+        },
+        {
+          id: 'sara_hired_bonus',
+          condition: (ctx) => ctx.stage === 5 && StorySystem.state.flags.hiredSara && !StorySystem.state.flags.sawSaraHiredScene,
+          scene: {
+            location: 'TEAM TRUCK · ENGINEERING BAY',
+            background: 'garage',
+            dialogue: [
+              { speaker: 'narrator', text: 'Sara has three laptops open and a setup sheet covered in her own shorthand. She doesn\'t look up when you walk in.' },
+              { speaker: 'sara', text: 'You put me on retainer instead of borrowing me from the factory team for one weekend at a time. That means I get to actually finish what I start.' },
+              { speaker: 'you', text: 'Figured you\'d earned a say in how this car gets built, not just patched between rallies.' },
+              { speaker: 'sara', text: '(finally looks up)\nThat\'s the first time a co-driver has said that to me and meant it as more than a compliment.\n\nShe slides the setup sheet across the table.\n\nSara: This is what the car should have been all season. Let\'s find out what it actually is.' }
+            ],
+            choices: [
+              {
+                text: '"Let\'s find out."',
+                consequence: {
+                  text: 'Sara closes the laptops, one by one, like she\'s closing a case she\'s finally allowed to argue.',
+                  stats: { teamRespect: 10, mentalStress: -5 },
+                  flags: { sawSaraHiredScene: true }
                 }
               }
             ]
