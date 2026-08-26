@@ -10,6 +10,91 @@ if (typeof StoryData === 'undefined') {
   console.log('StoryData loaded successfully');
 }
 
+// Returns a fresh copy of the default story state shape. Used both to
+// initialize StorySystem.state and to fill in any fields missing from an
+// older save (see StorySystem.init() / deepMergeDefaults below).
+function getDefaultStoryState() {
+  return {
+    genderRoute: null, // 'male' or 'female'
+    chapter: 1,
+    stageIndex: 0,
+
+    stats: {
+      driverTrust: 50,
+      teamRespect: 50,
+      reputation: 50,
+      mentalStress: 0,
+      grit: 0,
+      legacy: 0,
+    },
+
+    factionReputation: {
+      factoryTeams: 50,
+      privateers: 50,
+      progressives: 50,
+      oldGuard: 50,
+      mediaMachine: 50
+    },
+
+    relationships: {
+      driverSober: false,
+      girlfriendHostile: false,
+      mechanicBond: 0,
+      saraImpressed: false,
+    },
+
+    flags: {
+      sawGirlfriendConfrontation: false,
+      blamedForCrash: false,
+      defendedDriver: false,
+      usedToughLove: false,
+      alignedWithFactory: false,
+      alignedWithPrivateers: false,
+      alignedWithProgressives: false,
+      alignedWithOldGuard: false,
+      savedMerchant: false,
+      betrayedFaction: null,
+      helpedRival: false,
+      ignoredConflict: false
+    },
+
+    driverState: {
+      drunk: false,
+      shaken: false,
+      motivated: false,
+      injured: false,
+    },
+
+    consequenceHistory: []
+  };
+}
+
+// Recursively fills in any keys missing from `saved` using values from
+// `defaults`, without discarding anything already present in `saved`.
+// This is what lets old localStorage saves survive new fields being added
+// to the state shape (e.g. consequenceHistory) instead of crashing with
+// "Cannot read properties of undefined" the first time a new field is used.
+function deepMergeDefaults(saved, defaults) {
+  const isPlainObject = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
+
+  if (!isPlainObject(saved)) {
+    // Saved value is missing, an array, or a primitive that doesn't need
+    // merging — arrays (like consequenceHistory) are taken as-is from
+    // saved if present, otherwise fall back to the default entirely.
+    return saved !== undefined ? saved : defaults;
+  }
+
+  const merged = { ...saved };
+  Object.keys(defaults).forEach((key) => {
+    if (!(key in merged) || merged[key] === undefined) {
+      merged[key] = defaults[key];
+    } else if (isPlainObject(defaults[key])) {
+      merged[key] = deepMergeDefaults(merged[key], defaults[key]);
+    }
+  });
+  return merged;
+}
+
 const StorySystem = {
   // Skill system - skills create new possibilities rather than just being doors
   skills: {
@@ -347,73 +432,23 @@ const StorySystem = {
     return conflicts.length > 0 ? conflicts : null;
   },
   // Game state for story progression
-  state: {
-    genderRoute: null, // 'male' or 'female'
-    chapter: 1,
-    stageIndex: 0,
-    
-    // Stats
-    stats: {
-      driverTrust: 50,      // 0-100, how much driver trusts you
-      teamRespect: 50,      // 0-100, team opinion of you
-      reputation: 50,       // 0-100, paddock-wide reputation
-      mentalStress: 0,      // 0-100, affects performance
-      grit: 0,              // Female route - determination under pressure
-      legacy: 0,            // Career legacy score
-    },
-    
-    // Faction reputation - 0-100 with each faction
-    factionReputation: {
-      factoryTeams: 50,
-      privateers: 50,
-      progressives: 50,
-      oldGuard: 50,
-      mediaMachine: 50
-    },
-    
-    // Relationship flags
-    relationships: {
-      driverSober: false,   // Male: helped Mikko sober up
-      girlfriendHostile: false, // Male: Elena is hostile
-      mechanicBond: 0,      // Jorge relationship
-      saraImpressed: false, // Female: impressed engineer
-    },
-    
-    // Story flags
-    flags: {
-      sawGirlfriendConfrontation: false,
-      blamedForCrash: false,
-      defendedDriver: false,
-      usedToughLove: false,
-      // Faction-specific flags
-      alignedWithFactory: false,
-      alignedWithPrivateers: false,
-      alignedWithProgressives: false,
-      alignedWithOldGuard: false,
-      // Consequence tracking
-      savedMerchant: false,
-      betrayedFaction: null,
-      helpedRival: false,
-      ignoredConflict: false
-    },
-    
-    // Driver states
-    driverState: {
-      drunk: false,
-      shaken: false,
-      motivated: false,
-      injured: false,
-    },
-    
-    // Consequence database - tracks long-term effects of choices
-    consequenceHistory: []
-  },
+  state: getDefaultStoryState(),
   
   // Initialize story system
   init() {
     const saved = localStorage.getItem('rally_story_state');
     if (saved) {
-      this.state = JSON.parse(saved);
+      try {
+        const parsed = JSON.parse(saved);
+        // Merge onto a fresh default shape so any field added to the game
+        // since this save was written (e.g. consequenceHistory) is filled
+        // in instead of being undefined and crashing the first time it's
+        // used (see applyChoice()).
+        this.state = deepMergeDefaults(parsed, getDefaultStoryState());
+      } catch (e) {
+        console.error('Failed to parse saved story state, starting fresh:', e);
+        this.state = getDefaultStoryState();
+      }
     }
   },
   
@@ -424,53 +459,7 @@ const StorySystem = {
   
   // Reset for new career
   reset() {
-    this.state = {
-      genderRoute: null,
-      chapter: 1,
-      stageIndex: 0,
-      stats: {
-        driverTrust: 50,
-        teamRespect: 50,
-        reputation: 50,
-        mentalStress: 0,
-        grit: 0,
-        legacy: 0,
-      },
-      factionReputation: {
-        factoryTeams: 50,
-        privateers: 50,
-        progressives: 50,
-        oldGuard: 50,
-        mediaMachine: 50
-      },
-      relationships: {
-        driverSober: false,
-        girlfriendHostile: false,
-        mechanicBond: 0,
-        saraImpressed: false,
-      },
-      flags: {
-        sawGirlfriendConfrontation: false,
-        blamedForCrash: false,
-        defendedDriver: false,
-        usedToughLove: false,
-        alignedWithFactory: false,
-        alignedWithPrivateers: false,
-        alignedWithProgressives: false,
-        alignedWithOldGuard: false,
-        savedMerchant: false,
-        betrayedFaction: null,
-        helpedRival: false,
-        ignoredConflict: false
-      },
-      driverState: {
-        drunk: false,
-        shaken: false,
-        motivated: false,
-        injured: false,
-      },
-      consequenceHistory: []
-    };
+    this.state = getDefaultStoryState();
     this.save();
   },
   
