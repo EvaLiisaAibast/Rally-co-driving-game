@@ -59,7 +59,7 @@ const Factions = {
     internalContradictions: "They claim to value courage but often take unnecessary risks that endanger others. They preach tradition but many of them made their careers by breaking with tradition.",
     classesBenefiting: ["Purist fans", "Historians", "Drivers who thrive on danger"],
     classesSuffering: ["Safety advocates", "Modern engineers", "Drivers with families"],
-    leaderMotivation: "Preserve what they believe racing "should be," and prove that the modern era has lost something essential",
+    leaderMotivation: "Preserve what they believe racing 'should be,' and prove that the modern era has lost something essential",
     memberDisagreements: "Some genuinely love the sport's history. Others are using nostalgia to mask their fear of becoming irrelevant."
   },
   
@@ -491,7 +491,7 @@ Keep the rhythm. Don't let him off the hook.`,
               { speaker: 'you', text: 'You told me that\'s when the road ends.' },
               { speaker: 'laurent', text: 'I did.\n\nHe finishes his coffee.\n\nLaurent: But I didn\'t tell you the other part.\n\nHe looks at you.\n\nLaurent: Sometimes hearing the silence is the only way to find the road that actually goes somewhere.' },
               { speaker: 'you', text: 'What road is that?' },
-              { speaker: 'laurent', text: 'The one that doesn\'t end.\n\nHe throws the cup in the trash.\n\nLaurent: My teammate? He stopped hearing the silence. He started hearing only what he wanted to hear.\n\nHe walks away, then stops.\n\nLaurent: You\'re still hearing it. That\'s why you\'re still alive.\n\nHe doesn\'t look back. The silence between you feels different now—like something you\'ve earned.'
+              { speaker: 'laurent', text: 'The one that doesn\'t end.\n\nHe throws the cup in the trash.\n\nLaurent: My teammate? He stopped hearing the silence. He started hearing only what he wanted to hear.\n\nHe walks away, then stops.\n\nLaurent: You\'re still hearing it. That\'s why you\'re still alive.\n\nHe doesn\'t look back. The silence between you feels different now—like something you\'ve earned.' }
             ],
             choices: [
               {
