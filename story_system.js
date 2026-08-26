@@ -11,6 +11,341 @@ if (typeof StoryData === 'undefined') {
 }
 
 const StorySystem = {
+  // Skill system - skills create new possibilities rather than just being doors
+  skills: {
+    speech: 0,        // Opens conversations, persuades NPCs
+    medicine: 0,      // Reveals medical information about driver health
+    engineering: 0,  // Understands technical issues, can suggest repairs
+    perception: 0,   // Notices hidden details, environmental clues
+    survival: 0,     // Identifies resources, predicts dangerous conditions
+    stealth: 0,      // Changes infiltration possibilities, hears private conversations
+    intelligence: 0, // Understands complex information, sees patterns
+  },
+  
+  // Check if a skill level is sufficient for a check
+  checkSkill(skillName, requiredLevel) {
+    return this.skills[skillName] >= requiredLevel;
+  },
+  
+  // Add skill points (called during character creation or as rewards)
+  addSkillPoints(skillName, points) {
+    this.skills[skillName] = Math.min(100, this.skills[skillName] + points);
+    this.save();
+  },
+  
+  // Get skill-based dialogue options - adds new choices based on skills
+  getSkillBasedChoices(baseChoices, context) {
+    const enhancedChoices = [...baseChoices];
+    
+    // Speech skill: Persuasion options
+    if (this.skills.speech >= 30 && context.canPersuade) {
+      enhancedChoices.push({
+        text: '[Speech] Convince them to see it your way',
+        consequence: {
+          text: 'Your words find their mark. Sometimes persuasion isn\'t about arguments—it\'s about understanding what someone actually needs.',
+          stats: { reputation: 5 },
+          flags: { speechSuccess: true }
+        },
+        condition: (ctx) => StorySystem.skills.speech >= 30
+      });
+    }
+    
+    // Engineering skill: Technical solutions
+    if (this.skills.engineering >= 40 && context.technicalProblem) {
+      enhancedChoices.push({
+        text: '[Engineering] Propose a technical solution',
+        consequence: {
+          text: 'You see the problem before they finish explaining it. The solution is elegant, practical, and completely different from what they expected.',
+          stats: { teamRespect: 10, reputation: 5 },
+          flags: { engineeringSuccess: true }
+        },
+        condition: (ctx) => StorySystem.skills.engineering >= 40
+      });
+    }
+    
+    // Perception skill: Notice hidden details
+    if (this.skills.perception >= 25 && context.hiddenDetails) {
+      enhancedChoices.push({
+        text: '[Perception] Notice something others missed',
+        consequence: {
+          text: 'There it is—the detail everyone else walked past. Sometimes the most important information is the stuff nobody thinks to mention.',
+          stats: { reputation: 10 },
+          flags: { perceptionSuccess: true, discoveredHiddenInfo: true }
+        },
+        condition: (ctx) => StorySystem.skills.perception >= 25
+      });
+    }
+    
+    // Medicine skill: Health insights
+    if (this.skills.medicine >= 35 && context.medicalContext) {
+      enhancedChoices.push({
+        text: '[Medicine] Assess the physical condition',
+        consequence: {
+          text: 'You see what they\'re trying to hide. The tension in their shoulders, the slight favoring of one side, the way they move when they think nobody\'s watching.',
+          stats: { driverTrust: 10, mentalStress: -5 },
+          flags: { medicalInsight: true }
+        },
+        condition: (ctx) => StorySystem.skills.medicine >= 35
+      });
+    }
+    
+    // Intelligence skill: Pattern recognition
+    if (this.skills.intelligence >= 50 && context.complexSituation) {
+      enhancedChoices.push({
+        text: '[Intelligence] See the pattern in the chaos',
+        consequence: {
+          text: 'It\'s not random. It never is. Once you see the pattern, the chaos becomes strategy.',
+          stats: { reputation: 15, mentalStress: -10 },
+          flags: { patternRecognized: true }
+        },
+        condition: (ctx) => StorySystem.skills.intelligence >= 50
+      });
+    }
+    
+    return enhancedChoices;
+  },
+  
+  // Filter choices based on conditions (including skill checks)
+  filterChoices(choices, context) {
+    return choices.filter(choice => {
+      if (!choice.condition) return true;
+      try {
+        return choice.condition(context);
+      } catch (e) {
+        console.error('Error evaluating choice condition:', e);
+        return true;
+      }
+    });
+  },
+  
+  // Information discovery system - players investigate to learn truth
+  discoveredInformation: {
+    // Track what the player has learned about various situations
+    // Information can be contradictory, requiring players to decide what to believe
+    learnedFacts: [],
+    conflictingAccounts: [],
+    verifiedInformation: [],
+    rumorsHeard: []
+  },
+  
+  // Add discovered information
+  addDiscoveredInfo(type, information, source, reliability) {
+    const infoEntry = {
+      type, // 'fact', 'rumor', 'conflict', 'verified'
+      information,
+      source,
+      reliability, // 0-100, how reliable this source is
+      timestamp: Date.now()
+    };
+    
+    if (type === 'fact') {
+      this.discoveredInformation.learnedFacts.push(infoEntry);
+    } else if (type === 'rumor') {
+      this.discoveredInformation.rumorsHeard.push(infoEntry);
+    } else if (type === 'conflict') {
+      this.discoveredInformation.conflictingAccounts.push(infoEntry);
+    } else if (type === 'verified') {
+      this.discoveredInformation.verifiedInformation.push(infoEntry);
+    }
+    
+    this.save();
+  },
+  
+  // Get conflicting information about a topic
+  getConflictingAccounts(topic) {
+    return this.discoveredInformation.conflictingAccounts.filter(
+      info => info.topic === topic
+    );
+  },
+  
+  // Check if player has enough information to make an informed decision
+  hasEnoughInformation(topic, threshold = 2) {
+    const relevantFacts = this.discoveredInformation.learnedFacts.filter(
+      info => info.topic === topic
+    );
+    const relevantRumors = this.discoveredInformation.rumorsHeard.filter(
+      info => info.topic === topic
+    );
+    
+    return (relevantFacts.length + relevantRumors.length) >= threshold;
+  },
+  
+  // Companion system - companions have opinions and can conflict
+  companions: {
+    // Each companion has opinions on choices and can react
+    currentCompanion: null,
+    companionStates: {},
+    availableCompanions: {
+      jorge: {
+        name: 'Jorge',
+        role: 'Mechanic',
+        worldview: 'Pragmatic traditionalist - believes in machines over people, but respects those who prove themselves',
+        opinions: {
+          factoryTeams: -20, // Distrusts corporate control
+          privateers: 30,    // Respects the underdog mentality
+          riskTaking: -10,   // Prefers reliability over heroics
+          technicalSolutions: 40 // Values engineering skill
+        },
+        relationshipLevel: 0, // 0-100
+        flags: {
+          hasWorkedWithFactory: false,
+          savedPlayerLife: false,
+          betrayedPlayer: false
+        }
+      },
+      elena: {
+        name: 'Elena',
+        role: "Driver's Girlfriend",
+        worldview: 'Protective realist - will do anything to keep Mikko alive, even if it means making him retire',
+        opinions: {
+          safety: 50,         // Values safety above all
+          ambition: -20,      // Worried about the cost of winning
+          trust: 30,          // Wants to trust but has been burned
+          confrontation: -10  // Prefers calculation over conflict
+        },
+        relationshipLevel: 0,
+        flags: {
+          askedForHelp: false,
+          rejectedAdvice: false,
+          sawVulnerability: false
+        }
+      },
+      sara: {
+        name: 'Sara',
+        role: 'Engineer',
+        worldview: 'Technical progressive - believes innovation and safety can coexist, wants to prove women belong in engineering',
+        opinions: {
+          progressives: 40,  // Aligns with technical advancement
+          tradition: -20,    // Rejects "that's how we've always done it"
+          competence: 50,    // Values skill over everything
+          gender: 30         // Has experienced discrimination, wants to prove others wrong
+        },
+        relationshipLevel: 0,
+        flags: {
+          facedDiscrimination: false,
+          provenCompetence: false,
+          mentoredPlayer: false
+        }
+      },
+      laurent: {
+        name: 'Laurent',
+        role: 'Rival Driver',
+        worldview: 'Philosophical competitor - sees racing as a mirror for life, respects the journey more than the destination',
+        opinions: {
+          competition: 30,    // Values fair competition
+          wisdom: 40,        // Respects those who learn from mistakes
+          arrogance: -30,    // Dislikes ego-driven drivers
+          authenticity: 50   // Values being true to oneself
+        },
+        relationshipLevel: 0,
+        flags: {
+          sharedWisdom: false,
+          competedFairly: false,
+          learnedFromPlayer: false
+        }
+      }
+    }
+  },
+  
+  // Add companion reaction to a choice
+  addCompanionReaction(companionId, reactionType, intensity) {
+    const companion = this.companions.availableCompanions[companionId];
+    if (!companion) return;
+    
+    // Adjust relationship based on reaction
+    if (reactionType === 'approve') {
+      companion.relationshipLevel = Math.min(100, companion.relationshipLevel + intensity);
+    } else if (reactionType === 'disapprove') {
+      companion.relationshipLevel = Math.max(0, companion.relationshipLevel - intensity);
+    }
+    
+    // Check for companion departure thresholds
+    if (companion.relationshipLevel < 20 && !companion.flags.warnedAboutLeaving) {
+      companion.flags.warnedAboutLeaving = true;
+      return 'warning';
+    } else if (companion.relationshipLevel < 10) {
+      return 'departure';
+    }
+    
+    this.save();
+    return 'normal';
+  },
+  
+  // Get companion commentary on a situation
+  getCompanionCommentary(companionId, situationType) {
+    const companion = this.companions.availableCompanions[companionId];
+    if (!companion || companion.relationshipLevel < 30) return null;
+    
+    const commentaries = {
+      jorge: {
+        technical: "You see the problem. Most people just see the symptom.",
+        risk: "Brave or stupid? The line between them is thinner than you think.",
+        trust: "Machines don't lie. People do. The trick is knowing which is which.",
+        failure: "Every failure teaches something. The question is whether you're listening."
+      },
+      elena: {
+        safety: "I've seen what happens when the calculation goes wrong. I won't see it again.",
+        trust: "Trust isn't given. It's earned. And it can be lost in a single note.",
+        love: "I love him. That doesn't mean I'll let him destroy himself.",
+        sacrifice: "Some things are worth the cost. The question is whether this is one of them."
+      },
+      sara: {
+        innovation: "The old ways work. The new ways work better. Prove it.",
+        discrimination: "They told me I didn't belong. I showed them they were wrong.",
+        competence: "I don't need you to believe in me. I need you to get out of my way.",
+        success: "This isn't about proving them wrong. It's about proving myself right."
+      },
+      laurent: {
+        competition: "I'm not racing you. I'm racing the version of myself that settles for second.",
+        wisdom: "The fastest driver isn't the one who wins. It's the one who learns the most.",
+        authenticity: "Be yourself. The other versions are already taken.",
+        legacy: "When they remember you, what will they remember? The winning? Or the way you won?"
+      }
+    };
+    
+    return commentaries[companionId]?.[situationType] || null;
+  },
+  
+  // Check for companion conflicts
+  checkCompanionConflicts() {
+    const activeCompanions = Object.entries(this.companions.availableCompanions)
+      .filter(([id, comp]) => comp.relationshipLevel > 40)
+      .map(([id, comp]) => ({ id, ...comp }));
+    
+    if (activeCompanions.length < 2) return null;
+    
+    // Check for ideological conflicts
+    const conflicts = [];
+    
+    // Jorge vs Elena - technical vs emotional approach
+    if (activeCompanions.some(c => c.id === 'jorge') && activeCompanions.some(c => c.id === 'elena')) {
+      conflicts.push({
+        type: 'ideological',
+        companions: ['jorge', 'elena'],
+        issue: 'Mikko\'s best path forward',
+        jorgePosition: 'Technical reliability',
+        elenaPosition: 'Emotional safety',
+        intensity: Math.abs(this.companions.availableCompanions.jorge.relationshipLevel - 
+                          this.companions.availableCompanions.elena.relationshipLevel) / 100
+      });
+    }
+    
+    // Sara vs Traditional mechanics
+    if (activeCompanions.some(c => c.id === 'sara') && activeCompanions.some(c => c.id === 'jorge')) {
+      if (this.companions.availableCompanions.sara.opinions.tradition < 0) {
+        conflicts.push({
+          type: 'methodological',
+          companions: ['sara', 'jorge'],
+          issue: 'Technical approach',
+          saraPosition: 'Innovation and data',
+          jorgePosition: 'Experience and intuition',
+          intensity: 0.6
+        });
+      }
+    }
+    
+    return conflicts.length > 0 ? conflicts : null;
+  },
   // Game state for story progression
   state: {
     genderRoute: null, // 'male' or 'female'
@@ -27,6 +362,15 @@ const StorySystem = {
       legacy: 0,            // Career legacy score
     },
     
+    // Faction reputation - 0-100 with each faction
+    factionReputation: {
+      factoryTeams: 50,
+      privateers: 50,
+      progressives: 50,
+      oldGuard: 50,
+      mediaMachine: 50
+    },
+    
     // Relationship flags
     relationships: {
       driverSober: false,   // Male: helped Mikko sober up
@@ -41,6 +385,16 @@ const StorySystem = {
       blamedForCrash: false,
       defendedDriver: false,
       usedToughLove: false,
+      // Faction-specific flags
+      alignedWithFactory: false,
+      alignedWithPrivateers: false,
+      alignedWithProgressives: false,
+      alignedWithOldGuard: false,
+      // Consequence tracking
+      savedMerchant: false,
+      betrayedFaction: null,
+      helpedRival: false,
+      ignoredConflict: false
     },
     
     // Driver states
@@ -49,7 +403,10 @@ const StorySystem = {
       shaken: false,
       motivated: false,
       injured: false,
-    }
+    },
+    
+    // Consequence database - tracks long-term effects of choices
+    consequenceHistory: []
   },
   
   // Initialize story system
@@ -79,6 +436,13 @@ const StorySystem = {
         grit: 0,
         legacy: 0,
       },
+      factionReputation: {
+        factoryTeams: 50,
+        privateers: 50,
+        progressives: 50,
+        oldGuard: 50,
+        mediaMachine: 50
+      },
       relationships: {
         driverSober: false,
         girlfriendHostile: false,
@@ -90,13 +454,22 @@ const StorySystem = {
         blamedForCrash: false,
         defendedDriver: false,
         usedToughLove: false,
+        alignedWithFactory: false,
+        alignedWithPrivateers: false,
+        alignedWithProgressives: false,
+        alignedWithOldGuard: false,
+        savedMerchant: false,
+        betrayedFaction: null,
+        helpedRival: false,
+        ignoredConflict: false
       },
       driverState: {
         drunk: false,
         shaken: false,
         motivated: false,
         injured: false,
-      }
+      },
+      consequenceHistory: []
     };
     this.save();
   },
@@ -109,21 +482,460 @@ const StorySystem = {
   
   // Apply choice consequences
   applyChoice(choice) {
+    // Track consequences for the database
+    const consequenceEntry = {
+      timestamp: Date.now(),
+      choice: choice.text || 'unknown',
+      effects: []
+    };
+
     if (choice.stats) {
       Object.entries(choice.stats).forEach(([stat, value]) => {
         this.state.stats[stat] = Math.max(0, Math.min(100, this.state.stats[stat] + value));
+        consequenceEntry.effects.push({ type: 'stat', stat, value });
+      });
+    }
+    if (choice.factionReputation) {
+      Object.entries(choice.factionReputation).forEach(([faction, value]) => {
+        this.state.factionReputation[faction] = Math.max(0, Math.min(100, this.state.factionReputation[faction] + value));
+        consequenceEntry.effects.push({ type: 'faction', faction, value });
       });
     }
     if (choice.flags) {
       Object.assign(this.state.flags, choice.flags);
+      consequenceEntry.effects.push({ type: 'flags', flags: choice.flags });
     }
     if (choice.relationships) {
       Object.assign(this.state.relationships, choice.relationships);
+      consequenceEntry.effects.push({ type: 'relationships', relationships: choice.relationships });
     }
     if (choice.driverState) {
       Object.assign(this.state.driverState, choice.driverState);
+      consequenceEntry.effects.push({ type: 'driverState', state: choice.driverState });
     }
+    
+    // Handle companion reactions
+    if (choice.companionReaction) {
+      const reaction = this.addCompanionReaction(
+        choice.companionReaction.companion,
+        choice.companionReaction.reaction,
+        choice.companionReaction.intensity
+      );
+      consequenceEntry.effects.push({ type: 'companionReaction', reaction, details: choice.companionReaction });
+      
+      // Store companion reaction state for potential use in dialogue
+      if (reaction === 'departure') {
+        this.state.flags[`companion_${choice.companionReaction.companion}_departed`] = true;
+      } else if (reaction === 'warning') {
+        this.state.flags[`companion_${choice.companionReaction.companion}_warned`] = true;
+      }
+    }
+    
+    // Handle multiple companion reactions
+    if (choice.companionReactions) {
+      choice.companionReactions.forEach(compReaction => {
+        const reaction = this.addCompanionReaction(
+          compReaction.companion,
+          compReaction.reaction,
+          compReaction.intensity
+        );
+        consequenceEntry.effects.push({ type: 'companionReaction', reaction, details: compReaction });
+        
+        // Store companion reaction state for potential use in dialogue
+        if (reaction === 'departure') {
+          this.state.flags[`companion_${compReaction.companion}_departed`] = true;
+        } else if (reaction === 'warning') {
+          this.state.flags[`companion_${compReaction.companion}_warned`] = true;
+        }
+      });
+    }
+    
+    // Add to consequence history
+    this.state.consequenceHistory.push(consequenceEntry);
+    
+    // Trigger world reactions based on consequences
+    this.triggerWorldReactions(consequenceEntry);
+    
     this.save();
+  },
+  
+  // World reaction system - makes the world respond to player actions
+  triggerWorldReactions(consequence) {
+    // Example: High privateer reputation triggers factory suspicion
+    if (this.state.factionReputation.privateers > 75 && this.state.factionReputation.factoryTeams < 30) {
+      this.state.flags.factorySuspicious = true;
+    }
+    
+    // Example: Helping rival driver creates media narrative
+    if (consequence.effects.some(e => e.type === 'flags' && e.flags.helpedRival)) {
+      this.state.factionReputation.mediaMachine += 10;
+      this.state.factionReputation.factoryTeams -= 5;
+    }
+    
+    // Example: Betraying faction creates long-term consequences
+    if (consequence.effects.some(e => e.type === 'flags' && e.flags.betrayedFaction)) {
+      const betrayedFaction = consequence.effects.find(e => e.type === 'flags' && e.flags.betrayedFaction).flags.betrayedFaction;
+      this.state.factionReputation[betrayedFaction] -= 30;
+      // Other factions might respect or fear you
+      Object.keys(this.state.factionReputation).forEach(faction => {
+        if (faction !== betrayedFaction) {
+          this.state.factionReputation[faction] += 5;
+        }
+      });
+    }
+    
+    // Trigger consequence propagation chains
+    this.propagateConsequences(consequence);
+  },
+  
+  // Consequence propagation system - cascading effects from single choices
+  propagateConsequences(consequence) {
+    const propagationChain = [];
+    
+    // Chain 1: Engineering solution leads to technical respect, which leads to new opportunities
+    if (consequence.effects.some(e => e.type === 'flags' && e.flags.engineeringSolution)) {
+      propagationChain.push({
+        trigger: 'engineeringSolution',
+        timeline: 'immediate',
+        effect: 'Jorge shares technical insights with other mechanics'
+      });
+      
+      if (this.state.stageIndex > 2) {
+        propagationChain.push({
+          trigger: 'engineeringSolution',
+          timeline: 'next_chapter',
+          effect: 'Word spreads - other teams inquire about your technical input',
+          delayedFlag: 'technicalReputationSpread'
+        });
+      }
+    }
+    
+    // Chain 2: Siding with Elena over Jorge affects driver psychology
+    if (consequence.effects.some(e => e.type === 'flags' && e.flags.sidedWithElena)) {
+      propagationChain.push({
+        trigger: 'sidedWithElena',
+        timeline: 'immediate',
+        effect: 'Mikko senses safety-first approach, may drive more conservatively'
+      });
+      
+      propagationChain.push({
+        trigger: 'sidedWithElena',
+        timeline: 'next_stage',
+        effect: 'Jorge becomes less communicative about technical details',
+        delayedFlag: 'mechanicWithdrawal'
+      });
+    }
+    
+    // Chain 3: Factory interest leads to recruitment pressure
+    if (consequence.effects.some(e => e.type === 'flags' && e.flags.factoryInterested)) {
+      propagationChain.push({
+        trigger: 'factoryInterested',
+        timeline: 'next_chapter',
+        effect: 'Factory team increases recruitment efforts, may approach with concrete offer',
+        delayedFlag: 'factoryOfferIncoming'
+      });
+    }
+    
+    // Chain 4: Privateer bond creates network effects
+    if (consequence.effects.some(e => e.type === 'relationships' && e.relationships.privateerBond)) {
+      propagationChain.push({
+        trigger: 'privateerBond',
+        timeline: 'immediate',
+        effect: 'Privateer community shares information and resources'
+      });
+      
+      propagationChain.push({
+        trigger: 'privateerBond',
+        timeline: 'future_stages',
+        effect: 'Privateer teams offer preferential treatment and inside information',
+        delayedFlag: 'privateerNetworkEstablished'
+      });
+    }
+    
+    // Chain 5: High reputation creates media attention
+    if (this.state.stats.reputation > 80) {
+      propagationChain.push({
+        trigger: 'highReputation',
+        timeline: 'immediate',
+        effect: 'Media seeks interviews and commentary'
+      });
+      
+      propagationChain.push({
+        trigger: 'highReputation',
+        timeline: 'ongoing',
+        effect: 'Sponsors and teams monitor performance more closely',
+        delayedFlag: 'mediaSpotlightActive'
+      });
+    }
+    
+    // Store propagation chain for later reference
+    if (propagationChain.length > 0) {
+      consequence.propagationChain = propagationChain;
+      this.state.flags.activePropagationChains = this.state.flags.activePropagationChains || [];
+      this.state.flags.activePropagationChains.push(...propagationChain.map(chain => chain.trigger));
+    }
+    
+    // Apply delayed effects if their conditions are met
+    this.applyDelayedEffects();
+  },
+  
+  // Apply delayed effects from propagation chains
+  applyDelayedEffects() {
+    const currentStage = this.state.stageIndex;
+    const activeChains = this.state.flags.activePropagationChains || [];
+    
+    // Check if any delayed effects should trigger now
+    if (activeChains.includes('technicalReputationSpread') && currentStage >= 6) {
+      this.state.flags.technicalExpertRecognized = true;
+      this.state.stats.reputation += 10;
+    }
+    
+    if (activeChains.includes('mechanicWithdrawal') && currentStage >= 4) {
+      this.state.stats.teamRespect -= 5;
+      this.state.flags.mechanicDistant = true;
+    }
+    
+    if (activeChains.includes('factoryOfferIncoming') && currentStage >= 5) {
+      this.state.flags.factoryOfferAvailable = true;
+    }
+    
+    if (activeChains.includes('privateerNetworkEstablished') && currentStage >= 7) {
+      this.state.flags.privateerNetworkActive = true;
+      this.state.factionReputation.privateers += 15;
+    }
+    
+    this.save();
+  },
+  
+  // Calculate ending based on player's entire history
+  calculateEnding() {
+    const ending = {
+      type: 'unknown',
+      components: [],
+      description: '',
+      epilogue: []
+    };
+    
+    // Dominant faction alignment
+    const dominantFaction = this.getDominantFaction();
+    if (dominantFaction) {
+      ending.components.push({ type: 'faction', value: dominantFaction });
+    }
+    
+    // Relationship outcomes
+    if (this.state.stats.driverTrust > 75) {
+      ending.components.push({ type: 'relationship', value: 'driver_loyal' });
+    } else if (this.state.stats.driverTrust < 25) {
+      ending.components.push({ type: 'relationship', value: 'driver_broken' });
+    }
+    
+    // Companion fates
+    Object.entries(this.companions.availableCompanions).forEach(([id, companion]) => {
+      if (companion.relationshipLevel > 70) {
+        ending.components.push({ type: 'companion', value: `${id}_loyal` });
+      } else if (companion.relationshipLevel < 20) {
+        ending.components.push({ type: 'companion', value: `${id}_departed` });
+      }
+    });
+    
+    // Career achievements
+    if (this.state.stats.legacy > 70) {
+      ending.components.push({ type: 'achievement', value: 'legendary' });
+    } else if (this.state.stats.legacy > 40) {
+      ending.components.push({ type: 'achievement', value: 'respected' });
+    } else {
+      ending.components.push({ type: 'achievement', value: 'forgotten' });
+    }
+    
+    // Moral/philosophical alignment
+    if (this.state.flags.sidedWithElena && !this.state.flags.sidedWithJorge) {
+      ending.components.push({ type: 'philosophy', value: 'safety_first' });
+    } else if (this.state.flags.sidedWithJorge && !this.state.flags.sidedWithElena) {
+      ending.components.push({ type: 'philosophy', value: 'performance_first' });
+    } else if (this.state.flags.resolvedConflict) {
+      ending.components.push({ type: 'philosophy', value: 'balanced' });
+    }
+    
+    // Determine ending type based on components
+    ending.type = this.determineEndingType(ending.components);
+    ending.description = this.generateEndingDescription(ending);
+    ending.epilogue = this.generateEpilogue(ending);
+    
+    return ending;
+  },
+  
+  // Determine the type of ending based on components
+  determineEndingType(components) {
+    const faction = components.find(c => c.type === 'faction')?.value;
+    const relationship = components.find(c => c.type === 'relationship')?.value;
+    const achievement = components.find(c => c.type === 'achievement')?.value;
+    
+    // Legendary endings
+    if (achievement === 'legendary' && relationship === 'driver_loyal') {
+      if (faction === 'privateers') return 'legendary_privateer_champion';
+      if (faction === 'factoryTeams') return 'legendary_factory_champion';
+      return 'legendary_balanced_champion';
+    }
+    
+    // Tragic endings
+    if (relationship === 'driver_broken') {
+      if (this.state.flags.blamedForCrash) return 'tragic_mutual_destruction';
+      return 'tragic_drifted_apart';
+    }
+    
+    // Philosophical endings
+    const philosophy = components.find(c => c.type === 'philosophy')?.value;
+    if (philosophy === 'safety_first') return 'philosophical_guardian';
+    if (philosophy === 'performance_first') return 'philosophical_purist';
+    if (philosophy === 'balanced') return 'philosophical_diplomat';
+    
+    // Faction-specific endings
+    if (faction === 'privateers') return 'privateer_leader';
+    if (faction === 'factoryTeams') return 'factory_insider';
+    if (faction === 'progressives') return 'progressive_reformer';
+    if (faction === 'oldGuard') return 'traditionalist_keeper';
+    
+    // Default endings
+    if (achievement === 'respected') return 'respected_veteran';
+    return 'forgotten_participant';
+  },
+  
+  // Generate ending description
+  generateEndingDescription(ending) {
+    const descriptions = {
+      legendary_privateer_champion: "You proved that passion beats corporate budgets. The privateer community remembers you as the one who showed the world that talent and determination can overcome any resource gap.",
+      legendary_factory_champion: "You rose through the ranks to become one of the factory team's most respected figures. Your technical insights and leadership shaped the future of the team.",
+      legendary_balanced_champion: "You found the middle path that nobody thought existed—balancing competitiveness with compassion, performance with safety. Your legacy is one of bridges built and boundaries broken.",
+      tragic_mutual_destruction: "The pursuit of perfection destroyed everything. Both you and Mikko were consumed by the very standards you set. The paddock remembers you as a cautionary tale about the cost of never being wrong.",
+      tragic_drifted_apart: "You won races, but lost the relationship. Mikko moved on to other co-drivers, other teams. Sometimes success and connection cannot coexist.",
+      philosophical_guardian: "You chose safety over seconds, survival over glory. Mikko may not have won every championship, but he's alive—and that's an achievement nobody can diminish.",
+      philosophical_purist: "You refused to compromise on performance. The car was built to win, not to forgive. Every victory came with a cost that you were willing to pay.",
+      philosophical_diplomat: "You found solutions that nobody else could see. Where others saw only conflicts, you found compromises that satisfied both honor and ambition.",
+      privateer_leader: "The privateer community looks to you for leadership. You've built networks and connections that help the underdogs compete with the factory giants.",
+      factory_insider: "You've become part of the establishment you once questioned. The resources are yours to command, but you sometimes wonder what you've lost along the way.",
+      progressive_reformer: "You've used your position to push for safety innovations and responsible racing. The sport is changing because of you—slower, perhaps, but more sustainable.",
+      traditionalist_keeper: "You've become a guardian of racing's golden age traditions. In a world of increasing regulation and corporate control, you keep alive the dangerous spirit that made the sport legendary.",
+      respected_veteran: "You're known as a reliable professional, a co-driver who gets the job done. The championships may not bear your name, but the respect of your peers does.",
+      forgotten_participant: "Time passes, and memories fade. You were part of the story, but not the part anyone remembers. The racing world moves on, as it always does."
+    };
+    
+    return descriptions[ending.type] || "Your story defies easy categorization. You walked a path that was entirely your own.";
+  },
+  
+  // Generate epilogue based on ending components
+  generateEpilogue(ending) {
+    const epilogue = [];
+    
+    // Faction consequences
+    const faction = ending.components.find(c => c.type === 'faction')?.value;
+    if (faction === 'privateers') {
+      epilogue.push("The privateer teams you supported have grown stronger. A new generation of drivers now has opportunities that wouldn't have existed without your help.");
+    } else if (faction === 'factoryTeams') {
+      epilogue.push("The factory team's dominance has only increased under your influence. Some say you've made the sport less accessible, but the results speak for themselves.");
+    } else if (faction === 'progressives') {
+      epilogue.push("Safety innovations you championed have saved lives. The sport is different now—less dangerous, some say less exciting—but undeniably more sustainable.");
+    }
+    
+    // Companion fates
+    ending.components.filter(c => c.type === 'companion').forEach(comp => {
+      if (comp.value === 'jorge_loyal') {
+        epilogue.push("Jorge still works in the garage, teaching a new generation of mechanics the difference between building cars and building trust.");
+      } else if (comp.value === 'elena_loyal') {
+        epilogue.push("Elena found peace, knowing that someone else understood her calculation. She still attends races, but now she watches from the stands, not the timing stand.");
+      } else if (comp.value === 'jorge_departed') {
+        epilogue.push("Jorge moved to a different team. You hear he's doing well, but the relationship never recovered from the choices you made.");
+      }
+    });
+    
+    // Relationship consequences
+    const relationship = ending.components.find(c => c.type === 'relationship')?.value;
+    if (relationship === 'driver_loyal') {
+      epilogue.push("Mikko still calls you before big decisions. The trust you built survived the pressures of competition and the passage of time.");
+    } else if (relationship === 'driver_broken') {
+      epilogue.push("Mikko doesn't return your calls. Some bridges burn slowly, and this one smoldered for years before finally collapsing.");
+    }
+    
+    // Personal legacy
+    const achievement = ending.components.find(c => c.type === 'achievement')?.value;
+    if (achievement === 'legendary') {
+      epilogue.push("They mention your name in discussions of the great co-drivers. Not just for what you achieved, but for how you achieved it.");
+    } else if (achievement === 'respected') {
+      epilogue.push("In the paddock, heads still nod when you walk by. That quiet respect is its own kind of legacy.");
+    }
+    
+    return epilogue;
+  },
+  
+  // Get world state for reactive dialogue
+  getWorldState() {
+    return {
+      dominantFaction: this.getDominantFaction(),
+      worldReactions: this.getWorldReactions(),
+      reputationTier: this.getReputationTier(),
+      consequenceCount: this.state.consequenceHistory.length
+    };
+  },
+  
+  // Determine which faction the player is most aligned with
+  getDominantFaction() {
+    const reps = this.state.factionReputation;
+    let maxRep = 0;
+    let dominant = null;
+    
+    Object.entries(reps).forEach(([faction, rep]) => {
+      if (rep > maxRep) {
+        maxRep = rep;
+        dominant = faction;
+      }
+    });
+    
+    return dominant;
+  },
+  
+  // Get world reactions based on player's reputation and actions
+  getWorldReactions() {
+    const reactions = [];
+    const reps = this.state.factionReputation;
+    
+    // Check for extreme faction alignments
+    if (reps.privateers > 80) {
+      reactions.push('privateersLoyal');
+    }
+    if (reps.factoryTeams > 80) {
+      reactions.push('factoryLoyal');
+    }
+    if (reps.oldGuard > 80) {
+      reactions.push('traditionalistRespect');
+    }
+    if (reps.progressives > 80) {
+      reactions.push('progressiveTrust');
+    }
+    
+    // Check for conflicting reputations
+    const highRepCount = Object.values(reps).filter(r => r > 70).length;
+    if (highRepCount >= 3) {
+      reactions.push('diplomatBridgeBuilder');
+    }
+    
+    // Check for notorious actions
+    if (this.state.flags.betrayedFaction) {
+      reactions.push('knownBetrayer');
+    }
+    if (this.state.flags.helpedRival) {
+      reactions.push('rivalHelper');
+    }
+    
+    return reactions;
+  },
+  
+  // Get reputation tier for world reactions
+  getReputationTier() {
+    const rep = this.state.stats.reputation;
+    if (rep >= 90) return 'legendary';
+    if (rep >= 75) return 'respected';
+    if (rep >= 50) return 'known';
+    if (rep >= 25) return 'recognized';
+    return 'unknown';
   },
   
   // Get current stage context
