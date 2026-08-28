@@ -99,9 +99,28 @@ const Analytics = {
     if (r.includes('CREST') && !t.includes('crest')) return 'missed_crest';
     if (r.includes('JUMP') && !t.includes('jump')) return 'missed_jump';
     if (r.includes('JUNCTION') && !t.includes('junct')) return 'missed_junction';
+
+    // Enhanced sequence detection: check if corners are present but in wrong order
+    // This leverages the new order-aware matcher's ability to detect reversals
     const cornerPattern = /[LR]\d/g;
     const corners = r.match(cornerPattern) || [];
-    if (corners.length > 1) return 'missed_sequence';
+    if (corners.length > 1) {
+      // Check if typed has multiple corners but in different order than raw
+      const typedCorners = t.match(/[lr]\d/g) || [];
+      if (typedCorners.length > 1) {
+        // Extract corner sequences from both
+        const rawSequence = corners.map(c => c.toLowerCase());
+        const typedSequence = typedCorners.map(c => c.toLowerCase());
+        // Check if they're different (reversed or scrambled)
+        if (JSON.stringify(rawSequence) !== JSON.stringify(typedSequence)) {
+          return 'missed_sequence';
+        }
+      }
+      // If typed has fewer corners than raw, it's a missed sequence
+      if (typedCorners.length < corners.length) {
+        return 'missed_sequence';
+      }
+    }
     return 'wrong_translation';
   },
 
@@ -300,9 +319,88 @@ const Coach = {
     }
   },
 
+  // In-character tips when driver trust is low (StorySystem integration)
+  CHARACTER_TIPS: {
+    mikko: {
+      missed_caution: {
+        title: "Mikko doesn't hear the caution",
+        tips: [
+          "Mikko: 'I can't drive blind. If you see !, say it like you mean it.'",
+          "Mikko: 'Caution marks aren't optional. That's how we stay on the road.'",
+          "Mikko: 'Call it early, call it loud. I need to hear it before the corner.'"
+        ]
+      },
+      missed_link: {
+        title: "Mikko needs the full sequence",
+        tips: [
+          "Mikko: 'Don't give me half a note. INTO means both corners, now.'",
+          "Mikko: 'If you stop at the first corner, I'm braking for the wrong one.'",
+          "Mikko: 'Read it all the way through. I trust complete calls, not half measures.'"
+        ]
+      },
+      timeout: {
+        title: "Mikko is waiting on the call",
+        tips: [
+          "Mikko: 'I'm holding the line. What's the note?'",
+          "Mikko: 'We don't have time to think. Read and call.'",
+          "Mikko: 'If you're late, I'm already committed. Be faster.'"
+        ]
+      }
+    },
+    reko: {
+      missed_caution: {
+        title: "Reko expects the C notation",
+        tips: [
+          "Reko: 'That's a C, not an exclamation. WRC2 style, remember?'",
+          "Reko: 'In my system, C means caution. Don't translate it to !.'",
+          "Reko: 'I trained with the factory team. C is what I know.'"
+        ]
+      },
+      missed_link: {
+        title: "Reko uses > for INTO",
+        tips: [
+          "Reko: 'That's a greater-than sign. > means INTO in my book.'",
+          "Reko: 'Don't write INTO. Use > like we practiced.'",
+          "Reko: 'My notation is compact. >, not INTO. Learn it.'"
+        ]
+      }
+    },
+    elin: {
+      missed_caution: {
+        title: "Elin wants full words",
+        tips: [
+          "Elin: 'No shorthand. Say the full word — caution.'",
+          "Elin: 'Road rally style — we speak in complete sentences.'",
+          "Elin: 'I don't do abbreviations. Call it properly.'"
+        ]
+      },
+      wrong_translation: {
+        title: "Elin doesn't use numbers",
+        tips: [
+          "Elin: 'That's a Hairpin, not a 1. Say the word.'",
+          "Elin: 'No digit codes. Use the full severity names.'",
+          "Elin: 'I came up on road rallies. We speak English, not code.'"
+        ]
+      }
+    }
+  },
+
   analyse(session) {
     if (!session || !session.mistakes.length) return [];
     const tips = [];
+
+    // Check for in-character tips based on driver trust (StorySystem integration)
+    let useCharacterTips = false;
+    let activeDriverId = null;
+    if (typeof StorySystem !== 'undefined' && StorySystem.state) {
+      const stats = StorySystem.state.stats;
+      // Low driver trust triggers in-character dialogue instead of generic tips
+      if (stats.driverTrust < 40) {
+        useCharacterTips = true;
+        // Get active driver profile
+        activeDriverId = DriverProfileSystem.activeProfile;
+      }
+    }
 
     // Pattern detection
     const cats = session.mistakeBreakdown || {};
@@ -311,14 +409,22 @@ const Coach = {
     // Top mistake pattern
     if (sorted[0] && sorted[0][1] >= 2) {
       const cat = sorted[0][0];
-      const tip = this.TIPS[cat];
+      let tip = this.TIPS[cat];
+      // Use in-character tips if driver trust is low and character-specific tip exists
+      if (useCharacterTips && activeDriverId && this.CHARACTER_TIPS[activeDriverId]?.[cat]) {
+        tip = this.CHARACTER_TIPS[activeDriverId][cat];
+      }
       if (tip) tips.push({ priority: 'high', category: cat, ...tip });
     }
 
     // Secondary pattern
     if (sorted[1] && sorted[1][1] >= 2) {
       const cat = sorted[1][0];
-      const tip = this.TIPS[cat];
+      let tip = this.TIPS[cat];
+      // Use in-character tips if driver trust is low and character-specific tip exists
+      if (useCharacterTips && activeDriverId && this.CHARACTER_TIPS[activeDriverId]?.[cat]) {
+        tip = this.CHARACTER_TIPS[activeDriverId][cat];
+      }
       if (tip) tips.push({ priority: 'medium', category: cat, ...tip });
     }
 
@@ -407,6 +513,24 @@ const AdaptiveDifficulty = {
     this.baseTime = baseTimeS;
     this.currentTime = baseTimeS;
     this.recentResults = [];
+
+    // Wire to StorySystem: adjust base time based on driver state
+    if (typeof StorySystem !== 'undefined' && StorySystem.state) {
+      const driverState = StorySystem.state.driverState;
+      const stats = StorySystem.state.stats;
+
+      // Drunk driver: slower reaction time, give more time
+      if (driverState.drunk) {
+        this.baseTime += 2;
+        this.currentTime = this.baseTime;
+      }
+
+      // High mental stress: tighter window (more pressure)
+      if (stats.mentalStress > 70) {
+        this.baseTime -= 0.5;
+        this.currentTime = Math.max(4, this.baseTime);
+      }
+    }
   },
 
   recordResult(correct) {
