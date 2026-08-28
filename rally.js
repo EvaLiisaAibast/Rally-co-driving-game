@@ -2496,9 +2496,12 @@ const VoiceInput = {
 
     this.recognition.onend = () => {
       this.isListening = false;
-      // Only auto-restart if Web Speech is still the ACTIVE engine (Vosk
-      // may have become ready and taken over in the meantime).
-      if (this.engine === 'webspeech' && !MODE.isPro && !G.stageEnded && this.consecutiveErrors < this.maxConsecutiveErrors) {
+      // Auto-restart for continuous listening in non-Pro mode
+      // Check both engine conditions: if we're currently on Web Speech, OR if
+      // Vosk isn't ready yet (in which case we're effectively on Web Speech)
+      const shouldRestart = !MODE.isPro && !G.stageEnded && this.consecutiveErrors < this.maxConsecutiveErrors;
+      const usingWebSpeech = this.engine === 'webspeech' || (this.engine !== 'vosk' && !this._voskRecognizer);
+      if (shouldRestart && usingWebSpeech) {
         setTimeout(() => this.start(), 100);
       }
     };
@@ -4014,9 +4017,10 @@ function similarity(a, b, opts = {}) {
   for (const word of typedSet) {
     if (expectedSet.has(word)) overlapCount++;
   }
-  // If less than 30% of the smaller set overlaps, it's definitely wrong
+  // If less than 20% of the smaller set overlaps, it's definitely wrong
+  // (lowered from 30% to avoid false positives on legitimate but different notes)
   const minSize = Math.min(typedSet.size, expectedSet.size);
-  if (minSize > 0 && overlapCount / minSize < 0.3) {
+  if (minSize > 0 && overlapCount / minSize < 0.2) {
     return overlapCount / Math.max(typedTokens.length, expectedTokens.length);
   }
 
