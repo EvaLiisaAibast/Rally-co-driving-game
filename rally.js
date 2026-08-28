@@ -2311,75 +2311,210 @@ function updateInputModeUI() {
   }
 }
 
+// ---- Configuration -- VERIFY / UPDATE THESE before shipping ----
+//
+// VOSK_LIB_URL: pinned to a specific version deliberately (not @latest) so
+// the game doesn't silently pick up a breaking library update. Bump this
+// intentionally and re-test when you want a newer version.
+//
+// VOSK_MODEL_URL: this points at a small (~40MB) English model hosted on
+// ccoreilly's GitHub Pages as a public demo host. That's fine for
+// development, but for a real shipped game you almost certainly want to
+// self-host the model file (download it once, serve it from your own CDN
+// or alongside your other game assets) — a third party's demo hosting can
+// go away or rate-limit you with zero warning, and it's the single point
+// of failure for your entire offline voice feature. Model download page:
+// https://alphacephei.com/vosk/models (grab "vosk-model-small-en-us-0.15",
+// ~40MB, good accuracy/size tradeoff for a closed vocabulary like this).
+const VOSK_LIB_URL = 'https://cdn.jsdelivr.net/npm/vosk-browser@0.0.8/dist/vosk.js';
+const VOSK_MODEL_URL = 'https://ccoreilly.github.io/vosk-browser/models/vosk-model-small-en-us-0.15.tar.gz';
+const VOSK_SAMPLE_RATE = 16000;
+
+// Every distinct word that can appear in any note's canonical answer,
+// extracted directly from every `ans:` string in rally.js, PLUS a few
+// words that never appear in the canonical text itself but that
+// normaliseAnswer() explicitly knows how to handle as spoken/typed input
+// variants -- "max" (for "max caution", normalised from "maximum
+// caution") and "out" (for "flat out", normalised to "flat"). If Vosk's
+// grammar doesn't include these, a player who actually SAYS "flat out" or
+// "max caution" can't be transcribed correctly even though the scoring
+// logic already knows what to do with that text. Also includes the
+// number words 0-9 (players may call a distance as a number word) and
+// Vosk's documented "[unk]" catch-all (so a genuinely out-of-vocabulary
+// sound -- background noise, a stray word -- maps to "unknown" instead of
+// being forced into the nearest in-grammar word). If you add new pacenote
+// vocabulary to the game later (new hazard words, new surface types),
+// add the new words here too, or Vosk will mishear them as the closest
+// word it's allowed to say instead.
+const PACENOTE_GRAMMAR_WORDS = [
+  'boost','bridge','bump','bumps','caution','change','concrete','crest',
+  'cut','deep','dont','dust','easy','fast','feshfesh','finish','flat',
+  'gravel','hairpin','hybrid','ice','into','jump','junction','left','long',
+  'max','maximum','maybe','medium','metres','mixed','mud','narrows','one',
+  'open','opens','out','over','patch','regen','right','rocks','ruts',
+  'sand','six','splash','square','stop','surface','sweep','tarmac','then',
+  'three','tight','tightens','two','very','water','wet','zone',
+  'zero','four','five','seven','eight','nine',
+  '[unk]'
+];
+
 const VoiceInput = {
-  recognition: null,
   isListening: false,
   consecutiveErrors: 0,
   maxConsecutiveErrors: 3, // after this many failures in a row, stop auto-retrying and tell the player
-  
+
+  // 'vosk' | 'webspeech' | null. null means neither engine is usable
+  // (e.g. no mic support at all) -- init() already warns the player in
+  // that case, same as the original code did.
+  engine: null,
+
+  // Vosk internals
+  _voskModel: null,
+  _voskRecognizer: null,
+  _voskReadyPromise: null,
+  _audioContext: null,
+  _audioStream: null,
+  _micSource: null,
+  _scriptNode: null,
+
+  // Web Speech fallback internals (this path is essentially unchanged
+  // from the original engine)
+  recognition: null,
+
   init() {
+    // Wire up the Web Speech fallback synchronously and immediately --
+    // it's free, instant, and is what plays if Vosk can't load for any
+    // reason (offline on first visit with nothing cached yet, browser
+    // lacks WASM/Worker support, model host unreachable, etc). This also
+    // means the game behaves EXACTLY as it did before if you never touch
+    // the Vosk config above, or if Vosk loading fails for any reason.
+    this._initWebSpeechFallback();
+
+    // Kick off the offline engine load in the background at page load,
+    // not when the player first opens voice mode -- a ~40MB WASM model
+    // takes real time to download and compile, so starting early means
+    // it's usually already warm by the time they actually toggle to
+    // voice mode and hit their first stage.
+    this._voskReadyPromise = this._tryLoadVosk().catch(err => {
+      console.warn('[VoiceInput] Offline engine unavailable, staying on browser speech recognition:', err);
+      return false;
+    });
+  },
+
+  async _tryLoadVosk() {
+    if (!window.isSecureContext) {
+      // getUserMedia and the WASM Worker both require a secure context
+      // (https, or http://localhost). Not worth attempting elsewhere.
+      console.log('[VoiceInput] Not a secure context, skipping offline engine.');
+      return false;
+    }
+    if (typeof Worker === 'undefined' || typeof WebAssembly === 'undefined') {
+      console.log('[VoiceInput] Worker/WebAssembly unsupported, skipping offline engine.');
+      return false;
+    }
+
+    if (!window.Vosk) {
+      await this._loadScript(VOSK_LIB_URL);
+    }
+    if (!window.Vosk || typeof window.Vosk.createModel !== 'function') {
+      throw new Error('vosk-browser failed to load from ' + VOSK_LIB_URL);
+    }
+
+    const model = await window.Vosk.createModel(VOSK_MODEL_URL);
+    const grammar = JSON.stringify(PACENOTE_GRAMMAR_WORDS);
+    const recognizer = new model.KaldiRecognizer(VOSK_SAMPLE_RATE, grammar);
+
+    recognizer.on('result', (message) => {
+      const text = (message && message.result && message.result.text) || '';
+      this._handleVoskResult(text);
+    });
+
+    this._voskModel = model;
+    this._voskRecognizer = recognizer;
+    this.engine = 'vosk';
+    console.log('[VoiceInput] Offline voice engine (Vosk, grammar-constrained) ready.');
+    return true;
+  },
+
+  _loadScript(src) {
+    return new Promise((resolve, reject) => {
+      const existing = document.querySelector(`script[src="${src}"]`);
+      if (existing) { resolve(); return; }
+      const el = document.createElement('script');
+      el.src = src;
+      el.onload = () => resolve();
+      el.onerror = () => reject(new Error('Failed to load script: ' + src));
+      document.head.appendChild(el);
+    });
+  },
+
+  // --- Web Speech API fallback path. Functionally identical to the
+  // original engine -- unchanged behavior if Vosk never becomes available.
+  _initWebSpeechFallback() {
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
       console.log('Speech recognition not supported in this browser');
       this.notify('Voice input isn\'t supported in this browser — try Chrome or Edge, or switch to Type mode.', true);
       return;
     }
-    
+
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     this.recognition = new SpeechRecognition();
     this.recognition.continuous = false;
     this.recognition.interimResults = false;
-    this.recognition.maxAlternatives = 3; // consider a few guesses, not just the top one
+    this.recognition.maxAlternatives = 3;
     this.recognition.lang = 'en-US';
-    
+
     this.recognition.onresult = (event) => {
-      this.consecutiveErrors = 0; // a successful result clears any failure streak
+      this.consecutiveErrors = 0;
       const alternatives = [];
       for (let i = 0; i < event.results[0].length; i++) {
         alternatives.push(event.results[0][i].transcript);
       }
       this.submit(this.pickBestAlternative(alternatives));
     };
-    
+
     this.recognition.onerror = (event) => {
       console.log('Speech recognition error:', event.error);
       this.isListening = false;
-      
-      // 'no-speech' just means the player hasn't started talking yet (or paused) --
-      // that's normal during co-driving and shouldn't count as a real failure.
+
       if (event.error === 'no-speech' || event.error === 'aborted') {
         return; // onend will fire next and handle the restart
       }
-      
+
       this.consecutiveErrors++;
-      
+
       if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
-        // Mic permission denied -- retrying will only throw the same error
-        // forever. Stop entirely and tell the player what to actually do.
         this.consecutiveErrors = this.maxConsecutiveErrors;
         this.notify('Microphone access is blocked. Allow it in your browser\'s address-bar permissions, then click the mic to retry.', true);
         return;
       }
-      
+
       if (this.consecutiveErrors >= this.maxConsecutiveErrors) {
         this.notify('Voice recognition keeps failing (' + event.error + '). Click the mic to try again, or switch to Type mode.', true);
       }
     };
-    
+
     this.recognition.onend = () => {
       this.isListening = false;
-      // Auto-restart for continuous listening, but only if: we're not in
-      // Pro mode (which is push-to-talk), the stage hasn't ended, and we
-      // haven't just hit a wall of repeated failures -- otherwise this is
-      // the loop that used to hammer a denied mic permission indefinitely.
-      if (!MODE.isPro && !G.stageEnded && this.consecutiveErrors < this.maxConsecutiveErrors) {
+      // Only auto-restart if Web Speech is still the ACTIVE engine (Vosk
+      // may have become ready and taken over in the meantime).
+      if (this.engine === 'webspeech' && !MODE.isPro && !G.stageEnded && this.consecutiveErrors < this.maxConsecutiveErrors) {
         setTimeout(() => this.start(), 100);
       }
     };
+
+    // Provisional -- if/when Vosk finishes loading in the background,
+    // _tryLoadVosk() overwrites this to 'vosk'.
+    if (!this.engine) this.engine = 'webspeech';
   },
-  
+
   // Score each candidate transcript against the expected answer and submit
   // whichever is closest, instead of blindly trusting the engine's single
-  // top guess. Falls back to the top guess if none score meaningfully.
+  // top guess. Web Speech API supports multiple alternatives (maxAlternatives
+  // above); Vosk's default 'result' event only gives a single best
+  // transcript, so this is only ever called on the Web Speech path -- but
+  // both paths route through the same similarity()-based scoring in
+  // submitAnswer() either way.
   pickBestAlternative(alternatives) {
     const currentNote = G.notes && G.notes[G.idx];
     if (!currentNote || alternatives.length <= 1) return alternatives[0] || '';
@@ -2391,7 +2526,7 @@ const VoiceInput = {
     });
     return best;
   },
-  
+
   notify(message, isError) {
     const indicator = document.getElementById('mic-indicator');
     if (indicator) {
@@ -2402,44 +2537,153 @@ const VoiceInput = {
     }
     console.log('[VoiceInput]', message);
   },
-  
-  start() {
-    if (this.recognition && !this.isListening) {
+
+  async start() {
+    if (this.isListening) return;
+    this.consecutiveErrors = 0;
+
+    // If Vosk is still loading, don't leave the player staring at a dead
+    // mic waiting for it -- start Web Speech immediately. Give the Vosk
+    // promise a brief 50ms window to resolve first ONLY in case it's
+    // already finished (avoids a pointless one-note delay right at the
+    // moment it becomes ready), but never block longer than that.
+    if (this._voskReadyPromise) {
+      const outcome = await Promise.race([
+        this._voskReadyPromise,
+        new Promise(resolve => setTimeout(() => resolve('__pending__'), 50))
+      ]);
+      if (outcome !== '__pending__') this._voskReadyPromise = null; // truly resolved, stop re-checking every call
+    }
+
+    if (this.engine === 'vosk' && this._voskRecognizer) {
+      return this._startVosk();
+    }
+    return this._startWebSpeech();
+  },
+
+  async _startVosk() {
+    try {
+      this._audioStream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          channelCount: 1,
+          sampleRate: VOSK_SAMPLE_RATE
+        }
+      });
+    } catch (e) {
+      console.log('[VoiceInput] Mic permission error (offline engine):', e);
+      this.consecutiveErrors = this.maxConsecutiveErrors;
+      this.notify('Microphone access is blocked. Allow it in your browser\'s address-bar permissions, then click the mic to retry.', true);
+      return;
+    }
+
+    this._audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    this._micSource = this._audioContext.createMediaStreamSource(this._audioStream);
+
+    // ScriptProcessorNode is deprecated in favor of AudioWorkletNode, but
+    // it's what vosk-browser's own documented example uses and remains
+    // universally supported. Worth modernizing to an AudioWorklet later,
+    // but not swapped here since I can't verify a hand-written worklet
+    // module against a real browser from this sandbox, and correctness
+    // matters more than avoiding a deprecation warning.
+    this._scriptNode = this._audioContext.createScriptProcessor(4096, 1, 1);
+    this._scriptNode.onaudioprocess = (event) => {
+      if (!this.isListening || !this._voskRecognizer) return;
       try {
-        this.consecutiveErrors = 0; // manual/explicit start always gets a fresh chance
-        this.isListening = true;
-        this.recognition.start();
-      } catch(e) {
-        console.log('Speech start error:', e);
-        this.isListening = false;
+        this._voskRecognizer.acceptWaveform(event.inputBuffer);
+      } catch (e) {
+        console.log('[VoiceInput] acceptWaveform error:', e);
+        // If Vosk crashes mid-session, fall back to Web Speech
+        this._fallbackToWebSpeech('Vosk worker crashed');
       }
+    };
+    this._micSource.connect(this._scriptNode);
+    this._scriptNode.connect(this._audioContext.destination);
+
+    this.isListening = true;
+  },
+
+  _handleVoskResult(text) {
+    text = (text || '').trim();
+    // Vosk emits 'result' at every detected utterance boundary, including
+    // silence -- those come through with empty text and should be
+    // ignored, same as Web Speech simply never firing onresult for silence.
+    if (!text) return;
+    this.consecutiveErrors = 0;
+    this.submit(text);
+  },
+
+  _fallbackToWebSpeech(reason) {
+    console.log('[VoiceInput] Falling back to Web Speech:', reason);
+    this.engine = 'webspeech';
+    
+    // Clean up Vosk resources
+    if (this._scriptNode) {
+      this._scriptNode.disconnect();
+      this._scriptNode.onaudioprocess = null;
+      this._scriptNode = null;
+    }
+    if (this._micSource) { this._micSource.disconnect(); this._micSource = null; }
+    if (this._audioStream) { this._audioStream.getTracks().forEach(t => t.stop()); this._audioStream = null; }
+    if (this._audioContext) { this._audioContext.close(); this._audioContext = null; }
+    this._voskRecognizer = null;
+    this._voskModel = null;
+    this._voskReadyPromise = null;
+
+    // If we were listening, restart with Web Speech
+    if (this.isListening) {
+      this.isListening = false;
+      this._startWebSpeech();
     }
   },
-  
+
+  _startWebSpeech() {
+    if (!this.recognition) return;
+    try {
+      this.isListening = true;
+      this.recognition.start();
+    } catch (e) {
+      console.log('Speech start error:', e);
+      this.isListening = false;
+    }
+  },
+
   stop() {
-    if (this.recognition && this.isListening) {
+    if (!this.isListening) return;
+    this.isListening = false;
+
+    if (this.engine === 'vosk') {
+      if (this._scriptNode) {
+        this._scriptNode.disconnect();
+        this._scriptNode.onaudioprocess = null;
+        this._scriptNode = null;
+      }
+      if (this._micSource) { this._micSource.disconnect(); this._micSource = null; }
+      if (this._audioStream) { this._audioStream.getTracks().forEach(t => t.stop()); this._audioStream = null; }
+      if (this._audioContext) { this._audioContext.close(); this._audioContext = null; }
+      return;
+    }
+
+    if (this.recognition) {
       try {
-        this.isListening = false;
         this.recognition.stop();
-      } catch(e) {
+      } catch (e) {
         console.log('Speech stop error:', e);
       }
     }
   },
-  
+
+  // Unchanged from the original engine: route through the game's one real
+  // scoring pipeline (submitAnswer), same as typed input, for both engines.
   submit(text) {
     const currentNote = G.notes[G.idx];
     if (!currentNote || G.stageEnded) return;
-    
+
     const typed = text.trim();
     if (!typed) return;
-    
+
     document.getElementById('g-input').value = typed;
-    
-    // Route through the game's one real scoring pipeline (submitAnswer),
-    // same as typed input. This used to call checkAnswer()/calculateScore(),
-    // which are not defined anywhere in the project -- every voice
-    // submission was throwing and silently doing nothing.
     RALLY_STATE.inputSource = 'voice';
     submitAnswer();
   }
@@ -3573,36 +3817,210 @@ function normaliseAnswer(s){
   return s;
 }
 
-// Known speech-recognition confusion pairs: words that sound alike enough
-// over a real microphone that the Web Speech API (or a noisy connection)
-// regularly transcribes one as the other. This does NOT change what the
-// words mean in the game's notation -- 'tight' still means severity 3,
-// 'right' still means the right-hand direction -- it just stops a likely
-// mis-transcription from tanking an otherwise-correct voice call. Typed
-// answers are never given this leniency.
+// --- unchanged from rally.js -------------------------------------------
 const VOICE_CONFUSABLE_WORDS = { tight: 'right', right: 'tight' };
 
-function similarity(a, b, opts = {}) {
-  a=normaliseAnswer(a);
-  b=normaliseAnswer(b);
-  if(a===b)return 1;
-  // Special case: "flat" and "fast sweep" for R6 — treat as equivalent
-  const aFlat = a.replace(/\bfast sweep\b/g,'flat');
-  const bFlat = b.replace(/\bfast sweep\b/g,'flat');
-  if(aFlat===bFlat)return 1;
-  const wa=new Set(a.split(/\s+/));const wb=new Set(b.split(/\s+/));
-  let hit=0;
-  wb.forEach(w=>{
-    if(wa.has(w)) {
-      hit++;
-    } else if (opts.voiceTolerant && VOICE_CONFUSABLE_WORDS[w] && wa.has(VOICE_CONFUSABLE_WORDS[w])) {
-      // Likely speech-recognition mishearing rather than a genuine wrong
-      // call -- partial credit, not a full match, so an actual mistake
-      // still scores worse than a plausible mishearing.
-      hit += 0.6;
+// ============================================================================
+// NEW: bounded Damerau-Levenshtein edit distance (optimal string alignment
+// variant). This is plain Levenshtein PLUS one extra rule: swapping two
+// ADJACENT letters counts as a single edit instead of two. That single rule
+// matters a lot in practice -- transposed adjacent letters ("haripn" for
+// "hairpin", "the" typed as "hte") are one of the single most common human
+// typing errors, and under plain Levenshtein those cost 2+ edits, often
+// pushing a completely legible typo above the fuzzy-match threshold and
+// losing the player credit for a call they clearly got right.
+// ============================================================================
+function editDistance(a, b) {
+  const m = a.length, n = b.length;
+  if (a === b) return 0;
+  if (m === 0) return n;
+  if (n === 0) return m;
+
+  // Need the previous TWO rows (not just one) to detect a transposition.
+  let twoBack = new Array(n + 1).fill(0);
+  let prevRow = new Array(n + 1);
+  for (let j = 0; j <= n; j++) prevRow[j] = j;
+
+  for (let i = 1; i <= m; i++) {
+    const currRow = new Array(n + 1);
+    currRow[0] = i;
+    for (let j = 1; j <= n; j++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      let best = Math.min(
+        prevRow[j] + 1,       // deletion
+        currRow[j - 1] + 1,   // insertion
+        prevRow[j - 1] + cost // substitution
+      );
+      // Adjacent transposition: a[i-2..i-1] is the reverse of b[j-2..j-1]
+      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) {
+        best = Math.min(best, twoBack[j - 2] + 1);
+      }
+      currRow[j] = best;
     }
-  });
-  return hit/Math.max(wa.size,wb.size);
+    twoBack = prevRow;
+    prevRow = currRow;
+  }
+  return prevRow[n];
+}
+
+// ============================================================================
+// NEW: minimal-pair blocklist. These pairs were found by extracting every
+// distinct word used across every `ans:` string in rally.js and computing
+// pairwise edit distance between all of them. Running that against the current
+// game vocabulary surfaced exactly these four real collisions (edit distance 1,
+// genuinely different meanings):
+//   tight <-> right   : severity-3 corner   vs  direction
+//   open  <-> opens    : severity-5 corner   vs  "corner opens up" hazard
+//   bump  <-> jump      : compression hazard vs  jump feature
+//   one   <-> zone      : rare, but free to guard
+//
+// Typo-tolerance (below) will NEVER bridge these, no matter how close the
+// edit distance — a "close enough" typo match here would silently turn a
+// correct call into a wrong one or vice versa, which is worse than just
+// not helping at all.
+// ============================================================================
+const CRITICAL_MINIMAL_PAIRS = [
+  ['tight', 'right'],
+  ['open', 'opens'],
+  ['bump', 'jump'],
+  ['one', 'zone'],
+];
+
+function isProtectedPair(a, b) {
+  for (let i = 0; i < CRITICAL_MINIMAL_PAIRS.length; i++) {
+    const [x, y] = CRITICAL_MINIMAL_PAIRS[i];
+    if ((a === x && b === y) || (a === y && b === x)) return true;
+  }
+  return false;
+}
+
+const NUMERIC_RE = /^\d+$/;
+
+// ============================================================================
+// NEW: per-token match score, 0..1. This is where voice's existing
+// homophone leniency and the new typo leniency both live, kept as two
+// clearly separate, independently-gated mechanisms.
+// ============================================================================
+function tokenMatchScore(typedWord, expectedWord, opts) {
+  if (typedWord === expectedWord) return 1;
+
+  // Numbers (distances, metres) must always match exactly or not at all --
+  // fuzzing "50" toward "500" or "150" would be actively dangerous, not
+  // helpful.
+  if (NUMERIC_RE.test(typedWord) || NUMERIC_RE.test(expectedWord)) return 0;
+
+  // Voice mode: unchanged from the original engine. Known ASR mishearing
+  // pairs get a fixed 0.6 partial credit -- a real mistake still scores
+  // worse than a plausible mishearing, but never as good as an exact call.
+  if (opts.voiceTolerant && VOICE_CONFUSABLE_WORDS[typedWord] === expectedWord) {
+    return 0.6;
+  }
+
+  // Typo tolerance: both modes get this (typed input benefits most, but a
+  // voice engine's own transcription can drop/add a letter too). Gated by
+  // the minimal-pair blocklist above so it can never bridge a real
+  // vocabulary collision, and by a length-scaled edit-distance threshold so
+  // short words (which are more likely to accidentally collide) need a
+  // near-exact match while longer words tolerate a bit more.
+  if (opts.typoTolerant !== false && !isProtectedPair(typedWord, expectedWord)) {
+    const maxLen = Math.max(typedWord.length, expectedWord.length);
+    if (maxLen < 3) return 0; // too short to safely fuzz at all
+
+    const threshold = maxLen <= 5 ? 1 : maxLen <= 8 ? 2 : 3;
+    const dist = editDistance(typedWord, expectedWord);
+    if (dist > 0 && dist <= threshold) {
+      // Scale credit down as edit distance grows relative to word length,
+      // so a clean 1-letter typo still scores below an exact match (keeps
+      // exact matches winning tie-breaks), floor at 0.5 so it still
+      // meaningfully counts toward the total.
+      return Math.max(0.5, 1 - (dist / maxLen) * 0.7);
+    }
+  }
+
+  return 0;
+}
+
+// ============================================================================
+// NEW: order-aware scoring via weighted longest-common-subsequence. This is
+// the fix for the reversal bug described at the top of this file. Standard
+// LCS dynamic program, except "does token i match token j" is now a
+// fractional score (tokenMatchScore) instead of a boolean equality check.
+//
+// Why this fixes reordering: LCS only accumulates credit along a strictly
+// increasing pairing of indices in both sequences. Two clauses that are
+// present but swapped ("A into B" vs "B into A") can only align as ONE of
+// the two clauses, not both — the other clause's words end up unpaired,
+// same as if they were simply missing. That's exactly the penalty a
+// genuinely wrong (transposed) call deserves.
+//
+// Why this preserves existing leniency: LCS does NOT penalize skipped
+// tokens on either side — an extra filler word, or the game rephrasing
+// slightly, still lets every other token align and match normally. Only
+// tokens that are present but in the wrong relative order lose credit.
+// ============================================================================
+function sequenceSimilarity(typedTokens, expectedTokens, opts) {
+  const m = typedTokens.length, n = expectedTokens.length;
+  if (m === 0 || n === 0) return 0;
+
+  // dp[i][j] = best cumulative match credit aligning the first i typed
+  // tokens with the first j expected tokens.
+  let prevRow = new Float64Array(n + 1);
+  for (let i = 1; i <= m; i++) {
+    const currRow = new Float64Array(n + 1);
+    for (let j = 1; j <= n; j++) {
+      const matchScore = tokenMatchScore(typedTokens[i - 1], expectedTokens[j - 1], opts);
+      currRow[j] = Math.max(
+        currRow[j - 1],
+        prevRow[j],
+        prevRow[j - 1] + matchScore
+      );
+    }
+    prevRow = currRow;
+  }
+  return prevRow[n] / Math.max(m, n);
+}
+
+// ============================================================================
+// similarity(a, b, opts) — SAME NAME, SAME SIGNATURE as the original, so this
+// file can be dropped in as a straight replacement for the block in rally.js
+// (everything from "Known speech-recognition confusion pairs" through the
+// end of the old similarity() function).
+//
+// opts:
+//   voiceTolerant : boolean — unchanged meaning from before (voice mode).
+//   typoTolerant  : boolean — NEW, defaults to true. Pass { typoTolerant:
+//                   false } for any call site that wants the old strict
+//                   exact-word-only behavior (there currently isn't one,
+//                   but it's there if a future minigame mode wants it).
+// ============================================================================
+function similarity(a, b, opts = {}) {
+  a = normaliseAnswer(a);
+  b = normaliseAnswer(b);
+  if (a === b) return 1;
+
+  // Special case carried over unchanged: "flat" and "fast sweep" for R6.
+  const aFlat = a.replace(/\bfast sweep\b/g, 'flat');
+  const bFlat = b.replace(/\bfast sweep\b/g, 'flat');
+  if (aFlat === bFlat) return 1;
+
+  const typedTokens = a.split(/\s+/);
+  const expectedTokens = b.split(/\s+/);
+
+  // Short-circuit: if word sets have very little overlap, skip expensive LCS
+  // This catches obviously wrong answers early (e.g., completely different corners)
+  const typedSet = new Set(typedTokens);
+  const expectedSet = new Set(expectedTokens);
+  let overlapCount = 0;
+  for (const word of typedSet) {
+    if (expectedSet.has(word)) overlapCount++;
+  }
+  // If less than 30% of the smaller set overlaps, it's definitely wrong
+  const minSize = Math.min(typedSet.size, expectedSet.size);
+  if (minSize > 0 && overlapCount / minSize < 0.3) {
+    return overlapCount / Math.max(typedTokens.length, expectedTokens.length);
+  }
+
+  return sequenceSimilarity(typedTokens, expectedTokens, opts);
 }
 function submitAnswer(){
   clearInterval(G.timer);
