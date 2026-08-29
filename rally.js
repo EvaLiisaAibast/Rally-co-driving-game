@@ -3056,7 +3056,24 @@ let CAREER={driver:'',codriver:'',car:null,currentStage:0,pts:0,completed:[],sta
 let lessonsCompleted=new Set();
 let currentLesson='intro';
 let quizBank=[],quizIdx=0,quizCurrent=null,quizStartTime=null,quizTelemetry=[];
-function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function show(id){
+  const prevActive=document.querySelector('.screen.active');
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(id==='game') startGameVideo();
+  else if(prevActive&&prevActive.id==='game') stopGameVideo();
+}
+function startGameVideo(){
+  const v=document.getElementById('game-bg-video');
+  if(!v)return;
+  const play=()=>v.play().catch(()=>{});
+  if(v.readyState>=2)play();
+  else v.addEventListener('canplay',play,{once:true});
+}
+function stopGameVideo(){
+  const v=document.getElementById('game-bg-video');
+  if(v)v.pause();
+}
 function showMenu(){if(G.timer)clearInterval(G.timer);show('menu');const bgMusic=document.getElementById('bg-music');if(bgMusic){bgMusic.play().catch(()=>{});}if(typeof DriverProfileSystem!=='undefined')DriverProfileSystem.reset();}
 function quickPlay(){
   G.careerMode=false;
@@ -6891,23 +6908,28 @@ function showTimingBonus(tier) {
 }
 
 function showFlowTransition(isCorrect) {
+  const flash = document.getElementById('game-flash');
   const gameBody = document.querySelector('.g-body');
-  if (!gameBody) return;
-  
+  if (!flash) return;
+
   if (isCorrect) {
-    gameBody.style.transition = 'all 0.3s ease';
-    gameBody.style.backgroundColor = 'rgba(57, 255, 20, 0.05)';
+    flash.style.backgroundColor = 'rgba(57, 255, 20, 0.08)';
+    flash.style.opacity = '1';
     setTimeout(() => {
-      gameBody.style.backgroundColor = 'var(--bg)';
+      flash.style.opacity = '0';
     }, 300);
     playFlowSound('correct');
   } else {
-    gameBody.style.animation = 'screenShake 0.4s';
-    gameBody.style.backgroundColor = 'rgba(232, 41, 28, 0.1)';
-    
+    if (gameBody) {
+      gameBody.style.animation = 'screenShake 0.4s';
+      setTimeout(() => {
+        gameBody.style.animation = '';
+      }, 400);
+    }
+    flash.style.backgroundColor = 'rgba(232, 41, 28, 0.12)';
+    flash.style.opacity = '1';
     setTimeout(() => {
-      gameBody.style.animation = '';
-      gameBody.style.backgroundColor = 'var(--bg)';
+      flash.style.opacity = '0';
     }, 400);
     playFlowSound('mistake');
   }
