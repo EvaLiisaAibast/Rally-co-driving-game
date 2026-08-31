@@ -103,6 +103,20 @@ Keep the rhythm. Don't let him off the hook.`,
               { speaker: 'narrator', text: 'Mikko is leaning against the fender of the car. He\'s holding a flask. The air smells like cheap brandy and expensive racing fuel. He isn\'t taping his wrists; he\'s staring at a dent he made in testing. The dent is shaped like a memory he\'s trying to forget.' },
               { speaker: 'mikko', text: 'Car\'s pushing wide. Or maybe the world\'s moving too fast today. Every time you call a note perfectly, it costs me something. Trust is expensive. You ready to pay that price, or just here for the ride?', emotion: 'slurred' }
             ],
+            eraVariants: {
+              grpb: {
+                dialogue: [
+                  { speaker: 'narrator', text: 'Mikko is leaning against the fender of the Group B monster. The turbo whine from the next bay makes conversation impossible. He\'s holding a flask. The air smells like cheap brandy and unburnt high-octane fuel. This car doesn\'t forgive mistakes. Neither does he.' },
+                  { speaker: 'mikko', text: 'Six hundred horsepower. No electronics. Just your voice and my right foot. If you blink, we die. Every note is life or death now. You ready for that, or just here for the ride?', emotion: 'slurred' }
+                ]
+              },
+              rally1: {
+                dialogue: [
+                  { speaker: 'narrator', text: 'Mikko is studying the hybrid system display on the Rally1 car. Multiple screens, complex telemetry, energy recovery graphs. He\'s holding a flask but barely touching it. The complexity of the modern car seems to exhaust him more than the driving.' },
+                  { speaker: 'mikko', text: 'Battery management, hybrid deployment, energy recovery. Used to be, I just turned the wheel and went. Now I\'m managing a power plant and calling pacenotes. Trust me when I say the old way was simpler. You ready to learn the new way?', emotion: 'tired' }
+                ]
+              }
+            },
             choices: [
               { 
                 text: '"I\'m not here to judge. I\'m here to keep you alive."',
@@ -185,6 +199,24 @@ Keep the rhythm. Don't let him off the hook.`,
               { speaker: 'you', text: 'Can you fix him?' },
               { speaker: 'jorge', text: 'I\'m a mechanic, not a priest. And even if I were a priest, I couldn\'t fix something that doesn\'t want to be fixed.\n\nHe finally looks at you. His eyes are tired, not angry.' }
             ],
+            eraVariants: {
+              classic: {
+                dialogue: [
+                  { speaker: 'narrator', text: 'Jorge is polishing a carburetor on the classic car. He moves slowly, deliberately, like he\'s working on a museum piece instead of a race car. The old engine smells of oil and nostalgia.' },
+                  { speaker: 'jorge', text: 'Carburetors. Points ignition. No computers, no sensors. Just mechanical sympathy and knowing what the engine\'s telling you.\n\nHe wipes his hands on a rag that\'s seen better decades.\n\nJorge: The old days? We didn\'t have data logging. We had feel. And sometimes feel was wrong. But at least it was our mistake, not the computer\'s.' },
+                  { speaker: 'you', text: 'Can you fix him?' },
+                  { speaker: 'jorge', text: 'I can fix anything with pistons and a crank. The stuff between a man\'s ears? That\'s beyond my pay grade.\n\nHe sets the carburetor down with care.' }
+                ]
+              },
+              rally2: {
+                dialogue: [
+                  { speaker: 'narrator', text: 'Jorge is reviewing telemetry data on a tablet. Multiple graphs, suspension traces, tire temperature curves. The Rally2 car is a data platform as much as a racing machine.' },
+                  { speaker: 'jorge', text: 'Telemetry says the suspension\'s perfect. Driver says it\'s pushing wide.\n\nHe scrolls through the data with practiced fingers.\n\nJorge: Modern cars tell you everything except what matters. The data says one thing, the driver\'s seat says another. I learned to trust the seat. The tablet\'s just for the sponsors.' },
+                  { speaker: 'you', text: 'Can you fix him?' },
+                  { speaker: 'jorge', text: 'I can adjust the damper curves. I can change the spring rates. I can\'t adjust what\'s going on in his head.\n\nHe taps the tablet screen, thoughtful.' }
+                ]
+              }
+            },
             choices: [
               { 
                 text: '"Machines don\'t have a choice. He does."',
