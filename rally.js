@@ -2163,7 +2163,8 @@ const Achievements = {
     {id: 'clean_sweep', name: '✨ Clean Sweep', desc: 'Complete a stage with 100% accuracy', unlocked: false},
     {id: 'speed_demon', name: '⚡ Speed Demon', desc: 'Complete a stage on Insane difficulty', unlocked: false},
     {id: 'era_master', name: '🏆 Era Master', desc: 'Complete stages in all three eras', unlocked: false},
-    {id: 'occupational_hazard', name: '🍫 Occupational Hazard', desc: 'Get hit in the head by an emergency granola bar', unlocked: false}
+    {id: 'occupational_hazard', name: '🍫 Occupational Hazard', desc: 'Get hit in the head by an emergency granola bar', unlocked: false},
+    {id: 'living_up_to_the_name', name: '⭐ Living Up To The Name', desc: 'Complete a clean stage with a legendary rally name', unlocked: false}
   ],
   tuningChanges: 0,
   erasCompleted: new Set(),
@@ -3267,6 +3268,12 @@ function openCareer(){
     G.driver = isMale ? 'Mikko Lahti' : 'Sofia Andersson';
     G.codriver = isMale ? 'Janne Salo' : 'Elena Voss';
     G.era='grpb'; G.car=ERAS['grpb'].cars[0]; G.diff=1; G.timeLimit=DIFFS[1].s;
+    
+    // Apply era-based starting modifiers (System 2)
+    if (typeof StorySystem !== 'undefined') {
+      StorySystem.applyEraModifiers(G.era);
+    }
+    
     CAREER.driver=G.driver; CAREER.codriver=G.codriver; CAREER.car=G.car;
     CAREER.currentStage=0; CAREER.pts=0; CAREER.completed=[];
     CAREER.standings=RIVALS.map(r=>({...r,pts:Math.floor(Math.random()*12)+3}));
@@ -3403,6 +3410,24 @@ function startStageFromSetup(){
   // Get driver/co-driver names from setup screen inputs
   G.driver=document.getElementById('inp-drv')?.value.trim()||'Driver';
   G.codriver=document.getElementById('inp-cod')?.value.trim()||'Co-driver';
+  
+  // Check for legendary name recognition (System 3: nag tier, System 1: Tier S legends)
+  if (typeof NameRecognitionSystem !== 'undefined') {
+    const reactions = NameRecognitionSystem.checkCrewNames(G.driver, G.codriver);
+    
+    // Show nag tier reaction immediately (one-time wink)
+    if (reactions.driverReaction && reactions.driverReaction.tier === 'nag') {
+      setTimeout(() => {
+        alert(reactions.driverReaction.line);
+      }, 500);
+    } else if (reactions.coDriverReaction && reactions.coDriverReaction.tier === 'nag') {
+      setTimeout(() => {
+        alert(reactions.coDriverReaction.line);
+      }, 500);
+    }
+    // Tier S reactions are cached and used later in stage results/crash handling
+  }
+  
   if(!G.era){alert('Select an era first!');return;}
   if(!G.car){alert('Select a car first!');return;}
   const era=ERAS[G.era];
@@ -4198,6 +4223,11 @@ function endStage(){
   Achievements.checkSpeedDemon();
   Achievements.checkEraMaster();
   
+  // Check Living Up To The Name achievement (legendary name + clean stage)
+  if (won && typeof NameRecognitionSystem !== 'undefined' && NameRecognitionSystem.legendFlag) {
+    Achievements.unlock('living_up_to_the_name');
+  }
+  
   if(G.careerMode){
     const cal=CAREER_CAL[G.careerIdx];
     const pts=posN<cal.pts.length?cal.pts[posN]:0;
@@ -4253,6 +4283,16 @@ function endStage(){
   document.getElementById('r-deck').textContent=won
     ?`The crew translated ${G.correct} of ${total} pacenotes correctly. Stage time: ${timeStr}.`
     :`Only ${G.correct} of ${total} notes read correctly. Time lost across multiple corners.`;
+  
+  // Check for legendary name reaction (Tier S) on clean runs
+  let legendReaction = '';
+  if (won && typeof NameRecognitionSystem !== 'undefined') {
+    const cleanRunLine = NameRecognitionSystem.getReactionLine('cleanRun');
+    if (cleanRunLine) {
+      legendReaction = `<p><em>${cleanRunLine}</em></p>`;
+    }
+  }
+  
   const crashWords=G.crashCount>0?`After ${G.crashCount} incident${G.crashCount>1?'s':''} costing over ${Math.round(G.totalTimeLost)} seconds, `:' ';
   let art;
   if (G.dnf) {
@@ -4281,7 +4321,7 @@ function endStage(){
     }
   }
   const dmgLine=G.crashCount>0?`<p>The car suffered ${G.crashCount} incident${G.crashCount>1?'s':''} during the stage, costing an estimated ${Math.round(G.totalTimeLost)} seconds in total. Average car damage was ${Math.round(avgDmg)}% at the finish — ${avgDmg>80?'remarkable considering the conditions':'visible on the bodywork and underneath'}.`:`<p>The car came through clean — no incidents, no damage beyond the normal wear of a gravel stage.`;
-  document.getElementById('r-article').innerHTML=art+dmgLine+'</p>';
+  document.getElementById('r-article').innerHTML=art+dmgLine+legendReaction+'</p>';
   let q;
   if (won) {
     switch(storyTone) {
