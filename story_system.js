@@ -463,6 +463,33 @@ const StorySystem = {
     this.save();
   },
   
+  // Apply era-based starting modifiers (System 2)
+  applyEraModifiers(era) {
+    if (!era || !this.state.stats) return;
+    
+    const eraModifiers = {
+      'grpb': { stress: 10, trust: 0 },      // Group B: +10 stress (monsters with no limits)
+      'wrc90s': { stress: 0, trust: 0 },     // WRC 90s: baseline
+      'rally2': { stress: 0, trust: 5 },     // Rally2/R5: +5 trust (modern, forgiving)
+      'rally1': { stress: 5, trust: 0 },     // Rally1: +5 stress (hybrid management)
+      'classic': { stress: -5, trust: 0 }    // Classic: -5 stress (lower power, forgiving)
+    };
+    
+    const modifiers = eraModifiers[era] || { stress: 0, trust: 0 };
+    
+    // Apply stress modifier (mentalStress)
+    if (modifiers.stress !== 0) {
+      this.state.stats.mentalStress = Math.max(0, Math.min(100, this.state.stats.mentalStress + modifiers.stress));
+    }
+    
+    // Apply trust modifier (driverTrust)
+    if (modifiers.trust !== 0) {
+      this.state.stats.driverTrust = Math.max(0, Math.min(100, this.state.stats.driverTrust + modifiers.trust));
+    }
+    
+    this.save();
+  },
+  
   // Select route at start
   selectRoute(route) {
     this.state.genderRoute = route;
@@ -1480,7 +1507,12 @@ function showPreStageStory(stageIndex, onComplete) {
   const scene = chapterData.preStage.find(s => s.condition(ctx));
   
   if (scene) {
-    StoryUI.showScene(scene.scene, onComplete);
+    // Check for era variants (System 2)
+    let sceneToShow = scene.scene;
+    if (scene.scene.eraVariants && scene.scene.eraVariants[era]) {
+      sceneToShow = {...scene.scene, dialogue: scene.scene.eraVariants[era].dialogue};
+    }
+    StoryUI.showScene(sceneToShow, onComplete);
   } else {
     onComplete();
   }
