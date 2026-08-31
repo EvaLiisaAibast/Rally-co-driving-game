@@ -202,7 +202,7 @@ Each car has unique stats: acceleration, handling, stability, turbo lag, expert 
 
 * Not a driving simulator
 * Not a physics-based racing game
-* Not a multiplayer game (single-player focused)
+* Not primarily a multiplayer game — LAN/online play exists but is secondary to the single-player career experience
 * Not forgiving
 
 ---
@@ -247,7 +247,7 @@ Learn pacenote fundamentals with vocabulary panels, practice modes, and tutorial
 
 ## PROJECT STATUS
 
-This is an active student project with regular updates.Check the website at https://evaliisaaibast.github.io/Take-me-to-the-hairpin-_website/ for the latest news and development updates.
+This is an active student project with regular updates. Join the Discord community for the latest news and development updates.
 
 ---
 
