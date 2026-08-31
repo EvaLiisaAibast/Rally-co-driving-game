@@ -2385,3 +2385,593 @@ const DriverProfileSystem = {
     this.setProfile('default');
   }
 };
+
+// ── LEGENDARY NAME RECOGNITION SYSTEM ───────────────────────────────
+// Section 6: Guardrails - Profanity blocklist + silent fallback
+// This is the safety net for everything below - check before any name processing
+
+const PROFANITY_BLOCKLIST = [
+  // Common profanity and offensive terms
+  "fuck", "shit", "ass", "bitch", "bastard", "damn", "hell", "crap",
+  "dick", "piss", "cock", "pussy", "cunt", "whore", "slut", "fag",
+  "nigger", "nigga", "chink", "spic", "kike", "gook", "wetback",
+  "retard", "retarded", "retard", "mong", "spastic",
+  // Variations and common misspellings
+  "fuk", "sh1t", "azz", "b1tch", "d1ck", "f4g", "n1gger"
+];
+
+// Check if a name contains blocked content (silent fallback - returns true if blocked)
+function isNameBlocked(fullName) {
+  if (!fullName) return false;
+  const lowerName = fullName.toLowerCase();
+  return PROFANITY_BLOCKLIST.some(blocked => lowerName.includes(blocked));
+}
+
+// System 3: Broad "nag" tier - ~50 rally surnames with generic reactions
+// This is the cheapest win - one-time random line on name confirmation
+const KNOWN_RALLY_SURNAMES = [
+  "mcrae", "burns", "sainz", "makinen", "gronholm", "loeb", "ogier",
+  "rovanpera", "tanak", "neuville", "evans", "breen", "meeke", "latvala",
+  "hirvonen", "solberg", "henning", "oliver", "kankkunen", "vatanen",
+  "mikkola", "waldegard", "rohrl", "blomqvist", "alen", "salonen",
+  "biasion", "auriol", "delecour", "liatti", "schwarz", "loubet", "saby",
+  "eriksson", "alister", "arai", "galli", "loix", "harri", "stohl",
+  "pons", "panizzi", "bugalski", "aghini", "munari", "aaltonen",
+  "andersson", "clark", "buffum", "mouton", "mikkelsen", "suninen",
+  "lappi", "katsuta", "fourmaux", "loubet", "greensmith", "block"
+];
+
+const NAG_LINES = [
+  "That's a real name. You know that, right?",
+  "{name} on the entry list. Bold choice. We'll see if it holds up.",
+  "Big shoes. Let's see if you fill them.",
+  "Huh. Didn't expect to see that name again.",
+  "Sure. And I'm Colin McRae's co-driver too.",
+  "Somewhere, a rally historian just felt a disturbance."
+];
+
+// System 1: Tier S legends with bespoke reactions
+// Tone guardrail: homage, never mockery of real death or tragedy
+const LEGEND_NAMES = {
+  "burns": {
+    tier: "S",
+    cleanRunLine: "Co-driver, quietly: 'Burns. Good name to drive under.'",
+    crashLine: null, // deliberately no crash-specific line for tragedy-adjacent names
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "loeb": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Nine titles. No pressure.'",
+    crashLine: "Co-driver mutters: 'Nine world titles and you still found a tree.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "mcrae": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'McRae. Flat out, every time. You'd have made him proud.'",
+    crashLine: "Co-driver: 'Even the greats found trees. You're in good company.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "ogier": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Eight titles and counting. You've got seven to go.'",
+    crashLine: "Co-driver: 'Eight titles and you still found a tree. Impressive.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "gronholm": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Grönholm. Fast and mouthy — you've got the fast part down, anyway.'",
+    crashLine: "Co-driver: 'Even the Flying Finn had bad days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "sainz": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Sainz. El Matador rides again. Nice and clean.'",
+    crashLine: "Co-driver: 'Even El Matador had off-days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "makinen": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Mäkinen. Four in a row was his number. One clean stage is a start.'",
+    crashLine: "Co-driver: 'Even the Ice Man slipped sometimes.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "solberg": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Solberg. The showman. All fists and flags. You kept it quiet today.'",
+    crashLine: "Co-driver: 'Even champions have bad stages.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "vatanen": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Vatanen. 1981 champion, and he did it his way. So did you, evidently.'",
+    crashLine: "Co-driver: 'Even legends had rough patches.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "rovanpera": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Rovanperä. Youngest champion in history. No rush, you've got time.'",
+    crashLine: "Co-driver: 'Even the youngest champion finds trees.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  // Batch 2 - Additional legendary drivers (51-100)
+  "toivonen": {
+    tier: "S",
+    cleanRunLine: "Co-driver, quietly: 'Henri Toivonen. One of the fastest to ever sit in a rally car. This one's for him.'",
+    crashLine: null, // tragedy-adjacent - Group B era death
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "cresto": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Sergio Cresto — the notes were his. Read them well.'",
+    crashLine: null, // tragedy-adjacent - Group B era death
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "bettega": {
+    tier: "S",
+    cleanRunLine: "Co-driver, quietly: 'Attilio Bettega. Italian speed, gone too soon. Respect the name.'",
+    crashLine: null, // tragedy-adjacent
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "breen": {
+    tier: "S",
+    cleanRunLine: "Co-driver, quietly: 'Craig Breen. Fast, warm, gone too soon. That one's for him.'",
+    crashLine: null, // tragedy-adjacent
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "tanak": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Tänak. Estonian precision. That was tidy.'",
+    crashLine: "Co-driver: 'Even Estonian precision has off-days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "neuville": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Neuville. Thierry's famous for finishing second. You just finished first.'",
+    crashLine: "Co-driver: 'Even second-place specialists have bad days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "evans": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Evans. Welsh, consistent, and clean today. He'd approve.'",
+    crashLine: "Co-driver: 'Even Welsh consistency has rough patches.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "meeke": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Meeke. Kris Meeke drove like he had nothing to lose. So did you, apparently.'",
+    crashLine: "Co-driver: 'Even aggressive drivers find trees.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "latvala": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Latvala. Longest-serving young gun in the business. You'll do.'",
+    crashLine: "Co-driver: 'Even the longest-serving young guns have off-days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "hirvonen": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Hirvonen. So close to a title, so many times. This stage, though — clean.'",
+    crashLine: "Co-driver: 'Even title contenders have bad stages.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "kankkunen": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Kankkunen. Four titles across three decades. Consistency like that starts somewhere.'",
+    crashLine: "Co-driver: 'Even four-time champions have off-days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "mikkola": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Mikkola. One of the greats before it was even called the World Championship.'",
+    crashLine: "Co-driver: 'Even the pioneers had rough days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "waldegard": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Waldegård. The very first World Champion. No pressure carrying that one.'",
+    crashLine: "Co-driver: 'Even the first champion found trees.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "rohrl": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Röhrl. Precision over speed, always. That stage had both.'",
+    crashLine: "Co-driver: 'Even precision drivers have off-days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "blomqvist": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Blomqvist. 1984, and never rattled. Neither were you.'",
+    crashLine: "Co-driver: 'Even unflappable drivers have bad days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "alen": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Alén. Fast enough to scare champions, never quite champion himself. You've got one up on him already.'",
+    crashLine: "Co-driver: 'Even championship contenders have off-days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "salonen": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Salonen. Quiet, methodical, two titles to show for it.'",
+    crashLine: "Co-driver: 'Even methodical drivers have bad stages.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "biasion": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Biasion. Two titles, ice in his veins. That run had some of that.'",
+    crashLine: "Co-driver: 'Even ice-cold champions have off-days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "auriol": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Auriol. French flair, two titles worth of it.'",
+    crashLine: "Co-driver: 'Even French flair has rough patches.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "delecour": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Delecour. Aggressive to a fault, but fast with it. Sound familiar?'",
+    crashLine: "Co-driver: 'Even aggressive drivers find trees.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "mouton": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Mouton. Michèle Mouton — still the only woman ever this close to a WRC title. Respect the name.'",
+    crashLine: "Co-driver: 'Even legends have difficult days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "mikkelsen": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Mikkelsen. Andreas Mikkelsen, Norwegian consistency. That stage had it.'",
+    crashLine: "Co-driver: 'Even consistent drivers have off-days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "katsuta": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Katsuta. Takamoto Katsuta, flying Japan's flag at the top level.'",
+    crashLine: "Co-driver: 'Even Japanese stars have bad days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "lappi": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Lappi. Esapekka Lappi. Rally winner, rallycross winner, does it all.'",
+    crashLine: "Co-driver: 'Even versatile drivers have off-days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "suninen": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Suninen. Teemu Suninen — young, fast, still writing the story.'",
+    crashLine: "Co-driver: 'Even young fast drivers find trees.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "kubica": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Kubica. Robert Kubica. F1 star, then rally star. Different kind of fearless.'",
+    crashLine: "Co-driver: 'Even fearless drivers have bad days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "sordo": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Sordo. Dani Sordo. Never quite champion, always somehow still there.'",
+    crashLine: "Co-driver: 'Even perennial contenders have off-days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "ostberg": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Østberg. Mads Østberg. Norwegian speed, never afraid to attack.'",
+    crashLine: "Co-driver: 'Even Norwegian speed finds trees.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "mehta": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Mehta. Shekhar Mehta — Safari Rally royalty. That stage had some of that grit.'",
+    crashLine: "Co-driver: 'Even Safari royalty has bad days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "carlsson": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Carlsson. Erik Carlsson — Mr. Saab himself. RAC and Monte, more than once.'",
+    crashLine: "Co-driver: 'Even Mr. Saab had off-days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "aaltonen": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Aaltonen. Rauno Aaltonen — the Flying Finn who started the whole Flying Finn thing.'",
+    crashLine: "Co-driver: 'Even the original Flying Finn had rough patches.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "munari": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Munari. Sandro Munari, before the championship even had the name WRC. Legend status.'",
+    crashLine: "Co-driver: 'Even legends have difficult days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "ragnotti": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Ragnotti. Jean Ragnotti. Ask any French fan about the handbrake turns. They'll know.'",
+    crashLine: "Co-driver: 'Even handbrake artists have off-days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "darniche": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Darniche. Bernard Darniche — Tour de Corse was basically his address.'",
+    crashLine: "Co-driver: 'Even tarmac specialists have bad days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "airikkala": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Airikkala. Pentti Airikkala — RAC winner, proper Finnish pace.'",
+    crashLine: "Co-driver: 'Even Finnish pace has off-days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "clark": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Clark. Roger Clark, British rallying's first hero. Home advantage, maybe.'",
+    crashLine: "Co-driver: 'Even British heroes have bad days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "buffum": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Buffum. John Buffum, American rally royalty. Not many can say that.'",
+    crashLine: "Co-driver: 'Even American royalty has off-days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "toivonenp": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Toivonen. Henri's father, champion in his own right, decades before. The name runs deep.'",
+    crashLine: "Co-driver: 'Even champions have difficult days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "mcraej": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'McRae. Colin's father — five-time British champion before Colin ever sat in a car.'",
+    crashLine: "Co-driver: 'Even champions have bad stages.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "pond": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Pond. Tony Pond. British rallying doesn't talk about him enough.'",
+    crashLine: "Co-driver: 'Even underrated drivers have off-days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "chatriot": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Chatriot. François Chatriot — French tarmac craft, old school.'",
+    crashLine: "Co-driver: 'Even old-school tarmac specialists have bad days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "warmbold": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Warmbold. Achim Warmbold, one of the sport's earliest true internationals.'",
+    crashLine: "Co-driver: 'Even pioneers have rough patches.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "nicolas": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Nicolas. Jean-Pierre Nicolas. Alpine-Renault glory days.'",
+    crashLine: "Co-driver: 'Even glory days have rough patches.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "beguin": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Béguin. Bernard Béguin. Another French tarmac specialist who knew every apex.'",
+    crashLine: "Co-driver: 'Even tarmac specialists have off-days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "frequelin": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Frequelin. Guy Frequelin — consistent, sharp, a proper professional's professional.'",
+    crashLine: "Co-driver: 'Even professionals have bad days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "fourmaux": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Fourmaux. Adrien Fourmaux — young, aggressive, still figuring it out. Aren't we all.'",
+    crashLine: "Co-driver: 'Even young aggressive drivers find trees.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "loubet": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Loubet. Pierre-Louis Loubet. Tarmac specialist, still climbing.'",
+    crashLine: "Co-driver: 'Even climbing specialists have off-days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "greensmith": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Greensmith. Gus Greensmith — British grit, still writing the story.'",
+    crashLine: "Co-driver: 'Even British grit has rough patches.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "lefebvre": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Lefebvre. Stéphane Lefebvre — Junior champion turned full-timer.'",
+    crashLine: "Co-driver: 'Even junior champions have bad days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "ingram": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Ingram. Chris Ingram. European champion, quietly excellent.'",
+    crashLine: "Co-driver: 'Even quiet excellence has off-days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "kajetanowicz": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Kajetanowicz. Kajetan Kajetanowicz — Poland's rally hero, several European titles deep.'",
+    crashLine: "Co-driver: 'Even heroes have bad days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "basso": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Basso. Giandomenico Basso — Italian tarmac royalty.'",
+    crashLine: "Co-driver: 'Even Italian royalty has off-days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "novikov": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Novikov. Evgeny Novikov. Fast, occasionally chaotic. You'll know if that's accurate.'",
+    crashLine: "Co-driver: 'Even fast chaotic drivers find trees.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "wilks": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Wilks. Guy Wilks — British, sharp on tarmac, underrated.'",
+    crashLine: "Co-driver: 'Even underrated drivers have off-days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "duval": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Duval. François Duval — Junior champion, Belgian speed.'",
+    crashLine: "Co-driver: 'Even Belgian speed finds trees.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "wilson": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Wilson. Matthew Wilson — part of a proper rallying family.'",
+    crashLine: "Co-driver: 'Even rallying families have bad days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "camilli": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Camilli. Bryan Camilli — Monaco's own, making his mark.'",
+    crashLine: "Co-driver: 'Even Monaco stars have off-days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "alqassimi": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Al Qassimi. Khalid Al Qassimi — flying the UAE flag at world level.'",
+    crashLine: "Co-driver: 'Even flag-bearers have bad days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "puras": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Puras. Jesús Puras — Spanish tarmac ace, long, steady career.'",
+    crashLine: "Co-driver: 'Even steady careers have rough patches.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "andruet": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Andruet. Jean-Claude Jiclo Andruet — European champion, proper old-school flair.'",
+    crashLine: "Co-driver: 'Even old-school flair has off-days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "kallstrom": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Källström. Harry Källström — Swedish, Monte Carlo and RAC winner both.'",
+    crashLine: "Co-driver: 'Even Swedish winners have bad days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "timo": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Mäkinen, Timo. The original Flying Finn, decades before Tommi.'",
+    crashLine: "Co-driver: 'Even original Flying Finns had rough patches.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "trana": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Trana. Tom Trana — Swedish rally, before most of this list existed.'",
+    crashLine: "Co-driver: 'Even pioneers have difficult days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "aitkenwalker": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Aitken-Walker. Louise Aitken-Walker — a trailblazer for women in the sport.'",
+    crashLine: "Co-driver: 'Even trailblazers have bad days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "ickx": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Ickx. Vanina Ickx. Racing runs in that family, on gravel and tarmac both.'",
+    crashLine: "Co-driver: 'Even racing families have off-days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "prokop": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Prokop. Martin Prokop — Czech rally, steady hands.'",
+    crashLine: "Co-driver: 'Even steady hands have bad days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "solans": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Solans. Nil Solans — young Spanish talent, still climbing the ranks.'",
+    crashLine: "Co-driver: 'Even climbing talent has off-days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  },
+  "bouffier": {
+    tier: "S",
+    cleanRunLine: "Co-driver: 'Bouffier. Bryan Bouffier — French tarmac specialist, ERC-tested.'",
+    crashLine: "Co-driver: 'Even tarmac specialists have bad days.'",
+    milestoneAchievement: "living_up_to_the_name"
+  }
+};
+
+const NameRecognitionSystem = {
+  legendFlag: null,
+  
+  // Extract surname from full name (handles "Mr Burns", "burns", etc.)
+  extractSurname(fullName) {
+    if (!fullName) return null;
+    const parts = fullName.trim().split(/\s+/);
+    return parts[parts.length - 1].toLowerCase();
+  },
+  
+  // Check if name matches a legend or known rally surname
+  checkNameReaction(fullName) {
+    // Guardrail: Silent fallback for blocked names
+    if (isNameBlocked(fullName)) {
+      return null; // Silent fallback - no reaction for blocked names
+    }
+    
+    const surname = this.extractSurname(fullName);
+    if (!surname) return null;
+    
+    // Check Tier S legends first (bespoke reactions)
+    if (LEGEND_NAMES[surname]) {
+      return { tier: "S", data: LEGEND_NAMES[surname], surname };
+    }
+    
+    // Check broad nag list (generic reactions)
+    if (KNOWN_RALLY_SURNAMES.includes(surname)) {
+      const line = NAG_LINES[Math.floor(Math.random() * NAG_LINES.length)];
+      const formattedLine = line.replace("{name}", surname.charAt(0).toUpperCase() + surname.slice(1));
+      return { tier: "nag", line: formattedLine, surname };
+    }
+    
+    return null;
+  },
+  
+  // Get reaction line for specific context (clean run, crash, etc.)
+  getReactionLine(context) {
+    if (!this.legendFlag || this.legendFlag.tier !== "S") return null;
+    
+    const data = this.legendFlag.data;
+    switch (context) {
+      case "cleanRun":
+        return data.cleanRunLine;
+      case "crash":
+        return data.crashLine; // may be null for tragedy-adjacent names
+      default:
+        return null;
+    }
+  },
+  
+  // Check and cache legend flag on crew name confirmation
+  checkCrewNames(driverName, coDriverName) {
+    const driverReaction = this.checkNameReaction(driverName);
+    const coDriverReaction = this.checkNameReaction(coDriverName);
+    
+    // Cache driver reaction if it's a Tier S legend (nag tier doesn't need caching)
+    if (driverReaction && driverReaction.tier === "S") {
+      this.legendFlag = driverReaction;
+    } else if (coDriverReaction && coDriverReaction.tier === "S") {
+      this.legendFlag = coDriverReaction;
+    } else {
+      this.legendFlag = null;
+    }
+    
+    return { driverReaction, coDriverReaction };
+  },
+  
+  reset() {
+    this.legendFlag = null;
+  }
+};
