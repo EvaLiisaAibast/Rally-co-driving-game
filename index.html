@@ -260,6 +260,9 @@
       <button class="mnbtn" onclick="openCareer()">Career Mode <span>→</span></button>
       <button class="mnbtn" onclick="openTraining()">Training School <span>→</span></button>
       <button class="mnbtn" onclick="openTutorial()" style="border-color:var(--gold);color:var(--gold)">Interactive Tutorial <span style="font-size:14px">★</span></button>
+      <button class="mnbtn" onclick="openSignatureStages()" style="border-color:var(--red);color:var(--red)">🏆 Signature Stages <span style="font-size:12px">★</span></button>
+      <button class="mnbtn" onclick="openDailyChallenge()" style="border-color:var(--cyan);color:var(--cyan)">📅 Daily Challenge <span style="font-size:12px">NEW</span></button>
+      <button class="mnbtn" onclick="openWeeklyChallenge()" style="border-color:var(--mp-orange);color:var(--mp-orange)">🏆 Weekly Rally <span style="font-size:12px">HOT</span></button>
       <button class="mnbtn" onclick="openTuningStandalone()">Tuning Garage <span>→</span></button>
       <button class="mnbtn" id="menu-analytics-btn" onclick="openAnalytics()" style="display:none">Analytics Dashboard <span>→</span></button>
       <button class="mnbtn" id="menu-programs-btn" onclick="openPrograms()" style="display:none">Training Programs <span>→</span></button>
@@ -503,6 +506,114 @@
 </div>
 </div>
 
+<div class="screen" id="daily-challenge">
+<div class="page-hdr">
+  <button class="bk" onclick="showMenu()">← Menu</button>
+  <div class="page-hdr-title">Daily Challenge</div>
+</div>
+<div class="setup-scroll">
+  <div class="ss-sec">
+    <h3>Today's Stage</h3>
+    <div id="daily-stage-info" style="background:var(--surf2);padding:1rem;border-radius:4px;margin-bottom:1rem">
+      <div style="font-size:14px;color:var(--text3);margin-bottom:0.5rem">Loading...</div>
+    </div>
+  </div>
+  <div class="ss-sec">
+    <h3>Your Best Today</h3>
+    <div id="daily-best-score" style="font-family:'IBM Plex Mono',monospace;font-size:24px;color:var(--gold)">No runs yet</div>
+  </div>
+  <div class="ss-sec">
+    <h3>Global Leaderboard</h3>
+    <div id="daily-leaderboard" style="font-family:'IBM Plex Mono',monospace;font-size:12px">Loading...</div>
+  </div>
+</div>
+<div class="start-bar">
+  <button class="gbtn" onclick="showMenu()">← Menu</button>
+  <button class="gbtn pri" onclick="startDailyChallenge()">Start Daily Challenge</button>
+</div>
+</div>
+
+<div class="screen" id="signature-stages">
+<div class="page-hdr">
+  <button class="bk" onclick="showMenu()">← Menu</button>
+  <div class="page-hdr-title">Signature Stages</div>
+</div>
+<div class="setup-scroll">
+  <div class="ss-sec">
+    <h3>Legendary Stages</h3>
+    <div style="background:var(--surf2);padding:1rem;border-radius:4px;margin-bottom:1rem;border:1px solid var(--red)">
+      <div style="font-size:14px;color:var(--red);margin-bottom:0.5rem;font-weight:600">HAND-TUNED PACENOTES</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.4">These stages feature specially crafted pacenote sequences that test specific skills. Each is inspired by real rally stages that made history. Beat the record times to earn your place among the legends.</div>
+    </div>
+  </div>
+  <div class="ss-sec">
+    <h3>Your Personal Bests</h3>
+    <div id="signature-personal-bests" style="font-family:'IBM Plex Mono',monospace;font-size:12px">Loading...</div>
+  </div>
+  <div class="ss-sec">
+    <h3>Select Stage</h3>
+    <div id="signature-stages-list">Loading...</div>
+  </div>
+</div>
+<div class="start-bar">
+  <button class="gbtn" onclick="showMenu()">← Menu</button>
+</div>
+</div>
+
+<div class="screen" id="daily-challenge">
+<div class="page-hdr">
+  <button class="bk" onclick="showMenu()">← Menu</button>
+  <div class="page-hdr-title">Daily Challenge</div>
+</div>
+<div class="setup-scroll">
+  <div class="ss-sec">
+    <h3>Today's Stage</h3>
+    <div id="daily-stage-info" style="background:var(--surf2);padding:1rem;border-radius:4px;margin-bottom:1rem">
+      <div style="font-size:14px;color:var(--text3);margin-bottom:0.5rem">Loading...</div>
+    </div>
+  </div>
+  <div class="ss-sec">
+    <h3>Your Best Today</h3>
+    <div id="daily-best-score" style="font-family:'IBM Plex Mono',monospace;font-size:24px;color:var(--gold)">No runs yet</div>
+  </div>
+  <div class="ss-sec">
+    <h3>Daily Leaderboard</h3>
+    <div id="daily-leaderboard" style="font-family:'IBM Plex Mono',monospace;font-size:12px">Loading...</div>
+  </div>
+</div>
+<div class="start-bar">
+  <button class="gbtn" onclick="showMenu()">← Menu</button>
+  <button class="gbtn pri" onclick="startDailyChallenge()">Start Daily Challenge</button>
+</div>
+</div>
+
+<div class="screen" id="weekly-challenge">
+<div class="page-hdr">
+  <button class="bk" onclick="showMenu()">← Menu</button>
+  <div class="page-hdr-title">Weekly Rally</div>
+</div>
+<div class="setup-scroll">
+  <div class="ss-sec">
+    <h3>This Week's Stage</h3>
+    <div id="weekly-stage-info" style="background:var(--surf2);padding:1rem;border-radius:4px;margin-bottom:1rem">
+      <div style="font-size:14px;color:var(--text3);margin-bottom:0.5rem">Loading...</div>
+    </div>
+  </div>
+  <div class="ss-sec">
+    <h3>Your Best This Week</h3>
+    <div id="weekly-best-score" style="font-family:'IBM Plex Mono',monospace;font-size:24px;color:var(--gold)">No runs yet</div>
+  </div>
+  <div class="ss-sec">
+    <h3>Weekly Leaderboard</h3>
+    <div id="weekly-leaderboard" style="font-family:'IBM Plex Mono',monospace;font-size:12px">Loading...</div>
+  </div>
+</div>
+<div class="start-bar">
+  <button class="gbtn" onclick="showMenu()">← Menu</button>
+  <button class="gbtn pri" onclick="startWeeklyChallenge()">Start Weekly Rally</button>
+</div>
+</div>
+
 <div class="screen" id="result">
 <div class="mp-mast">
   <div class="mp-mast-top">
@@ -550,6 +661,10 @@
       <h3>Note Breakdown</h3>
       <div id="r-breakdown">—</div>
     </div>
+    <div class="mp-box">
+      <h3>Performance Timeline</h3>
+      <div id="r-timeline">—</div>
+    </div>
     <div class="mp-standings" id="r-std-box" style="display:none">
       <h3>Championship</h3>
       <div id="r-standings">—</div>
@@ -563,6 +678,7 @@
 <div class="mp-foot">
   <button class="mpbtn" onclick="showMenu()">← Menu</button>
   <button class="mpbtn" onclick="openSetup()">Quick Stage</button>
+  <button class="mpbtn" onclick="generateShareableCard()">📸 Share Result</button>
   <button class="mpbtn pri" id="r-career-btn" style="display:none" onclick="continueCareer()">Next Stage →</button>
 </div>
 </div>
