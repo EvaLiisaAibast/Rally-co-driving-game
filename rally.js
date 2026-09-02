@@ -1,4 +1,4 @@
-const DIFFS=[{n:'Easy',s:18},{n:'Normal',s:14},{n:'Hard',s:11},{n:'Insane',s:9},{n:'Chaos',s:7}];
+const DIFFS=[{n:'Easy',s:20},{n:'Normal',s:16},{n:'Hard',s:13},{n:'Insane',s:11},{n:'Chaos',s:9}];
 const RIVALS=[{name:'S. Laurent',team:'Citroën'},{name:'C. MacRae',team:'Subaru'},{name:'M. Grönholm',team:'Peugeot'},{name:'K. Rovanperä',team:'Toyota'}];
 
 const cars=[
@@ -2757,9 +2757,12 @@ function rollCrash(noteRaw, isTimeout, isBadNote){
   const handlingBonus = carStats.handling ? (carStats.handling / 100) : 1.0;
   const stabilityBonus = carStats.stability ? (carStats.stability / 100) : 1.0;
   
-  if (RALLY_STATE.consecutiveWrong < 2) {
-    return false; // Not enough consecutive wrongs - no crash
+  // Progressive crash threshold based on difficulty
+  const crashThresholds = [3, 2, 2, 1, 1]; // consecutive wrongs needed per difficulty
+  if (RALLY_STATE.consecutiveWrong < crashThresholds[G.diff]) {
+    return false;
   }
+  
   const era=ERAS[G.era];
   const hasCaution=noteRaw.includes('!');
   const hasDbl=noteRaw.includes('!!');
@@ -2768,18 +2771,35 @@ function rollCrash(noteRaw, isTimeout, isBadNote){
   const hasIce=noteRaw.includes('ICE') || noteRaw.includes('WET');
   const damage=G.damage;
   const avgDmg=(damage.engine+damage.susp+damage.tyres+damage.body)/4;
+  
+  // Difficulty-specific base crash multipliers
+  const diffMultipliers = [0.6, 0.8, 1.0, 1.2, 1.5];
+  const diffMod = diffMultipliers[G.diff];
+  
   let prob=0;
-  if(isTimeout)prob+=0.25;
-  if(isBadNote)prob+=0.12;
-  if(hasDbl)prob+=0.18;
-  if(hasCaution)prob+=0.08;
-  if(isHairpin&&isTimeout)prob+=0.15;
-  if(hasJump&&isTimeout)prob+=0.20;
-  if(hasIce&&isTimeout)prob+=0.18;
-  if(avgDmg<60)prob+=0.08;
-  if(avgDmg<30)prob+=0.15;
-  if(G.diff>=3)prob*=1.3;
-  prob=Math.min(prob*crashModifier*handlingBonus*stabilityBonus,0.85);
+  if(isTimeout)prob+=0.20;
+  if(isBadNote)prob+=0.10;
+  if(hasDbl)prob+=0.15;
+  if(hasCaution)prob+=0.07;
+  if(isHairpin&&isTimeout)prob+=0.12;
+  if(hasJump&&isTimeout)prob+=0.15;
+  if(hasIce&&isTimeout)prob+=0.14;
+  if(avgDmg<60)prob+=0.06;
+  if(avgDmg<30)prob+=0.12;
+  
+  // Apply difficulty modifier
+  prob *= diffMod;
+  
+  // Weather effects on crash probability
+  if(RALLY_STATE.weatherEffect === 'rain') prob *= 1.1;
+  if(RALLY_STATE.weatherEffect === 'ice') prob *= 1.3;
+  if(RALLY_STATE.weatherEffect === 'fog') prob *= 1.05;
+  
+  // Driver stress factor (momentum affects crash risk)
+  if(RALLY_STATE.momentum < 0.6) prob *= 1.2;
+  if(RALLY_STATE.momentum > 1.2) prob *= 0.9;
+  
+  prob=Math.min(prob*crashModifier*handlingBonus*stabilityBonus,0.80);
   return Math.random()<prob;
 }
 function triggerCrash(noteRaw){
@@ -3597,6 +3617,9 @@ function loadNote(){
     }
   }
   
+  // Check for new modifiers and show tooltips
+  checkForNewModifiers(n.raw);
+  
   clearInterval(G.timer);
   G.timer=setInterval(()=>{G.remaining--;updateTimer();if(G.remaining<=0){clearInterval(G.timer);timeUp();}},1000);
   
@@ -3635,14 +3658,23 @@ function calculateNoteComplexity(raw) {
 
 function updateDynamicDifficulty() {
   const baseTime = DIFFS[G.diff].s;
-  const streakBonus = Math.min(RALLY_STATE.streak * 0.5, 3); // Max 3 seconds bonus
-  const momentumBonus = (RALLY_STATE.momentum - 1.0) * 2; // Momentum affects time
+  // Difficulty-specific streak bonuses (higher difficulties get less streak bonus)
+  const streakMultipliers = [0.6, 0.5, 0.4, 0.3, 0.2];
+  const streakBonus = Math.min(RALLY_STATE.streak * streakMultipliers[G.diff], 4); 
+  const momentumBonus = (RALLY_STATE.momentum - 1.0) * 1.5; // Slightly reduced momentum effect
   
-  G.timeLimit = Math.max(5, baseTime - streakBonus + momentumBonus);
+  G.timeLimit = Math.max(6, baseTime - streakBonus + momentumBonus);
+  
+  // Difficulty-specific forgiveness windows
+  const baseForgiveness = [0.70, 0.65, 0.62, 0.58, 0.55];
+  const forgivenessStreakBonus = [0.03, 0.025, 0.02, 0.015, 0.01];
+  
   if(RALLY_STATE.streak >= 5) {
-    RALLY_STATE.forgivenessWindow = Math.min(0.75, 0.62 + RALLY_STATE.streak * 0.02);
+    RALLY_STATE.forgivenessWindow = Math.min(0.80, baseForgiveness[G.diff] + RALLY_STATE.streak * forgivenessStreakBonus[G.diff]);
   } else if(RALLY_STATE.streak === 0 && RALLY_STATE.momentum < 0.8) {
-    RALLY_STATE.forgivenessWindow = Math.max(0.55, 0.62 - 0.1);
+    RALLY_STATE.forgivenessWindow = Math.max(0.50, baseForgiveness[G.diff] - 0.08);
+  } else {
+    RALLY_STATE.forgivenessWindow = baseForgiveness[G.diff];
   }
 }
 
@@ -3656,28 +3688,40 @@ function calculateDynamicTimeLimit() {
   const currentNoteForTiming = G.notes && G.notes[G.idx];
   if (currentNoteForTiming) {
     const complexity = calculateNoteComplexity(currentNoteForTiming.raw);
-    const complexityFactor = Math.max(0.75, Math.min(1.6, 0.7 + complexity * 0.3));
+    // Difficulty-specific complexity scaling (higher difficulties get less complexity bonus)
+    const complexityMultipliers = [0.35, 0.30, 0.25, 0.20, 0.15];
+    const complexityFactor = Math.max(0.70, Math.min(1.5, 0.65 + complexity * complexityMultipliers[G.diff]));
     timeLimit *= complexityFactor;
   }
 
-  if(RALLY_STATE.weatherEffect === 'rain') {
-    timeLimit += 2; // Slower transitions
-  } else if(RALLY_STATE.weatherEffect === 'ice') {
-    timeLimit -= 1; // Tighter timing
-  } else if(RALLY_STATE.weatherEffect === 'fog') {
-    timeLimit += 1.5; // Delayed reveal
+  // Difficulty-specific weather effects
+  const weatherTimeMods = {
+    'rain': [2.5, 2.0, 1.5, 1.0, 0.5],
+    'ice': [-0.5, -0.8, -1.0, -1.2, -1.5],
+    'fog': [2.0, 1.5, 1.2, 1.0, 0.8]
+  };
+  
+  if(RALLY_STATE.weatherEffect && weatherTimeMods[RALLY_STATE.weatherEffect]) {
+    timeLimit += weatherTimeMods[RALLY_STATE.weatherEffect][G.diff];
   }
+  
+  // Difficulty-specific urgency effects
   if(RALLY_STATE.urgencyLevel === 'critical') {
-    timeLimit -= 1; // Less time under pressure
+    const urgencyPenalties = [0.5, 0.8, 1.0, 1.2, 1.5];
+    timeLimit -= urgencyPenalties[G.diff];
   } else if(RALLY_STATE.urgencyLevel === 'calm' && RALLY_STATE.streak >= 3) {
-    timeLimit += 1; // More time when flowing well
+    const calmBonuses = [1.5, 1.2, 1.0, 0.8, 0.5];
+    timeLimit += calmBonuses[G.diff];
   }
 
   if (G.careerMode && typeof TeamManagement !== 'undefined') {
     timeLimit += TeamManagement.getTimeBonus();
   }
   
-  return Math.max(4, Math.min(15, timeLimit)); // Clamp between 4-15 seconds
+  // Difficulty-specific clamping ranges
+  const minTimes = [5, 4.5, 4, 3.5, 3];
+  const maxTimes = [18, 16, 14, 12, 10];
+  return Math.max(minTimes[G.diff], Math.min(maxTimes[G.diff], timeLimit));
 }
 
 function applyRhythmShift() {
@@ -3704,12 +3748,21 @@ function applyRhythmShift() {
   
   document.body.appendChild(indicator);
   setTimeout(() => indicator.remove(), 2000);
+  
+  // Difficulty-specific rhythm shift multipliers
+  const fastMultipliers = [0.85, 0.82, 0.80, 0.78, 0.75]; // Higher difficulties get faster
+  const technicalMultipliers = [1.25, 1.22, 1.20, 1.18, 1.15]; // Higher difficulties get less technical bonus
+  const sprintMultipliers = [0.90, 0.88, 0.85, 0.82, 0.80]; // Higher difficulties get faster sprints
+  
   switch(currentShift) {
     case 'fast':
-      G.timeLimit *= 0.8; // 20% faster
+      G.timeLimit *= fastMultipliers[G.diff];
       break;
     case 'technical':
-      G.timeLimit *= 1.2; // 20% slower for complex notes
+      G.timeLimit *= technicalMultipliers[G.diff];
+      break;
+    case 'sprint':
+      G.timeLimit *= sprintMultipliers[G.diff];
       break;
     case 'sprint':
       G.timeLimit *= 0.7; // 30% faster for sprint section
@@ -4143,7 +4196,30 @@ window.__origShowResult = function(ok,n,score,skipped,timeout,crashFollows=false
   if(!n)return; // guard against undefined note
   const fb=document.getElementById('g-fb');
   fb.className='fb-box '+(ok?'ok':timeout?'to':'bad');
-  document.getElementById('g-fb-txt').textContent=ok?`Correct — ${Math.round(score*100)}% match`:skipped?'Skipped':timeout?'Time up — '+Math.round(score*100)+'% match':'Incorrect — '+Math.round(score*100)+'% match';
+  
+  // Generate detailed breakdown for incorrect answers
+  let breakdownHTML = '';
+  if (!ok && !skipped) {
+    const typed = document.getElementById('g-input').value.trim();
+    const analysis = analyzeMistake(typed, n.ans, n.raw, timeout);
+    
+    breakdownHTML = `
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1)">
+        <div style="font-size:11px;color:#f5c518;margin-bottom:8px">❓ Why did this fail?</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.4">
+          ${analysis.explanation}
+        </div>
+        ${analysis.suggestions ? `
+          <div style="margin-top:8px;font-size:11px;color:#39ff14">💡 Try:</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.4">
+            ${analysis.suggestions}
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }
+  
+  document.getElementById('g-fb-txt').innerHTML=ok?`Correct — ${Math.round(score*100)}% match`:skipped?'Skipped':timeout?'Time up — '+Math.round(score*100)+'% match':'Incorrect — '+Math.round(score*100)+'% match'+breakdownHTML;
   document.getElementById('g-fb-ans').textContent='Answer: '+n.ans;
   fb.style.display='flex';
   document.getElementById('g-narr').style.display='block';
@@ -4162,6 +4238,66 @@ window.__origShowResult = function(ok,n,score,skipped,timeout,crashFollows=false
     window.speechSynthesis.speak(utt);
   }
 };
+
+function analyzeMistake(typed, expected, raw, timeout) {
+  const typedLower = typed.toLowerCase().replace(/[^a-z0-9 ]/g, '');
+  const expectedLower = expected.toLowerCase().replace(/[^a-z0-9 ]/g, '');
+  const typedWords = typedLower.split(/\s+/).filter(w => w.length > 0);
+  const expectedWords = expectedLower.split(/\s+/).filter(w => w.length > 0);
+  
+  let explanation = '';
+  let suggestions = '';
+  
+  if (timeout) {
+    explanation = 'You ran out of time. The timer expired before you could submit your answer.';
+    suggestions = 'Focus on the key elements: direction (L/R) and severity number first. Add modifiers as you get faster.';
+  } else if (typed.length === 0) {
+    explanation = 'No input was submitted. The system needs some translation to evaluate.';
+    suggestions = 'Start with the basics: "left tight" for L3, "right medium" for R4. Build up from there.';
+  } else {
+    // Analyze what went wrong
+    const typedSet = new Set(typedWords);
+    const expectedSet = new Set(expectedWords);
+    
+    // Check for direction match
+    const hasDirection = typedWords.some(w => w === 'left' || w === 'right' || w === 'l' || w === 'r');
+    const expectedDirection = expectedWords.find(w => w === 'left' || w === 'right');
+    const matchedDirection = expectedDirection && typedWords.includes(expectedDirection);
+    
+    // Check for severity match
+    const severityMatch = typedWords.some(w => ['hairpin', 'very tight', 'tight', 'medium', 'open', 'fast sweep', 'six'].includes(w));
+    
+    // Check for modifier match
+    const rawModifiers = ['care', "don't cut", 'jump', 'crest', 'ice', 'mud', 'junction', 'square', 'stop', 'narrow', 'flat', 'bump', 'long', 'tightens', 'opens'];
+    const hasModifier = rawModifiers.some(m => raw.toLowerCase().includes(m));
+    const typedModifier = typedWords.find(w => rawModifiers.includes(w));
+    
+    if (!matchedDirection) {
+      explanation = `Direction mismatch. Expected "${expectedDirection || 'direction'}" but got "${typedWords.find(w => ['left', 'right', 'l', 'r'].includes(w)) || 'no direction'}".`;
+      suggestions = `Always start with direction: L = left, R = right. This is the first thing the driver needs to know.`;
+    } else if (!severityMatch) {
+      explanation = 'Severity number was missing or incorrect. The driver needs to know how tight the corner is.';
+      suggestions = 'Remember: 1=hairpin, 2=very tight, 3=tight, 4=medium, 5=open, 6=fast sweep.';
+    } else if (hasModifier && !typedModifier) {
+      explanation = 'Missing modifier. The note contains important road condition information.';
+      suggestions = `Look for modifiers like CARE, DONTCUT, JUMP, etc. These tell the driver about road conditions.`;
+    } else {
+      // Partial match - check word overlap
+      const overlap = [...typedSet].filter(w => expectedSet.has(w)).length;
+      const overlapRatio = overlap / Math.max(typedSet.size, expectedSet.size);
+      
+      if (overlapRatio > 0.5) {
+        explanation = `Close! You got ${overlap} out of ${expectedSet.size} key elements right, but something was missing or incorrect.`;
+        suggestions = 'Check for missing modifiers or distance numbers. Small details matter in rally notes.';
+      } else {
+        explanation = 'Major mismatch. Your translation doesn\'t match the expected pacenote structure.';
+        suggestions = 'Break it down: Direction + Severity + Distance (if any) + Modifiers. Read the note piece by piece.';
+      }
+    }
+  }
+  
+  return { explanation, suggestions };
+}
 function showResult(ok,n,score,skipped,timeout,crashFollows=false){
   return window.__origShowResult(ok,n,score,skipped,timeout,crashFollows);
 }
@@ -4362,6 +4498,9 @@ function endStage(){
       <div class="bd-r ${r.ok?'ok':'bad'}"></div>
     </div>`).join('');
   
+  // Render performance timeline
+  renderPerformanceTimeline();
+  
   // Check for post-stage story in career mode
   if(G.careerMode && typeof showPostStageStory === 'function' && StorySystem?.state?.genderRoute){
     const stageIndex = (CAREER.currentStage || 1) - 1;
@@ -4386,11 +4525,875 @@ function endStage(){
   if (!G.dnf) {
     savePersonalBest(timeStr, acc);
   }
+  
+  // Save challenge results if this was a challenge run
+  if (G.dailyChallengeData) {
+    saveDailyChallengeResult();
+    G.dailyChallengeData = null;
+  }
+  if (G.weeklyChallengeData) {
+    saveWeeklyChallengeResult();
+    G.weeklyChallengeData = null;
+  }
+  
+  // Save signature stage results
+  saveSignatureStageResult();
 }
 function openTraining(){
   buildLessonList();
   loadLesson('intro');
   show('training');
+}
+
+function renderPerformanceTimeline() {
+  const timelineContainer = document.getElementById('r-timeline');
+  if (!timelineContainer || !G.results || G.results.length === 0) {
+    if (timelineContainer) timelineContainer.innerHTML = '<div style="color:var(--text3);font-size:11px">No data available</div>';
+    return;
+  }
+
+  // Calculate reaction time statistics
+  const reactionTimes = G.results.map(r => r.reactionTime || 0).filter(t => t > 0);
+  const avgReaction = reactionTimes.length > 0 ? Math.round(reactionTimes.reduce((a, b) => a + b, 0) / reactionTimes.length) : 0;
+  const maxReaction = reactionTimes.length > 0 ? Math.max(...reactionTimes) : 0;
+  const minReaction = reactionTimes.length > 0 ? Math.min(...reactionTimes) : 0;
+
+  // Build timeline visualization
+  let timelineHTML = `
+    <div style="margin-bottom:0.5rem;font-size:10px;color:var(--text2);font-family:'IBM Plex Mono',monospace">
+      <div>Avg: ${avgReaction}ms | Fast: ${minReaction}ms | Slow: ${maxReaction}ms</div>
+    </div>
+    <div style="display:flex;align-items:flex-end;gap:2px;height:60px;padding:4px;background:var(--surf2);border-radius:4px">
+  `;
+
+  G.results.forEach((r, i) => {
+    const reactionTime = r.reactionTime || 0;
+    const isCorrect = r.ok;
+    const isTimeout = r.timeout;
+    const isSkipped = r.skipped;
+    
+    // Calculate bar height (normalize to max 3 seconds)
+    const maxHeight = 50;
+    const barHeight = Math.min(maxHeight, Math.max(4, (reactionTime / 3000) * maxHeight));
+    
+    // Color based on performance
+    let barColor = '#39ff14'; // green for correct
+    if (!isCorrect) barColor = '#e8291c'; // red for wrong
+    if (isTimeout) barColor = '#ff6b00'; // orange for timeout
+    if (isSkipped) barColor = '#888'; // gray for skipped
+    
+    // Adjust color based on reaction time speed
+    if (isCorrect && reactionTime < 1000) barColor = '#FFD700'; // gold for fast correct
+    
+    timelineHTML += `
+      <div style="
+        flex:1;
+        height:${barHeight}px;
+        background:${barColor};
+        border-radius:2px;
+        position:relative;
+        cursor:pointer;
+        transition:all 0.2s
+      " title="Note ${i+1}: ${r.raw}\nTyped: ${r.typed || '(skipped)'}\nTime: ${reactionTime}ms\n${isCorrect ? '✓ Correct' : '✗ Wrong'}">
+        ${reactionTime > 2000 ? `<span style="position:absolute;top:-15px;left:50%;transform:translateX(-50%);font-size:8px;color:var(--text2)">${(reactionTime/1000).toFixed(1)}s</span>` : ''}
+      </div>
+    `;
+  });
+
+  timelineHTML += '</div>';
+  
+  // Add detailed timeline table
+  timelineHTML += `
+    <div style="margin-top:0.5rem;max-height:150px;overflow-y:auto;font-size:10px;font-family:'IBM Plex Mono',monospace">
+      <table style="width:100%;border-collapse:collapse">
+        <tr style="border-bottom:1px solid var(--brd2);color:var(--text3)">
+          <th style="text-align:left;padding:2px">#</th>
+          <th style="text-align:left;padding:2px">Note</th>
+          <th style="text-align:left;padding:2px">Typed</th>
+          <th style="text-align:right;padding:2px">Time</th>
+          <th style="text-align:center;padding:2px">Result</th>
+        </tr>
+  `;
+
+  G.results.forEach((r, i) => {
+    const resultIcon = r.ok ? '✓' : (r.timeout ? '⏱' : (r.skipped ? '⊘' : '✗'));
+    const resultColor = r.ok ? 'var(--green)' : (r.timeout ? '#ff6b00' : 'var(--red)');
+    
+    timelineHTML += `
+      <tr style="border-bottom:1px solid var(--brd2);color:${r.ok ? 'var(--text)' : resultColor}">
+        <td style="padding:2px">${i+1}</td>
+        <td style="padding:2px">${r.raw}</td>
+        <td style="padding:2px;max-width:80px;overflow:hidden;text-overflow:ellipsis">${r.typed || '-'}</td>
+        <td style="text-align:right;padding:2px">${r.reactionTime ? (r.reactionTime/1000).toFixed(2) + 's' : '-'}</td>
+        <td style="text-align:center;padding:2px">${resultIcon}</td>
+      </tr>
+    `;
+  });
+
+  timelineHTML += '</table></div>';
+  
+  timelineContainer.innerHTML = timelineHTML;
+}
+
+// Modifier Tooltip System
+const MODIFIER_TOOLTIP_DATA = {
+  'CARE': {
+    title: 'CARE',
+    description: 'Take care - road narrows or has hidden danger. Reduce speed and stay alert.',
+    severity: 'medium'
+  },
+  'DONTCUT': {
+    title: "DON'T CUT",
+    description: "Do not cut the corner - inside line is dangerous (drop-off, rocks, etc.). Stay wide and safe.",
+    severity: 'high'
+  },
+  'JUMP': {
+    title: 'JUMP',
+    description: 'Jump ahead - car will leave the ground. Prepare for landing and maintain straight line.',
+    severity: 'high'
+  },
+  'CREST': {
+    title: 'CREST',
+    description: 'Blind crest - corner hides until you commit. Trust the note completely.',
+    severity: 'medium'
+  },
+  'ICE': {
+    title: 'ICE',
+    description: 'Ice patch - extremely slippery surface. Reduce speed significantly and avoid sudden inputs.',
+    severity: 'high'
+  },
+  'MUD': {
+    title: 'MUD',
+    description: 'Mud surface - reduced grip and different lines required. Adjust driving style.',
+    severity: 'medium'
+  },
+  'JUNCTION': {
+    title: 'JUNCTION',
+    description: 'Road junction/crossroads - another road crosses. Watch for cross traffic or obstacles.',
+    severity: 'high'
+  },
+  'SQUARE': {
+    title: 'SQUARE',
+    description: 'Square corner - 90-degree turn. Requires full braking and precise line.',
+    severity: 'medium'
+  },
+  'STOP': {
+    title: 'STOP',
+    description: 'Full stop required - not just scrub speed. Complete halt before proceeding.',
+    severity: 'critical'
+  },
+  'NARROW': {
+    title: 'NARROW',
+    description: 'Road narrows - less space available. Stay centered and watch for obstacles.',
+    severity: 'low'
+  },
+  'FLAT': {
+    title: 'FLAT',
+    description: 'Flat out - maximum speed safe. Full commitment, no lifting.',
+    severity: 'low'
+  },
+  'BUMP': {
+    title: 'BUMP',
+    description: 'Bump in road - can unsettle car. Prepare for compression and maintain control.',
+    severity: 'low'
+  },
+  'LONG': {
+    title: 'LONG',
+    description: 'Long corner - maintains direction for extended distance. Consistency is key.',
+    severity: 'low'
+  },
+  'TIGHTENS': {
+    title: 'TIGHTENS',
+    description: 'Corner tightens mid-way - appears more open than it is. Prepare for increasing severity.',
+    severity: 'medium'
+  },
+  'OPENS': {
+    title: 'OPENS',
+    description: 'Corner opens to straight - can accelerate earlier than expected. Opportunity to gain time.',
+    severity: 'low'
+  },
+  'HAIRPIN': {
+    title: 'HAIRPIN',
+    description: 'Hairpin turn - near 180-degree corner. Maximum braking and very low speed required.',
+    severity: 'high'
+  },
+  'FESHFESH': {
+    title: 'FESH-FESH',
+    description: 'Rough rocky surface - very abrasive and damaging to tires. Reduce speed to protect car.',
+    severity: 'high'
+  },
+  'REGEN': {
+    title: 'REGEN',
+    description: 'Regenerating surface - grip changes as you drive through. Be ready for varying traction.',
+    severity: 'medium'
+  }
+};
+
+let seenModifiers = new Set();
+
+function checkForNewModifiers(noteRaw) {
+  const tokens = noteRaw.toUpperCase().split(/\s+/);
+  const newModifiers = [];
+  
+  tokens.forEach(token => {
+    // Check if this token matches any known modifier
+    Object.keys(MODIFIER_TOOLTIP_DATA).forEach(modifier => {
+      if (token === modifier || token.includes(modifier)) {
+        if (!seenModifiers.has(modifier)) {
+          seenModifiers.add(modifier);
+          newModifiers.push(MODIFIER_TOOLTIP_DATA[modifier]);
+        }
+      }
+    });
+  });
+  
+  // Show tooltips for any new modifiers found
+  if (newModifiers.length > 0) {
+    newModifiers.forEach(modifier => {
+      showModifierTooltip(modifier);
+    });
+  }
+}
+
+function showModifierTooltip(modifier) {
+  const tooltip = document.createElement('div');
+  const severityColors = {
+    'low': '#39ff14',
+    'medium': '#f5c518', 
+    'high': '#ff6b00',
+    'critical': '#e8291c'
+  };
+  
+  tooltip.style.cssText = `
+    position: fixed;
+    top: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(10, 10, 12, 0.95);
+    border: 2px solid ${severityColors[modifier.severity]};
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 400px;
+    z-index: 10000;
+    font-family: 'IBM Plex Mono', monospace;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    animation: slideDown 0.3s ease;
+  `;
+  
+  tooltip.innerHTML = `
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+      <div style="background:${severityColors[modifier.severity]};color:#000;padding:4px 8px;border-radius:4px;font-weight:bold;font-size:12px">${modifier.severity.toUpperCase()}</div>
+      <div style="color:${severityColors[modifier.severity]};font-size:18px;font-weight:bold">${modifier.title}</div>
+    </div>
+    <div style="color:var(--text);font-size:14px;line-height:1.5">${modifier.description}</div>
+    <div style="margin-top:15px;text-align:right">
+      <button onclick="this.parentElement.remove()" style="background:var(--surf);border:1px solid var(--brd2);color:var(--text);padding:6px 12px;cursor:pointer;font-family:inherit;font-size:12px">Got it</button>
+    </div>
+  `;
+  
+  document.body.appendChild(tooltip);
+  
+  // Auto-dismiss after 8 seconds
+  setTimeout(() => {
+    if (tooltip.parentElement) {
+      tooltip.remove();
+    }
+  }, 8000);
+}
+
+// Add the animation keyframes for the tooltip
+const tooltipStyle = document.createElement('style');
+tooltipStyle.textContent = `
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+`;
+document.head.appendChild(tooltipStyle);
+
+// Daily Challenge System
+function openDailyChallenge() {
+  show('daily-challenge');
+  loadDailyChallengeInfo();
+}
+
+function loadDailyChallengeInfo() {
+  const dailySeed = generateDailySeed();
+  const allStages = [];
+  Object.values(ERAS).forEach(era => {
+    era.stages.forEach(stage => {
+      allStages.push({ ...stage, era: era.label });
+    });
+  });
+  
+  const stageIndex = dailySeed % allStages.length;
+  const selectedStage = allStages[stageIndex];
+  const tempSeed = dailySeed + 1000;
+  const difficulties = ['Easy', 'Normal', 'Hard', 'Insane', 'Chaos'];
+  const difficultyIndex = Math.floor((tempSeed % 10000) / 2000);
+  
+  const stageInfo = document.getElementById('daily-stage-info');
+  stageInfo.innerHTML = `
+    <div style="font-size:16px;font-weight:600;color:var(--gold);margin-bottom:0.5rem">${selectedStage.name}</div>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:0.25rem">${selectedStage.era} · ${selectedStage.country}</div>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:0.25rem">${selectedStage.surf} · ${selectedStage.weather}</div>
+    <div style="font-size:12px;color:var(--text2)">Difficulty: ${difficulties[difficultyIndex]}</div>
+  `;
+  
+  // Load personal best
+  const dailyKey = `daily_best_${dailySeed}`;
+  const personalBest = localStorage.getItem(dailyKey);
+  const bestScoreEl = document.getElementById('daily-best-score');
+  if (personalBest) {
+    const best = JSON.parse(personalBest);
+    bestScoreEl.textContent = `${best.score.toFixed(1)} pts - ${best.accuracy}% accuracy`;
+    bestScoreEl.style.color = 'var(--gold)';
+  } else {
+    bestScoreEl.textContent = 'No runs yet';
+    bestScoreEl.style.color = 'var(--text3)';
+  }
+  
+  // Load leaderboard (simulated)
+  const leaderboardKey = `daily_leaderboard_${dailySeed}`;
+  let leaderboard = JSON.parse(localStorage.getItem(leaderboardKey) || '[]');
+  const leaderboardEl = document.getElementById('daily-leaderboard');
+  
+  if (leaderboard.length === 0) {
+    // Add some fake entries for demo
+    leaderboard = [
+      { name: 'RallyMaster99', score: 95.5, accuracy: 92 },
+      { name: 'PacenotePro', score: 89.2, accuracy: 88 },
+      { name: 'CoDriverKing', score: 84.7, accuracy: 85 }
+    ];
+    localStorage.setItem(leaderboardKey, JSON.stringify(leaderboard));
+  }
+  
+  leaderboardEl.innerHTML = leaderboard.slice(0, 5).map((entry, i) => `
+    <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--brd2)">
+      <span>${i+1}. ${entry.name}</span>
+      <span style="color:var(--gold)">${entry.score.toFixed(1)}pts</span>
+    </div>
+  `).join('');
+  
+  // Store challenge data for starting
+  G.dailyChallengeData = {
+    stage: selectedStage,
+    difficulty: difficultyIndex,
+    seed: dailySeed
+  };
+}
+
+function startDailyChallenge() {
+  if (!G.dailyChallengeData) return;
+  
+  const { stage, difficulty, seed } = G.dailyChallengeData;
+  
+  // Set up the game state
+  G.era = Object.keys(ERAS).find(key => ERAS[key].label === stage.era) || 'grpb';
+  G.diff = difficulty;
+  G.timeLimit = DIFFS[difficulty].s;
+  G.driver = document.getElementById('inp-drv').value || 'Driver';
+  G.codriver = document.getElementById('inp-cod').value || 'Co-driver';
+  
+  // Set the seed for reproducibility
+  RALLY_STATE.competitiveSeed = seed;
+  
+  // Start the stage
+  beginStageWithData(stage);
+  show('game');
+}
+
+// Weekly Challenge System
+function openWeeklyChallenge() {
+  show('weekly-challenge');
+  loadWeeklyChallengeInfo();
+}
+
+function loadWeeklyChallengeInfo() {
+  const weeklyData = getWeeklyRallyStage();
+  
+  const stageInfo = document.getElementById('weekly-stage-info');
+  stageInfo.innerHTML = `
+    <div style="font-size:16px;font-weight:600;color:var(--red);margin-bottom:0.5rem">${weeklyData.name}</div>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:0.25rem">${weeklyData.era} · ${weeklyData.country}</div>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:0.25rem">${weeklyData.surf} · ${weeklyData.weather}</div>
+    <div style="font-size:12px;color:var(--text2)">Context: ${weeklyData.weeklyContext.toUpperCase()}</div>
+  `;
+  
+  // Load personal best
+  const weeklyKey = `weekly_best_${weeklyData.weeklySeed}`;
+  const personalBest = localStorage.getItem(weeklyKey);
+  const bestScoreEl = document.getElementById('weekly-best-score');
+  if (personalBest) {
+    const best = JSON.parse(personalBest);
+    bestScoreEl.textContent = `${best.score.toFixed(1)} pts - ${best.accuracy}% accuracy`;
+    bestScoreEl.style.color = 'var(--red)';
+  } else {
+    bestScoreEl.textContent = 'No runs yet';
+    bestScoreEl.style.color = 'var(--text3)';
+  }
+  
+  // Load leaderboard
+  const leaderboardKey = `weekly_leaderboard_${weeklyData.weeklySeed}`;
+  let leaderboard = JSON.parse(localStorage.getItem(leaderboardKey) || '[]');
+  const leaderboardEl = document.getElementById('weekly-leaderboard');
+  
+  if (leaderboard.length === 0) {
+    // Add some fake entries for demo
+    leaderboard = [
+      { name: 'WRC_Champion', score: 98.2, accuracy: 95 },
+      { name: 'StageLegend', score: 91.8, accuracy: 90 },
+      { name: 'RallyElite', score: 87.3, accuracy: 86 }
+    ];
+    localStorage.setItem(leaderboardKey, JSON.stringify(leaderboard));
+  }
+  
+  leaderboardEl.innerHTML = leaderboard.slice(0, 5).map((entry, i) => `
+    <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--brd2)">
+      <span>${i+1}. ${entry.name}</span>
+      <span style="color:var(--red)">${entry.score.toFixed(1)}pts</span>
+    </div>
+  `).join('');
+  
+  // Store challenge data for starting
+  G.weeklyChallengeData = weeklyData;
+}
+
+function startWeeklyChallenge() {
+  if (!G.weeklyChallengeData) return;
+  
+  const weeklyData = G.weeklyChallengeData;
+  
+  // Set up the game state
+  G.era = Object.keys(ERAS).find(key => ERAS[key].label === weeklyData.era) || 'grpb';
+  G.diff = 3; // Weekly challenges are always on Hard difficulty
+  G.timeLimit = DIFFS[3].s;
+  G.driver = document.getElementById('inp-drv').value || 'Driver';
+  G.codriver = document.getElementById('inp-cod').value || 'Co-driver';
+  
+  // Set the seed and context for reproducibility
+  RALLY_STATE.competitiveSeed = weeklyData.weeklySeed;
+  RALLY_STATE.currentContext = weeklyData.weeklyContext;
+  
+  // Start the stage
+  beginStageWithData(weeklyData);
+  show('game');
+}
+
+// Save challenge results
+function saveDailyChallengeResult() {
+  const seed = generateDailySeed();
+  const key = `daily_best_${seed}`;
+  
+  const currentBest = localStorage.getItem(key);
+  const totalNotes = G.notes.length;
+  const accuracy = Math.round((G.correct / totalNotes) * 100);
+  const score = accuracy + (G.dnf ? 0 : 20); // Simple scoring system
+  
+  const newResult = {
+    score: score,
+    accuracy: accuracy,
+    timestamp: Date.now(),
+    driver: G.driver
+  };
+  
+  if (!currentBest || score > JSON.parse(currentBest).score) {
+    localStorage.setItem(key, JSON.stringify(newResult));
+  }
+  
+  // Update leaderboard
+  const leaderboardKey = `daily_leaderboard_${seed}`;
+  let leaderboard = JSON.parse(localStorage.getItem(leaderboardKey) || '[]');
+  
+  const existingEntry = leaderboard.find(entry => entry.name === G.driver);
+  if (existingEntry) {
+    if (score > existingEntry.score) {
+      existingEntry.score = score;
+      existingEntry.accuracy = accuracy;
+    }
+  } else {
+    leaderboard.push({ name: G.driver, score: score, accuracy: accuracy });
+  }
+  
+  leaderboard.sort((a, b) => b.score - a.score);
+  localStorage.setItem(leaderboardKey, JSON.stringify(leaderboard.slice(0, 10)));
+}
+
+function saveWeeklyChallengeResult() {
+  const seed = generateWeeklySeed();
+  const key = `weekly_best_${seed}`;
+  
+  const currentBest = localStorage.getItem(key);
+  const totalNotes = G.notes.length;
+  const accuracy = Math.round((G.correct / totalNotes) * 100);
+  const score = accuracy + (G.dnf ? 0 : 20); // Simple scoring system
+  
+  const newResult = {
+    score: score,
+    accuracy: accuracy,
+    timestamp: Date.now(),
+    driver: G.driver
+  };
+  
+  if (!currentBest || score > JSON.parse(currentBest).score) {
+    localStorage.setItem(key, JSON.stringify(newResult));
+  }
+  
+  // Update leaderboard
+  const leaderboardKey = `weekly_leaderboard_${seed}`;
+  let leaderboard = JSON.parse(localStorage.getItem(leaderboardKey) || '[]');
+  
+  const existingEntry = leaderboard.find(entry => entry.name === G.driver);
+  if (existingEntry) {
+    if (score > existingEntry.score) {
+      existingEntry.score = score;
+      existingEntry.accuracy = accuracy;
+    }
+  } else {
+    leaderboard.push({ name: G.driver, score: score, accuracy: accuracy });
+  }
+  
+  leaderboard.sort((a, b) => b.score - a.score);
+  localStorage.setItem(leaderboardKey, JSON.stringify(leaderboard.slice(0, 10)));
+}
+
+// Signature Stages - Centerpiece Feature
+const SIGNATURE_STAGES = {
+  grpb: {
+    name: 'SS1 — The Legend Killer',
+    country: 'Finland',
+    surf: 'Gravel',
+    weather: 'Overcast · 12°C',
+    km: '28.5',
+    cond: 'The stage that ended Group B. Every corner is a story. Every note is survived or forgotten. This is where legends were made and careers ended.',
+    segments: ['Technical', 'Memory', 'Risk', 'Survival'],
+    notes: [
+      {raw:'FLAT R6',ans:'flat right six',narr:'The opening statement. Flat out or go home. The crowd knows what this corner means.',comm:'Six into the stage. Maximum commitment from meter one.'},
+      {raw:'L3!! DONTCUT 50',ans:'left tight maximum caution don\'t cut 50 metres',narr:'The first trap. Inside line drops into the ravine. Stay wide or join the history books.',comm:'Every year someone tries to cut this. Every year someone retires.'},
+      {raw:'R4 INTO L2! JUNCTION',ans:'right medium into left very tight caution junction',comm:'Quick rhythm into the trap junction. The crowd holds their breath every time.'},
+      {raw:'CREST R5 NARROW',ans:'over crest right open narrows',narr:'Blind crest to a narrowing road. Trust the note or find the wall.',comm:'You cannot see the narrow from the entry. That is the entire test.'},
+      {raw:'L3 CARE JUMP R4',ans:'left tight care jump right medium',narr:'Jump unsettles the car into the right medium. Recovery time is zero.',comm:'Jump plus care equals the signature Group B rhythm.'},
+      {raw:'SQUARE R!! STOP 30',ans:'square right maximum caution stop 30 metres',narr:'The village square. Double caution and full stop. Old stone walls and zero margin.',comm:'Square double bang stop. The trifecta of danger.'},
+      {raw:'L4 ICE BUMP L3',ans:'left medium ice bump left tight',narr:'Ice patch on compression. The car never settles. This is where concentration breaks.',comm:'Ice plus bump is the ultimate test of car control.'},
+      {raw:'R2!! INTO L1!!',ans:'right very tight maximum caution into left hairpin maximum caution',narr:'Double caution into double caution. No recovery. No mistakes. Just survival.',comm:'The most feared sequence in rallying. Period.'}
+    ],
+    signature: true,
+    difficulty: 'Chaos',
+    bestTime: '4:12.3',
+    recordHolder: 'Walter Röhrl (1985)'
+  },
+  w90: {
+    name: 'SS2 — Col de Turini Night',
+    country: 'Monaco',
+    surf: 'Tarmac',
+    weather: 'Clear · -2°C',
+    km: '22.1',
+    cond: 'The mountain pass at night. Headlights cutting through darkness. One wrong line and you\'re in the Mediterranean. This is precision driving at its absolute limit.',
+    segments: ['Darkness', 'Precision', 'Speed', 'Finality'],
+    notes: [
+      {raw:'FLAT R5 LONG',ans:'flat right open long',narr:'Flat out through the dark pines. Trust the pace notes completely.',comm:'Flat at night means committed before seeing anything.'},
+      {raw:'L3!! ICE DONTCUT',ans:'left tight maximum caution ice don\'t cut',narr:'Night Turini. Glazed inside line. One mistake and the stage is over.',comm:'The most famous corner in rallying history. For good reason.'},
+      {raw:'R4 200 INTO L2! CARE',ans:'right medium 200 into left very tight caution care',narr:'Fast straight into the tightening left. Care means something here.',comm:'200 metres of darkness, then the test begins.'},
+      {raw:'CREST L6 NARROW SQUARE',ans:'over crest left six narrows square',narr:'Fast crest to narrowing road into square corner. Absolute precision required.',comm:'Blind crest plus square. The ultimate night test.'},
+      {raw:'R3 TIGHTENS JUMP L4',ans:'right tight tightens jump left medium',narr:'Appears medium, pulls tight, then jump. The car never settles.',comm:'Three tests in one note. This separates champions from drivers.'},
+      {raw:'SQUARE L!! STOP',ans:'square left maximum caution stop',narr:'Hairpin with double caution and full stop. Stone walls in the headlights.',comm:'The wall is closer than you think. Stop means stop.'},
+      {raw:'R5 BUMP BUMP FLAT',ans:'right open bumps bumps flat',narr:'Double compression into flat out. Suspension test at night.',comm:'If the suspension survives, the driver might not.'},
+      {raw:'L4 CARE INTO R1!!',ans:'left medium care into right hairpin maximum caution',narr:'Care into the iconic hairpin. Double caution because the wall waits.',comm:'The hairpin that defined an era of rallying.'}
+    ],
+    signature: true,
+    difficulty: 'Insane',
+    bestTime: '3:45.7',
+    recordHolder: 'Colin McRae (1998)'
+  },
+  w24: {
+    name: 'SS3 — Ragnarök Ridge',
+    country: 'Wales',
+    surf: 'Gravel',
+    weather: 'Rain · 8°C',
+    km: '31.8',
+    cond: 'Modern speed on ancient roads. Rain-slicked gravel with zero margin. The cars are faster than ever, but the roads don\'t care. This is where WRC dreams are made or broken.',
+    segments: ['Attack', 'Flow', 'Technical', 'Final'],
+    notes: [
+      {raw:'FLAT R6 FESHFESH',ans:'flat right six feshfesh',narr:'Flat out on rough surface. Modern cars can take it. Can you?',comm:'Flat on feshfesh. The modern era equivalent of Group B madness.'},
+      {raw:'L4 CARE REGEN R5',ans:'left medium care regen right open',narr:'Care on entry, regenerating surface on exit. Grip changes mid-corner.',comm:'Regen surface means the grip changes as you drive through it.'},
+      {raw:'R3 INTO L4 INTO R3',ans:'right tight into left medium into right tight',narr:'Three corners, one flow. Modern rally cars love this rhythm.',comm:'Into into into. The modern speed note.'},
+      {raw:'CREST L5 150 SQUARE',ans:'over crest left open 150 square',narr:'Fast crest, distance to square corner. No visibility, total trust.',comm:'150 metres at modern speeds is nothing. Then the square arrives.'},
+      {raw:'R2!! JUMP DONTCUT',ans:'right very tight maximum caution jump don\'t cut',narr:'Double caution into jump with dangerous inside line. Maximum concentration.',comm:'Every element of danger in one note. Modern rallying distilled.'},
+      {raw:'L4 BUMP ICE 50 R3',ans:'left medium bump ice 50 right tight',narr:'Compression, ice patch, then tight right. The car never settles.',comm:'Modern suspension meets ice. The ultimate test.'},
+      {raw:'SQUARE R!! CARE FLAT',ans:'square right maximum caution care flat',narr:'Square with double caution, then immediately flat out. The transition is everything.',comm:'Square to flat. The rhythm change that wins championships.'},
+      {raw:'L3 TIGHTENS 100 FLAT R6',ans:'left tight tightens 100 flat right six',narr:'Tightening left, distance, then flat out right six. Stage end maximum attack.',comm:'The perfect modern stage end. Tightens, distance, then flat out.'}
+    ],
+    signature: true,
+    difficulty: 'Chaos',
+    bestTime: '3:58.2',
+    recordHolder: 'Kalle Rovanperä (2023)'
+  }
+};
+
+function openSignatureStages() {
+  show('signature-stages');
+  renderSignatureStages();
+}
+
+function renderSignatureStages() {
+  const container = document.getElementById('signature-stages-list');
+  const bestsContainer = document.getElementById('signature-personal-bests');
+  if (!container) return;
+  
+  // Render personal bests
+  if (bestsContainer) {
+    let bestsHTML = '';
+    Object.entries(SIGNATURE_STAGES).forEach(([eraKey, stage]) => {
+      const key = `signature_${eraKey}_${stage.name.replace(/\s+/g, '_')}`;
+      const best = localStorage.getItem(key);
+      if (best) {
+        const bestData = JSON.parse(best);
+        bestsHTML += `
+          <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--brd2)">
+            <span>${stage.name}</span>
+            <span style="color:${bestData.dnf ? '#e8291c' : 'var(--gold)'}">${bestData.accuracy}%${bestData.dnf ? ' (DNF)' : ` - ${bestData.time}`}</span>
+          </div>
+        `;
+      }
+    });
+    
+    if (bestsHTML) {
+      bestsContainer.innerHTML = bestsHTML;
+    } else {
+      bestsContainer.innerHTML = '<div style="color:var(--text3)">No attempts yet</div>';
+    }
+  }
+  
+  // Render stage cards
+  container.innerHTML = Object.entries(SIGNATURE_STAGES).map(([eraKey, stage]) => `
+    <div class="signature-stage-card" onclick="startSignatureStage('${eraKey}')" style="
+      background:var(--surf2);
+      border:2px solid var(--brd2);
+      border-radius:8px;
+      padding:1.5rem;
+      margin-bottom:1rem;
+      cursor:pointer;
+      transition:all 0.3s;
+    ">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem">
+        <div style="font-size:18px;font-weight:600;color:var(--gold)">${stage.name}</div>
+        <div style="font-size:12px;padding:4px 8px;background:${stage.difficulty === 'Chaos' ? '#e8291c' : '#f5c518'};color:#000;border-radius:4px;font-weight:bold">${stage.difficulty}</div>
+      </div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:0.5rem">${stage.country} · ${stage.surf} · ${stage.weather}</div>
+      <div style="font-size:14px;color:var(--text);margin-bottom:1rem;line-height:1.4">${stage.cond}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace">
+        <div>Record: ${stage.bestTime}</div>
+        <div>${stage.recordHolder}</div>
+      </div>
+      <div style="margin-top:1rem;font-size:12px;color:var(--cyan)">★ SIGNATURE STAGE — Hand-tuned pacenotes</div>
+    </div>
+  `).join('');
+}
+
+function startSignatureStage(eraKey) {
+  const stage = SIGNATURE_STAGES[eraKey];
+  if (!stage) return;
+  
+  // Set up the game state
+  G.era = eraKey;
+  G.diff = stage.difficulty === 'Chaos' ? 4 : (stage.difficulty === 'Insane' ? 3 : 2);
+  G.timeLimit = DIFFS[G.diff].s;
+  G.driver = document.getElementById('inp-drv').value || 'Driver';
+  G.codriver = document.getElementById('inp-cod').value || 'Co-driver';
+  
+  // Create a proper stage object from the signature stage
+  const stageObject = {
+    name: stage.name,
+    country: stage.country,
+    surf: stage.surf,
+    weather: stage.weather,
+    km: stage.km,
+    cond: stage.cond,
+    segments: stage.segments,
+    notes: stage.notes
+  };
+  
+  // Mark this as a signature stage run
+  G.signatureStage = {
+    era: eraKey,
+    stageName: stage.name,
+    isSignature: true
+  };
+  
+  // Start the stage
+  beginStageWithData(stageObject);
+  show('game');
+}
+
+// Add signature stage button to menu - now handled in HTML
+
+// Add signature stage results tracking
+function saveSignatureStageResult() {
+  if (!G.signatureStage || !G.signatureStage.isSignature) return;
+  
+  const { era, stageName } = G.signatureStage;
+  const key = `signature_${era}_${stageName.replace(/\s+/g, '_')}`;
+  
+  const total = G.notes.length;
+  const accuracy = Math.round((G.correct / total) * 100);
+  const timeStr = G.dnf ? 'DNF' : document.getElementById('r-time').textContent;
+  
+  const result = {
+    accuracy: accuracy,
+    time: timeStr,
+    timestamp: Date.now(),
+    driver: G.driver,
+    dnf: G.dnf
+  };
+  
+  // Save personal best
+  const currentBest = localStorage.getItem(key);
+  if (!currentBest || (!G.dnf && (accuracy > JSON.parse(currentBest).accuracy || 
+    (accuracy === JSON.parse(currentBest).accuracy && timeStr < JSON.parse(currentBest).time)))) {
+    localStorage.setItem(key, JSON.stringify(result));
+  }
+  
+  // Reset signature stage flag
+  G.signatureStage = null;
+}
+
+// Hook into endStage to save signature results
+// This will be called within the existing endStage function
+
+// Shareable Result Card Generation
+function generateShareableCard() {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  
+  // Set canvas size (1080x1080 for square social media format)
+  canvas.width = 1080;
+  canvas.height = 1080;
+  
+  // Background
+  ctx.fillStyle = '#0a0a0c';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+  // Add gradient overlay
+  const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  gradient.addColorStop(0, '#f5c518');
+  gradient.addColorStop(1, '#e8291c');
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, 20, canvas.height); // Left accent bar
+  ctx.fillRect(canvas.width - 20, 0, 20, canvas.height); // Right accent bar
+  
+  // Game title
+  ctx.fillStyle = '#f5c518';
+  ctx.font = 'bold 48px Bebas Neue, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('TAKE ME TO THE HAIRPIN', canvas.width / 2, 80);
+  
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '24px IBM Plex Mono, monospace';
+  ctx.fillText('STAGE RESULT', canvas.width / 2, 120);
+  
+  // Driver info
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 36px Bebas Neue, sans-serif';
+  ctx.fillText(`${G.driver} & ${G.codriver}`, canvas.width / 2, 200);
+  
+  // Stage info
+  ctx.fillStyle = '#888888';
+  ctx.font = '20px IBM Plex Mono, monospace';
+  ctx.fillText(G.currentStageName, canvas.width / 2, 240);
+  
+  // Results box
+  ctx.fillStyle = '#1a1a1a';
+  ctx.fillRect(100, 280, 880, 400);
+  ctx.strokeStyle = '#f5c518';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(100, 280, 880, 400);
+  
+  // Result stats
+  const total = G.notes.length;
+  const acc = G.dnf ? 0 : Math.round(G.correct / total * 100);
+  const pos = G.dnf ? 'DNF' : acc >= 85 ? 'P1' : acc >= 70 ? 'P2' : acc >= 50 ? 'P3' : 'DNF';
+  
+  ctx.fillStyle = '#f5c518';
+  ctx.font = 'bold 72px Bebas Neue, sans-serif';
+  ctx.fillText(pos, canvas.width / 2, 360);
+  
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '24px IBM Plex Mono, monospace';
+  ctx.fillText('POSITION', canvas.width / 2, 400);
+  
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 48px Bebas Neue, sans-serif';
+  ctx.fillText(`${acc}% ACCURACY`, canvas.width / 2, 460);
+  
+  ctx.fillStyle = '#888888';
+  ctx.font = '20px IBM Plex Mono, monospace';
+  ctx.fillText(`${G.correct}/${total} NOTES CORRECT`, canvas.width / 2, 500);
+  
+  // Performance breakdown
+  if (G.results && G.results.length > 0) {
+    const reactionTimes = G.results.map(r => r.reactionTime || 0).filter(t => t > 0);
+    const avgReaction = reactionTimes.length > 0 ? Math.round(reactionTimes.reduce((a, b) => a + b, 0) / reactionTimes.length) : 0;
+    
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '18px IBM Plex Mono, monospace';
+    ctx.fillText(`AVG REACTION: ${avgReaction}ms`, canvas.width / 2, 560);
+    
+    if (G.crashCount > 0) {
+      ctx.fillStyle = '#e8291c';
+      ctx.fillText(`${G.crashCount} INCIDENT(S)`, canvas.width / 2, 600);
+    } else {
+      ctx.fillStyle = '#39ff14';
+      ctx.fillText('CLEAN RUN', canvas.width / 2, 600);
+    }
+  }
+  
+  // Difficulty indicator
+  const diffNames = ['EASY', 'NORMAL', 'HARD', 'INSANE', 'CHAOS'];
+  ctx.fillStyle = '#f5c518';
+  ctx.font = 'bold 24px Bebas Neue, sans-serif';
+  ctx.fillText(`DIFFICULTY: ${diffNames[G.diff]}`, canvas.width / 2, 650);
+  
+  // Footer
+  ctx.fillStyle = '#888888';
+  ctx.font = '16px IBM Plex Mono, monospace';
+  ctx.fillText('playtakemetothehairpin.com', canvas.width / 2, 750);
+  
+  // Date
+  const dateStr = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  ctx.fillText(dateStr.toUpperCase(), canvas.width / 2, 780);
+  
+  // Convert to image and download
+  const dataURL = canvas.toDataURL('image/png');
+  const link = document.createElement('a');
+  link.download = `hairpin-result-${Date.now()}.png`;
+  link.href = dataURL;
+  link.click();
+  
+  // Show confirmation
+  const notification = document.createElement('div');
+  notification.style.cssText = `
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #39ff14;
+    color: #0a0a0c;
+    padding: 20px 40px;
+    border-radius: 8px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    z-index: 10000;
+    animation: fadeInOut 2s ease;
+  `;
+  notification.textContent = 'RESULT CARD SAVED!';
+  document.body.appendChild(notification);
+  setTimeout(() => notification.remove(), 2000);
 }
 function buildLessonList(){
   document.getElementById('lesson-list').innerHTML=LESSONS.map(l=>`
@@ -4961,18 +5964,45 @@ function renderTulipForNote(noteString){
 
 const TUTORIAL_STEPS = [
   {
-    title: "Read the pacenotes. Keep the driver alive.",
-    body: "In rally racing, the co-driver reads shorthand notes before every corner. The driver can't see what's coming — they trust you completely. One wrong call and they're off the road.",
-    highlight: null, note: null, needsInput: false,
-    nextLabel: "Let's go →"
+    title: "Welcome to Take Me To The Hairpin",
+    body: "You are the co-driver. Your job is to read pacenotes — shorthand instructions that tell the driver what's coming on the road ahead. The driver cannot see around corners. They trust you completely. One wrong call and they're off the road.",
+    highlight: "CO-DRIVER'S JOB:\n• Read the notes\n• Translate them instantly\n• Keep the driver alive\n\nSuccess = Trust. Mistakes = Crashes.",
+    note: null, needsInput: false,
+    nextLabel: "Let's start →"
   },
   {
-    title: "Corner direction and severity",
-    body: "Every note starts with a direction (L or R) and a severity number (1–6). <strong>1 is the tightest hairpin. 6 is a fast sweep.</strong> Think of it as how open the corner is.",
-    highlight: "L = Left   R = Right\n1 = Hairpin   6 = Fast sweep\n\nSo: L3 = Tight left corner",
+    title: "The basics: Direction (L/R)",
+    body: "Every note starts with a direction. <strong>L</strong> means LEFT turn. <strong>R</strong> means RIGHT turn. This is the first thing the driver needs to know.",
+    highlight: "L = Left turn\nR = Right turn\n\nSimple as that. Direction first.",
     note: "L3",
     needsInput: true,
-    prompt: "Type the translation:",
+    prompt: "Type the direction only:",
+    hint: "Hint: just say 'left'",
+    accept: ["left","l"],
+    answer: "left",
+    successMsg: "PERFECT — Direction is everything",
+    nextLabel: "Next →"
+  },
+  {
+    title: "The basics: Severity numbers (1-6)",
+    body: "After direction comes a number from 1 to 6. This tells the driver how tight the corner is. <strong>1 is the tightest (hairpin)</strong>. <strong>6 is the fastest (sweep)</strong>. Think of it as how open the corner is.",
+    highlight: "1 = Hairpin (tightest)\n2 = Very tight\n3 = Tight\n4 = Medium\n5 = Open\n6 = Fast sweep (openest)\n\nLower number = tighter corner",
+    note: "R3",
+    needsInput: true,
+    prompt: "Type the severity description:",
+    hint: "Hint: 3 = tight",
+    accept: ["tight","3"],
+    answer: "tight",
+    successMsg: "GOOD — You understand severity",
+    nextLabel: "Next →"
+  },
+  {
+    title: "Putting it together: Direction + Severity",
+    body: "Now combine direction and severity. <strong>L3</strong> means a LEFT turn that's TIGHT (severity 3). This is the basic building block of all pacenotes.",
+    highlight: "L3 = Left tight corner\nR4 = Right medium corner\nR1 = Right hairpin (very tight)\n\nFormat: Direction + Severity",
+    note: "L3",
+    needsInput: true,
+    prompt: "Type the full translation:",
     hint: "Hint: direction + severity description",
     accept: ["left tight","l3"],
     answer: "left tight",
@@ -4980,22 +6010,35 @@ const TUTORIAL_STEPS = [
     nextLabel: "Next →"
   },
   {
-    title: "Linking corners",
-    body: "Corners can be chained. INTO means the second corner follows immediately — no gap. The driver needs both calls to plan their line.",
-    highlight: "L3 INTO R4\n= Left tight, directly into right medium\n\nNo time between them. Call it smooth.",
+    title: "Distance numbers",
+    body: "Sometimes you'll see a number after the corner. This is the DISTANCE in metres to the next hazard or corner. It tells the driver how long they have before the next instruction.",
+    highlight: "L4 100\n= Left medium, then 100 metres to next thing\n\nDistance = preparation time for the driver",
+    note: "R5 150",
+    needsInput: true,
+    prompt: "Translate this corner with distance:",
+    hint: "Hint: right open, 150 metres",
+    accept: ["right open 150","right open 150 metres","r5 150"],
+    answer: "right open 150",
+    successMsg: "EXCELLENT — Distance noted",
+    nextLabel: "Next →"
+  },
+  {
+    title: "Linking corners with INTO",
+    body: "Corners can be chained together. <strong>INTO</strong> means the second corner follows immediately — no gap between them. The driver needs to plan for both corners in one smooth motion.",
+    highlight: "L3 INTO R4\n= Left tight, directly into right medium\n\nNo straight between them. Call it as one flow.",
     note: "L3 INTO R4",
     needsInput: true,
     prompt: "Translate the full sequence:",
-    hint: "Hint: say both corners in order",
+    hint: "Hint: say both corners in order with 'into'",
     accept: ["left tight into right medium","l3 into r4"],
     answer: "left tight into right medium",
     successMsg: "GOOD FLOW — Both corners read",
     nextLabel: "Next →"
   },
   {
-    title: "Caution marks — the symbols that matter most",
-    body: "<strong>!</strong> means caution — something dangerous ahead. <strong>!!</strong> means maximum caution — get this wrong and you're done. These appear when something was found in recce that the driver can't see from the entry.",
-    highlight: "!  = Caution (danger ahead)\n!! = Maximum caution (do NOT deviate)\n\nThe exclamation mark is not decoration. It is a warning.",
+    title: "Caution marks — ! and !!",
+    body: "<strong>!</strong> means CAUTION — something dangerous ahead that the driver can't see from the entry. <strong>!!</strong> means MAXIMUM CAUTION — get this wrong and the stage is over. These are the most important symbols.",
+    highlight: "!  = Caution (danger ahead)\n!! = Maximum caution (do NOT deviate)\n\nThese appear when recce found something hidden.",
     note: "R2!!",
     needsInput: true,
     prompt: "Translate this — don't miss the caution:",
@@ -5006,25 +6049,66 @@ const TUTORIAL_STEPS = [
     nextLabel: "Next →"
   },
   {
-    title: "Now feel the pressure",
-    body: "In a real stage you have seconds per note. The timer runs from the moment the note appears. Miss it and the driver enters the corner blind.",
-    highlight: "This next note has a 8-second timer.\nRead it. Type it. Hit Enter.",
+    title: "Common modifiers you'll see",
+    body: "Beyond basics, you'll encounter modifiers that describe specific road conditions. These tell the driver about surface changes or special features.",
+    highlight: "CARE = Take care, road narrows\nDONTCUT = Don't cut the corner\nSQUARE = 90-degree junction\nJUMP = Jump ahead\n\nThese modify how the driver should approach.",
+    note: "L4 CARE",
+    needsInput: true,
+    prompt: "Translate with the modifier:",
+    hint: "Hint: left medium, take care",
+    accept: ["left medium care","left medium take care","l4 care"],
+    answer: "left medium care",
+    successMsg: "MODIFIER NOTED — Driver adjusts line",
+    nextLabel: "Next →"
+  },
+  {
+    title: "Practice round — no timer",
+    body: "Let's practice with a realistic note. Take your time — there's no timer yet. Focus on getting the translation right.",
+    highlight: "R4 50 INTO L2 CARE\n= Right medium, 50m into left very tight, take care\n\nBreak it down: R4 → 50 → INTO → L2 → CARE",
+    note: "R4 50 INTO L2 CARE",
+    needsInput: true,
+    prompt: "Translate this full note:",
+    hint: "Take your time. Read each part.",
+    accept: ["right medium 50 into left very tight care","right medium 50 into left very tight take care","r4 50 into l2 care"],
+    answer: "right medium 50 into left very tight care",
+    successMsg: "PERFECT — You're getting it",
+    nextLabel: "Next →"
+  },
+  {
+    title: "Now feel the real pressure",
+    body: "In a real stage, you have SECONDS per note. The timer starts the moment the note appears. You must read, translate, and type before time runs out. This is what rally co-driving feels like.",
+    highlight: "This next note has a 10-second timer.\nRead it. Type it. Hit Enter.\n\nDon't overthink. Trust your training.",
     note: "L4 100 R3",
     needsInput: true,
     timedStep: true,
-    timeLimit: 8,
+    timeLimit: 10,
     prompt: "Translate fast:",
     hint: "left medium, 100 metres to right tight",
     accept: ["left medium 100 right tight","left medium 100 metres right tight"],
     answer: "left medium 100 right tight",
     successMsg: "CLEAN — Under pressure",
-    nextLabel: "Final step →"
+    nextLabel: "Next →"
   },
   {
-    title: "You're ready. One last thing.",
-    body: "If you miss enough notes, the car takes damage. Enough damage and you face a choice: risk continuing or retire. That decision is yours — and it has consequences.",
-    highlight: "Damage accumulates from:\n• Wrong translations\n• Timeouts\n• Crash events\n\nA DNF means no points. But limping home damaged costs time.",
+    title: "What happens when you make mistakes",
+    body: "If you miss notes or run out of time, the car takes damage. <strong>Enough consecutive mistakes and you'll crash.</strong> A crash means retirement from the stage — no points, no progress.",
+    highlight: "MISTAKES = DAMAGE:\n• Wrong translation = car damage\n• Timeout = car damage\n• 2+ consecutive wrongs = crash risk\n\nDamage accumulates. Choose when to push, when to survive.",
     note: null, needsInput: false,
+    nextLabel: "Final test →"
+  },
+  {
+    title: "Final test — Your first real note",
+    body: "This is it. One note, realistic timing. If you get this, you're ready for your first stage. Remember: direction, severity, distance, modifiers. Read it, trust it, call it.",
+    highlight: "You have 8 seconds.\nR3! INTO L5 150\n\nRight tight with caution, into right open, 150 metres.\n\nThis is what co-driving feels like.",
+    note: "R3! INTO L5 150",
+    needsInput: true,
+    timedStep: true,
+    timeLimit: 8,
+    prompt: "Your first real call:",
+    hint: "right tight caution into right open 150",
+    accept: ["right tight caution into right open 150","right tight into right open 150","r3 into l5 150"],
+    answer: "right tight caution into right open 150",
+    successMsg: "STAGE READY — You're a co-driver now",
     nextLabel: "Start my first stage →",
     isLast: true
   }
