@@ -324,6 +324,11 @@ img{display:block;max-width:100%}
 .bd-r{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 .bd-r.ok{background:var(--green)}
 .bd-r.bad{background:var(--red)}
+#r-timeline{font-family:'IBM Plex Mono',monospace}
+#r-timeline table tr:hover{background:rgba(245,197,24,0.1)}
+#daily-challenge,#weekly-challenge,#signature-stages{max-width:800px;margin:0 auto}
+#daily-stage-info,#weekly-stage-info{border:1px solid var(--brd2)}
+.signature-stage-card:hover{border-color:var(--red);transform:translateY(-2px)}
 .mp-standings{background:var(--mp-red);padding:1rem;margin-bottom:.85rem}
 .mp-standings h3{font-family:'Anton',sans-serif;font-size:14px;color:#fff;margin-bottom:.5rem;text-transform:uppercase}
 .std-row{display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid rgba(0,0,0,.3)}
